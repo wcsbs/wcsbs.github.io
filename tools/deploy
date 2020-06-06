@@ -1,3 +1,3 @@
 #!/bin/bash
 DIRECTORY=$(cd `dirname $0` && cd .. && pwd)
-rsync --delete -azvv --exclude '.DS_Store' --exclude '*.md' --exclude 'tools' --exclude '.git*' -e "ssh -i ${DIRECTORY}/tools/certs/wcsbs-prod.pem" $DIRECTORY ec2-user@13.229.110.86:/var/www/html/wcsbs/
+rsync --delete -azvv --exclude '.DS_Store' --exclude '*.md' --exclude 'tools' --exclude '.git*' -e "ssh -i ${DIRECTORY}/tools/certs/wcsbs-prod.pem" $DIRECTORY/ ec2-user@13.229.110.86:/var/www/html/wcsbs/
