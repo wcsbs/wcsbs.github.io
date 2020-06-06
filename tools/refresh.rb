@@ -2,7 +2,7 @@
 
 require 'nokogiri'
 
-def refresh_one_file(template_file, input_file, output_file)
+def refresh_one_file(template_file, input_file, output_file, level)
   template = File.read(template_file)
   doc = File.open(input_file) { |f| Nokogiri::HTML(f) }
   node = doc.at_css('article')
@@ -14,6 +14,16 @@ def refresh_one_file(template_file, input_file, output_file)
 
   result = template.sub('<article />', node.to_s)
   result = result.gsub('title_to_be_replaced', doc.title)
+
+  if level > 0
+    rel_path = ''
+    while level > 0 
+      rel_path = rel_path + "../"
+      level -= 1
+    end
+    puts rel_path
+    result = result.gsub('./', rel_path)
+  end
 
   File.open(output_file, 'w') { |file| file.write(result) } 
   puts "Done for #{doc.title} - #{output_file}"
@@ -43,9 +53,14 @@ def main
   if ARGV.length > 2
     output_file = ARGV[2]
   end
-  #puts "output_file: #{output_file}"
 
-  refresh_one_file(template_file, input_file, output_file)
+  level = 0
+  if ARGV.length > 3
+    puts "ARGV[3]: #{ARGV[3]}"
+    level = ARGV[3].to_i
+  end
+
+  refresh_one_file(template_file, input_file, output_file, level)
 
 end
 
@@ -53,7 +68,7 @@ end
 if __FILE__ == $0
   usage = <<-EOU
 
-usage: ruby #{File.basename($0)} template_file input_file  (optional)output_file
+usage: ruby #{File.basename($0)} template_file input_file  (optional)output_file (optional)level
 
   EOU
 
