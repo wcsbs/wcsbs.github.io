@@ -1,1 +1,3 @@
-ssh -i certs/wcsbs-prod.pem ec2-user@13.229.110.86
+#!/bin/bash
+DIRECTORY=$(cd `dirname $0` && pwd)
+ssh -i $DIRECTORY/certs/wcsbs-prod.pem ec2-user@13.229.110.86
