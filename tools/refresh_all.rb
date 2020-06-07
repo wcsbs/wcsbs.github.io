@@ -9,7 +9,7 @@ def refresh_all(template_file, input_dir)
     if !File.directory? file_name
       unless file_name.include?("/tools/")
         level = file_name.count('/') - input_dir.count('/')
-        refresh_one_file(template_file, file_name, file_name, 2)
+        refresh_one_file(template_file, file_name, file_name, level)
       end
     end
   end
