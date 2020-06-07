@@ -21,7 +21,7 @@ def refresh_one_file(template_file, input_file, output_file, level)
       rel_path = rel_path + "../"
       level -= 1
     end
-    puts rel_path
+    #puts rel_path
     result = result.gsub('./', rel_path)
   end
 
@@ -29,18 +29,21 @@ def refresh_one_file(template_file, input_file, output_file, level)
   puts "Done for #{doc.title} - #{output_file}"
 end
 
-# def process_list(input_file)
-#   doc = File.open(input_file) { |f| Nokogiri::HTML(f) }
-#   puts doc.title
+def process_index_bk(input_dir, output_dir)
+  index_file = output_dir + "/index.html"
+  puts index_file
+  doc = File.open(index_file) { |f| Nokogiri::HTML(f) }
+  puts doc.title
 
-#   doc.css('h1').each do |h1|
-#     href = h1.parent['href']
-#     filename = href.sub('/', '/rxl/index.php/archives/')
-#     puts "Processing #{h1.text} #{filename} ..."
-#     refresh_one_file(filename)
-#   end
-#   nil
-# end
+  doc.css('h1').each do |h1|
+    href = h1.parent['href']
+
+    #filename = href.sub('/', '/rxl/index.php/archives/')
+    puts "Processing #{h1.text} #{href} ..."
+    #refresh_one_file(filename)
+  end
+  nil
+end
 
 def main
   template_file = ARGV[0]

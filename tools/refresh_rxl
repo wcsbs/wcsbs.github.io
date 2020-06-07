@@ -1,4 +1,0 @@
-#!/bin/bash
-cd `dirname $0`
-
-./refresh.rb templates/template.html ../rpsxl/index.html ../rpsxl/index.html 1
