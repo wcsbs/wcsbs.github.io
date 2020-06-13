@@ -34,7 +34,7 @@ end
 if __FILE__ == $0
   usage = <<-EOU
 
-usage: ruby #{File.basename($0)} template_file, input_dir, (optional)output_dir
+usage: ruby #{File.basename($0)} template_file input_dir (optional)output_dir
 
   EOU
 
