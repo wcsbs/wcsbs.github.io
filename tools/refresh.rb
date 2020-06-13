@@ -6,14 +6,31 @@ def refresh_one_file(template_file, input_file, output_file, level)
   template = File.read(template_file)
   doc = File.open(input_file) { |f| Nokogiri::HTML(f) }
   node = doc.at_css('article')
+  is_main = false
+
+  doc.css('span').each do |span|
+    if span['class'] == 'info'
+      span.remove()
+    end
+  end
+
+  if node == nil
+    node = doc.at_css('main')
+    is_main = true
+  end
   
-  if node.first_element_child['class'] == "smartideo"
+  if ["smartideo", "wp-video"].include?(node.first_element_child['class'])
     #puts "Removed smartvideo <div>"
     node.first_element_child.remove
   end
 
-  result = template.sub('<article />', node.to_s)
+  result = template.sub('<article />', node.to_s.gsub('"../', '"'))
   result = result.gsub('title_to_be_replaced', doc.title)
+
+  if is_main
+    result = result.gsub('<main class="postList mdui-center hello" id="postlist">', '<article class="post-773291 post type-post status-publish format-standard has-post-thumbnail hentry category-2  mdui-typo" id="post-773291" itemprop="articleBody">')
+    result = result.gsub('</main>', '</article>')
+  end
 
   if level > 0
     rel_path = ''
@@ -59,7 +76,6 @@ def main
 
   level = 0
   if ARGV.length > 3
-    puts "ARGV[3]: #{ARGV[3]}"
     level = ARGV[3].to_i
   end
 
