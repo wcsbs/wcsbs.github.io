@@ -4,6 +4,17 @@ require 'nokogiri'
 
 def refresh_one_file(template_file, input_file, output_file, level)
   template = File.read(template_file)
+
+  if level > 0
+    rel_path = ''
+    while level > 0 
+      rel_path = rel_path + "../"
+      level -= 1
+    end
+    #puts rel_path
+    template = template.gsub('./', rel_path)
+  end 
+
   doc = File.open(input_file) { |f| Nokogiri::HTML(f) }
   node = doc.at_css('article')
   is_main = false
@@ -24,22 +35,13 @@ def refresh_one_file(template_file, input_file, output_file, level)
     node.first_element_child.remove
   end
 
-  result = template.sub('<article />', node.to_s.gsub('"../', '"'))
+  #result = template.sub('<article />', node.to_s.gsub('"../', '"'))
+  result = template.sub('<article />', node.to_s)
   result = result.gsub('title_to_be_replaced', doc.title)
 
   if is_main
     result = result.gsub('<main class="postList mdui-center hello" id="postlist">', '<article class="post-773291 post type-post status-publish format-standard has-post-thumbnail hentry category-2  mdui-typo" id="post-773291" itemprop="articleBody">')
     result = result.gsub('</main>', '</article>')
-  end
-
-  if level > 0
-    rel_path = ''
-    while level > 0 
-      rel_path = rel_path + "../"
-      level -= 1
-    end
-    #puts rel_path
-    result = result.gsub('./', rel_path)
   end
 
   File.open(output_file, 'w') { |file| file.write(result) } 
