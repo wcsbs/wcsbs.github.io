@@ -27,9 +27,8 @@ customElements.define(
         alert("密码不匹配！");
       } else if (password.length < 6) {
         alert('密码至少6个字符！');
-      }
-
-      this.signup(email, password, phone)
+      } else {
+        this.signup(email, password, phone)
         .then(() => {
           alert('用户注册成功！请确认您的电邮地址，再来登录');
           window.location.href = 'login.html';
@@ -37,6 +36,7 @@ customElements.define(
         .catch(e => {
           alert("用户注册失败！"+ e.message);
         });
+      }
     }
 
     signup(email, password, phone) {
