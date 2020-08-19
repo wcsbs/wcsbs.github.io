@@ -24,18 +24,18 @@ customElements.define(
       ).value;
 
       if (password !== confirmPassword) {
-        alert("password's don't match!");
+        alert("密码不匹配！");
       } else if (password.length < 6) {
-        alert('Please make your password at least 6 characters');
+        alert('密码至少6个字符！');
       }
 
       this.signup(email, password, phone)
         .then(() => {
-          alert('Success signing up! Please verify your email, then login');
+          alert('用户注册成功！请确认您的电邮地址，再来登录');
           window.location.href = 'login.html';
         })
         .catch(e => {
-          alert(e.message);
+          alert("用户注册失败！"+ e.message);
         });
     }
 

@@ -29,7 +29,7 @@ customElements.define(
           window.location.href = 'index.html';
         })
         .catch(e => {
-          alert(e.message);
+          alert("登录失败！" + e.message);
         });
     }
   }
