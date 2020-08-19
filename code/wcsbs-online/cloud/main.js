@@ -14,8 +14,9 @@ const requireAuth = user => {
 
 Parse.Cloud.define(
   'user:signup',
-  async ({ params: { email, password, phone } }) => {
+  async ({ params: { name, email, password, phone } }) => {
     return new Parse.User({
+      name,
       email,
       password,
       username: email,

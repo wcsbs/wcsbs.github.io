@@ -16,6 +16,7 @@ customElements.define(
 
     onSubmit(e) {
       e.preventDefault();
+      const name = this.shadowRoot.querySelector('#inputName').value;
       const phone = this.shadowRoot.querySelector('#inputPhone').value;
       const email = this.shadowRoot.querySelector('#inputEmail').value;
       const password = this.shadowRoot.querySelector('#inputPassword').value;
@@ -28,7 +29,7 @@ customElements.define(
       } else if (password.length < 6) {
         alert('密码至少6个字符！');
       } else {
-        this.signup(email, password, phone)
+        this.signup(name, email, password, phone)
         .then(() => {
           alert('用户注册成功！请确认您的电邮地址，再来登录');
           window.location.href = 'login.html';
@@ -39,8 +40,9 @@ customElements.define(
       }
     }
 
-    signup(email, password, phone) {
+    signup(name, email, password, phone) {
       return Parse.Cloud.run('user:signup', {
+        name,
         email,
         password,
         phone

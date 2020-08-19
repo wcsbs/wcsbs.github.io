@@ -24,6 +24,10 @@
     <script type='text/javascript' src='./shared/js/wp-embed.min.js'></script>
     <script type='text/javascript' src="./shared/js/clipboard.min.js"></script>
     <script type='text/javascript' src="./shared/js/layer.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/2.1.0/parse.min.js"></script>
+    <script src="member/js/parse.js"></script>
+    <script src="member/js/home.js" defer></script>
 </head>
 
 <body class="mdui-theme-primary-indigo mdui-theme-accent-indigo body-grey">
@@ -76,8 +80,11 @@
     <div class="PostMain">
         <div class="ArtMain0 mdui-center mdui-shadow-12">
             <img class="PostMainImg0" alt="智悲佛学会首页" src="./shared/images/faputixin.jpg">
-			<article class="post-773291 post type-post status-publish format-standard has-post-thumbnail hentry category-2  mdui-typo" id="post-773291" itemprop="articleBody">
-                <p style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
+            <article
+                class="post-773291 post type-post status-publish format-standard has-post-thumbnail hentry category-2  mdui-typo"
+                id="post-773291" itemprop="articleBody">
+                <p
+                    style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
                     <strong>佛学课程</strong></p>
                 <ol style="font-size: 20px; line-height: 2.1;">
                     <li><a href="./lxfhj/">离幸福很近</a></li>
@@ -85,7 +92,8 @@
                     <li><a href="./rpsxl/">入菩萨行论</a></li>
                     <li><a href="./dymqx/">大圆满前行</a></li>
                 </ol>
-                <p style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
+                <p
+                    style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
                     <strong>参考资料</strong></p>
                 <ol style="font-size: 20px; line-height: 2.1;">
                     <li><a href="./cysc/">常用颂词</a></li>
@@ -94,19 +102,32 @@
                     <li><a href="./byjgs/">百业经故事</a></li>
                     <li><a href="./pxxyps/">普贤行愿品释</a></li>
                 </ol>
-                <p style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
+                <p
+                    style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
                     <strong>学会活动</strong></p>
                 <ol style="font-size: 20px; line-height: 2.1;">
                     <li><a href="">2021年新生报名开始</a></li>
                     <li><a href="">2020寒假亲子班报名开始</a></li>
                     <li><a href="">更多活动信息</a></li>
                 </ol>
-                <p style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
+                <p
+                    style="text-align: center; padding: 12px 0; background: #D32F2F; color: white; font-size: 16px; margin-bottom: 12px;">
                     <strong>会员专区</strong></p>
-                <ol style="font-size: 20px; line-height: 2.1;">
-                    <li><a href="member/login.html">用户登录</a></li>
-                    <li><a href="member/signup.html">新用户注册</a></li>
-                </ol>
+                <template id="member-template">
+                    <div id="non-member" style="display: none;">
+                        <ol style="font-size: 20px; line-height: 2.1;">
+                            <li><a href="member/login.html">用户登录</a></li>
+                            <li><a href="member/signup.html">新用户注册</a></li>
+                        </ol>
+                    </div>
+                    <div id="member" style="display: none;">
+                        <ol style="font-size: 20px; line-height: 2.1;">
+                            <li><a href="member/index.html">学修平台</a></li>
+                            <li><a id="logoutButton" href="">退出登录</a></li>
+                        </ol>
+                    </div>
+                </template>
+                <member-func></member-func>
             </article>
         </div>
 
