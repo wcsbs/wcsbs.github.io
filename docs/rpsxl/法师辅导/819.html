@@ -14,16 +14,20 @@
         media='all' />
     <link rel='stylesheet' id='mdx_style_css-css' href='../../shared/themes/mdx/style.css' type='text/css' media='all' />
 
-    <script type='text/javascript' src='../../shared/themes/mdx/js/jquery.min.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/mdui/js/mdui.min.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/qr.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/ra.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/h2c.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/lazyload.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/ajax-comment/app.js'></script>
-    <script type='text/javascript' src='../../shared/js/wp-embed.min.js'></script>
-    <script type='text/javascript' src="../../shared/js/clipboard.min.js"></script>
-    <script type='text/javascript' src="../../shared/js/layer.js"></script>
+    <script src='../../shared/themes/mdx/js/jquery.min.js'></script>
+    <script src='../../shared/themes/mdx/mdui/js/mdui.min.js'></script>
+    <script src='../../shared/themes/mdx/js/qr.js'></script>
+    <script src='../../shared/themes/mdx/js/ra.js'></script>
+    <script src='../../shared/themes/mdx/js/h2c.js'></script>
+    <script src='../../shared/themes/mdx/js/lazyload.js'></script>
+    <script src='../../shared/themes/mdx/ajax-comment/app.js'></script>
+    <script src='../../shared/js/wp-embed.min.js'></script>
+    <script src="../../shared/js/clipboard.min.js"></script>
+    <script src="../../shared/js/layer.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/2.15.0/parse.min.js"></script>
+    <script src="../../member/js/parse.js"></script>
+    <script src="../../member/js/home.js" defer></script>
 </head>
 
 <body class="mdui-theme-primary-indigo mdui-theme-accent-indigo body-grey">
@@ -36,22 +40,33 @@
                     class="mdui-icon material-icons">&#xe3a9;</i></button>
         </div>
         <nav role="navigation">
-            <div id="mdx_menu" class="mdui-list">
-                <ul>
-                    <a href="../../">智悲佛学会首页</a>
-                </ul>
-                <ul style="PADDING-LEFT: 80px">
-                    <li><a href="../../lxfhj/">离幸福很近</a></li>
-                    <li><a href="../../zhzcdn/">找回最初的你</a></li>
-                    <li><a href="../../rpsxl/">入菩萨行论</a></li>
-                    <li><a href="../../dymqx/">大圆满前行</a></li>
-                    <li><a href="../../cysc/">常用颂词</a></li>
-                    <li><a href="../../cyyg/">常用仪轨</a></li>
-                    <li><a href="../../fjsp/">佛教视频</a></li>
-                    <li><a href="../../byjgs/">百业经故事</a></li>
-                    <li><a href="../../pxxyps/">普贤行愿品释</a></li>
-                </ul>
-            </div>
+            <template id="member-menu">
+                <div id="mdx_menu" class="mdui-list">
+                    <ul>
+                        <a href="../../">智悲佛学会首页</a>
+                    </ul>
+                    <ul style="PADDING-LEFT: 80px">
+                        <li><a href="../../lxfhj/">离幸福很近</a></li>
+                        <li><a href="../../zhzcdn/">找回最初的你</a></li>
+                        <li><a href="../../rpsxl/">入菩萨行论</a></li>
+                        <li><a href="../../dymqx/">大圆满前行</a></li>
+                        <li><a href="../../cysc/">常用颂词</a></li>
+                        <li><a href="../../cyyg/">常用仪轨</a></li>
+                        <li><a href="../../fjsp/">佛教视频</a></li>
+                        <li><a href="../../byjgs/">百业经故事</a></li>
+                        <li><a href="../../pxxyps/">普贤行愿品释</a></li>
+                        <div id="non-member" style="display: none;">
+                            <li><a href="../../member/login.html">用户登录</a></li>
+                            <li><a href="../../member/signup.html">新用户注册</a></li>
+                        </div>
+                        <div id="member" style="display: none;">
+                            <li><a href="../../member/index.html">学修平台</a></li>
+                            <li><a id="logoutButton" href="">退出登录</a></li>
+                        </div>
+                    </ul>
+                </div>
+            </template>
+            <member-menu></member-menu>
         </nav>
     </div>
     <header role="banner">
@@ -70,13 +85,14 @@
         </div>
     </header>
     <div class="mdui-text-color-white-text mdui-color-theme mdui-typo-display-2 mdui-valign PostTitle"
-        itemprop="name headline" itemtype="http://schema.org/BlogPosting"><span class="mdui-center">入菩萨行论辅导第149课   </span>
+        itemprop="name headline" itemtype="http://schema.org/BlogPosting"><span
+            class="mdui-center">入菩萨行论辅导第149课   </span>
     </div>
     <div class="PostTitleFill mdui-color-theme"></div>
     <div class="PostMain">
         <div class="ArtMain0 mdui-center mdui-shadow-12">
             <img class="PostMainImg0" alt="入菩萨行论辅导第149课   " src="../../shared/images/faputixin.jpg">
-			<article class="post-819 post type-post status-publish format-standard has-post-thumbnail hentry category-7  mdui-typo" id="post-819" itemprop="articleBody">
+            <article class="post-819 post type-post status-publish format-standard has-post-thumbnail hentry category-7  mdui-typo" id="post-819" itemprop="articleBody">
                 <p>发了菩提心之后，今天我们再来学习寂天菩萨所造的《入菩萨行论》。前面我们说要为了利益一切众生而发菩提心，每天我们都在念、都在想发菩提心，具体怎样从内心中生起殊胜的菩提心？要系统地学习《入菩萨行论》这样殊胜的论典。因为在这个论典当中，讲到了发菩提心的非常完整的修法，把它的体系、理论都讲得非常清楚，我们真正发菩提心，生起菩提心非常重要。</p>
 <p>华智仁波切在《前行》中也再再提过“发心不重要，生心才重要。”其实并不是发菩提心不重要，而是在心里想一下或者嘴里说一下“我要发菩提心”都很简单，但我们在说、在想的时候，内心当中有没有生起菩提心？和内心当中生起菩提心比较，如果我们只是在嘴巴上讲一讲，或者劝别人发菩提心，就显得不重要了。</p>
 <p>我们要通过各种修法或者理论引发内心中的菩提心，从内心深处真正地生起度化众生的菩提心。如果真正要度化众生，我们必须要知道度化众生的根据，我们和众生之间到底有怎样一种关系？所以我必须要对他们发菩提心？我必须要做他们自己应该做的事情？如果这些问题没有想清楚，我们在发菩提心或者利益众生的过程当中，肯定会有一些怀疑。我们在发心的时候就没那么决断，也不会全身心地投入利益众生的修法和事业中去。</p>
@@ -231,5 +247,5 @@
         var mdx_post_i18n_2 = '前往页面';
         var mdx_post_i18n_3 = '获取页面信息时出现问题<br>尝试直接访问';
     </script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/post.js'></script>
+    <script src='../../shared/themes/mdx/js/post.js'></script>
 </body>

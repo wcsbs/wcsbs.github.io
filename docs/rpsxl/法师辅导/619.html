@@ -14,16 +14,20 @@
         media='all' />
     <link rel='stylesheet' id='mdx_style_css-css' href='../../shared/themes/mdx/style.css' type='text/css' media='all' />
 
-    <script type='text/javascript' src='../../shared/themes/mdx/js/jquery.min.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/mdui/js/mdui.min.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/qr.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/ra.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/h2c.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/lazyload.js'></script>
-    <script type='text/javascript' src='../../shared/themes/mdx/ajax-comment/app.js'></script>
-    <script type='text/javascript' src='../../shared/js/wp-embed.min.js'></script>
-    <script type='text/javascript' src="../../shared/js/clipboard.min.js"></script>
-    <script type='text/javascript' src="../../shared/js/layer.js"></script>
+    <script src='../../shared/themes/mdx/js/jquery.min.js'></script>
+    <script src='../../shared/themes/mdx/mdui/js/mdui.min.js'></script>
+    <script src='../../shared/themes/mdx/js/qr.js'></script>
+    <script src='../../shared/themes/mdx/js/ra.js'></script>
+    <script src='../../shared/themes/mdx/js/h2c.js'></script>
+    <script src='../../shared/themes/mdx/js/lazyload.js'></script>
+    <script src='../../shared/themes/mdx/ajax-comment/app.js'></script>
+    <script src='../../shared/js/wp-embed.min.js'></script>
+    <script src="../../shared/js/clipboard.min.js"></script>
+    <script src="../../shared/js/layer.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/2.15.0/parse.min.js"></script>
+    <script src="../../member/js/parse.js"></script>
+    <script src="../../member/js/home.js" defer></script>
 </head>
 
 <body class="mdui-theme-primary-indigo mdui-theme-accent-indigo body-grey">
@@ -36,22 +40,33 @@
                     class="mdui-icon material-icons">&#xe3a9;</i></button>
         </div>
         <nav role="navigation">
-            <div id="mdx_menu" class="mdui-list">
-                <ul>
-                    <a href="../../">智悲佛学会首页</a>
-                </ul>
-                <ul style="PADDING-LEFT: 80px">
-                    <li><a href="../../lxfhj/">离幸福很近</a></li>
-                    <li><a href="../../zhzcdn/">找回最初的你</a></li>
-                    <li><a href="../../rpsxl/">入菩萨行论</a></li>
-                    <li><a href="../../dymqx/">大圆满前行</a></li>
-                    <li><a href="../../cysc/">常用颂词</a></li>
-                    <li><a href="../../cyyg/">常用仪轨</a></li>
-                    <li><a href="../../fjsp/">佛教视频</a></li>
-                    <li><a href="../../byjgs/">百业经故事</a></li>
-                    <li><a href="../../pxxyps/">普贤行愿品释</a></li>
-                </ul>
-            </div>
+            <template id="member-menu">
+                <div id="mdx_menu" class="mdui-list">
+                    <ul>
+                        <a href="../../">智悲佛学会首页</a>
+                    </ul>
+                    <ul style="PADDING-LEFT: 80px">
+                        <li><a href="../../lxfhj/">离幸福很近</a></li>
+                        <li><a href="../../zhzcdn/">找回最初的你</a></li>
+                        <li><a href="../../rpsxl/">入菩萨行论</a></li>
+                        <li><a href="../../dymqx/">大圆满前行</a></li>
+                        <li><a href="../../cysc/">常用颂词</a></li>
+                        <li><a href="../../cyyg/">常用仪轨</a></li>
+                        <li><a href="../../fjsp/">佛教视频</a></li>
+                        <li><a href="../../byjgs/">百业经故事</a></li>
+                        <li><a href="../../pxxyps/">普贤行愿品释</a></li>
+                        <div id="non-member" style="display: none;">
+                            <li><a href="../../member/login.html">用户登录</a></li>
+                            <li><a href="../../member/signup.html">新用户注册</a></li>
+                        </div>
+                        <div id="member" style="display: none;">
+                            <li><a href="../../member/index.html">学修平台</a></li>
+                            <li><a id="logoutButton" href="">退出登录</a></li>
+                        </div>
+                    </ul>
+                </div>
+            </template>
+            <member-menu></member-menu>
         </nav>
     </div>
     <header role="banner">
@@ -70,13 +85,14 @@
         </div>
     </header>
     <div class="mdui-text-color-white-text mdui-color-theme mdui-typo-display-2 mdui-valign PostTitle"
-        itemprop="name headline" itemtype="http://schema.org/BlogPosting"><span class="mdui-center">入菩萨行论辅导第49课   </span>
+        itemprop="name headline" itemtype="http://schema.org/BlogPosting"><span
+            class="mdui-center">入菩萨行论辅导第49课   </span>
     </div>
     <div class="PostTitleFill mdui-color-theme"></div>
     <div class="PostMain">
         <div class="ArtMain0 mdui-center mdui-shadow-12">
             <img class="PostMainImg0" alt="入菩萨行论辅导第49课   " src="../../shared/images/faputixin.jpg">
-			<article class="post-619 post type-post status-publish format-standard has-post-thumbnail hentry category-7  mdui-typo" id="post-619" itemprop="articleBody">
+            <article class="post-619 post type-post status-publish format-standard has-post-thumbnail hentry category-7  mdui-typo" id="post-619" itemprop="articleBody">
                 <p>寂天菩萨所造的《入菩萨行论》，主要宣讲如何遣除我执，打破我爱执，生起利他的意乐。当然除了生起利他意乐的大目标之外，通过修学此论,也能懂得如何在实际修行中追随佛菩萨的轨迹而行持，这样就可以顺利到达彼岸，获得佛果。</p>
 <p>如何产生菩提心呢？要生起菩提心，必须要积资净障，受菩萨戒等。受戒之后又如何守护菩萨戒呢？菩提心没有生起要让它生起，已生起的不要让它退失，在不退的基础上还要让它再再地增长。无论是受戒后守持菩萨戒，令已生起的菩提心再再增长，还是发菩提心后趋入六度的修持，这些内容都是让我们的相续尽快与菩萨道相应的殊胜方便方法。前面我们学习了受菩萨戒后如何护戒的内容，这是从次第的角度讲的。</p>
 <p>从六度的角度来讲，布施度散于各品当中，没有单独的布施品；持戒度主要是从不放逸和守护正知正念这两品进行学习。我们正在学习一切万法都是依心而安立，一切恶业依心，一切善法也依心。在身、语、意三门中，以意为主。佛经中讲：“意速意为主”：心很迅速，心在一切中为主要。“一切皆依心”就是主要依心。身和语跟随自己的发心有不同的转变，发恶心，身、语就变成恶业；发善心，身语也可以变成善业。</p>
@@ -203,5 +219,5 @@
         var mdx_post_i18n_2 = '前往页面';
         var mdx_post_i18n_3 = '获取页面信息时出现问题<br>尝试直接访问';
     </script>
-    <script type='text/javascript' src='../../shared/themes/mdx/js/post.js'></script>
+    <script src='../../shared/themes/mdx/js/post.js'></script>
 </body>

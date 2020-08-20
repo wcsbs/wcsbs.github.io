@@ -14,16 +14,20 @@
         media='all' />
     <link rel='stylesheet' id='mdx_style_css-css' href='../shared/themes/mdx/style.css' type='text/css' media='all' />
 
-    <script type='text/javascript' src='../shared/themes/mdx/js/jquery.min.js'></script>
-    <script type='text/javascript' src='../shared/themes/mdx/mdui/js/mdui.min.js'></script>
-    <script type='text/javascript' src='../shared/themes/mdx/js/qr.js'></script>
-    <script type='text/javascript' src='../shared/themes/mdx/js/ra.js'></script>
-    <script type='text/javascript' src='../shared/themes/mdx/js/h2c.js'></script>
-    <script type='text/javascript' src='../shared/themes/mdx/js/lazyload.js'></script>
-    <script type='text/javascript' src='../shared/themes/mdx/ajax-comment/app.js'></script>
-    <script type='text/javascript' src='../shared/js/wp-embed.min.js'></script>
-    <script type='text/javascript' src="../shared/js/clipboard.min.js"></script>
-    <script type='text/javascript' src="../shared/js/layer.js"></script>
+    <script src='../shared/themes/mdx/js/jquery.min.js'></script>
+    <script src='../shared/themes/mdx/mdui/js/mdui.min.js'></script>
+    <script src='../shared/themes/mdx/js/qr.js'></script>
+    <script src='../shared/themes/mdx/js/ra.js'></script>
+    <script src='../shared/themes/mdx/js/h2c.js'></script>
+    <script src='../shared/themes/mdx/js/lazyload.js'></script>
+    <script src='../shared/themes/mdx/ajax-comment/app.js'></script>
+    <script src='../shared/js/wp-embed.min.js'></script>
+    <script src="../shared/js/clipboard.min.js"></script>
+    <script src="../shared/js/layer.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/2.15.0/parse.min.js"></script>
+    <script src="../member/js/parse.js"></script>
+    <script src="../member/js/home.js" defer></script>
 </head>
 
 <body class="mdui-theme-primary-indigo mdui-theme-accent-indigo body-grey">
@@ -36,22 +40,33 @@
                     class="mdui-icon material-icons">&#xe3a9;</i></button>
         </div>
         <nav role="navigation">
-            <div id="mdx_menu" class="mdui-list">
-                <ul>
-                    <a href="../">智悲佛学会首页</a>
-                </ul>
-                <ul style="PADDING-LEFT: 80px">
-                    <li><a href="../lxfhj/">离幸福很近</a></li>
-                    <li><a href="../zhzcdn/">找回最初的你</a></li>
-                    <li><a href="../rpsxl/">入菩萨行论</a></li>
-                    <li><a href="../dymqx/">大圆满前行</a></li>
-                    <li><a href="../cysc/">常用颂词</a></li>
-                    <li><a href="../cyyg/">常用仪轨</a></li>
-                    <li><a href="../fjsp/">佛教视频</a></li>
-                    <li><a href="../byjgs/">百业经故事</a></li>
-                    <li><a href="../pxxyps/">普贤行愿品释</a></li>
-                </ul>
-            </div>
+            <template id="member-menu">
+                <div id="mdx_menu" class="mdui-list">
+                    <ul>
+                        <a href="../">智悲佛学会首页</a>
+                    </ul>
+                    <ul style="PADDING-LEFT: 80px">
+                        <li><a href="../lxfhj/">离幸福很近</a></li>
+                        <li><a href="../zhzcdn/">找回最初的你</a></li>
+                        <li><a href="../rpsxl/">入菩萨行论</a></li>
+                        <li><a href="../dymqx/">大圆满前行</a></li>
+                        <li><a href="../cysc/">常用颂词</a></li>
+                        <li><a href="../cyyg/">常用仪轨</a></li>
+                        <li><a href="../fjsp/">佛教视频</a></li>
+                        <li><a href="../byjgs/">百业经故事</a></li>
+                        <li><a href="../pxxyps/">普贤行愿品释</a></li>
+                        <div id="non-member" style="display: none;">
+                            <li><a href="../member/login.html">用户登录</a></li>
+                            <li><a href="../member/signup.html">新用户注册</a></li>
+                        </div>
+                        <div id="member" style="display: none;">
+                            <li><a href="../member/index.html">学修平台</a></li>
+                            <li><a id="logoutButton" href="">退出登录</a></li>
+                        </div>
+                    </ul>
+                </div>
+            </template>
+            <member-menu></member-menu>
         </nav>
     </div>
     <header role="banner">
@@ -70,13 +85,14 @@
         </div>
     </header>
     <div class="mdui-text-color-white-text mdui-color-theme mdui-typo-display-2 mdui-valign PostTitle"
-        itemprop="name headline" itemtype="http://schema.org/BlogPosting"><span class="mdui-center">百业经故事（86）裸体迦叶——临终信佛 证罗汉果  </span>
+        itemprop="name headline" itemtype="http://schema.org/BlogPosting"><span
+            class="mdui-center">百业经故事（86）裸体迦叶——临终信佛 证罗汉果  </span>
     </div>
     <div class="PostTitleFill mdui-color-theme"></div>
     <div class="PostMain">
         <div class="ArtMain0 mdui-center mdui-shadow-12">
             <img class="PostMainImg0" alt="百业经故事（86）裸体迦叶——临终信佛 证罗汉果  " src="../shared/images/faputixin.jpg">
-			<article class="post-1948 post type-post status-publish format-standard has-post-thumbnail hentry category-24  mdui-typo" id="post-1948" itemprop="articleBody">
+            <article class="post-1948 post type-post status-publish format-standard has-post-thumbnail hentry category-24  mdui-typo" id="post-1948" itemprop="articleBody">
                 <p>一时，佛在舍卫城。城郊一贫民家生下一子，家人举行了简单的贺生仪式，因其乃外道迦叶种姓，故取名迦叶，精心喂养。长大后与父母同忙农务，但他看到父亲杀死成千上万的众生时便责备说：“父亲，您怎么忍心杀害那么多的众生呢？”父亲说：“孩子，你还小不懂这些道理。”迦叶听了非常难过，认为如果一直与父亲这样生活下去没有意义。</p>
 <p>我等大师释迦世尊证得无上正等正觉之位，随缘度化无量众生。一日世尊来到王舍城，人们互告释迦世尊将普降甘露妙法。迦叶闻讯极欲随佛陀出家行持佛法，征得父母同意后，诣王舍城拜见佛陀，途中遇上一位外道行者，误以为是世尊，即随其出家。</p>
 <p>迦叶跟外道修学得很不错，颇有名气。因他皈依的是外道裸体（NaggaSamana）派，所以人们都称他同姓裸体迦叶。一日他观知自己的寿命只剩七天，心中非常痛苦，痛悔自己选错了路，至今尚未修证佛法却已濒临死亡。有一位对世尊教法极有信心的天尊告诉他：“你不必如此痛苦，要想得解脱（Vimutti）就应该去王舍城拜见世尊，世尊肯定会传授你解脱之法。”裸体迦叶立即前往王舍城。他在途中前思后想，觉得世尊的眷属都有惭有愧，而自己无片布遮身，如此前去肯定会遭人讥笑。他不敢再继续前行，就找个地方藏起来，心里却一直在想：世尊啊世尊，您是否知道我的心情？</p>
@@ -141,5 +157,5 @@
         var mdx_post_i18n_2 = '前往页面';
         var mdx_post_i18n_3 = '获取页面信息时出现问题<br>尝试直接访问';
     </script>
-    <script type='text/javascript' src='../shared/themes/mdx/js/post.js'></script>
+    <script src='../shared/themes/mdx/js/post.js'></script>
 </body>
