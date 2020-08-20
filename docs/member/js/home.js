@@ -46,12 +46,13 @@ customElements.define(
 			const shadowRoot = this.attachShadow({ mode: 'open' });
 			shadowRoot.appendChild(templateContent.cloneNode(true));
 
-			this.shadowRoot.querySelector('#logoutButton').addEventListener('click', this.logout);
+			this.shadowRoot.querySelector('#logoutButton').addEventListener('click', this.logout, false);
 		}
 
 		logout() {
 			Parse.User.logOut().catch(() => {}).then(() => {
 				window.location.href = '/index.html';
+				return false;
 			});
 		}
 
