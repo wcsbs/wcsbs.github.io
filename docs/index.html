@@ -25,9 +25,9 @@
     <script type='text/javascript' src="./shared/js/clipboard.min.js"></script>
     <script type='text/javascript' src="./shared/js/layer.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/2.1.0/parse.min.js"></script>
-    <script src="member/js/parse.js"></script>
-    <script src="member/js/home.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/2.15.0/parse.min.js"></script>
+    <script src="./member/js/parse.js"></script>
+    <script src="./member/js/home.js" defer></script>
 </head>
 
 <body class="mdui-theme-primary-indigo mdui-theme-accent-indigo body-grey">
@@ -39,24 +39,35 @@
                 mdui-tooltip="{content: '切换日间/夜间模式'}" id="tgns" mdui-drawer-close="{target: '#left-drawer'}"><i
                     class="mdui-icon material-icons">&#xe3a9;</i></button>
         </div>
-        <nav role="navigation">
-            <div id="mdx_menu" class="mdui-list">
-                <ul>
-                    <a href="./">智悲佛学会首页</a>
-                </ul>
-                <ul style="PADDING-LEFT: 80px">
-                    <li><a href="./lxfhj/">离幸福很近</a></li>
-                    <li><a href="./zhzcdn/">找回最初的你</a></li>
-                    <li><a href="./rpsxl/">入菩萨行论</a></li>
-                    <li><a href="./dymqx/">大圆满前行</a></li>
-                    <li><a href="./cysc/">常用颂词</a></li>
-                    <li><a href="./cyyg/">常用仪轨</a></li>
-                    <li><a href="./fjsp/">佛教视频</a></li>
-                    <li><a href="./byjgs/">百业经故事</a></li>
-                    <li><a href="./pxxyps/">普贤行愿品释</a></li>
-                </ul>
-            </div>
-        </nav>
+        <template id="member-menu">
+            <nav role="navigation">
+                <div id="mdx_menu" class="mdui-list">
+                    <ul>
+                        <a href="./">智悲佛学会首页</a>
+                    </ul>
+                    <ul style="PADDING-LEFT: 80px">
+                        <li><a href="./lxfhj/">离幸福很近</a></li>
+                        <li><a href="./zhzcdn/">找回最初的你</a></li>
+                        <li><a href="./rpsxl/">入菩萨行论</a></li>
+                        <li><a href="./dymqx/">大圆满前行</a></li>
+                        <li><a href="./cysc/">常用颂词</a></li>
+                        <li><a href="./cyyg/">常用仪轨</a></li>
+                        <li><a href="./fjsp/">佛教视频</a></li>
+                        <li><a href="./byjgs/">百业经故事</a></li>
+                        <li><a href="./pxxyps/">普贤行愿品释</a></li>
+                        <div id="non-member" style="display: none;">
+                            <li><a href="./member/login.html">用户登录</a></li>
+                            <li><a href="./member/signup.html">新用户注册</a></li>
+                        </div>
+                        <div id="member" style="display: none;">
+                            <li><a href="./member/index.html">学修平台</a></li>
+                            <li><a id="logoutButton" href="">退出登录</a></li>
+                        </div>
+                    </ul>
+                </div>
+            </nav>
+        </template>
+        <member-menu></member-menu>
     </div>
     <header role="banner">
         <div class="titleBarGobal mdui-appbar mdui-shadow-0  mdui-text-color-white-text" id="titleBarinPost">

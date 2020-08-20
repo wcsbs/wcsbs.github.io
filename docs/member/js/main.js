@@ -21,7 +21,7 @@ customElements.define(
 
     connectedCallback() {
       if (!Parse.User.current()) {
-        window.location = '/login.html';
+        window.location = 'login.html';
         return;
       }
       this.fetchTickets()
