@@ -1,4 +1,10 @@
 #!/bin/bash
 cd `dirname $0`
 pwd
-ruby refresh_all.rb templates/template.html ../docs/
+#ruby refresh_all.rb templates/template.html ../docs/
+
+cd ../code/wcsbs-online 
+pwd
+yarn run build
+rm -rf ../../docs/online
+mv dist ../../docs/online
