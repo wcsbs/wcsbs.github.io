@@ -18,7 +18,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 v-model="username"
-                placeholder="Username"
+                placeholder="Name"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -27,6 +27,14 @@
                 type="text"
                 v-model="email"
                 placeholder="Email"
+              />
+            </fieldset>
+            <fieldset class="form-group">
+              <input
+                class="form-control form-control-lg"
+                type="phone"
+                v-model="phone"
+                placeholder="Phone"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -57,7 +65,8 @@ export default {
     return {
       username: "",
       email: "",
-      password: ""
+      password: "",
+      phone: ""
     };
   },
   computed: {
@@ -71,7 +80,8 @@ export default {
         .dispatch(REGISTER, {
           email: this.email,
           password: this.password,
-          username: this.username
+          username: this.username,
+          phone: this.phone
         })
         .then(() => this.$router.push({ name: "home" }));
     }

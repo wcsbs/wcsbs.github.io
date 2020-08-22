@@ -32,6 +32,11 @@ export default new Router({
       component: () => import("@/views/Login")
     },
     {
+      name: "forgotPassword",
+      path: "/forgotPassword",
+      component: () => import("@/views/ForgotPassword")
+    },
+    {
       name: "register",
       path: "/register",
       component: () => import("@/views/Register")

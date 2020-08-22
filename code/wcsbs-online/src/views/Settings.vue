@@ -8,34 +8,18 @@
             <fieldset>
               <fieldset class="form-group">
                 <input
-                  class="form-control"
-                  type="text"
-                  v-model="currentUser.image"
-                  placeholder="URL of profile picture"
-                />
-              </fieldset>
-              <fieldset class="form-group">
-                <input
                   class="form-control form-control-lg"
                   type="text"
                   v-model="currentUser.username"
-                  placeholder="Your username"
+                  placeholder="Your name"
                 />
-              </fieldset>
-              <fieldset class="form-group">
-                <textarea
-                  class="form-control form-control-lg"
-                  rows="8"
-                  v-model="currentUser.bio"
-                  placeholder="Short bio about you"
-                ></textarea>
               </fieldset>
               <fieldset class="form-group">
                 <input
                   class="form-control form-control-lg"
-                  type="text"
-                  v-model="currentUser.email"
-                  placeholder="Email"
+                  type="phone"
+                  v-model="currentUser.phone"
+                  placeholder="Phone"
                 />
               </fieldset>
               <fieldset class="form-group">

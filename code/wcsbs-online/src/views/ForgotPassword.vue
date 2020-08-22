@@ -3,16 +3,11 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">Sign in</h1>
-          <p class="text-xs-center">
-            <router-link :to="{ name: 'register' }">
-              Need an account?
-            </router-link>
-          </p>
+          <h1 class="text-xs-center">Reset password</h1>
           <ul v-if="errors" class="error-messages">
             <li v-for="(v, k) in errors" :key="k">{{ k }} {{ v | error }}</li>
           </ul>
-          <form @submit.prevent="onSubmit(email, password)">
+          <form @submit.prevent="onSubmit(email)">
             <fieldset class="form-group">
               <input
                 class="form-control form-control-lg"
@@ -21,23 +16,10 @@
                 placeholder="Email"
               />
             </fieldset>
-            <fieldset class="form-group">
-              <input
-                class="form-control form-control-lg"
-                type="password"
-                v-model="password"
-                placeholder="Password"
-              />
-            </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
-              Sign in
+              Submit
             </button>
           </form>
-          <p class="text-xs-left">
-            <router-link :to="{ name: 'forgotPassword' }">
-              Forgot password?
-            </router-link>
-          </p>
         </div>
       </div>
     </div>
@@ -46,7 +28,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { LOGIN } from "@/store/actions.type";
+import { RESET_PASSWORD } from "@/store/actions.type";
 
 export default {
   name: "RwvLogin",
@@ -57,9 +39,9 @@ export default {
     };
   },
   methods: {
-    onSubmit(email, password) {
+    onSubmit(email) {
       this.$store
-        .dispatch(LOGIN, { email, password })
+        .dispatch(RESET_PASSWORD, { email })
         .then(() => this.$router.push({ name: "home" }));
     }
   },

@@ -1,7 +1,8 @@
-import ApiService from "@/common/api.service";
-import JwtService from "@/common/jwt.service";
+import Parse from "parse";
+
 import {
   LOGIN,
+  RESET_PASSWORD,
   LOGOUT,
   REGISTER,
   CHECK_AUTH,
@@ -12,7 +13,7 @@ import { SET_AUTH, PURGE_AUTH, SET_ERROR } from "./mutations.type";
 const state = {
   errors: null,
   user: {},
-  isAuthenticated: !!JwtService.getToken()
+  isAuthenticated: false
 };
 
 const getters = {
@@ -27,13 +28,29 @@ const getters = {
 const actions = {
   [LOGIN](context, credentials) {
     return new Promise(resolve => {
-      ApiService.post("users/login", { user: credentials })
-        .then(({ data }) => {
-          context.commit(SET_AUTH, data.user);
-          resolve(data);
+      Parse.User.logIn(credentials.email, credentials.password)
+        .then(user => {
+          context.commit(SET_AUTH, user);
+          resolve(user);
         })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
+        .catch(e => {
+          alert("登录失败！" + e.message);
+          context.commit(SET_ERROR, e.errors);
+        });
+    });
+  },
+  [RESET_PASSWORD](context, credentials) {
+    context.commit(PURGE_AUTH);
+    return new Promise(resolve => {
+      Parse.User.requestPasswordReset(credentials.email)
+        .then(() => {
+          alert(
+            "请求成功！请登录您的电邮，根据电邮指示完成密码重置后，再来登录"
+          );
+          resolve();
+        })
+        .catch(e => {
+          alert("重置密码失败！" + e.message);
         });
     });
   },
@@ -41,48 +58,46 @@ const actions = {
     context.commit(PURGE_AUTH);
   },
   [REGISTER](context, credentials) {
+    const name = credentials.username;
+    const email = credentials.email;
+    const password = credentials.password;
+    const phone = credentials.phone;
+
     return new Promise((resolve, reject) => {
-      ApiService.post("users", { user: credentials })
+      Parse.Cloud.run("user:signup", {
+        name,
+        email,
+        password,
+        phone
+      })
         .then(({ data }) => {
-          context.commit(SET_AUTH, data.user);
+          alert("用户注册成功！请确认您的电邮地址，再来登录");
+          context.commit(PURGE_AUTH);
           resolve(data);
         })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
-          reject(response);
+        .catch(e => {
+          alert("用户注册失败！" + e.message);
+          context.commit(SET_ERROR, e.errors);
+          reject(e);
         });
     });
   },
   [CHECK_AUTH](context) {
-    if (JwtService.getToken()) {
-      ApiService.setHeader();
-      ApiService.get("user")
-        .then(({ data }) => {
-          context.commit(SET_AUTH, data.user);
-        })
-        .catch(({ response }) => {
-          context.commit(SET_ERROR, response.data.errors);
-        });
+    const loggedInUser = Parse.User.current();
+    if (loggedInUser) {
+      context.commit(SET_AUTH, loggedInUser);
     } else {
       context.commit(PURGE_AUTH);
     }
   },
   [UPDATE_USER](context, payload) {
-    const { email, username, password, image, bio } = payload;
-    const user = {
-      email,
-      username,
-      bio,
-      image
-    };
-    if (password) {
-      user.password = password;
+    var loggedInUser = Parse.User.current();
+    if (payload.password) {
+      loggedInUser.set("password", payload.password);
     }
-
-    return ApiService.put("user", user).then(({ data }) => {
-      context.commit(SET_AUTH, data.user);
-      return data;
-    });
+    loggedInUser.set("name", payload.username);
+    loggedInUser.set("phone", payload.phone);
+    loggedInUser.save();
   }
 };
 
@@ -92,15 +107,18 @@ const mutations = {
   },
   [SET_AUTH](state, user) {
     state.isAuthenticated = true;
-    state.user = user;
+    state.user = { username: user.get("name"), phone: user.get("phone") };
     state.errors = {};
-    JwtService.saveToken(state.user.token);
   },
   [PURGE_AUTH](state) {
     state.isAuthenticated = false;
     state.user = {};
     state.errors = {};
-    JwtService.destroyToken();
+    if (Parse.User.current()) {
+      Parse.User.logOut().then(() => {
+        console.log("user logged out");
+      });
+    }
   }
 };
 
