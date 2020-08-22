@@ -3,10 +3,10 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">Sign up</h1>
+          <h1 class="text-xs-center">新用户注册</h1>
           <p class="text-xs-center">
             <router-link :to="{ name: 'login' }">
-              Have an account?
+              已有用户账号?
             </router-link>
           </p>
           <ul v-if="errors" class="error-messages">
@@ -18,7 +18,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 v-model="username"
-                placeholder="Name"
+                placeholder="名字"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -26,7 +26,7 @@
                 class="form-control form-control-lg"
                 type="text"
                 v-model="email"
-                placeholder="Email"
+                placeholder="电邮地址"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -34,7 +34,7 @@
                 class="form-control form-control-lg"
                 type="phone"
                 v-model="phone"
-                placeholder="Phone"
+                placeholder="电话号码"
               />
             </fieldset>
             <fieldset class="form-group">
@@ -42,11 +42,11 @@
                 class="form-control form-control-lg"
                 type="password"
                 v-model="password"
-                placeholder="Password"
+                placeholder="密码"
               />
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
-              Sign up
+              注册
             </button>
           </form>
         </div>

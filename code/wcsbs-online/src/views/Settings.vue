@@ -3,7 +3,7 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">Your Settings</h1>
+          <h1 class="text-xs-center">您的个人信息</h1>
           <form @submit.prevent="updateSettings()">
             <fieldset>
               <fieldset class="form-group">
@@ -11,7 +11,7 @@
                   class="form-control form-control-lg"
                   type="text"
                   v-model="currentUser.username"
-                  placeholder="Your name"
+                  placeholder="名字"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -19,7 +19,7 @@
                   class="form-control form-control-lg"
                   type="phone"
                   v-model="currentUser.phone"
-                  placeholder="Phone"
+                  placeholder="电话"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -27,18 +27,18 @@
                   class="form-control form-control-lg"
                   type="password"
                   v-model="currentUser.password"
-                  placeholder="Password"
+                  placeholder="密码"
                 />
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
-                Update Settings
+                更新个人信息
               </button>
             </fieldset>
           </form>
           <!-- Line break for logout button -->
           <hr />
           <button @click="logout" class="btn btn-outline-danger">
-            Or click here to logout.
+            点击这里退出登录
           </button>
         </div>
       </div>
