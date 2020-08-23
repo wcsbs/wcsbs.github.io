@@ -49,10 +49,7 @@ const actions = {
       Parse.User.logIn(username, password)
         .then(parseUser => {
           console.log(`user logged in: ${parseUser.id}`);
-          Parse.Cloud.run("user:getRoles", {}).then(user => {
-            context.commit(SET_AUTH, user);
-            resolve(parseUser);
-          });
+          resolve(parseUser);
         })
         .catch(e => {
           alert("登录失败！" + e.message);
@@ -105,8 +102,25 @@ const actions = {
   },
   [CHECK_AUTH](context) {
     console.log(
-      `${CHECK_AUTH} - ${context}: ${state.user.username} roles: ${state.user.roles}`
+      `${CHECK_AUTH}: ${state.user.id} roles: ${state.user.roles} ${
+        Parse.User.current() ? Parse.User.current().id : "no logged in user"
+      }`
     );
+    const currentUser = Parse.User.current();
+    if (currentUser && (!state.user || state.user.id != currentUser.id)) {
+      return new Promise(resolve => {
+        console.log(`loading user details: ${currentUser.id}`);
+        Parse.Cloud.run("user:getRoles", {})
+          .then(user => {
+            context.commit(SET_AUTH, user);
+            resolve(user);
+          })
+          .catch(e => {
+            console.log(`error loading user details: ${e.message}`);
+            context.commit(SET_ERROR, e.errors);
+          });
+      });
+    }
   },
   [UPDATE_USER](context, payload) {
     var loggedInUser = Parse.User.current();
@@ -131,12 +145,13 @@ const mutations = {
     state.errors = {};
   },
   [PURGE_AUTH](state) {
-    updateMenu();
+    console.log(PURGE_AUTH);
     state.isAuthenticated = false;
     state.user = {};
     state.errors = {};
     if (Parse.User.current()) {
       Parse.User.logOut().then(() => {
+        updateMenu();
         console.log("user logged out");
       });
     }

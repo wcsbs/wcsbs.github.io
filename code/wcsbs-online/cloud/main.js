@@ -20,6 +20,7 @@ Parse.Cloud.define("user:getRoles", async ({ user }) => {
   const roles = await userRoleQuery.find(MASTER_KEY);
 
   user = {
+    id: user.id,
     username: user.get("name"),
     phone: user.get("phone"),
     email: user.get("email"),
