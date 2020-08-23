@@ -46,15 +46,13 @@ const actions = {
     const username = credentials.email;
     const password = credentials.password;
     return new Promise(resolve => {
-      //Parse.User.logIn(username, password)
-      Parse.Cloud.run("user:login", {
-        username,
-        password
-      })
-        .then(user => {
-          console.log("user logged in: " + user.id);
-          context.commit(SET_AUTH, user);
-          resolve(user);
+      Parse.User.logIn(username, password)
+        .then(parseUser => {
+          console.log(`user logged in: ${parseUser.id}`);
+          Parse.Cloud.run("user:getRoles", {}).then(user => {
+            context.commit(SET_AUTH, user);
+            resolve(parseUser);
+          });
         })
         .catch(e => {
           alert("登录失败！" + e.message);
@@ -105,9 +103,9 @@ const actions = {
         });
     });
   },
-  [CHECK_AUTH](_context) {
+  [CHECK_AUTH](context) {
     console.log(
-      CHECK_AUTH + ": " + state.user.username + " roles: " + state.user.roles
+      `${CHECK_AUTH} - ${context}: ${state.user.username} roles: ${state.user.roles}`
     );
   },
   [UPDATE_USER](context, payload) {
@@ -130,11 +128,6 @@ const mutations = {
     updateMenu();
     state.isAuthenticated = true;
     state.user = user;
-    // state.user = {
-    //   username: user.get("name"),
-    //   phone: user.get("phone"),
-    //   email: user.get("email")
-    // };
     state.errors = {};
   },
   [PURGE_AUTH](state) {

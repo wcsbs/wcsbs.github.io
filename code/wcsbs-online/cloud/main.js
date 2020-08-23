@@ -14,18 +14,15 @@ Parse.Cloud.define(
   }
 );
 
-Parse.Cloud.define("user:login", async ({ params: { username, password } }) => {
-  const loggedInUser = await Parse.User.logIn(username, password);
-  // const userRoleQuery = loggedInUser.relation(Parse.Role).query();
+Parse.Cloud.define("user:getRoles", async ({ user }) => {
   var userRoleQuery = new Parse.Query(Parse.Role);
-  userRoleQuery.equalTo("users", loggedInUser);
+  userRoleQuery.equalTo("users", user);
   const roles = await userRoleQuery.find(MASTER_KEY);
 
-  const user = {
-    id: loggedInUser.id,
-    username: loggedInUser.get("name"),
-    phone: loggedInUser.get("phone"),
-    email: loggedInUser.get("email"),
+  user = {
+    username: user.get("name"),
+    phone: user.get("phone"),
+    email: user.get("email"),
     roles: roles.map(r => r.get("name"))
   };
   return user;
