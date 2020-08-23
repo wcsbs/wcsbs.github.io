@@ -101,62 +101,62 @@
         <div id="app"></div>
         <!-- built files will be auto injected -->
       </article>
-
-      <div class="mdui-color-theme" style="line-height:1.8;font-size:21px;text-align:center;padding:21px 0;">
-        乃至菩提果，皈依诸佛陀<br />亦依正法宝，菩萨诸圣众
-      </div>
-      <div id="indic"></div>
-      <div class="mdx-share-img" id="mdx-share-img">
-        <div class="mdx-si-box"><span>扫描二维码继续阅读</span>
-          <div class="mdx-si-qr" id="mdx-si-qr"></div>
-        </div>
-        <div class="mdx-si-time">2020-05-27</div>
-      </div>
-      <button class="mdui-fab mdui-color-theme-accent mdui-fab-fixed mdui-fab-hide scrollToTop mdui-ripple"><i
-          class="mdui-icon material-icons">&#xe316;</i></button>
     </div>
+    <div class="mdui-color-theme" style="line-height:1.8;font-size:21px;text-align:center;padding:21px 0;">
+      乃至菩提果，皈依诸佛陀<br />亦依正法宝，菩萨诸圣众
+    </div>
+    <div id="indic"></div>
+    <div class="mdx-share-img" id="mdx-share-img">
+      <div class="mdx-si-box"><span>扫描二维码继续阅读</span>
+        <div class="mdx-si-qr" id="mdx-si-qr"></div>
+      </div>
+      <div class="mdx-si-time">2020-05-27</div>
+    </div>
+    <button class="mdui-fab mdui-color-theme-accent mdui-fab-fixed mdui-fab-hide scrollToTop mdui-ripple"><i
+        class="mdui-icon material-icons">&#xe316;</i></button>
+  </div>
 
-    <script>
-      var mdx_offline_mode = 0;
-      function snbar() {
-        mdui.snackbar({
-          message: '已自动定位到你此前阅读处&nbsp;&nbsp;&nbsp;',
-          buttonText: '从头阅读',
-          timeout: 10000,
-          onButtonClick: function () {
-            $("body,html").animate({ scrollTop: 0 }, 700);
-          },
-        });
-      }
-      var ifscr = 0;
-      var moreinput = "'更多选项'";
-      var morecomment = "加载更多评论";
-      var nomorecomment = "没有更多了";
-      ifscr = 1;
-      var mdx_comment_ajax = 0;
-      mdx_comment_ajax = 1;
-      var mdx_imgBox = 0;
-      var mdx_tapToTop = 0;
-      mdx_tapToTop = 1;
-
-      //Show Read Pro'
-      $('#indic').radialIndicator({
-        displayNumber: false,
-        radius: 27,
-        barColor: '#ffffff',
-        roundCorner: false,
-        barWidth: 3,
-        barBgColor: '#536dfe',
+  <script>
+    var mdx_offline_mode = 0;
+    function snbar() {
+      mdui.snackbar({
+        message: '已自动定位到你此前阅读处&nbsp;&nbsp;&nbsp;',
+        buttonText: '从头阅读',
+        timeout: 10000,
+        onButtonClick: function () {
+          $("body,html").animate({ scrollTop: 0 }, 700);
+        },
       });
-      var ind = $('#indic').data('radialIndicator');
-      var mdx_si_i18n = '长按/右键保存图片';
-      var mdx_github_i18n_1 = '在 Github 上查阅';
-      var mdx_github_i18n_2 = '获取 Github 仓库信息时出现问题<br>尝试直接访问';
-      var mdx_post_i18n_1 = '这个页面没有摘要。';
-      var mdx_post_i18n_2 = '前往页面';
-      var mdx_post_i18n_3 = '获取页面信息时出现问题<br>尝试直接访问';
-    </script>
-    <script type='text/javascript' src='https://wcsbs.github.io/shared/themes/mdx/js/post.js'></script>
-    <script src="https://wcsbs.github.io/member/js/home.js"></script>
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Symbol "></script>
+    }
+    var ifscr = 0;
+    var moreinput = "'更多选项'";
+    var morecomment = "加载更多评论";
+    var nomorecomment = "没有更多了";
+    ifscr = 1;
+    var mdx_comment_ajax = 0;
+    mdx_comment_ajax = 1;
+    var mdx_imgBox = 0;
+    var mdx_tapToTop = 0;
+    mdx_tapToTop = 1;
+
+    //Show Read Pro'
+    $('#indic').radialIndicator({
+      displayNumber: false,
+      radius: 27,
+      barColor: '#ffffff',
+      roundCorner: false,
+      barWidth: 3,
+      barBgColor: '#536dfe',
+    });
+    var ind = $('#indic').data('radialIndicator');
+    var mdx_si_i18n = '长按/右键保存图片';
+    var mdx_github_i18n_1 = '在 Github 上查阅';
+    var mdx_github_i18n_2 = '获取 Github 仓库信息时出现问题<br>尝试直接访问';
+    var mdx_post_i18n_1 = '这个页面没有摘要。';
+    var mdx_post_i18n_2 = '前往页面';
+    var mdx_post_i18n_3 = '获取页面信息时出现问题<br>尝试直接访问';
+  </script>
+  <script type='text/javascript' src='https://wcsbs.github.io/shared/themes/mdx/js/post.js'></script>
+  <script src="https://wcsbs.github.io/member/js/home.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Symbol "></script>
 </body>

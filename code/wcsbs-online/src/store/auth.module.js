@@ -25,6 +25,21 @@ const getters = {
   }
 };
 
+var updateMenu = function() {
+  const loggedInUser = Parse.User.current();
+
+  const memberFunc = document.getElementById("member-func");
+  const nonMemberFunc = document.getElementById("non-member-func");
+
+  if (loggedInUser) {
+    memberFunc.setAttribute("style", "display: block;");
+    nonMemberFunc.setAttribute("style", "display: none;");
+  } else {
+    nonMemberFunc.setAttribute("style", "display: block;");
+    memberFunc.setAttribute("style", "display: none;");
+  }
+};
+
 const actions = {
   [LOGIN](context, credentials) {
     return new Promise(resolve => {
@@ -106,11 +121,17 @@ const mutations = {
     state.errors = error;
   },
   [SET_AUTH](state, user) {
+    updateMenu();
     state.isAuthenticated = true;
-    state.user = { username: user.get("name"), phone: user.get("phone") };
+    state.user = {
+      username: user.get("name"),
+      phone: user.get("phone"),
+      email: user.get("email")
+    };
     state.errors = {};
   },
   [PURGE_AUTH](state) {
+    updateMenu();
     state.isAuthenticated = false;
     state.user = {};
     state.errors = {};
