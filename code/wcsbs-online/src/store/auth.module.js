@@ -42,9 +42,17 @@ var updateMenu = function() {
 
 const actions = {
   [LOGIN](context, credentials) {
+    console.log(LOGIN);
+    const username = credentials.email;
+    const password = credentials.password;
     return new Promise(resolve => {
-      Parse.User.logIn(credentials.email, credentials.password)
+      //Parse.User.logIn(username, password)
+      Parse.Cloud.run("user:login", {
+        username,
+        password
+      })
         .then(user => {
+          console.log("user logged in: " + user.id);
           context.commit(SET_AUTH, user);
           resolve(user);
         })
@@ -97,13 +105,10 @@ const actions = {
         });
     });
   },
-  [CHECK_AUTH](context) {
-    const loggedInUser = Parse.User.current();
-    if (loggedInUser) {
-      context.commit(SET_AUTH, loggedInUser);
-    } else {
-      context.commit(PURGE_AUTH);
-    }
+  [CHECK_AUTH](_context) {
+    console.log(
+      CHECK_AUTH + ": " + state.user.username + " roles: " + state.user.roles
+    );
   },
   [UPDATE_USER](context, payload) {
     var loggedInUser = Parse.User.current();
@@ -121,13 +126,15 @@ const mutations = {
     state.errors = error;
   },
   [SET_AUTH](state, user) {
+    console.log(SET_AUTH);
     updateMenu();
     state.isAuthenticated = true;
-    state.user = {
-      username: user.get("name"),
-      phone: user.get("phone"),
-      email: user.get("email")
-    };
+    state.user = user;
+    // state.user = {
+    //   username: user.get("name"),
+    //   phone: user.get("phone"),
+    //   email: user.get("email")
+    // };
     state.errors = {};
   },
   [PURGE_AUTH](state) {

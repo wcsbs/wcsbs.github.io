@@ -2,19 +2,13 @@
   <nav class="navbar navbar-light">
     <div class="container">
       <router-link class="navbar-brand" :to="{ name: 'home' }">
-        WCSBS学修平台
+        闻思修
       </router-link>
-      <ul v-if="!isAuthenticated" class="nav navbar-nav pull-xs-right">
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            active-class="active"
-            exact
-            :to="{ name: 'home' }"
-          >
-            首页
-          </router-link>
-        </li>
+      <ul
+        v-if="!isAuthenticated"
+        class="nav navbar-nav pull-xs-right"
+        style="list-style-type:none"
+      >
         <li class="nav-item">
           <router-link
             class="nav-link"
@@ -36,17 +30,11 @@
           </router-link>
         </li>
       </ul>
-      <ul v-else class="nav navbar-nav pull-xs-right">
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            active-class="active"
-            exact
-            :to="{ name: 'home' }"
-          >
-            首页
-          </router-link>
-        </li>
+      <ul
+        v-else
+        class="nav navbar-nav pull-xs-right"
+        style="list-style-type:none"
+      >
         <li class="nav-item">
           <router-link
             class="nav-link"
