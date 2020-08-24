@@ -8,6 +8,7 @@ export default new Router({
     {
       path: "/",
       component: () => import("@/views/Home"),
+      meta: { requiresAuth: true },
       children: [
         {
           path: "",

@@ -22,9 +22,24 @@ Parse.initialize(
 Parse.serverURL = "https://parseapi.back4app.com";
 
 // Ensure we checked auth before each page load.
-router.beforeEach((to, from, next) =>
-  Promise.all([store.dispatch(CHECK_AUTH)]).then(next)
-);
+router.beforeEach((to, from, next) => {
+  Promise.all([store.dispatch(CHECK_AUTH)]).then(() => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      // this route requires auth, check if logged in
+      // if not, redirect to login page.
+      if (!Parse.User.current()) {
+        next({
+          path: "/login",
+          query: { redirect: to.fullPath }
+        });
+      } else {
+        next();
+      }
+    } else {
+      next(); // make sure to always call next()!
+    }
+  });
+});
 
 new Vue({
   router,

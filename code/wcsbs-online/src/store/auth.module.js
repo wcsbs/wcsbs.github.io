@@ -121,6 +121,9 @@ const actions = {
           });
       });
     }
+    if (!currentUser && !state.user && state.user.id) {
+      context.commit(PURGE_AUTH);
+    }
   },
   [UPDATE_USER](context, payload) {
     var loggedInUser = Parse.User.current();
