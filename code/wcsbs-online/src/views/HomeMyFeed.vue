@@ -6,7 +6,7 @@
 import RwvArticleList from "@/components/ArticleList";
 
 export default {
-  name: "rwv-home-my-feed",
+  name: "home-my-feed",
   components: {
     RwvArticleList
   }

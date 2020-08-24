@@ -22,6 +22,30 @@ const getters = {
   },
   isAuthenticated(state) {
     return state.isAuthenticated;
+  },
+  isSystemAdmin(state) {
+    if (!state.isAuthenticated) {
+      return false;
+    }
+    return state.user.roles.some(role => role == "B4aAdminUser");
+  },
+  isClassAdmin(state) {
+    if (!state.isAuthenticated) {
+      return false;
+    }
+    return state.user.roles.some(role => role == "ClassAdminUser");
+  },
+  isTeachingAssistant(state) {
+    if (!state.isAuthenticated) {
+      return false;
+    }
+    return state.user.roles.some(role => role == "TeachingAssistantUser");
+  },
+  isStudent(state) {
+    if (!state.isAuthenticated) {
+      return false;
+    }
+    return state.user.roles.some(role => role == "StudentUser");
   }
 };
 
@@ -76,7 +100,7 @@ const actions = {
     context.commit(PURGE_AUTH);
   },
   [REGISTER](context, credentials) {
-    const name = credentials.username;
+    const name = credentials.ame;
     const email = credentials.email;
     const password = credentials.password;
     const phone = credentials.phone;
@@ -112,6 +136,7 @@ const actions = {
         console.log(`loading user details: ${currentUser.id}`);
         Parse.Cloud.run("user:getRoles", {})
           .then(user => {
+            console.log(`loaded user details: ${JSON.stringify(user)}`);
             context.commit(SET_AUTH, user);
             resolve(user);
           })

@@ -16,6 +16,11 @@ export default new Router({
           component: () => import("@/views/HomeGlobal")
         },
         {
+          path: "user-management",
+          name: "home-user-management",
+          component: () => import("@/views/HomeUserManagement")
+        },
+        {
           path: "my-feed",
           name: "home-my-feed",
           component: () => import("@/views/HomeMyFeed")
@@ -72,6 +77,12 @@ export default new Router({
       path: "/editor/:slug?",
       props: true,
       component: () => import("@/views/ArticleEdit")
+    },
+    {
+      name: "user",
+      path: "/users/:slug",
+      component: () => import("@/views/User"),
+      props: true
     }
   ]
 });

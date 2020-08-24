@@ -14,11 +14,11 @@
       </router-link>
       <span class="date">{{ article.createdAt | date }}</span>
     </div>
-    <rwv-article-actions
+    <article-actions
       v-if="actions"
       :article="article"
       :canModify="isCurrentUser()"
-    ></rwv-article-actions>
+    ></article-actions>
     <button
       v-else
       class="btn btn-sm pull-xs-right"

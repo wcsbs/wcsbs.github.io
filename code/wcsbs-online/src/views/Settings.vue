@@ -3,15 +3,15 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">您的个人信息</h1>
+          <h1 class="text-xs-center">我的个人信息</h1>
           <form @submit.prevent="updateSettings()">
             <fieldset>
               <fieldset class="form-group">
                 <input
                   class="form-control form-control-lg"
                   type="text"
-                  v-model="currentUser.username"
-                  placeholder="名字"
+                  v-model="currentUser.name"
+                  placeholder="姓名"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -33,12 +33,15 @@
               <button class="btn btn-lg btn-primary pull-xs-right">
                 更新个人信息
               </button>
+              <router-link class="navbar-brand" :to="{ name: 'home' }">
+                返回
+              </router-link>
             </fieldset>
           </form>
           <!-- Line break for logout button -->
           <hr />
-          <button @click="logout" class="btn btn-outline-danger">
-            点击这里退出登录
+          <button @click="logout" class="btn btn-outline-danger pull-xs-right">
+            退出登录
           </button>
         </div>
       </div>

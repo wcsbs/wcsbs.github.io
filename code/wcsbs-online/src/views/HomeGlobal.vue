@@ -5,7 +5,7 @@
 import RwvArticleList from "@/components/ArticleList";
 
 export default {
-  name: "rwv-home-global",
+  name: "home-global",
   components: {
     RwvArticleList
   }

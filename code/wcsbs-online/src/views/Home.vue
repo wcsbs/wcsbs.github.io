@@ -4,33 +4,67 @@
       <div class="row">
         <div class="col-md-9">
           <div class="feed-toggle">
-            <ul class="nav nav-pills outline-active">
-              <li v-if="isAuthenticated" class="nav-item">
-                <router-link
-                  :to="{ name: 'home-my-feed' }"
-                  class="nav-link"
-                  active-class="active"
-                >
-                  Your Feed
-                </router-link>
-              </li>
+            <ul
+              class="nav nav-pills outline-active"
+              style="list-style-type:none"
+            >
               <li class="nav-item">
                 <router-link
                   :to="{ name: 'home' }"
                   exact
                   class="nav-link"
                   active-class="active"
+                  >最新信息</router-link
                 >
-                  Global Feed
-                </router-link>
               </li>
-              <li class="nav-item" v-if="tag">
+              <li v-if="isSystemAdmin" class="nav-item">
                 <router-link
-                  :to="{ name: 'home-tag', params: { tag } }"
+                  :to="{ name: 'home-user-management' }"
                   class="nav-link"
                   active-class="active"
+                  >用户管理</router-link
                 >
-                  <i class="ion-pound"></i> {{ tag }}
+              </li>
+              <li v-if="isClassAdmin" class="nav-item">
+                <router-link
+                  :to="{ name: 'home-my-feed' }"
+                  class="nav-link"
+                  active-class="active"
+                  >课程管理</router-link
+                >
+              </li>
+              <li v-if="isClassAdmin" class="nav-item">
+                <router-link
+                  :to="{ name: 'home-my-feed' }"
+                  class="nav-link"
+                  active-class="active"
+                  >实修管理</router-link
+                >
+              </li>
+              <li v-if="isStudent" class="nav-item">
+                <router-link
+                  :to="{ name: 'home-my-feed' }"
+                  class="nav-link"
+                  active-class="active"
+                  >闻思修</router-link
+                >
+              </li>
+              <li v-if="isTeachingAssistant" class="nav-item">
+                <router-link
+                  :to="{ name: 'home-my-feed' }"
+                  class="nav-link"
+                  active-class="active"
+                  >课程助理</router-link
+                >
+              </li>
+              <li class="nav-item pull-xs-right">
+                <router-link
+                  class="nav-link"
+                  active-class="active"
+                  exact
+                  :to="{ name: 'settings' }"
+                >
+                  <i class="ion-gear-a"></i>&nbsp;{{ currentUser.name }}
                 </router-link>
               </li>
             </ul>
@@ -56,10 +90,14 @@ export default {
     this.$store.dispatch(FETCH_TAGS);
   },
   computed: {
-    ...mapGetters(["isAuthenticated", "tags"]),
-    tag() {
-      return this.$route.params.tag;
-    }
+    ...mapGetters([
+      "currentUser",
+      "isAuthenticated",
+      "isSystemAdmin",
+      "isClassAdmin",
+      "isTeachingAssistant",
+      "isStudent"
+    ])
   }
 };
 </script>

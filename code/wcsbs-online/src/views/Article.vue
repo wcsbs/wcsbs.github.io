@@ -62,7 +62,7 @@ import RwvTag from "@/components/VTag";
 import { FETCH_ARTICLE, FETCH_COMMENTS } from "@/store/actions.type";
 
 export default {
-  name: "rwv-article",
+  name: "article",
   props: {
     slug: {
       type: String,

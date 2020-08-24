@@ -1,4 +1,6 @@
 <template>
+  <div></div>
+  <!--
   <nav class="navbar navbar-light">
     <div class="container">
       <router-link class="navbar-brand" :to="{ name: 'home' }">
@@ -48,6 +50,7 @@
       </ul>
     </div>
   </nav>
+  -->
 </template>
 
 <script>
