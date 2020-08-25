@@ -1,12 +1,16 @@
 import Parse from "parse";
+import Toasted from "vue-toasted";
+import Vue from "vue";
 import { FETCH_USERS } from "./actions.type";
-import { ADMIN_FETCH_USER } from "./actions.type";
+import { UPDATE_USER_BY_ADMIN, ADMIN_FETCH_USER } from "./actions.type";
 import {
   FETCH_USERS_START,
   FETCH_USERS_END,
   SET_USER,
   UPDATE_USER_IN_LIST
 } from "./mutations.type";
+
+Vue.use(Toasted);
 
 const state = {
   user: {},
@@ -56,6 +60,21 @@ const actions = {
         console.log(`error loading user: ${e.message}`);
         throw new Error(e);
       });
+  },
+  [UPDATE_USER_BY_ADMIN](context, user) {
+    console.log(`${UPDATE_USER_BY_ADMIN} - user: ${JSON.stringify(user)}`);
+    const adminUpdateUser = "user:adminUpdateUser";
+    Parse.Cloud.run(adminUpdateUser, { user })
+      .then(user => {
+        context.commit(SET_USER, user);
+        context.commit(UPDATE_USER_IN_LIST, user);
+        Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
+      })
+      .catch(e => {
+        Vue.toasted.error(`更新失败！${e.message}`, { duration: 5000 });
+        console.log(`error updating user: ${e.message}`);
+        throw new Error(e);
+      });
   }
 };
 
@@ -74,15 +93,7 @@ const mutations = {
   },
   [UPDATE_USER_IN_LIST](state, data) {
     state.users = state.users.map(user => {
-      if (user.slug !== data.slug) {
-        return user;
-      }
-      // We could just return data, but it seems dangerous to
-      // mix the results of different api calls, so we
-      // protect ourselves by copying the information.
-      user.favorited = data.favorited;
-      user.favoritesCount = data.favoritesCount;
-      return user;
+      return user.slug !== data.slug ? user : data;
     });
   }
 };

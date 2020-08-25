@@ -1,8 +1,9 @@
 <template>
   <div class="user-preview">
     <router-link :to="userLink" class="preview-link">
-      <h6 v-text="user.name" />
+      <h3 v-text="user.name" />
       <ul style="list-style-type:none">
+        <li>用户名：{{ user.username }}</li>
         <li>电邮地址：{{ user.email }}</li>
         <li>电话号码：{{ user.phone }}</li>
       </ul>

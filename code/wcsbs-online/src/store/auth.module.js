@@ -1,4 +1,6 @@
 import Parse from "parse";
+import Toasted from "vue-toasted";
+import Vue from "vue";
 
 import {
   LOGIN,
@@ -9,6 +11,8 @@ import {
   UPDATE_USER
 } from "./actions.type";
 import { SET_AUTH, PURGE_AUTH, SET_ERROR } from "./mutations.type";
+
+Vue.use(Toasted);
 
 const state = {
   errors: null,
@@ -155,9 +159,21 @@ const actions = {
     if (payload.password) {
       loggedInUser.set("password", payload.password);
     }
-    loggedInUser.set("name", payload.username);
+    loggedInUser.set("name", payload.name);
     loggedInUser.set("phone", payload.phone);
-    loggedInUser.save();
+    return new Promise(resolve => {
+      loggedInUser
+        .save()
+        .then(parseUser => {
+          Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
+          resolve(parseUser);
+        })
+        .catch(e => {
+          Vue.toasted.error(`更新失败！${e.message}`, { duration: 5000 });
+          console.log(`error updating user: ${JSON.stringify(e)}`);
+            context.commit(SET_ERROR, e.errors);
+        });
+    });
   }
 };
 

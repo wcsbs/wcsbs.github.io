@@ -22,5 +22,5 @@ export const RESET_PASSWORD = "resetPassword";
 export const LOGOUT = "logout";
 export const REGISTER = "register";
 export const UPDATE_USER = "updateUser";
-export const UPDATE_USER_BY_ADMIN = "updateUserByAdmin";
+export const UPDATE_USER_BY_ADMIN = "adminUpdateUser";
 export const ADMIN_FETCH_USER = "adminFetchUser";

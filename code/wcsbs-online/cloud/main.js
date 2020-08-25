@@ -37,6 +37,7 @@ Parse.Cloud.define("user:getRoles", async ({ user }) => {
 Parse.Cloud.define("user:list", async ({ user }) => {
   requireAuth(user);
   var userQuery = new Parse.Query(Parse.User);
+  userQuery.ascending("name");
   const results = await userQuery.find(MASTER_KEY);
   const usersCount = results.length;
   const users = results.map(user => {
@@ -55,6 +56,33 @@ Parse.Cloud.define("user:adminFetchUser", async ({ params: { userSlug } }) => {
   var userQuery = new Parse.Query(Parse.User);
   userQuery.equalTo("objectId", userSlug);
   var user = await userQuery.first(MASTER_KEY);
+
+  var userRoleQuery = new Parse.Query(Parse.Role);
+  userRoleQuery.equalTo("users", user);
+  const roles = await userRoleQuery.find(MASTER_KEY);
+
+  user = {
+    id: user.id,
+    name: user.get("name"),
+    username: user.get("username"),
+    phone: user.get("phone"),
+    email: user.get("email"),
+    roles: roles.map(r => r.get("name"))
+  };
+  return user;
+});
+
+Parse.Cloud.define("user:adminUpdateUser", async ({ params: { user } }) => {
+  var userQuery = new Parse.Query(Parse.User);
+  userQuery.equalTo("objectId", user.id);
+  var parseUser = await userQuery.first(MASTER_KEY);
+
+  parseUser.set("name", user.name);
+  parseUser.set("phone", user.phone);
+  if (user.password) {
+    parseUser.set("password", user.password);
+  }
+  user = await parseUser.save(null, MASTER_KEY);
 
   var userRoleQuery = new Parse.Query(Parse.Role);
   userRoleQuery.equalTo("users", user);

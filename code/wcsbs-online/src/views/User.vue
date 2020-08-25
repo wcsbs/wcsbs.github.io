@@ -38,6 +38,14 @@
                   placeholder="电话号码"
                 />
               </fieldset>
+              <fieldset class="form-group">
+                <input
+                  class="form-control form-control-lg"
+                  type="password"
+                  v-model="user.password"
+                  placeholder="密码"
+                />
+              </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
                 更新用户信息
               </button>
@@ -80,7 +88,7 @@ export default {
   methods: {
     updateUser() {
       this.$store.dispatch(UPDATE_USER_BY_ADMIN, this.user).then(() => {
-        this.$router.push({ name: "home-user-management" });
+        // this.$router.push({ name: "home-user-management" });
       });
     }
   }
