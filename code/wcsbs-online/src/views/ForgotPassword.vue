@@ -16,10 +16,11 @@
                 placeholder="电邮地址"
               />
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">
-              提交
-            </button>
+            <button class="btn btn-lg btn-primary pull-xs-right">提交</button>
           </form>
+          <p class="text-xs-left">
+            <router-link :to="{ name: 'login' }">取消</router-link>
+          </p>
         </div>
       </div>
     </div>

@@ -43,6 +43,16 @@
                 type="password"
                 v-model="password"
                 placeholder="密码"
+                autocomplete="new-password"
+              />
+            </fieldset>
+            <fieldset class="form-group">
+              <input
+                class="form-control form-control-lg"
+                type="password"
+                v-model="confirmPassword"
+                placeholder="确认密码"
+                autocomplete="new-password"
               />
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">
@@ -80,6 +90,7 @@ export default {
         .dispatch(REGISTER, {
           email: this.email,
           password: this.password,
+          confirmPassword: this.confirmPassword,
           name: this.name,
           phone: this.phone
         })

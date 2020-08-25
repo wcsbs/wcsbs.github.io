@@ -14,7 +14,7 @@
                   exact
                   class="nav-link"
                   active-class="active"
-                  >最新信息</router-link
+                  >主页</router-link
                 >
               </li>
               <li v-if="isSystemAdmin" class="nav-item">
@@ -57,7 +57,7 @@
                   >课程助理</router-link
                 >
               </li>
-              <li class="nav-item pull-xs-right">
+              <li class="nav-item float-xs-right">
                 <router-link
                   class="nav-link"
                   active-class="active"
@@ -78,17 +78,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-//import RwvTag from "@/components/VTag";
-import { FETCH_TAGS } from "@/store/actions.type";
 
 export default {
   name: "home",
-  components: {
-    //RwvTag
-  },
-  mounted() {
-    this.$store.dispatch(FETCH_TAGS);
-  },
   computed: {
     ...mapGetters([
       "currentUser",

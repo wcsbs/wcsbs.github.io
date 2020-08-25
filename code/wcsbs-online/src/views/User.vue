@@ -7,14 +7,17 @@
           <form @submit.prevent="updateUser()">
             <fieldset>
               <fieldset class="form-group">
+                <label style="font-size:22px;">用户名</label>
                 <input
                   class="form-control form-control-lg"
                   type="text"
                   v-model="user.username"
                   placeholder="用户名"
+                  readonly
                 />
               </fieldset>
               <fieldset class="form-group">
+                <label style="font-size:22px;">姓名</label>
                 <input
                   class="form-control form-control-lg"
                   type="text"
@@ -23,14 +26,17 @@
                 />
               </fieldset>
               <fieldset class="form-group">
+                <label style="font-size:22px;">电邮地址</label>
                 <input
                   class="form-control form-control-lg"
                   type="email"
                   v-model="user.email"
                   placeholder="电邮地址"
+                  readonly
                 />
               </fieldset>
               <fieldset class="form-group">
+                <label style="font-size:22px;">电话号码</label>
                 <input
                   class="form-control form-control-lg"
                   type="phone"
@@ -39,11 +45,23 @@
                 />
               </fieldset>
               <fieldset class="form-group">
+                <label style="font-size:22px;">密码</label>
                 <input
                   class="form-control form-control-lg"
                   type="password"
                   v-model="user.password"
                   placeholder="密码"
+                  autocomplete="new-password"
+                />
+              </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">确认密码</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="password"
+                  v-model="user.confirmPassword"
+                  placeholder="确认密码"
+                  autocomplete="new-password"
                 />
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
@@ -88,7 +106,7 @@ export default {
   methods: {
     updateUser() {
       this.$store.dispatch(UPDATE_USER_BY_ADMIN, this.user).then(() => {
-        // this.$router.push({ name: "home-user-management" });
+        this.$router.push({ name: "home-user-management" });
       });
     }
   }

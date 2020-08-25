@@ -64,17 +64,32 @@ const actions = {
   [UPDATE_USER_BY_ADMIN](context, user) {
     console.log(`${UPDATE_USER_BY_ADMIN} - user: ${JSON.stringify(user)}`);
     const adminUpdateUser = "user:adminUpdateUser";
-    Parse.Cloud.run(adminUpdateUser, { user })
-      .then(user => {
-        context.commit(SET_USER, user);
-        context.commit(UPDATE_USER_IN_LIST, user);
-        Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
-      })
-      .catch(e => {
-        Vue.toasted.error(`更新失败！${e.message}`, { duration: 5000 });
-        console.log(`error updating user: ${e.message}`);
-        throw new Error(e);
-      });
+    const password = user.password;
+    const confirmPassword = user.confirmPassword;
+
+    return new Promise((resolve, reject) => {
+      if (password && password.length < 6) {
+        Vue.toasted.error("密码不可以少于6位！", { duration: 5000 });
+        reject();
+        return;
+      } else if (password && password != confirmPassword) {
+        Vue.toasted.error("密码和确认密码不匹配！", { duration: 5000 });
+        reject();
+        return;
+      }
+      Parse.Cloud.run(adminUpdateUser, { user })
+        .then(user => {
+          context.commit(SET_USER, user);
+          context.commit(UPDATE_USER_IN_LIST, user);
+          Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
+          resolve();
+        })
+        .catch(e => {
+          Vue.toasted.error(`更新失败！${e.message}`, { duration: 5000 });
+          console.log(`error updating user: ${e.message}`);
+          reject();
+        });
+    });
   }
 };
 

@@ -90,13 +90,14 @@ const actions = {
     return new Promise(resolve => {
       Parse.User.requestPasswordReset(credentials.email)
         .then(() => {
-          alert(
-            "请求成功！请登录您的电邮，根据电邮指示完成密码重置后，再来登录"
+          Vue.toasted.show(
+            "重置密码请求成功！请登录您的电邮，根据电邮指示设置好新的密码后，再来登录",
+            { icon: "check", duration: 5000 }
           );
           resolve();
         })
         .catch(e => {
-          alert("重置密码失败！" + e.message);
+          Vue.toasted.error(`重置密码失败！${e.message}`, { duration: 5000 });
         });
     });
   },
@@ -104,12 +105,23 @@ const actions = {
     context.commit(PURGE_AUTH);
   },
   [REGISTER](context, credentials) {
-    const name = credentials.ame;
+    const name = credentials.name;
     const email = credentials.email;
     const password = credentials.password;
+    const confirmPassword = credentials.confirmPassword;
     const phone = credentials.phone;
 
     return new Promise((resolve, reject) => {
+      if (!password || password.length < 6) {
+        Vue.toasted.error("密码不可以少于6位！", { duration: 5000 });
+        reject();
+        return;
+      } else if (password != confirmPassword) {
+        Vue.toasted.error("密码和确认密码不匹配！", { duration: 5000 });
+        reject();
+        return;
+      }
+
       Parse.Cloud.run("user:signup", {
         name,
         email,
@@ -117,12 +129,17 @@ const actions = {
         phone
       })
         .then(({ data }) => {
-          alert("用户注册成功！请确认您的电邮地址，再来登录");
+          Vue.toasted.show("用户注册成功！请确认您的电邮地址，再来登录", {
+            icon: "check",
+            duration: 5000
+          });
           context.commit(PURGE_AUTH);
           resolve(data);
         })
         .catch(e => {
-          alert("用户注册失败！" + e.message);
+          Vue.toasted.error(`用户注册失败！${e.message}`, {
+            duration: 5000
+          });
           context.commit(SET_ERROR, e.errors);
           reject(e);
         });
@@ -155,13 +172,28 @@ const actions = {
     }
   },
   [UPDATE_USER](context, payload) {
-    var loggedInUser = Parse.User.current();
-    if (payload.password) {
-      loggedInUser.set("password", payload.password);
-    }
+    const loggedInUser = Parse.User.current();
+    const password = payload.password;
+    const confirmPassword = payload.confirmPassword;
+
     loggedInUser.set("name", payload.name);
     loggedInUser.set("phone", payload.phone);
-    return new Promise(resolve => {
+
+    return new Promise((resolve, reject) => {
+      if (password) {
+        if (password.length < 6) {
+          Vue.toasted.error("密码不可以少于6位！", { duration: 5000 });
+          reject();
+          return;
+        } else if (password != confirmPassword) {
+          Vue.toasted.error("密码和确认密码不匹配！", { duration: 5000 });
+          reject();
+          return;
+        }
+
+        loggedInUser.set("password", password);
+      }
+
       loggedInUser
         .save()
         .then(parseUser => {
@@ -171,7 +203,8 @@ const actions = {
         .catch(e => {
           Vue.toasted.error(`更新失败！${e.message}`, { duration: 5000 });
           console.log(`error updating user: ${JSON.stringify(e)}`);
-            context.commit(SET_ERROR, e.errors);
+          context.commit(SET_ERROR, e.errors);
+          reject();
         });
     });
   }
