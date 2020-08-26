@@ -9,6 +9,7 @@ import {
   SET_USER,
   UPDATE_USER_IN_LIST
 } from "./mutations.type";
+import store from "./index";
 
 Vue.use(Toasted);
 
@@ -35,12 +36,13 @@ const getters = {
 };
 
 const actions = {
-  [FETCH_USERS]({ commit }, params) {
-    console.log(`${FETCH_USERS} - params: ${JSON.stringify(params)}`);
+  [FETCH_USERS]({ commit }) {
+    const user = store.state.auth.user;
+    console.log(`${FETCH_USERS} - auth.user: ${JSON.stringify(user)}`);
     commit(FETCH_USERS_START);
-    Parse.Cloud.run("user:list", {})
+    Parse.Cloud.run("user:list", { user })
       .then(users => {
-        console.log(`${FETCH_USERS} - user: ${JSON.stringify(users)}`);
+        console.log(`${FETCH_USERS} - users: ${JSON.stringify(users)}`);
         commit(FETCH_USERS_END, users);
       })
       .catch(e => {
@@ -55,8 +57,10 @@ const actions = {
       return;
     }
 
+    const user = store.state.auth.user;
+    console.log(`${ADMIN_FETCH_USER} - auth.user: ${JSON.stringify(user)}`);
     const adminFetchUser = "user:adminFetchUser";
-    Parse.Cloud.run(adminFetchUser, { userSlug })
+    Parse.Cloud.run(adminFetchUser, { user, userSlug })
       .then(user => {
         console.log(`${ADMIN_FETCH_USER} - user: ${JSON.stringify(user)}`);
 
@@ -74,11 +78,15 @@ const actions = {
         throw new Error(e);
       });
   },
-  [UPDATE_USER_BY_ADMIN](context, user) {
-    console.log(`${UPDATE_USER_BY_ADMIN} - user: ${JSON.stringify(user)}`);
+  [UPDATE_USER_BY_ADMIN](context, userToUpdate) {
+    const user = store.state.auth.user;
+    console.log(`${UPDATE_USER_BY_ADMIN} - auth.user: ${JSON.stringify(user)}`);
+    console.log(
+      `${UPDATE_USER_BY_ADMIN} - userToUpdate: ${JSON.stringify(userToUpdate)}`
+    );
     const adminUpdateUser = "user:adminUpdateUser";
-    const password = user.password;
-    const confirmPassword = user.confirmPassword;
+    const password = userToUpdate.password;
+    const confirmPassword = userToUpdate.confirmPassword;
 
     return new Promise((resolve, reject) => {
       if (password && password.length < 6) {
@@ -90,7 +98,7 @@ const actions = {
         reject();
         return;
       }
-      Parse.Cloud.run(adminUpdateUser, { user })
+      Parse.Cloud.run(adminUpdateUser, { user, userToUpdate })
         .then(user => {
           context.commit(SET_USER, user);
           context.commit(UPDATE_USER_IN_LIST, user);

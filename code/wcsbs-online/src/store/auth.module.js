@@ -80,7 +80,7 @@ const actions = {
           resolve(parseUser);
         })
         .catch(e => {
-          alert("登录失败！" + e.message);
+          Vue.toasted.error(`登录失败！${e.message}`, { duration: 5000 });
           context.commit(SET_ERROR, e.errors);
         });
     });
@@ -200,6 +200,8 @@ const actions = {
         .then(parseUser => {
           Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
           currentUser.state = undefined;
+          currentUser.password = undefined;
+          currentUser.confirmPassword = undefined;
           resolve(parseUser);
         })
         .catch(e => {

@@ -7,25 +7,21 @@ export default new Router({
   routes: [
     {
       path: "/",
+      name: "home",
       component: () => import("@/views/Home"),
-      meta: { requiresAuth: true },
-      children: [
-        {
-          path: "",
-          name: "home",
-          component: () => import("@/views/HomeGlobal")
-        },
-        {
-          path: "user-management",
-          name: "home-user-management",
-          component: () => import("@/views/HomeUserManagement")
-        },
-        {
-          path: "my-feed",
-          name: "home-my-feed",
-          component: () => import("@/views/HomeMyFeed")
-        }
-      ]
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/user-management",
+      name: "home-user-management",
+      component: () => import("@/views/HomeUserManagement"),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: "/my-feed",
+      name: "home-my-feed",
+      component: () => import("@/views/HomeMyFeed"),
+      meta: { requiresAuth: true }
     },
     {
       name: "login",

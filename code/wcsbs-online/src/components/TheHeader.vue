@@ -1,56 +1,43 @@
 <template>
-  <div></div>
-  <!--
   <nav class="navbar navbar-light">
+    <br />
     <div class="container">
-      <router-link class="navbar-brand" :to="{ name: 'home' }">
-        闻思修
-      </router-link>
-      <ul
-        v-if="!isAuthenticated"
-        class="nav navbar-nav pull-xs-right"
-        style="list-style-type:none"
+      <router-link :to="{ name: 'home' }" class="navbar-brand"
+        >主页</router-link
       >
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            active-class="active"
-            exact
-            :to="{ name: 'login' }"
-          >
-            <i class="ion-compose"></i>登录
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link
-            class="nav-link"
-            active-class="active"
-            exact
-            :to="{ name: 'register' }"
-          >
-            <i class="ion-compose"></i>注册
-          </router-link>
-        </li>
-      </ul>
-      <ul
-        v-else
-        class="nav navbar-nav pull-xs-right"
-        style="list-style-type:none"
+      <router-link
+        v-if="isSystemAdmin"
+        :to="{ name: 'home-user-management' }"
+        class="navbar-brand"
+        >用户管理</router-link
       >
-        <li class="nav-item">
+      <router-link
+        v-if="isClassAdmin"
+        :to="{ name: 'class-management' }"
+        class="navbar-brand"
+        >课程管理</router-link
+      >
+      <router-link
+        v-if="isTeachingAssistant"
+        :to="{ name: 'class-assistant' }"
+        class="navbar-brand"
+        >课程助理</router-link
+      >
+      <ul class="nav navbar-nav pull-xs-right" style="list-style-type:none">
+        <li class="nav-item float-xs-right">
           <router-link
             class="nav-link"
             active-class="active"
             exact
             :to="{ name: 'settings' }"
           >
-            <i class="ion-gear-a"></i>&nbsp;设置
+            <i class="ion-gear-a"></i>
+            &nbsp;{{ currentUser.name }}
           </router-link>
         </li>
       </ul>
     </div>
   </nav>
-  -->
 </template>
 
 <script>
@@ -59,7 +46,14 @@ import { mapGetters } from "vuex";
 export default {
   name: "RwvHeader",
   computed: {
-    ...mapGetters(["currentUser", "isAuthenticated"])
+    ...mapGetters([
+      "currentUser",
+      "isAuthenticated",
+      "isSystemAdmin",
+      "isClassAdmin",
+      "isTeachingAssistant",
+      "isStudent"
+    ])
   }
 };
 </script>
