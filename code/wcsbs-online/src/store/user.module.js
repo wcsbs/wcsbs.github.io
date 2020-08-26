@@ -50,6 +50,11 @@ const actions = {
   },
   [ADMIN_FETCH_USER](context, userSlug) {
     console.log(`${ADMIN_FETCH_USER} - userSlug: ${userSlug}`);
+    if (!userSlug) {
+      context.commit(SET_USER, {});
+      return;
+    }
+
     const adminFetchUser = "user:adminFetchUser";
     Parse.Cloud.run(adminFetchUser, { userSlug })
       .then(user => {

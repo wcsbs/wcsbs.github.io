@@ -45,44 +45,21 @@ export default new Router({
     {
       name: "settings",
       path: "/settings",
+      meta: { requiresAuth: true },
       component: () => import("@/views/Settings")
-    },
-    // Handle child routes with a default, by giving the name to the
-    // child.
-    // SO: https://github.com/vuejs/vue-router/issues/777
-    {
-      path: "/@:username",
-      component: () => import("@/views/Profile"),
-      children: [
-        {
-          path: "",
-          name: "profile",
-          component: () => import("@/views/ProfileArticles")
-        },
-        {
-          name: "profile-favorites",
-          path: "favorites",
-          component: () => import("@/views/ProfileFavorited")
-        }
-      ]
-    },
-    {
-      name: "article",
-      path: "/articles/:slug",
-      component: () => import("@/views/Article"),
-      props: true
-    },
-    {
-      name: "article-edit",
-      path: "/editor/:slug?",
-      props: true,
-      component: () => import("@/views/ArticleEdit")
     },
     {
       name: "user",
       path: "/users/:slug",
+      meta: { requiresAuth: true },
       component: () => import("@/views/User"),
       props: true
+    },
+    {
+      name: "createUser",
+      path: "/createUser",
+      meta: { requiresAuth: true },
+      component: () => import("@/views/User")
     }
   ]
 });

@@ -24,7 +24,19 @@ Parse.serverURL = "https://parseapi.back4app.com";
 // Ensure we checked auth before each page load.
 router.beforeEach((to, from, next) => {
   Promise.all([store.dispatch(CHECK_AUTH)]).then(() => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    // console.log(
+    //   `to:${JSON.stringify(to)} store.state.auth: ${JSON.stringify(store.state.auth)}`
+    // );
+    if (
+      store.state.auth &&
+      store.state.auth.user.state == "needToChangePassword" &&
+      to.path != "/settings"
+    ) {
+      next({
+        path: "/settings",
+        query: { redirect: to.fullPath }
+      });
+    } else if (to.matched.some(record => record.meta.requiresAuth)) {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
       if (!Parse.User.current()) {

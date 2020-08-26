@@ -3,17 +3,26 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">用户信息</h1>
+          <h1 v-if="user.id" class="text-xs-center">用户信息</h1>
+          <h1 v-else class="text-xs-center">创建用户</h1>
           <form @submit.prevent="updateUser()">
             <fieldset>
               <fieldset class="form-group">
                 <label style="font-size:22px;">用户名</label>
                 <input
+                  v-if="user.id"
                   class="form-control form-control-lg"
                   type="text"
                   v-model="user.username"
                   placeholder="用户名"
                   readonly
+                />
+                <input
+                  v-else
+                  class="form-control form-control-lg"
+                  type="text"
+                  v-model="user.username"
+                  placeholder="用户名"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -113,7 +122,7 @@
                   </div>
                 </div>
               </fieldset>
-              <fieldset class="form-group">
+              <fieldset v-if="user.id" class="form-group">
                 <label style="font-size:22px;">用户状态</label>
                 <div class="form-control">
                   <select v-model="user.state">
@@ -128,11 +137,12 @@
                 </div>
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
-                更新用户信息
+                <span v-if="user.id"> 更新用户信息</span>
+                <span v-else> 创建新用户</span>
               </button>
               <router-link
                 class="navbar-brand"
-                :to="{ name: 'home-user-management' }"
+                :to="{ name: 'home-user-management', skip: 'true' }"
                 >返回</router-link
               >
             </fieldset>
@@ -163,7 +173,7 @@ export default {
   props: {
     slug: {
       type: String,
-      required: true
+      required: false
     }
   },
   beforeRouteEnter(to, from, next) {

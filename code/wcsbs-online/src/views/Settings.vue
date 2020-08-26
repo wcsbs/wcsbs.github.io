@@ -48,8 +48,16 @@
               <button class="btn btn-lg btn-primary pull-xs-right">
                 更新个人信息
               </button>
-              <router-link class="navbar-brand" :to="{ name: 'home' }"
-                >返回</router-link
+              <span
+                v-if="currentUser.state == 'needToChangePassword'"
+                style="font-size:24px;"
+              >
+                <strong>
+                  请马上修改密码！
+                </strong>
+              </span>
+              <router-link v-else class="navbar-brand" :to="{ name: 'home' }"
+                >返回主页</router-link
               >
             </fieldset>
           </form>

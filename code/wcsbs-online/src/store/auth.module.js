@@ -171,13 +171,13 @@ const actions = {
       context.commit(PURGE_AUTH);
     }
   },
-  [UPDATE_USER](context, payload) {
+  [UPDATE_USER](context, currentUser) {
     const loggedInUser = Parse.User.current();
-    const password = payload.password;
-    const confirmPassword = payload.confirmPassword;
+    const password = currentUser.password;
+    const confirmPassword = currentUser.confirmPassword;
 
-    loggedInUser.set("name", payload.name);
-    loggedInUser.set("phone", payload.phone);
+    loggedInUser.set("name", currentUser.name);
+    loggedInUser.set("phone", currentUser.phone);
 
     return new Promise((resolve, reject) => {
       if (password) {
@@ -192,12 +192,14 @@ const actions = {
         }
 
         loggedInUser.set("password", password);
+        loggedInUser.unset("state");
       }
 
       loggedInUser
         .save()
         .then(parseUser => {
           Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
+          currentUser.state = undefined;
           resolve(parseUser);
         })
         .catch(e => {

@@ -29,6 +29,7 @@ Parse.Cloud.define("user:getRoles", async ({ user }) => {
     username: user.get("username"),
     phone: user.get("phone"),
     email: user.get("email"),
+    state: user.get("state"),
     roles: roles.map(r => r.get("name"))
   };
   return user;
@@ -81,9 +82,15 @@ Parse.Cloud.define("user:adminUpdateUser", async ({ params: { user } }) => {
     { enabled: user.isStudent, roleName: "StudentUser" }
   ];
 
-  var userQuery = new Parse.Query(Parse.User);
-  userQuery.equalTo("objectId", user.id);
-  var parseUser = await userQuery.first(MASTER_KEY);
+  var parseUser;
+  if (user.id) {
+    var userQuery = new Parse.Query(Parse.User);
+    userQuery.equalTo("objectId", user.id);
+    parseUser = await userQuery.first(MASTER_KEY);
+  } else {
+    parseUser = new Parse.User();
+    parseUser.set("username", user.username);
+  }
 
   parseUser.set("name", user.name);
   parseUser.set("phone", user.phone);

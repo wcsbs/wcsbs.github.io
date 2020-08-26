@@ -5,6 +5,7 @@
       <div v-if="users.length === 0" class="user-preview">
         No users are here... yet.
       </div>
+      <button @click="createUser" class="btn pull-xs-right">创建新用户</button>
       <VUserPreview v-for="(user, index) in users" :user="user" :key="index" />
     </div>
   </div>
@@ -29,6 +30,9 @@ export default {
   methods: {
     fetchUsers() {
       this.$store.dispatch(FETCH_USERS);
+    },
+    createUser() {
+      this.$router.push({ name: "createUser" });
     }
   }
 };
