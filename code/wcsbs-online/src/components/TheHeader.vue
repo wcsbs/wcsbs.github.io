@@ -1,6 +1,5 @@
 <template>
-  <nav class="navbar navbar-light">
-    <br />
+  <nav v-if="isAuthenticated" class="navbar navbar-light">
     <div class="container">
       <router-link :to="{ name: 'home' }" class="navbar-brand"
         >主页</router-link

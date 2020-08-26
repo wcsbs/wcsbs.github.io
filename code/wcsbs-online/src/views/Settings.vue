@@ -50,7 +50,7 @@
               </button>
               <span
                 v-if="currentUser.state == 'needToChangePassword'"
-                style="font-size:24px;"
+                style="font-size:22px;"
               >
                 <strong>
                   请马上修改密码！

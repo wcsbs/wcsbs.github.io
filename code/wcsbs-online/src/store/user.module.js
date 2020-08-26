@@ -1,13 +1,17 @@
 import Parse from "parse";
 import Toasted from "vue-toasted";
 import Vue from "vue";
-import { FETCH_USERS } from "./actions.type";
-import { UPDATE_USER_BY_ADMIN, ADMIN_FETCH_USER } from "./actions.type";
+import {
+  FETCH_USERS,
+  FILTER_USERS,
+  UPDATE_USER_BY_ADMIN,
+  ADMIN_FETCH_USER
+} from "./actions.type";
 import {
   FETCH_USERS_START,
   FETCH_USERS_END,
   SET_USER,
-  UPDATE_USER_IN_LIST
+  FILTER_USERS_IN_LIST
 } from "./mutations.type";
 import store from "./index";
 
@@ -16,6 +20,7 @@ Vue.use(Toasted);
 const state = {
   user: {},
   users: [],
+  allUsers: [],
   isLoadingUsers: true,
   usersCount: 0
 };
@@ -49,6 +54,10 @@ const actions = {
         console.log(`error loading user list: ${e.message}`);
         throw new Error(e);
       });
+  },
+  [FILTER_USERS](context, filterText) {
+    console.log(`${FILTER_USERS} - filterText: ${JSON.stringify(filterText)}`);
+    context.commit(FILTER_USERS_IN_LIST, filterText);
   },
   [ADMIN_FETCH_USER](context, userSlug) {
     console.log(`${ADMIN_FETCH_USER} - userSlug: ${userSlug}`);
@@ -101,7 +110,6 @@ const actions = {
       Parse.Cloud.run(adminUpdateUser, { user, userToUpdate })
         .then(user => {
           context.commit(SET_USER, user);
-          context.commit(UPDATE_USER_IN_LIST, user);
           Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
           resolve();
         })
@@ -124,13 +132,19 @@ const mutations = {
   },
   [FETCH_USERS_END](state, { users, usersCount }) {
     state.users = users;
+    state.allUsers = users;
     state.usersCount = usersCount;
     state.isLoadingUsers = false;
   },
-  [UPDATE_USER_IN_LIST](state, data) {
-    state.users = state.users.map(user => {
-      return user.slug !== data.slug ? user : data;
-    });
+  [FILTER_USERS_IN_LIST](state, filterText) {
+    if (!filterText || filterText == "") {
+      state.users = state.allUsers;
+    } else {
+      state.users = state.allUsers.filter(user => {
+        const text = `${user.name}\t${user.username}\t${user.email}\t${user.phone}`;
+        return text.toLowerCase().includes(filterText.toLowerCase());
+      });
+    }
   }
 };
 

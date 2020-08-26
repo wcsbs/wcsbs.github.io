@@ -13,5 +13,5 @@ export const UPDATE_ARTICLE_IN_LIST = "updateArticleInList";
 export const RESET_STATE = "resetModuleState";
 export const FETCH_USERS_END = "setUsers";
 export const FETCH_USERS_START = "setLoadingUsers";
-export const UPDATE_USER_IN_LIST = "updateUserInList";
+export const FILTER_USERS_IN_LIST = "filterUserInList";
 export const SET_USER = "setUser";
