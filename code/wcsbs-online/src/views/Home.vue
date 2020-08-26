@@ -33,22 +33,6 @@
                   >课程管理</router-link
                 >
               </li>
-              <li v-if="isClassAdmin" class="nav-item">
-                <router-link
-                  :to="{ name: 'home-my-feed' }"
-                  class="nav-link"
-                  active-class="active"
-                  >实修管理</router-link
-                >
-              </li>
-              <li v-if="isStudent" class="nav-item">
-                <router-link
-                  :to="{ name: 'home-my-feed' }"
-                  class="nav-link"
-                  active-class="active"
-                  >闻思修</router-link
-                >
-              </li>
               <li v-if="isTeachingAssistant" class="nav-item">
                 <router-link
                   :to="{ name: 'home-my-feed' }"

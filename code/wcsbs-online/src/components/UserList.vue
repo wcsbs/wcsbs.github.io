@@ -5,7 +5,7 @@
       <div v-if="users.length === 0" class="user-preview">
         No users are here... yet.
       </div>
-      <VUserPreview v-for="user in users" :user="user" :key="user.id" />
+      <VUserPreview v-for="(user, index) in users" :user="user" :key="index" />
     </div>
   </div>
 </template>

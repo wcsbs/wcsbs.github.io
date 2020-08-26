@@ -54,6 +54,14 @@ const actions = {
     Parse.Cloud.run(adminFetchUser, { userSlug })
       .then(user => {
         console.log(`${ADMIN_FETCH_USER} - user: ${JSON.stringify(user)}`);
+
+        // default user role is StudentUser
+        user.isStudent =
+          user.roles.length == 0 || user.roles.includes("StudentUser");
+        user.isTeachingAssistant = user.roles.includes("TeachingAssistantUser");
+        user.isClassAdmin = user.roles.includes("ClassAdminUser");
+        user.isSystemAdmin = user.roles.includes("B4aAdminUser");
+
         context.commit(SET_USER, user);
       })
       .catch(e => {

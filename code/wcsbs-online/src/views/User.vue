@@ -64,15 +64,77 @@
                   autocomplete="new-password"
                 />
               </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">用户角色</label>
+                <div class="form-control">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="isSystemAdmin"
+                      v-model="user.isSystemAdmin"
+                    />
+                    <label class="form-check-label" for="isSystemAdmin"
+                      >&nbsp;系统管理员</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="isClassAdmin"
+                      v-model="user.isClassAdmin"
+                    />
+                    <label class="form-check-label" for="isClassAdmin"
+                      >&nbsp;学修管理员</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="isTeachingAssistant"
+                      v-model="user.isTeachingAssistant"
+                    />
+                    <label class="form-check-label" for="isTeachingAssistant"
+                      >&nbsp;学修助理</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="isStudent"
+                      v-model="user.isStudent"
+                    />
+                    <label class="form-check-label" for="isStudent"
+                      >&nbsp;学员</label
+                    >
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">用户状态</label>
+                <div class="form-control">
+                  <select v-model="user.state">
+                    <option
+                      v-for="state in userStates"
+                      v-bind:key="state.key"
+                      v-bind:value="state.key"
+                    >
+                      {{ state.value }}
+                    </option>
+                  </select>
+                </div>
+              </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
                 更新用户信息
               </button>
               <router-link
                 class="navbar-brand"
                 :to="{ name: 'home-user-management' }"
+                >返回</router-link
               >
-                返回
-              </router-link>
             </fieldset>
           </form>
         </div>
@@ -89,6 +151,15 @@ import store from "@/store";
 
 export default {
   name: "RwvUser",
+  data() {
+    return {
+      userStates: [
+        { value: "正常", key: undefined },
+        { value: "密码需更改", key: "needToChangePassword" },
+        { value: "被屏蔽", key: "blocked" }
+      ]
+    };
+  },
   props: {
     slug: {
       type: String,
