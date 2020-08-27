@@ -3,6 +3,7 @@ const MASTER_KEY = { useMasterKey: true };
 
 const requireAuth = user => {
   if (!user) throw new Error("User must be authenticated!");
+  Parse.Cloud.useMasterKey();
 };
 
 const requireRole = (user, role) => {
@@ -106,7 +107,7 @@ Parse.Cloud.define(
       userQuery.equalTo("objectId", userToUpdate.id);
       parseUser = await userQuery.first(MASTER_KEY);
     } else {
-      parseUser = new Parse.User();
+      parseUser = new Parse.User(MASTER_KEY);
     }
 
     parseUser.set("username", userToUpdate.username);
@@ -114,7 +115,7 @@ Parse.Cloud.define(
     parseUser.set("phone", userToUpdate.phone);
     parseUser.set("email", userToUpdate.email);
 
-    if (userToUpdate.state == "blocked") {
+    if (userToUpdate.state === "blocked") {
       parseUser.set("emailVerified", false); // blocking user form login
     } else {
       if (userToUpdate.password) {
@@ -145,7 +146,7 @@ Parse.Cloud.define(
         roleNames.push(i.roleName);
       }
 
-      const existing = roles.some(r => r.get("name") == i.roleName);
+      const existing = roles.some(r => r.get("name") === i.roleName);
       if (i.enabled != existing) {
         var roleQuery = new Parse.Query(Parse.Role);
         roleQuery.equalTo("name", i.roleName);
@@ -172,3 +173,33 @@ Parse.Cloud.define(
     };
   }
 );
+
+Parse.Cloud.define("home:getStudentDashboard", async ({ user }) => {
+  requireRole(user, "StudentUser");
+  var query = new Parse.Query("Class");
+  query.equalTo("students", user);
+  const parseClasses = await query.find();
+  const parseClassSessions
+
+  for (var i= 0;i<parseClasses.length;i++){
+    query = parseClasses[i].relation("sessions").query();
+    var d = new Date();
+    d.setDate(d.getDate() - 3);
+    query.greaterThanOrEqualTo("scheduledAt", d);
+    const parseClassSessions = await query.find();
+  }
+  return parseClasses.map(parseClass => {
+
+  });
+
+  user = {
+    id: user.id,
+    name: user.get("name"),
+    username: user.get("username"),
+    phone: user.get("phone"),
+    email: user.get("email"),
+    state: user.get("state"),
+    roles: roles.map(r => r.get("name"))
+  };
+  return user;
+});
