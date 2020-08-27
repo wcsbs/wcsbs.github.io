@@ -5,7 +5,6 @@ import store from "./store";
 import Parse from "parse";
 
 import { CHECK_AUTH } from "./store/actions.type";
-import ApiService from "./common/api.service";
 import DateFilter from "./common/date.filter";
 import ErrorFilter from "./common/error.filter";
 
@@ -13,7 +12,6 @@ Vue.config.productionTip = false;
 Vue.filter("date", DateFilter);
 Vue.filter("error", ErrorFilter);
 
-ApiService.init();
 Parse.initialize(
   "ac8UZVIGoUpTW7dIF9no0KsaG8AvEWJV5ykCjJSS", // YOUR APP ID
   "07aVCHnW5psmgZ9fcSM54VAfTgsAwOTHud7HkyZH" // YOUR Javascript  KEY
@@ -24,16 +22,13 @@ Parse.serverURL = "https://parseapi.back4app.com";
 // Ensure we checked auth before each page load.
 router.beforeEach((to, from, next) => {
   Promise.all([store.dispatch(CHECK_AUTH)]).then(() => {
-    // console.log(
-    //   `to:${JSON.stringify(to)} store.state.auth: ${JSON.stringify(store.state.auth)}`
-    // );
     if (
       store.state.auth &&
       store.state.auth.user.state == "needToChangePassword" &&
-      to.path != "/settings"
+      to.path != "/profile"
     ) {
       next({
-        path: "/settings",
+        path: "/profile",
         query: { redirect: to.fullPath }
       });
     } else if (to.matched.some(record => record.meta.requiresAuth)) {

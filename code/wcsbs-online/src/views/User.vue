@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-page">
+  <div class="profile-page">
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
@@ -142,7 +142,7 @@
               </button>
               <router-link
                 class="navbar-brand"
-                :to="{ name: 'home-user-management', skip: 'true' }"
+                :to="{ name: 'user-management', skip: 'true' }"
                 >返回</router-link
               >
             </fieldset>
@@ -187,7 +187,7 @@ export default {
   methods: {
     updateUser() {
       this.$store.dispatch(UPDATE_USER_BY_ADMIN, this.user).then(() => {
-        this.$router.push({ name: "home-user-management" });
+        this.$router.push({ name: "user-management" });
       });
     }
   }

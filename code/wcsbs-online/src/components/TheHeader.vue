@@ -6,7 +6,7 @@
       >
       <router-link
         v-if="isSystemAdmin"
-        :to="{ name: 'home-user-management' }"
+        :to="{ name: 'user-management' }"
         class="navbar-brand"
         >用户管理</router-link
       >
@@ -28,7 +28,7 @@
             class="nav-link"
             active-class="active"
             exact
-            :to="{ name: 'settings' }"
+            :to="{ name: 'profile' }"
           >
             <i class="ion-gear-a"></i>
             &nbsp;{{ currentUser.name }}

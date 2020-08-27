@@ -13,14 +13,8 @@ export default new Router({
     },
     {
       path: "/user-management",
-      name: "home-user-management",
-      component: () => import("@/views/HomeUserManagement"),
-      meta: { requiresAuth: true }
-    },
-    {
-      path: "/my-feed",
-      name: "home-my-feed",
-      component: () => import("@/views/HomeMyFeed"),
+      name: "user-management",
+      component: () => import("@/views/UserManagement"),
       meta: { requiresAuth: true }
     },
     {
@@ -39,10 +33,10 @@ export default new Router({
       component: () => import("@/views/Register")
     },
     {
-      name: "settings",
-      path: "/settings",
+      name: "profile",
+      path: "/profile",
       meta: { requiresAuth: true },
-      component: () => import("@/views/Settings")
+      component: () => import("@/views/Profile")
     },
     {
       name: "user",
@@ -52,8 +46,8 @@ export default new Router({
       props: true
     },
     {
-      name: "createUser",
-      path: "/createUser",
+      name: "userCreate",
+      path: "/userCreate",
       meta: { requiresAuth: true },
       component: () => import("@/views/User")
     }

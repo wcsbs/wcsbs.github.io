@@ -1,71 +1,71 @@
 <template>
   <div class="profile-page">
-    <div class="user-info">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12 col-md-10 offset-md-1">
-            <img :src="profile.image" class="user-img" />
-            <h4>{{ profile.username }}</h4>
-            <p>{{ profile.bio }}</p>
-            <div v-if="isCurrentUser()">
-              <router-link
-                class="btn btn-sm btn-outline-secondary action-btn"
-                :to="{ name: 'settings' }"
-              >
-                <i class="ion-gear-a"></i> Edit Profile Settings
-              </router-link>
-            </div>
-            <div v-else>
-              <button
-                class="btn btn-sm btn-secondary action-btn"
-                v-if="profile.following"
-                @click.prevent="unfollow()"
-              >
-                <i class="ion-plus-round"></i> &nbsp;Unfollow
-                {{ profile.username }}
-              </button>
-              <button
-                class="btn btn-sm btn-outline-secondary action-btn"
-                v-if="!profile.following"
-                @click.prevent="follow()"
-              >
-                <i class="ion-plus-round"></i> &nbsp;Follow
-                {{ profile.username }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
+    <div class="container page">
       <div class="row">
-        <div class="col-xs-12 col-md-10 offset-md-1">
-          <div class="articles-toggle">
-            <ul class="nav nav-pills outline-active">
-              <li class="nav-item">
-                <router-link
-                  class="nav-link"
-                  active-class="active"
-                  exact
-                  :to="{ name: 'profile' }"
-                >
-                  My Articles
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link
-                  class="nav-link"
-                  active-class="active"
-                  exact
-                  :to="{ name: 'profile-favorites' }"
-                >
-                  Favorited Articles
-                </router-link>
-              </li>
-            </ul>
-          </div>
-          <router-view></router-view>
+        <div class="col-md-6 offset-md-3 col-xs-12">
+          <h1 class="text-xs-center">我的个人信息</h1>
+          <form class="auth-form" @submit.prevent="updateSettings()">
+            <fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">姓名</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="text"
+                  v-model="currentUser.name"
+                  placeholder="姓名"
+                  id="name"
+                />
+              </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">电话号码</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="phone"
+                  v-model="currentUser.phone"
+                  placeholder="电话号码"
+                />
+              </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">密码</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="password"
+                  v-model="currentUser.password"
+                  placeholder="密码"
+                  autocomplete="new-password"
+                />
+              </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">确认密码</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="password"
+                  v-model="currentUser.confirmPassword"
+                  placeholder="确认密码"
+                  autocomplete="new-password"
+                />
+              </fieldset>
+              <button class="btn btn-lg btn-primary pull-xs-right">
+                更新个人信息
+              </button>
+              <span
+                v-if="currentUser.state == 'needToChangePassword'"
+                style="font-size:22px;"
+              >
+                <strong>
+                  请马上修改密码！
+                </strong>
+              </span>
+              <router-link v-else class="navbar-brand" :to="{ name: 'home' }"
+                >返回主页</router-link
+              >
+            </fieldset>
+          </form>
+          <!-- Line break for logout button -->
+          <hr />
+          <button @click="logout" class="btn btn-outline-danger pull-xs-right">
+            退出登录
+          </button>
         </div>
       </div>
     </div>
@@ -74,38 +74,27 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  FETCH_PROFILE,
-  FETCH_PROFILE_FOLLOW,
-  FETCH_PROFILE_UNFOLLOW
-} from "@/store/actions.type";
+import { LOGOUT, UPDATE_USER } from "@/store/actions.type";
 
 export default {
-  name: "RwvProfile",
-  mounted() {
-    this.$store.dispatch(FETCH_PROFILE, this.$route.params);
-  },
+  name: "RwvSettings",
   computed: {
-    ...mapGetters(["currentUser", "profile", "isAuthenticated"])
+    ...mapGetters(["currentUser"])
+  },
+  mounted() {
+    this.currentUser.password = null;
+    this.currentUser.confirmPassword = null;
   },
   methods: {
-    isCurrentUser() {
-      if (this.currentUser.username && this.profile.username) {
-        return this.currentUser.username === this.profile.username;
-      }
-      return false;
+    updateSettings() {
+      this.$store.dispatch(UPDATE_USER, this.currentUser).then(() => {
+        this.$router.push({ name: "home" });
+      });
     },
-    follow() {
-      if (!this.isAuthenticated) return;
-      this.$store.dispatch(FETCH_PROFILE_FOLLOW, this.$route.params);
-    },
-    unfollow() {
-      this.$store.dispatch(FETCH_PROFILE_UNFOLLOW, this.$route.params);
-    }
-  },
-  watch: {
-    $route(to) {
-      this.$store.dispatch(FETCH_PROFILE, to.params);
+    logout() {
+      this.$store.dispatch(LOGOUT).then(() => {
+        this.$router.push({ name: "home" });
+      });
     }
   }
 };

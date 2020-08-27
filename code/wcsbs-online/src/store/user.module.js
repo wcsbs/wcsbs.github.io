@@ -11,6 +11,7 @@ import {
   FETCH_USERS_START,
   FETCH_USERS_END,
   SET_USER,
+  UPDATE_USER_IN_LIST,
   FILTER_USERS_IN_LIST
 } from "./mutations.type";
 import store from "./index";
@@ -69,23 +70,31 @@ const actions = {
     const user = store.state.auth.user;
     console.log(`${ADMIN_FETCH_USER} - auth.user: ${JSON.stringify(user)}`);
     const adminFetchUser = "user:adminFetchUser";
-    Parse.Cloud.run(adminFetchUser, { user, userSlug })
-      .then(user => {
-        console.log(`${ADMIN_FETCH_USER} - user: ${JSON.stringify(user)}`);
+    return new Promise((resolve, reject) => {
+      Parse.Cloud.run(adminFetchUser, { user, userSlug })
+        .then(user => {
+          console.log(`${ADMIN_FETCH_USER} - user: ${JSON.stringify(user)}`);
 
-        // default user role is StudentUser
-        user.isStudent =
-          user.roles.length == 0 || user.roles.includes("StudentUser");
-        user.isTeachingAssistant = user.roles.includes("TeachingAssistantUser");
-        user.isClassAdmin = user.roles.includes("ClassAdminUser");
-        user.isSystemAdmin = user.roles.includes("B4aAdminUser");
+          // default user role is StudentUser
+          user.isStudent =
+            user.roles.length == 0 || user.roles.includes("StudentUser");
+          user.isTeachingAssistant = user.roles.includes(
+            "TeachingAssistantUser"
+          );
+          user.isClassAdmin = user.roles.includes("ClassAdminUser");
+          user.isSystemAdmin = user.roles.includes("B4aAdminUser");
 
-        context.commit(SET_USER, user);
-      })
-      .catch(e => {
-        console.log(`error loading user: ${e.message}`);
-        throw new Error(e);
-      });
+          context.commit(SET_USER, user);
+          resolve();
+        })
+        .catch(e => {
+          console.log(`error loading user: ${e.message}`);
+          Vue.toasted.error(`Error loading user: ${e.message}`, {
+            duration: 5000
+          });
+          reject();
+        });
+    });
   },
   [UPDATE_USER_BY_ADMIN](context, userToUpdate) {
     const user = store.state.auth.user;
@@ -109,7 +118,7 @@ const actions = {
       }
       Parse.Cloud.run(adminUpdateUser, { user, userToUpdate })
         .then(user => {
-          context.commit(SET_USER, user);
+          context.commit(UPDATE_USER_IN_LIST, user);
           Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
           resolve();
         })
@@ -135,6 +144,25 @@ const mutations = {
     state.allUsers = users;
     state.usersCount = usersCount;
     state.isLoadingUsers = false;
+  },
+  [UPDATE_USER_IN_LIST](state, user) {
+    var found = false;
+    var place = 0;
+    for (var i = 0; i < state.allUsers.length; i++) {
+      if (state.allUsers[i].id == user.id) {
+        found = true;
+        state.allUsers[i] = user;
+        break;
+      }
+      if (user.name > state.allUsers[i].name) {
+        place = i + 1;
+      }
+    }
+    if (!found) {
+      state.allUsers.splice(place, 0, user);
+    }
+
+    state.users = state.allUsers;
   },
   [FILTER_USERS_IN_LIST](state, filterText) {
     if (!filterText || filterText == "") {

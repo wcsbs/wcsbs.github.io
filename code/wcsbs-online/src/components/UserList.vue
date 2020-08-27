@@ -2,14 +2,7 @@
   <div>
     <div v-if="isLoadingUsers" class="user-preview">正在获取用户列表...</div>
     <div v-else>
-      <div v-if="users.length === 0" class="user-preview">
-        No users are here... yet.
-      </div>
-      <button
-        v-else
-        @click="createUser"
-        class="btn btn-outline-danger pull-xs-right"
-      >
+      <button @click="createUser" class="btn btn-outline-danger pull-xs-right">
         创建新用户
       </button>
       <input
@@ -21,7 +14,15 @@
       <button @click="clearFilter">
         清除
       </button>
-      <VUserPreview v-for="(user, index) in users" :user="user" :key="index" />
+      <div v-if="users.length === 0" class="user-preview">
+        没有找到用户！
+      </div>
+      <VUserPreview
+        v-else
+        v-for="(user, index) in users"
+        :user="user"
+        :key="index"
+      />
     </div>
   </div>
 </template>
@@ -29,7 +30,7 @@
 <script>
 import { mapGetters } from "vuex";
 import VUserPreview from "./VUserPreview";
-import { FETCH_USERS, FILTER_USERS } from "../store/actions.type";
+import { FILTER_USERS } from "../store/actions.type";
 
 export default {
   name: "UserList",
@@ -40,7 +41,7 @@ export default {
     ...mapGetters(["usersCount", "isLoadingUsers", "users"])
   },
   mounted() {
-    this.fetchUsers();
+    this.filterText = "";
   },
   data: function() {
     return {
@@ -48,9 +49,6 @@ export default {
     };
   },
   methods: {
-    fetchUsers() {
-      this.$store.dispatch(FETCH_USERS);
-    },
     filterUsers(filterText) {
       this.$store.dispatch(FILTER_USERS, filterText);
     },
@@ -59,7 +57,7 @@ export default {
       this.$store.dispatch(FILTER_USERS, this.filterText);
     },
     createUser() {
-      this.$router.push({ name: "createUser" });
+      this.$router.push({ name: "userCreate" });
     }
   }
 };
