@@ -107,11 +107,12 @@ Parse.Cloud.define(
       parseUser = await userQuery.first(MASTER_KEY);
     } else {
       parseUser = new Parse.User();
-      parseUser.set("username", userToUpdate.username);
     }
 
+    parseUser.set("username", userToUpdate.username);
     parseUser.set("name", userToUpdate.name);
     parseUser.set("phone", userToUpdate.phone);
+    parseUser.set("email", userToUpdate.email);
 
     if (userToUpdate.state == "blocked") {
       parseUser.set("emailVerified", false); // blocking user form login

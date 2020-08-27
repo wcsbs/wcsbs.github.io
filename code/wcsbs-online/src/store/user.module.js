@@ -106,6 +106,11 @@ const actions = {
     const password = userToUpdate.password;
     const confirmPassword = userToUpdate.confirmPassword;
 
+    const i = store.state.auth.users.findIndex(u => u.id === userToUpdate.id);
+    if (i >= 0 && store.state.auth.allUsers[i].email == userToUpdate.email) {
+      userToUpdate.unset("email");
+    }
+
     return new Promise((resolve, reject) => {
       if (password && password.length < 6) {
         Vue.toasted.error("密码不可以少于6位！", { duration: 5000 });

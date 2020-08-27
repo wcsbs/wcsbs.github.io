@@ -10,15 +10,6 @@
               <fieldset class="form-group">
                 <label style="font-size:22px;">用户名</label>
                 <input
-                  v-if="user.id"
-                  class="form-control form-control-lg"
-                  type="text"
-                  v-model="user.username"
-                  placeholder="用户名"
-                  readonly
-                />
-                <input
-                  v-else
                   class="form-control form-control-lg"
                   type="text"
                   v-model="user.username"
@@ -41,7 +32,6 @@
                   type="email"
                   v-model="user.email"
                   placeholder="电邮地址"
-                  readonly
                 />
               </fieldset>
               <fieldset class="form-group">
