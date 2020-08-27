@@ -56,7 +56,7 @@ export default {
     ...mapGetters(["usersCount", "isLoadingUsers", "users"])
   },
   mounted() {
-    this.filterText = "";
+    this.clearFilter();
   },
   data: function() {
     return {

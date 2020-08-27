@@ -106,10 +106,13 @@ const actions = {
     const password = userToUpdate.password;
     const confirmPassword = userToUpdate.confirmPassword;
 
-    const i = store.state.auth.users.findIndex(u => u.id === userToUpdate.id);
-    if (i >= 0 && store.state.auth.allUsers[i].email == userToUpdate.email) {
-      userToUpdate.unset("email");
+    const i = store.state.user.allUsers.findIndex(
+      u => u.id === userToUpdate.id
+    );
+    if (i >= 0 && store.state.user.allUsers[i].email === userToUpdate.email) {
+      userToUpdate.email = undefined;
     }
+    console.log(`${i} - userToUpdate: ${JSON.stringify(userToUpdate)}`);
 
     return new Promise((resolve, reject) => {
       if (password && password.length < 6) {
