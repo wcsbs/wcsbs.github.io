@@ -1,13 +1,10 @@
-export const FETCH_END = "setArticles";
-export const FETCH_START = "setLoading";
 export const PURGE_AUTH = "logOut";
-export const SET_ARTICLE = "setArticle";
 export const SET_AUTH = "setAuth";
-export const SET_COMMENTS = "setComments";
 export const SET_ERROR = "setError";
-export const RESET_STATE = "resetModuleState";
 export const FETCH_USERS_END = "setUsers";
 export const FETCH_USERS_START = "setLoadingUsers";
 export const FILTER_USERS_IN_LIST = "filterUserInList";
 export const UPDATE_USER_IN_LIST = "updateUserInList";
 export const SET_USER = "setUser";
+export const FETCH_DASHBOARDS_END = "setDashboardss";
+export const FETCH_DASHBOARDS_START = "setLoadingDashboards";

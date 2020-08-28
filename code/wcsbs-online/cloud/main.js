@@ -3,6 +3,9 @@ const MASTER_KEY = { useMasterKey: true };
 
 const requireAuth = user => {
   if (!user) throw new Error("User must be authenticated!");
+  if (!user.roles || user.roles.length < 1) {
+    throw new Error("User must have a role!");
+  }
   Parse.Cloud.useMasterKey();
 };
 
@@ -27,10 +30,11 @@ Parse.Cloud.define(
 );
 
 Parse.Cloud.define("user:getRoles", async ({ user }) => {
-  requireAuth(user);
   var userRoleQuery = new Parse.Query(Parse.Role);
   userRoleQuery.equalTo("users", user);
   const roles = await userRoleQuery.find(MASTER_KEY);
+  const rolesToReturn =
+    roles.length > 0 ? roles.map(r => r.get("name")) : ["StudentUser"];
 
   user = {
     id: user.id,
@@ -39,7 +43,7 @@ Parse.Cloud.define("user:getRoles", async ({ user }) => {
     phone: user.get("phone"),
     email: user.get("email"),
     state: user.get("state"),
-    roles: roles.map(r => r.get("name"))
+    roles: rolesToReturn
   };
   return user;
 });
@@ -173,33 +177,34 @@ Parse.Cloud.define(
     };
   }
 );
-
-Parse.Cloud.define("home:getStudentDashboard", async ({ user }) => {
+const loadStudentDashboard = async function(user) {
   requireRole(user, "StudentUser");
   var query = new Parse.Query("Class");
   query.equalTo("students", user);
   const parseClasses = await query.find();
-  const parseClassSessions
 
-  for (var i= 0;i<parseClasses.length;i++){
+  for (var i = 0; i < parseClasses.length; i++) {
     query = parseClasses[i].relation("sessions").query();
     var d = new Date();
     d.setDate(d.getDate() - 3);
     query.greaterThanOrEqualTo("scheduledAt", d);
     const parseClassSessions = await query.find();
+    parseClasses.set("sessions", parseClassSessions);
   }
-  return parseClasses.map(parseClass => {
 
-  });
-
-  user = {
-    id: user.id,
-    name: user.get("name"),
-    username: user.get("username"),
-    phone: user.get("phone"),
-    email: user.get("email"),
-    state: user.get("state"),
-    roles: roles.map(r => r.get("name"))
+  return {
+    name: "我的闻思修",
+    classes: parseClasses
   };
-  return user;
+};
+
+Parse.Cloud.define("home:loadDashboards", async ({ params: { user } }) => {
+  requireAuth(user);
+
+  const result = {};
+  if (user.roles.includes("StudentUser")) {
+    result.studentDashboard = await loadStudentDashboard(user);
+  }
+
+  return result;
 });

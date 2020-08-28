@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "VUserPreview",
+  name: "UserPreview",
   components: {},
   props: {
     user: { type: Object, required: true }

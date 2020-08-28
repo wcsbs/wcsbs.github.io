@@ -32,7 +32,7 @@
       <div v-if="users.length === 0" class="user-preview">
         没有找到用户！
       </div>
-      <VUserPreview
+      <UserPreview
         v-else
         v-for="(user, index) in users"
         :user="user"
@@ -44,13 +44,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import VUserPreview from "./VUserPreview";
+import UserPreview from "./UserPreview";
 import { FILTER_USERS } from "../store/actions.type";
 
 export default {
   name: "UserList",
   components: {
-    VUserPreview
+    UserPreview
   },
   computed: {
     ...mapGetters(["usersCount", "isLoadingUsers", "users"])
