@@ -18,7 +18,7 @@
       >
       <router-link
         v-if="isTeachingAssistant"
-        :to="{ name: 'class-assistant' }"
+        :to="{ name: 'class-management' }"
         class="navbar-brand"
         >课程助理</router-link
       >

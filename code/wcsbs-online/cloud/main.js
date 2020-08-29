@@ -3,15 +3,12 @@ const MASTER_KEY = { useMasterKey: true };
 
 const requireAuth = user => {
   if (!user) throw new Error("User must be authenticated!");
-  if (!user.roles || user.roles.length < 1) {
-    throw new Error("User must have a role!");
-  }
   Parse.Cloud.useMasterKey();
 };
 
-const requireRole = (user, role) => {
-  if (!user) throw new Error("User must be authenticated!");
-  if (!user.roles.includes(role)) {
+const requireRole = (userWithRoles, role) => {
+  if (!userWithRoles) throw new Error("User must be authenticated!");
+  if (!userWithRoles.roles.includes(role)) {
     throw new Error(`User must be ${role}!`);
   }
 };
@@ -36,7 +33,7 @@ Parse.Cloud.define("user:getRoles", async ({ user }) => {
   const rolesToReturn =
     roles.length > 0 ? roles.map(r => r.get("name")) : ["StudentUser"];
 
-  user = {
+  return {
     id: user.id,
     name: user.get("name"),
     username: user.get("username"),
@@ -45,56 +42,64 @@ Parse.Cloud.define("user:getRoles", async ({ user }) => {
     state: user.get("state"),
     roles: rolesToReturn
   };
-  return user;
-});
-
-Parse.Cloud.define("user:list", async ({ params: { user } }) => {
-  requireRole(user, "B4aAdminUser");
-  var userQuery = new Parse.Query(Parse.User);
-  userQuery.ascending("name");
-  const results = await userQuery.find(MASTER_KEY);
-  const usersCount = results.length;
-  const users = results.map(user => {
-    return {
-      id: user.id,
-      name: user.get("name"),
-      username: user.get("username"),
-      phone: user.get("phone"),
-      email: user.get("email")
-    };
-  });
-  return { users, usersCount };
 });
 
 Parse.Cloud.define(
+  "user:adminFetchUsers",
+  async ({ user, params: { user: userWithRoles } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
+    var userQuery = new Parse.Query(Parse.User);
+    userQuery.ascending("name");
+    const results = await userQuery.find(MASTER_KEY);
+    const usersCount = results.length;
+    const users = results.map(user => {
+      return {
+        id: user.id,
+        name: user.get("name"),
+        username: user.get("username"),
+        phone: user.get("phone"),
+        email: user.get("email")
+      };
+    });
+    return { users, usersCount };
+  }
+);
+
+Parse.Cloud.define(
   "user:adminFetchUser",
-  async ({ params: { user, userSlug } }) => {
-    requireRole(user, "B4aAdminUser");
+  async ({ user, params: { user: userWithRoles, userSlug } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
     var userQuery = new Parse.Query(Parse.User);
     userQuery.equalTo("objectId", userSlug);
-    user = await userQuery.first(MASTER_KEY);
+    userWithRoles = await userQuery.first(MASTER_KEY);
 
     var userRoleQuery = new Parse.Query(Parse.Role);
-    userRoleQuery.equalTo("users", user);
+    userRoleQuery.equalTo("users", userWithRoles);
     const roles = await userRoleQuery.find(MASTER_KEY);
 
-    user = {
-      id: user.id,
-      name: user.get("name"),
-      username: user.get("username"),
-      phone: user.get("phone"),
-      email: user.get("email"),
-      state: user.get("state"),
+    userWithRoles = {
+      id: userWithRoles.id,
+      name: userWithRoles.get("name"),
+      username: userWithRoles.get("username"),
+      phone: userWithRoles.get("phone"),
+      email: userWithRoles.get("email"),
+      state: userWithRoles.get("state"),
       roles: roles.map(r => r.get("name"))
     };
-    return user;
+    return userWithRoles;
   }
 );
 
 Parse.Cloud.define(
   "user:adminUpdateUser",
-  async ({ params: { user, userToUpdate } }) => {
-    requireRole(user, "B4aAdminUser");
+  async ({ user, params: { user: userWithRoles, userToUpdate } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
     const array = [
       { enabled: userToUpdate.isSystemAdmin, roleName: "B4aAdminUser" },
       { enabled: userToUpdate.isClassAdmin, roleName: "ClassAdminUser" },
@@ -177,34 +182,52 @@ Parse.Cloud.define(
     };
   }
 );
-const loadStudentDashboard = async function(user) {
-  requireRole(user, "StudentUser");
+const loadStudentDashboard = async function(parseUser) {
+  const dashboard = {
+    classes: [],
+    practices: []
+  };
   var query = new Parse.Query("Class");
-  query.equalTo("students", user);
+  query.equalTo("students", parseUser);
   const parseClasses = await query.find();
 
   for (var i = 0; i < parseClasses.length; i++) {
-    query = parseClasses[i].relation("sessions").query();
+    const parseClass = parseClasses[i];
+    const classInfo = { name: parseClass.get("name") };
+
+    query = parseClass.relation("classAdminUsers").query();
+    const classAdminUsers = await query.find();
+    classInfo.teachers = classAdminUsers.map(u => u.get("name"));
+
+    query = parseClass.relation("students").query();
+    classInfo.studentCount = await query.count();
+
+    query = parseClass.relation("sessions").query();
     var d = new Date();
-    d.setDate(d.getDate() - 3);
-    query.greaterThanOrEqualTo("scheduledAt", d);
-    const parseClassSessions = await query.find();
-    parseClasses.set("sessions", parseClassSessions);
+    query.greaterThan("scheduledAt", d);
+    query.ascending("scheduledAt");
+    classInfo.nextSession = await query.first();
+
+    query.lessThanOrEqualTo("scheduledAt", d);
+    query.descending("scheduledAt");
+    classInfo.lastSession = await query.first();
+
+    dashboard.classes.push(classInfo);
   }
 
-  return {
-    name: "我的闻思修",
-    classes: parseClasses
-  };
+  return dashboard;
 };
 
-Parse.Cloud.define("home:loadDashboards", async ({ params: { user } }) => {
-  requireAuth(user);
+Parse.Cloud.define(
+  "home:loadDashboards",
+  async ({ user, params: { user: userWithRoles } }) => {
+    requireAuth(user);
 
-  const result = {};
-  if (user.roles.includes("StudentUser")) {
-    result.studentDashboard = await loadStudentDashboard(user);
+    const result = {};
+    if (userWithRoles.roles.includes("StudentUser")) {
+      result.studentDashboard = await loadStudentDashboard(user);
+    }
+
+    return result;
   }
-
-  return result;
-});
+);

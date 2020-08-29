@@ -8,7 +8,7 @@ import { FETCH_USERS } from "../store/actions.type";
 import store from "@/store";
 
 export default {
-  name: "user-management",
+  name: "UserManagement",
   components: {
     UserList
   },

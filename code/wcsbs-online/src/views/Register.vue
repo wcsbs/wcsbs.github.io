@@ -70,7 +70,7 @@ import { mapState } from "vuex";
 import { REGISTER } from "@/store/actions.type";
 
 export default {
-  name: "RwvRegister",
+  name: "Register",
   data() {
     return {
       name: "",

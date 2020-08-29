@@ -7,6 +7,7 @@
       <div v-if="home.studentDashboard" class="user-preview">
         <StudentDashboard :dashboard="home.studentDashboard" />
       </div>
+      <div v-else><h1>TODO</h1></div>
     </div>
   </div>
 </template>
@@ -16,8 +17,9 @@ import StudentDashboard from "@/components/StudentDashboard";
 import { mapGetters } from "vuex";
 import { FETCH_DASHBOARDS } from "../store/actions.type";
 import store from "@/store";
+
 export default {
-  name: "home-global",
+  name: "Home",
   components: {
     StudentDashboard
   },

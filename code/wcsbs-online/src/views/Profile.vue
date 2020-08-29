@@ -77,7 +77,7 @@ import { mapGetters } from "vuex";
 import { LOGOUT, UPDATE_USER } from "@/store/actions.type";
 
 export default {
-  name: "RwvSettings",
+  name: "Profile",
   computed: {
     ...mapGetters(["currentUser"])
   },

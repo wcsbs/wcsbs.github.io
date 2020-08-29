@@ -47,7 +47,7 @@ import { mapState, mapGetters } from "vuex";
 import { LOGIN } from "@/store/actions.type";
 
 export default {
-  name: "RwvLogin",
+  name: "Login",
   data() {
     return {
       email: null,

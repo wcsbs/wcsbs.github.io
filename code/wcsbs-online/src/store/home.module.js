@@ -49,6 +49,10 @@ const mutations = {
     state.isLoadingDashboards = true;
   },
   [FETCH_DASHBOARDS_END](state, result) {
+    if (result.studentDashboard) {
+      result.studentDashboard.name = "我的闻思修";
+    }
+
     state.home = result;
     state.isLoadingDashboards = false;
   }

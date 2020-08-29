@@ -150,7 +150,7 @@ import { UPDATE_USER_BY_ADMIN } from "@/store/actions.type";
 import store from "@/store";
 
 export default {
-  name: "RwvUser",
+  name: "User",
   data() {
     return {
       userStates: [

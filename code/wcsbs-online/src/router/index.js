@@ -18,6 +18,12 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: "/class-management",
+      name: "class-management",
+      component: () => import("@/views/UserManagement"),
+      meta: { requiresAuth: true }
+    },
+    {
       name: "login",
       path: "/login",
       component: () => import("@/views/Login")

@@ -32,7 +32,7 @@ import { mapState } from "vuex";
 import { RESET_PASSWORD } from "@/store/actions.type";
 
 export default {
-  name: "RwvLogin",
+  name: "ForgotPassword",
   data() {
     return {
       email: null,
