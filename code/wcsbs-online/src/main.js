@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import Parse from "parse";
 
+import { BootstrapVue } from 'bootstrap-vue'
 import { CHECK_AUTH } from "./store/actions.type";
 import DateFilter from "./common/date.filter";
 import ErrorFilter from "./common/error.filter";
@@ -47,6 +48,9 @@ router.beforeEach((to, from, next) => {
     }
   });
 });
+
+// Install BootstrapVue
+Vue.use(BootstrapVue);
 
 new Vue({
   router,

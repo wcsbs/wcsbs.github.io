@@ -1,17 +1,28 @@
 <template>
   <div class="user-preview">
     <h3 v-text="dashboard.name" />
-    <ul style="list-style-type:none">
-      <li>Classess: {{ dashboard.classes }}</li>
-    </ul>
+    <div v-if="dashboard.classes.length === 0" class="user-preview">
+      您还没有参加任何佛学课程！
+    </div>
+    <Class
+      v-else
+      v-for="(buddhaClass, index) in dashboard.classes"
+      :buddhaClass="buddhaClass"
+      :key="index"
+    />
   </div>
 </template>
 
 <script>
+import Class from "./Class";
+
 export default {
   name: "StudentDashboard",
   props: {
     dashboard: { type: Object, required: true }
+  },
+  components: {
+    Class
   }
 };
 </script>

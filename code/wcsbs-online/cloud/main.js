@@ -184,8 +184,7 @@ Parse.Cloud.define(
 );
 const loadStudentDashboard = async function(parseUser) {
   const dashboard = {
-    classes: [],
-    practices: []
+    classes: []
   };
   var query = new Parse.Query("Class");
   query.equalTo("students", parseUser);
@@ -193,24 +192,36 @@ const loadStudentDashboard = async function(parseUser) {
 
   for (var i = 0; i < parseClasses.length; i++) {
     const parseClass = parseClasses[i];
-    const classInfo = { name: parseClass.get("name") };
+    const classInfo = {
+      name: parseClass.get("name"),
+      url: parseClass.get("url")
+    };
 
     query = parseClass.relation("classAdminUsers").query();
     const classAdminUsers = await query.find();
     classInfo.teachers = classAdminUsers.map(u => u.get("name"));
 
-    query = parseClass.relation("students").query();
-    classInfo.studentCount = await query.count();
-
+    classInfo.classSessions = [];
     query = parseClass.relation("sessions").query();
     var d = new Date();
     query.greaterThan("scheduledAt", d);
     query.ascending("scheduledAt");
-    classInfo.nextSession = await query.first();
+    const nextSession = await query.first();
+    if (nextSession) {
+      classInfo.classSessions.push(nextSession);
+    }
 
+    query = parseClass.relation("sessions").query();
     query.lessThanOrEqualTo("scheduledAt", d);
     query.descending("scheduledAt");
-    classInfo.lastSession = await query.first();
+    const lastSession = await query.first();
+    if (lastSession) {
+      classInfo.classSessions.push(lastSession);
+    }
+
+    // classInfo.practices = [];
+    query = parseClass.relation("practices").query();
+    classInfo.practices = await query.find();
 
     dashboard.classes.push(classInfo);
   }
