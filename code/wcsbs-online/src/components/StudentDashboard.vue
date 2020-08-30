@@ -1,6 +1,5 @@
 <template>
   <div class="user-preview">
-    <h3 v-text="dashboard.name" />
     <div v-if="dashboard.classes.length === 0" class="user-preview">
       您还没有参加任何佛学课程！
     </div>
