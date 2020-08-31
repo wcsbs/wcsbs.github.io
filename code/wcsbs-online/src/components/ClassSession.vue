@@ -2,32 +2,39 @@
   <div>
     <b-card class="text-center" :header="session.name">
       <b-card-text>
-        <b-input-group prepend="上课时间：" class="mt-3">
-          <b-form-input
-            readonly
-            v-model="session.scheduledAtLocalDateTimeString"
-          ></b-form-input>
+        上课时间：{{ session.scheduledAtLocalDateTimeString }}
+        <b-input-group prepend="课前准备：" class="mt-3">
+          <b-form-input readonly v-model="session.materialState"></b-form-input>
           <b-input-group-append>
             <b-button variant="info" :href="session.url" target="_blank"
               >看传承/法本</b-button
             >
           </b-input-group-append>
         </b-input-group>
-        <b-form-textarea
-          v-model="session.description"
-          placeholder="Auto height textarea"
-          rows="3"
-          max-rows="8"
-        ></b-form-textarea>
-        <b-input-group prepend="考勤状态：" class="mt-3">
+        <b-input-group prepend="个人出勤：" class="mt-3">
           <b-form-input
             readonly
             v-model="session.attendanceState"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="info">{{ attendanceButtonName() }}</b-button>
+            <b-button variant="warning">{{ attendanceButtonName() }}</b-button>
+            <b-button
+              variant="info"
+              v-on:click="session.showDescription = !session.showDescription"
+            >
+              {{
+                session.showDescription ? "收起上课通知" : "显示上课通知"
+              }}</b-button
+            >
           </b-input-group-append>
         </b-input-group>
+        <b-form-textarea
+          v-if="session.showDescription"
+          v-model="session.description"
+          placeholder="Auto height textarea"
+          rows="3"
+          max-rows="8"
+        ></b-form-textarea>
       </b-card-text>
     </b-card>
   </div>
@@ -49,7 +56,9 @@ export default {
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
           this.classSession.get("scheduledAt")
         ),
-        attendanceState: "未报考勤"
+        showDescription: false,
+        attendanceState: "未报考勤",
+        materialState: "未看传承/未看法本"
       }
     };
   },

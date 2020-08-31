@@ -9,10 +9,20 @@
       还没有开课，敬请期待！
     </div>
     <div v-else class="user-preview">
+      <h4>正在闻思</h4>
       <ClassSession
         v-for="(classSession, index) in buddhaClass.classSessions"
         :classSession="classSession"
-        :key="index"
+        :key="classSession.id + index"
+      />
+      <b-button block variant="info" :href="buddhaClass.url" target="_blank"
+        >查看所有上课记录</b-button
+      >
+      <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
+      <Practice
+        v-for="(practice, index) in buddhaClass.practices"
+        :practice="practice"
+        :key="practice.id + index"
       />
     </div>
   </div>
@@ -20,11 +30,13 @@
 
 <script>
 import ClassSession from "./ClassSession";
+import Practice from "./Practice";
 
 export default {
   name: "Class",
   components: {
-    ClassSession
+    ClassSession,
+    Practice
   },
   props: {
     buddhaClass: { type: Object, required: true }
