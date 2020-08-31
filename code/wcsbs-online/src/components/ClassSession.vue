@@ -2,16 +2,39 @@
   <div>
     <b-card class="text-center" :header="session.name">
       <b-card-text>
-        上课时间：{{ session.scheduledAtLocalDateTimeString }}
-        <b-input-group prepend="课前准备：" class="mt-3">
-          <b-form-input readonly v-model="session.materialState"></b-form-input>
+        <b-input-group prepend="上课时间：" class="mt-3">
+          <b-form-input
+            readonly
+            v-model="session.scheduledAtLocalDateTimeString"
+          ></b-form-input>
           <b-input-group-append>
-            <b-button variant="info" :href="session.url" target="_blank"
-              >看传承/法本</b-button
-            >
+            <b-button variant="info" :href="session.url" target="_blank">
+              <b-icon icon="calendar-plus"></b-icon>
+            </b-button>
+            <!--
+            <add-to-calendar
+              :title="session.name"
+              :start="session.scheduledAt"
+              :details="session.description" inline-template >
+              :end="session.scheduledAt.addHours(4)"
+              <div>
+                <google-calendar id="google-calendar">
+                  <b-icon icon="calendar-plus"></b-icon>
+                </google-calendar>
+              </div>
+            </add-to-calendar>
+              -->
           </b-input-group-append>
         </b-input-group>
-        <b-input-group prepend="个人出勤：" class="mt-3">
+        <b-input-group prepend="课前学习：" class="mt-3">
+          <b-form-input readonly v-model="session.materialState"></b-form-input>
+          <b-input-group-append>
+            <b-button variant="info" :href="session.url" target="_blank">
+              <b-icon icon="book"></b-icon>
+            </b-button>
+          </b-input-group-append>
+        </b-input-group>
+        <b-input-group prepend="上课出勤：" class="mt-3">
           <b-form-input
             readonly
             v-model="session.attendanceState"
@@ -22,10 +45,12 @@
               variant="info"
               v-on:click="session.showDescription = !session.showDescription"
             >
-              {{
-                session.showDescription ? "收起上课通知" : "显示上课通知"
-              }}</b-button
-            >
+              <b-icon
+                v-if="session.showDescription"
+                icon="chevron-double-up"
+              ></b-icon>
+              <b-icon v-else icon="chevron-double-down"></b-icon>
+            </b-button>
           </b-input-group-append>
         </b-input-group>
         <b-form-textarea
@@ -53,6 +78,10 @@ export default {
         name: this.classSession.get("name"),
         url: this.classSession.get("url"),
         description: this.classSession.get("description"),
+        scheduledAt: this.classSession.get("scheduledAt"),
+        // scheduledAt: Date.parse(
+        //   this.classSession.get("scheduledAt").get("iso")
+        // ),
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
           this.classSession.get("scheduledAt")
         ),

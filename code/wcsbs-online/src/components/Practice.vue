@@ -15,10 +15,12 @@
                 practiceObj.showDescription = !practiceObj.showDescription
               "
             >
-              {{
-                practiceObj.showDescription ? "收起详情" : "显示详情"
-              }}</b-button
-            >
+              <b-icon
+                v-if="practiceObj.showDescription"
+                icon="chevron-double-up"
+              ></b-icon>
+              <b-icon v-else icon="chevron-double-down"></b-icon>
+            </b-button>
           </b-input-group-append>
         </b-input-group>
         <b-form-textarea
