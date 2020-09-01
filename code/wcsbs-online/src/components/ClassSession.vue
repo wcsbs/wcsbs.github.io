@@ -8,22 +8,13 @@
             v-model="session.scheduledAtLocalDateTimeString"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="info" :href="session.url" target="_blank">
+            <b-button
+              variant="info"
+              :href="addToGoogleCalendarUrl()"
+              target="_blank"
+            >
               <b-icon icon="calendar-plus"></b-icon>
             </b-button>
-            <!--
-            <add-to-calendar
-              :title="session.name"
-              :start="session.scheduledAt"
-              :details="session.description" inline-template >
-              :end="session.scheduledAt.addHours(4)"
-              <div>
-                <google-calendar id="google-calendar">
-                  <b-icon icon="calendar-plus"></b-icon>
-                </google-calendar>
-              </div>
-            </add-to-calendar>
-              -->
           </b-input-group-append>
         </b-input-group>
         <b-input-group prepend="课前学习：" class="mt-3">
@@ -78,10 +69,6 @@ export default {
         name: this.classSession.get("name"),
         url: this.classSession.get("url"),
         description: this.classSession.get("description"),
-        scheduledAt: this.classSession.get("scheduledAt"),
-        // scheduledAt: Date.parse(
-        //   this.classSession.get("scheduledAt").get("iso")
-        // ),
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
           this.classSession.get("scheduledAt")
         ),
@@ -101,6 +88,27 @@ export default {
         minute: "numeric"
       };
       return date.toLocaleDateString("zh-CN", options);
+    },
+    addToGoogleCalendarUrl() {
+      var eventStart = this.classSession.get("scheduledAt");
+      var eventEnd = new Date();
+      eventEnd.setTime(eventStart.getTime() + 4 * 60 * 60 * 1000);
+      eventStart = eventStart
+        .toISOString()
+        .replace(/.000/g, "")
+        .replace(/:/g, "")
+        .replace(/-/g, "");
+      eventEnd = eventEnd
+        .toISOString()
+        .replace(/.000/g, "")
+        .replace(/:/g, "")
+        .replace(/-/g, "");
+      console.log(eventStart);
+      var url = `${this.session.name}&details=${this.session.description}`;
+      url = encodeURI(url);
+      url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${url}&dates=${eventStart}%2F${eventEnd}`;
+      console.log(url);
+      return url;
     },
     attendanceButtonName() {
       const d = new Date();

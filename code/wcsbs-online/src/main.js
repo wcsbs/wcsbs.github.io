@@ -8,7 +8,6 @@ import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import { CHECK_AUTH } from "./store/actions.type";
 import DateFilter from "./common/date.filter";
 import ErrorFilter from "./common/error.filter";
-import AddToCalendar from "vue-add-to-calendar";
 
 Vue.config.productionTip = false;
 Vue.filter("date", DateFilter);
@@ -53,7 +52,6 @@ router.beforeEach((to, from, next) => {
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
-Vue.use(AddToCalendar);
 
 new Vue({
   router,
