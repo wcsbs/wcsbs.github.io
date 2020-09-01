@@ -37,4 +37,80 @@ document.addEventListener('DOMContentLoaded', () => {
 		}, false);
 	}
 
+	if (loggedInUser) {
+		element = document.getElementById('chuanchengCheck');
+
+		if (element) {
+			const pathname = window.location.pathname;
+			Parse.Cloud.run("home:getAttendance", { pathname })
+				.then(result => {
+					console.log(
+						`getAttendance - result: ${JSON.stringify(result)}`
+					);
+					element.setAttribute('type', 'checkbox');
+					element.checked = result.chuanCheng;
+
+					element.addEventListener('change', function () {
+						const attendance = { chuanCheng: this.checked };
+
+						Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
+							.then(result => {
+								console.log(
+									`updateAttendance - result: ${JSON.stringify(result)}`
+								);
+							})
+							.catch(e => {
+								console.log(`error in updateAttendance: ${e}`);
+							});
+					});
+
+
+					element = document.getElementById('fabenCheck');
+
+					if (element) {
+						element.setAttribute('type', 'checkbox');
+						element.checked = result.faBen;
+
+						element.addEventListener('change', function () {
+							const attendance = { faBen: this.checked };
+
+							Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
+								.then(result => {
+									console.log(
+										`updateAttendance - result: ${JSON.stringify(result)}`
+									);
+								})
+								.catch(e => {
+									console.log(`error in updateAttendance: ${e}`);
+								});
+						});
+					}
+
+					element = document.getElementById('fudaoCheck');
+
+					if (element) {
+						element.setAttribute('type', 'checkbox');
+						element.checked = result.fuDao;
+
+						element.addEventListener('change', function () {
+							const attendance = { fuDao: this.checked };
+	
+							Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
+								.then(result => {
+									console.log(
+										`updateAttendance - result: ${JSON.stringify(result)}`
+									);
+								})
+								.catch(e => {
+									console.log(`error in updateAttendance: ${e}`);
+								});
+						});
+						}
+
+				})
+				.catch(e => {
+					console.log(`error in getAttendance: ${e}`);
+				});
+		}
+	}
 }, false);

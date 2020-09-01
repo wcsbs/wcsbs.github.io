@@ -242,3 +242,82 @@ Parse.Cloud.define(
     return result;
   }
 );
+
+Parse.Cloud.define(
+  "home:getAttendance",
+  async ({ user, params: { pathname } }) => {
+    requireAuth(user);
+
+    const result = {};
+    var query = new Parse.Query("ClassSession");
+    query.contains("url", pathname);
+    const classSession = await query.first();
+
+    if (classSession) {
+      query = classSession.relation("attendances").query();
+      query.equalTo("userId", user.id);
+      const attendance = await query.first();
+
+      if (attendance) {
+        result.chuanCheng = attendance.get("chuanCheng");
+        result.faBen = attendance.get("faBen");
+        result.fuDao = attendance.get("fuDao");
+        result.shangKe = attendance.get("shangKe");
+      }
+    }
+
+    return result;
+  }
+);
+
+Parse.Cloud.define(
+  "home:updateAttendance",
+  async ({ user, params: { pathname, attendance } }) => {
+    requireAuth(user);
+
+    const result = {};
+    var query = new Parse.Query("ClassSession");
+    query.contains("url", pathname);
+    const classSession = await query.first();
+
+    if (classSession) {
+      const relation = classSession.relation("attendances");
+      query = relation.query();
+
+      const logger = require("parse-server").logger;
+
+      const userId = user.id;
+      logger.info(`updateAttendance - userId: ${userId}`);
+
+      query.equalTo("userId", userId);
+      var parseAttendance = await query.first();
+
+      const creatingAttendance = !parseAttendance;
+      if (creatingAttendance) {
+        parseAttendance = new Parse.Object("Attendance");
+        parseAttendance.set("userId", userId);
+      }
+
+      if (attendance) {
+        parseAttendance.set("chuanCheng", attendance.chuanCheng);
+        parseAttendance.set("faBen", attendance.faBen);
+        parseAttendance.set("fuDao", attendance.fuDao);
+        parseAttendance.set("shangKe", attendance.shangKe);
+      }
+
+      parseAttendance = await parseAttendance.save(null, MASTER_KEY);
+
+      if (creatingAttendance) {
+        relation.add(parseAttendance);
+        await classSession.save(null, MASTER_KEY);
+      }
+
+      result.chuanCheng = parseAttendance.get("chuanCheng");
+      result.faBen = parseAttendance.get("faBen");
+      result.fuDao = parseAttendance.get("fuDao");
+      result.shangKe = parseAttendance.get("shangKe");
+    }
+
+    return result;
+  }
+);
