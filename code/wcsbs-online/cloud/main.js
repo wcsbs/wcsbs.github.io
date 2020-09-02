@@ -182,7 +182,38 @@ Parse.Cloud.define(
     };
   }
 );
+
+const loadStudentAttendance = async function(userId, classSession) {
+  const logger = require("parse-server").logger;
+  logger.info(
+    `loadStudentAttendance - userId: ${userId} classSession: ${classSession._getId()}`
+  );
+
+  var result = {};
+  if (classSession) {
+    var query = classSession.relation("attendances").query();
+    query.equalTo("userId", userId);
+    const attendance = await query.first();
+
+    logger.info(`loadStudentAttendance - attendance: ${attendance}`);
+
+    if (attendance) {
+      result = {
+        chuanCheng: attendance.get("chuanCheng"),
+        faBen: attendance.get("faBen"),
+        fuDao: attendance.get("fuDao"),
+        shangKe: attendance.get("shangKe"),
+        qingJia: attendance.get("qingJia")
+      };
+
+      logger.info(`loadStudentAttendance - result: ${JSON.stringify(result)}`);
+    }
+  }
+  return result;
+};
+
 const loadStudentDashboard = async function(parseUser) {
+  const logger = require("parse-server").logger;
   const dashboard = {
     classes: []
   };
@@ -194,14 +225,15 @@ const loadStudentDashboard = async function(parseUser) {
     const parseClass = parseClasses[i];
     const classInfo = {
       name: parseClass.get("name"),
-      url: parseClass.get("url")
+      url: parseClass.get("url"),
+      attendances: [],
+      classSessions: []
     };
 
     query = parseClass.relation("classAdminUsers").query();
     const classAdminUsers = await query.find();
     classInfo.teachers = classAdminUsers.map(u => u.get("name"));
 
-    classInfo.classSessions = [];
     query = parseClass.relation("sessions").query();
     var d = new Date();
     query.greaterThan("scheduledAt", d);
@@ -209,6 +241,11 @@ const loadStudentDashboard = async function(parseUser) {
     const nextSession = await query.first();
     if (nextSession) {
       classInfo.classSessions.push(nextSession);
+      const attendance = await loadStudentAttendance(parseUser._getId(), nextSession);
+      logger.info(
+        `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
+      );
+      classInfo.attendances.push(attendance);
     }
 
     query = parseClass.relation("sessions").query();
@@ -217,9 +254,13 @@ const loadStudentDashboard = async function(parseUser) {
     const lastSession = await query.first();
     if (lastSession) {
       classInfo.classSessions.push(lastSession);
+      const attendance = await loadStudentAttendance(parseUser._getId(), lastSession);
+      logger.info(
+        `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
+      );
+      classInfo.attendances.push(attendance);
     }
 
-    // classInfo.practices = [];
     query = parseClass.relation("practices").query();
     classInfo.practices = await query.find();
 
@@ -248,25 +289,10 @@ Parse.Cloud.define(
   async ({ user, params: { pathname } }) => {
     requireAuth(user);
 
-    const result = {};
     var query = new Parse.Query("ClassSession");
     query.contains("url", pathname);
     const classSession = await query.first();
-
-    if (classSession) {
-      query = classSession.relation("attendances").query();
-      query.equalTo("userId", user.id);
-      const attendance = await query.first();
-
-      if (attendance) {
-        result.chuanCheng = attendance.get("chuanCheng");
-        result.faBen = attendance.get("faBen");
-        result.fuDao = attendance.get("fuDao");
-        result.shangKe = attendance.get("shangKe");
-      }
-    }
-
-    return result;
+    return loadStudentAttendance(user.id, classSession);
   }
 );
 
@@ -284,12 +310,7 @@ Parse.Cloud.define(
       const relation = classSession.relation("attendances");
       query = relation.query();
 
-      const logger = require("parse-server").logger;
-
-      const userId = user.id;
-      logger.info(`updateAttendance - userId: ${userId}`);
-
-      query.equalTo("userId", userId);
+      query.equalTo("userId", user.id);
       var parseAttendance = await query.first();
 
       const creatingAttendance = !parseAttendance;

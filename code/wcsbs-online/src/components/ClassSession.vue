@@ -60,7 +60,8 @@
 export default {
   name: "ClassSession",
   props: {
-    classSession: { type: Object, required: true }
+    classSession: { type: Object, required: true },
+    attendance: { type: Object, required: true }
   },
   data: function() {
     return {
@@ -73,8 +74,8 @@ export default {
           this.classSession.get("scheduledAt")
         ),
         showDescription: false,
-        attendanceState: "未报考勤",
-        materialState: "未看传承/未看法本"
+        attendanceState: this.toAttendanceStateString(this.attendance),
+        materialState: this.toMaterialStateString(this.attendance)
       }
     };
   },
@@ -88,6 +89,32 @@ export default {
         minute: "numeric"
       };
       return date.toLocaleDateString("zh-CN", options);
+    },
+    toAttendanceStateString(attendance) {
+      if (attendance) {
+        if (attendance.qingJia) {
+          return "已请假";
+        }
+        if (attendance.shangKe == true) {
+          return "已上课";
+        }
+      }
+
+      return "未报考勤";
+    },
+    toMaterialStateString(attendance) {
+      var chuanCheng = "未看传承";
+      var faBen = "未看法本";
+      if (attendance) {
+        if (attendance.chuanCheng) {
+          chuanCheng = "已看传承";
+        }
+        if (attendance.faBen == true) {
+          faBen = "已看法本";
+        }
+      }
+
+      return `${chuanCheng}/${faBen}`;
     },
     addToGoogleCalendarUrl() {
       var eventStart = this.classSession.get("scheduledAt");
@@ -103,18 +130,21 @@ export default {
         .replace(/.000/g, "")
         .replace(/:/g, "")
         .replace(/-/g, "");
-      console.log(eventStart);
       var url = `${this.session.name}&details=${this.session.description}`;
       url = encodeURI(url);
-      url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${url}&dates=${eventStart}%2F${eventEnd}`;
-      console.log(url);
-      return url;
+      return `https://www.google.com/calendar/render?action=TEMPLATE&text=${url}&dates=${eventStart}%2F${eventEnd}`;
     },
     attendanceButtonName() {
       const d = new Date();
       if (d < this.classSession.get("scheduledAt")) {
+        if (this.attendance.qingJia) {
+          return "取消请假";
+        }
         return "我要请假";
       } else {
+        if (this.attendance.shangKe != undefined) {
+          return "我要改考勤";
+        }
         return "我要报考勤";
       }
     }

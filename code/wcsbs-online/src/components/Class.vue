@@ -13,11 +13,14 @@
       <ClassSession
         v-for="(classSession, index) in buddhaClass.classSessions"
         :classSession="classSession"
+        :attendance="buddhaClass.attendances[index]"
         :key="classSession.id + index"
       />
+      <!--
       <b-button block variant="info" :href="buddhaClass.url" target="_blank"
         >查看上课记录</b-button
       >
+      -->
       <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
       <Practice
         v-for="(practice, index) in buddhaClass.practices"
