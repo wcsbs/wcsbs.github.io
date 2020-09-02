@@ -8,7 +8,6 @@
             v-model="practiceObj.practiceReportingState"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="warning">我要报数</b-button>
             <b-button
               variant="info"
               v-on:click="
@@ -30,6 +29,10 @@
           rows="3"
           max-rows="8"
         ></b-form-textarea>
+        <b-button block variant="warning">我要报数</b-button>
+        <b-button block variant="info" href="" target="_blank"
+          >查看报数记录</b-button
+        >
       </b-card-text>
     </b-card>
   </div>

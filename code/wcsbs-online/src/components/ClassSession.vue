@@ -31,7 +31,9 @@
             v-model="session.attendanceState"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="warning">{{ attendanceButtonName() }}</b-button>
+            <b-button variant="warning" v-on:click="updateAttendance()">{{
+              attendanceButtonName()
+            }}</b-button>
             <b-button
               variant="info"
               v-on:click="session.showDescription = !session.showDescription"
@@ -57,6 +59,8 @@
 </template>
 
 <script>
+import Parse from "parse";
+
 export default {
   name: "ClassSession",
   props: {
@@ -97,6 +101,9 @@ export default {
         }
         if (attendance.shangKe == true) {
           return "已上课";
+        }
+        if (attendance.shangKe == false && attendance.qingJia == undefined) {
+          return "未上课";
         }
       }
 
@@ -146,6 +153,49 @@ export default {
           return "我要改考勤";
         }
         return "我要报考勤";
+      }
+    },
+    updateAttendance() {
+      const d = new Date();
+      const attendance = {};
+      var msg = "确认";
+      if (d < this.classSession.get("scheduledAt")) {
+        if (this.attendance.qingJia) {
+          attendance.qingJia = false;
+          msg += "取消请假";
+        } else {
+          attendance.qingJia = true;
+          attendance.shangKe = false;
+          msg += "请假";
+        }
+      } else {
+        if (this.attendance.shangKe) {
+          attendance.shangKe = false;
+          msg += "没有上课";
+        } else {
+          attendance.shangKe = true;
+          msg += "上课";
+        }
+      }
+
+      if (confirm(`${msg}?`) == true) {
+        const pathname = this.classSession.get("url");
+        Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
+          .then(result => {
+            console.log(`updateAttendance - result: ${JSON.stringify(result)}`);
+            if (result.qingJia != undefined) {
+              this.attendance.qingJia = result.qingJia;
+            }
+            if (result.shangKe != undefined) {
+              this.attendance.shangKe = result.shangKe;
+            }
+            this.session.attendanceState = this.toAttendanceStateString(
+              this.attendance
+            );
+          })
+          .catch(e => {
+            console.log(`error in updateAttendance: ${e}`);
+          });
       }
     }
   }

@@ -316,7 +316,7 @@ Parse.Cloud.define(
       const creatingAttendance = !parseAttendance;
       if (creatingAttendance) {
         parseAttendance = new Parse.Object("Attendance");
-        parseAttendance.set("userId", userId);
+        parseAttendance.set("userId", user.id);
       }
 
       if (attendance) {
@@ -324,6 +324,7 @@ Parse.Cloud.define(
         parseAttendance.set("faBen", attendance.faBen);
         parseAttendance.set("fuDao", attendance.fuDao);
         parseAttendance.set("shangKe", attendance.shangKe);
+        parseAttendance.set("qingJia", attendance.qingJia);
       }
 
       parseAttendance = await parseAttendance.save(null, MASTER_KEY);
@@ -337,6 +338,7 @@ Parse.Cloud.define(
       result.faBen = parseAttendance.get("faBen");
       result.fuDao = parseAttendance.get("fuDao");
       result.shangKe = parseAttendance.get("shangKe");
+      result.qingJia = parseAttendance.get("qingJia");
     }
 
     return result;
