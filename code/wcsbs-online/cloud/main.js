@@ -289,6 +289,7 @@ Parse.Cloud.define(
   async ({ user, params: { pathname } }) => {
     requireAuth(user);
 
+    pathname = pathname.replace("/wcsbs", "");
     var query = new Parse.Query("ClassSession");
     query.contains("url", pathname);
     const classSession = await query.first();
@@ -302,6 +303,7 @@ Parse.Cloud.define(
     requireAuth(user);
 
     const result = {};
+    pathname = pathname.replace("/wcsbs", "");
     var query = new Parse.Query("ClassSession");
     query.contains("url", pathname);
     const classSession = await query.first();
