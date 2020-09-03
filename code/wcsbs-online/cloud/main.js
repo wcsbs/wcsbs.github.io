@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const MASTER_KEY = { useMasterKey: true };
+const logger = require("parse-server").logger;
 
 const requireAuth = user => {
   if (!user) throw new Error("User must be authenticated!");
@@ -184,7 +185,6 @@ Parse.Cloud.define(
 );
 
 const loadStudentAttendance = async function(userId, classSession) {
-  const logger = require("parse-server").logger;
   logger.info(
     `loadStudentAttendance - userId: ${userId} classSession: ${classSession._getId()}`
   );
@@ -212,8 +212,22 @@ const loadStudentAttendance = async function(userId, classSession) {
   return result;
 };
 
+// eslint-disable-next-line no-unused-vars
+const populateSessions = async function(parseClass) {
+  var relation = parseClass.relation("sessions");
+
+  var query = new Parse.Query("ClassSession");
+  var allSessions = await query.limit(300).find();
+  for (var i = 0; i < allSessions.length; i++) {
+    relation.add(allSessions[i]);
+    logger.info(
+      `populateSessions - i: ${i} classSession: ${allSessions[i].get("name")}`
+    );
+  }
+  await parseClass.save(null, MASTER_KEY);
+};
+
 const loadStudentDashboard = async function(parseUser) {
-  const logger = require("parse-server").logger;
   const dashboard = {
     classes: []
   };
@@ -241,7 +255,10 @@ const loadStudentDashboard = async function(parseUser) {
     const nextSession = await query.first();
     if (nextSession) {
       classInfo.classSessions.push(nextSession);
-      const attendance = await loadStudentAttendance(parseUser._getId(), nextSession);
+      const attendance = await loadStudentAttendance(
+        parseUser._getId(),
+        nextSession
+      );
       logger.info(
         `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
       );
@@ -254,7 +271,10 @@ const loadStudentDashboard = async function(parseUser) {
     const lastSession = await query.first();
     if (lastSession) {
       classInfo.classSessions.push(lastSession);
-      const attendance = await loadStudentAttendance(parseUser._getId(), lastSession);
+      const attendance = await loadStudentAttendance(
+        parseUser._getId(),
+        lastSession
+      );
       logger.info(
         `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
       );
@@ -265,6 +285,7 @@ const loadStudentDashboard = async function(parseUser) {
     classInfo.practices = await query.find();
 
     dashboard.classes.push(classInfo);
+    // await populateSessions(parseClass);
   }
 
   return dashboard;
