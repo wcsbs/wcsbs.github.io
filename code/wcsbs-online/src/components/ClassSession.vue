@@ -31,9 +31,12 @@
             v-model="session.attendanceState"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="warning" v-on:click="updateAttendance()">{{
-              attendanceButtonName()
-            }}</b-button>
+            <b-button
+              variant="warning"
+              v-if="session.showAttendanceButton"
+              v-on:click="updateAttendance()"
+              >{{ attendanceButtonName() }}</b-button
+            >
             <b-button
               variant="info"
               v-on:click="session.showDescription = !session.showDescription"
@@ -78,6 +81,9 @@ export default {
           this.classSession.get("scheduledAt")
         ),
         showDescription: false,
+        showAttendanceButton: this.needToShowAttendanceButton(
+          this.classSession.get("scheduledAt")
+        ),
         attendanceState: this.toAttendanceStateString(this.attendance),
         materialState: this.toMaterialStateString(this.attendance)
       }
@@ -93,6 +99,12 @@ export default {
         minute: "numeric"
       };
       return date.toLocaleDateString("zh-CN", options);
+    },
+    needToShowAttendanceButton(scheduledAt) {
+      const today = new Date();
+      console.log(`today: ${today} scheduledAt: ${scheduledAt}`);
+      //student must submit attendance with 3 days
+      return today.getTime() < scheduledAt.getTime() + 3 * 24 * 60 * 60 * 1000;
     },
     toAttendanceStateString(attendance) {
       if (attendance) {
@@ -184,8 +196,12 @@ export default {
         okText: "确认",
         cancelText: "取消"
       };
+      const message = {
+        title: this.session.name,
+        body: msg + "?"
+      };
       this.$dialog
-        .confirm(`${msg}?`, options)
+        .confirm(message, options)
         .then(function(dialog) {
           console.log(`${JSON.stringify(dialog)}`);
           Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
