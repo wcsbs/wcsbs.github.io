@@ -174,29 +174,42 @@ export default {
           msg += "没有上课";
         } else {
           attendance.shangKe = true;
-          msg += "上课";
+          msg += "已上课";
         }
       }
 
-      if (confirm(`${msg}?`) == true) {
-        const pathname = this.classSession.get("url");
-        Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
-          .then(result => {
-            console.log(`updateAttendance - result: ${JSON.stringify(result)}`);
-            if (result.qingJia != undefined) {
-              this.attendance.qingJia = result.qingJia;
-            }
-            if (result.shangKe != undefined) {
-              this.attendance.shangKe = result.shangKe;
-            }
-            this.session.attendanceState = this.toAttendanceStateString(
-              this.attendance
-            );
-          })
-          .catch(e => {
-            console.log(`error in updateAttendance: ${e}`);
-          });
-      }
+      const pathname = this.classSession.get("url");
+      const classSession = this;
+      const options = {
+        okText: "确认",
+        cancelText: "取消"
+      };
+      this.$dialog
+        .confirm(`${msg}?`, options)
+        .then(function(dialog) {
+          console.log(`${JSON.stringify(dialog)}`);
+          Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
+            .then(result => {
+              console.log(
+                `updateAttendance - result: ${JSON.stringify(result)}`
+              );
+              if (result.qingJia != undefined) {
+                classSession.attendance.qingJia = result.qingJia;
+              }
+              if (result.shangKe != undefined) {
+                classSession.attendance.shangKe = result.shangKe;
+              }
+              classSession.session.attendanceState = classSession.toAttendanceStateString(
+                classSession.attendance
+              );
+            })
+            .catch(e => {
+              console.log(`error in updateAttendance: ${e}`);
+            });
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
     }
   }
 };

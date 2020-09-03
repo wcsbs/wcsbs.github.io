@@ -5,6 +5,10 @@ import store from "./store";
 import Parse from "parse";
 
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
+
+import VuejsDialog from "vuejs-dialog";
+import "vuejs-dialog/dist/vuejs-dialog.min.css";
+
 import { CHECK_AUTH } from "./store/actions.type";
 import DateFilter from "./common/date.filter";
 import ErrorFilter from "./common/error.filter";
@@ -52,6 +56,9 @@ router.beforeEach((to, from, next) => {
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+
+// Install VuejsDialog
+Vue.use(VuejsDialog);
 
 new Vue({
   router,

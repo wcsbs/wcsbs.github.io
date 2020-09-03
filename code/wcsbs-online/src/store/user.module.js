@@ -47,7 +47,7 @@ const actions = {
     console.log(`${FETCH_USERS} - auth.user: ${JSON.stringify(user)}`);
     commit(FETCH_USERS_START);
     const adminFetchUsers = "user:adminFetchUsers";
-    Parse.Cloud.run("user:adminFetchUsers", { user })
+    Parse.Cloud.run(adminFetchUsers, { user })
       .then(users => {
         console.log(`${FETCH_USERS} - users: ${JSON.stringify(users)}`);
         commit(FETCH_USERS_END, users);
