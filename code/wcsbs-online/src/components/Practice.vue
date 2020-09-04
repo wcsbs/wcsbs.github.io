@@ -14,12 +14,7 @@
             v-model="practiceCountObj.accumulatedCount"
           ></b-form-input>
           <b-input-group-append>
-            <b-button
-              variant="warning"
-              v-on:click="
-                practiceObj.showReportingCount = !practiceObj.showReportingCount
-              "
-            >
+            <b-button variant="warning" v-on:click="toggleReportingCount()">
               {{ practiceObj.showReportingCount ? "完成报数" : "我要报数" }}
             </b-button>
             <b-button
@@ -36,11 +31,7 @@
             </b-button>
           </b-input-group-append>
         </b-input-group>
-        <b-form
-          @submit="onSubmit"
-          @reset="onReset"
-          v-if="practiceObj.showReportingCount"
-        >
+        <b-form @submit="onSubmit" v-if="practiceObj.showReportingCount">
           <b-input-group prepend="选择日期：" class="mt-3">
             <v-date-picker
               v-model="practiceObj.newCountReportedAt"
@@ -127,6 +118,12 @@ export default {
       };
       return date.toLocaleDateString("zh-CN", options);
     },
+    toggleReportingCount() {
+      this.practiceObj.showReportingCount = !this.practiceObj
+        .showReportingCount;
+      this.practiceObj.newCountReportedAt = undefined;
+      this.practiceObj.newCount = undefined;
+    },
     onSubmit(evt) {
       evt.preventDefault();
       const options = {
@@ -161,6 +158,7 @@ export default {
               console.log(
                 `reportPracticeCount - result: ${JSON.stringify(result)}`
               );
+
               thisComponent.practiceCountObj = {
                 latestCount: `${result.get(
                   "count"
@@ -177,12 +175,6 @@ export default {
         .catch(e => {
           console.log(`error: ${e}`);
         });
-    },
-    onReset(evt) {
-      evt.preventDefault();
-      // Reset our form values
-      this.practiceObj.newCount = "";
-      this.practiceObj.newCountReportedAt = "";
     }
   }
 };
