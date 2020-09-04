@@ -102,7 +102,7 @@ export default {
     },
     needToShowAttendanceButton(scheduledAt) {
       const today = new Date();
-      console.log(`today: ${today} scheduledAt: ${scheduledAt}`);
+      // console.log(`today: ${today} scheduledAt: ${scheduledAt}`);
       //student must submit attendance with 3 days
       return today.getTime() < scheduledAt.getTime() + 3 * 24 * 60 * 60 * 1000;
     },

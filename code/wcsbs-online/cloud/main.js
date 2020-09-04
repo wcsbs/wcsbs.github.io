@@ -212,6 +212,23 @@ const loadStudentAttendance = async function(userId, classSession) {
   return result;
 };
 
+const loadStudentPracticeCounts = async function(userId, practices) {
+  logger.info(`loadStudentPracticeCounts - userId: ${userId}`);
+
+  var result = [];
+  if (practices && practices.length > 0) {
+    for (var i = 0; i < practices.length; i++) {
+      var query = practices[i].relation("counts").query();
+      query.equalTo("userId", userId);
+      query.descending("createdAt");
+      const practiceCount = await query.first();
+      result.push(practiceCount);
+    }
+  }
+
+  return result;
+};
+
 // eslint-disable-next-line no-unused-vars
 const populateSessions = async function(parseClass) {
   var relation = parseClass.relation("sessions");
@@ -228,6 +245,7 @@ const populateSessions = async function(parseClass) {
 };
 
 const loadStudentDashboard = async function(parseUser) {
+  const userId = parseUser._getId();
   const dashboard = {
     classes: []
   };
@@ -240,8 +258,10 @@ const loadStudentDashboard = async function(parseUser) {
     const classInfo = {
       name: parseClass.get("name"),
       url: parseClass.get("url"),
+      classSessions: [],
       attendances: [],
-      classSessions: []
+      practices: [],
+      counts: []
     };
 
     query = parseClass.relation("classAdminUsers").query();
@@ -255,10 +275,7 @@ const loadStudentDashboard = async function(parseUser) {
     const nextSession = await query.first();
     if (nextSession) {
       classInfo.classSessions.push(nextSession);
-      const attendance = await loadStudentAttendance(
-        parseUser._getId(),
-        nextSession
-      );
+      const attendance = await loadStudentAttendance(userId, nextSession);
       logger.info(
         `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
       );
@@ -271,10 +288,7 @@ const loadStudentDashboard = async function(parseUser) {
     const lastSession = await query.first();
     if (lastSession) {
       classInfo.classSessions.push(lastSession);
-      const attendance = await loadStudentAttendance(
-        parseUser._getId(),
-        lastSession
-      );
+      const attendance = await loadStudentAttendance(userId, lastSession);
       logger.info(
         `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
       );
@@ -283,6 +297,10 @@ const loadStudentDashboard = async function(parseUser) {
 
     query = parseClass.relation("practices").query();
     classInfo.practices = await query.find();
+    classInfo.counts = await loadStudentPracticeCounts(
+      userId,
+      classInfo.practices
+    );
 
     dashboard.classes.push(classInfo);
     // await populateSessions(parseClass);
@@ -363,6 +381,44 @@ Parse.Cloud.define(
       result.shangKe = parseAttendance.get("shangKe");
       result.qingJia = parseAttendance.get("qingJia");
     }
+
+    return result;
+  }
+);
+
+Parse.Cloud.define(
+  "home:reportPracticeCount",
+  async ({ user, params: { practiceId, reportedAt, count } }) => {
+    requireAuth(user);
+
+    userId = user.id;
+    logger.info(
+      `home:reportPracticeCount - userId: ${userId} practiceId: ${practiceId} reportedAt: ${reportedAt} count: ${count}`
+    );
+
+    var query = new Parse.Query("Practice");
+    query.equalTo("objectId", practiceId);
+    const practice = await query.first();
+    const relation = practice.relation("counts");
+
+    query = relation.query();
+    query.equalTo("userId", userId);
+    query.descending("createdAt");
+    const latestPracticeCount = await query.first();
+
+    const newCount = new Parse.Object("UserPracticeCount");
+    newCount.set("userId", userId);
+    newCount.set("reportedAt", reportedAt);
+    newCount.set("count", count);
+
+    if (latestPracticeCount) {
+      count += latestPracticeCount.get("accumulatedCount");
+    }
+    newCount.set("accumulatedCount", count);
+    const result = await newCount.save(null, MASTER_KEY);
+
+    relation.add(newCount);
+    await practice.save(null, MASTER_KEY);
 
     return result;
   }

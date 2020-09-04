@@ -8,6 +8,7 @@ import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 
 import VuejsDialog from "vuejs-dialog";
 import "vuejs-dialog/dist/vuejs-dialog.min.css";
+import VCalendar from "v-calendar";
 
 import { CHECK_AUTH } from "./store/actions.type";
 import DateFilter from "./common/date.filter";
@@ -56,6 +57,9 @@ router.beforeEach((to, from, next) => {
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+
+// Install VCalendar
+Vue.use(VCalendar);
 
 // Install VuejsDialog
 Vue.use(VuejsDialog);
