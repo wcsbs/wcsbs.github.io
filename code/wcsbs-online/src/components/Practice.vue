@@ -42,7 +42,12 @@
           v-if="practiceObj.showReportingCount"
         >
           <b-input-group prepend="选择日期：" class="mt-3">
-            <v-date-picker v-model="practiceObj.newCountReportedAt" />
+            <v-date-picker
+              v-model="practiceObj.newCountReportedAt"
+              :input-props="{
+                readonly: true
+              }"
+            />
           </b-input-group>
           <b-input-group prepend="输入报数：" class="mt-3">
             <b-form-input
@@ -64,6 +69,9 @@
           rows="3"
           max-rows="8"
         ></b-form-textarea>
+        <b-button block variant="info" href="" target="_blank"
+          >查看报数记录</b-button
+        >
       </b-card-text>
     </b-card>
   </div>
