@@ -222,7 +222,7 @@ const loadStudentPracticeCounts = async function(userId, practices) {
       query.equalTo("userId", userId);
       query.descending("createdAt");
       const practiceCount = await query.first();
-      result.push(practiceCount);
+      result.push(practiceCount ? practiceCount : { dummy: true });
     }
   }
 

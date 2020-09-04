@@ -89,13 +89,17 @@ export default {
         showDescription: false,
         showReportingCount: false,
         newCountReportedAt: "",
-        practiceReportingState: "未报数"
+        newCount: ""
       },
       practiceCountObj: {
-        latestCount: `${this.practiceCount.get(
-          "count"
-        )} @ ${this.toLocalDateString(this.practiceCount.get("reportedAt"))}`,
-        accumulatedCount: this.practiceCount.get("accumulatedCount")
+        latestCount: this.practiceCount.dummy
+          ? "未报数"
+          : `${this.practiceCount.get("count")} @ ${this.toLocalDateString(
+              this.practiceCount.get("reportedAt")
+            )}`,
+        accumulatedCount: this.practiceCount.dummy
+          ? "未报数"
+          : this.practiceCount.get("accumulatedCount")
       }
     };
   },
