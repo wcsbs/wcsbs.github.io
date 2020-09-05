@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const MASTER_KEY = { useMasterKey: true };
-const logger = require("parse-server").logger;
+const MAX_QUERY_COUNT = 300;
 
 const requireAuth = user => {
   if (!user) throw new Error("User must be authenticated!");
@@ -185,8 +185,11 @@ Parse.Cloud.define(
 );
 
 const loadStudentAttendance = async function(userId, classSession) {
+  const logger = require("parse-server").logger;
   logger.info(
-    `loadStudentAttendance - userId: ${userId} classSession: ${classSession._getId()}`
+    `loadStudentAttendance - userId: ${userId} classSession: ${JSON.stringify(
+      classSession
+    )}`
   );
 
   var result = {};
@@ -213,6 +216,7 @@ const loadStudentAttendance = async function(userId, classSession) {
 };
 
 const loadStudentPracticeCounts = async function(userId, practices) {
+  const logger = require("parse-server").logger;
   logger.info(`loadStudentPracticeCounts - userId: ${userId}`);
 
   var result = [];
@@ -231,10 +235,11 @@ const loadStudentPracticeCounts = async function(userId, practices) {
 
 // eslint-disable-next-line no-unused-vars
 const populateSessions = async function(parseClass) {
+  const logger = require("parse-server").logger;
   var relation = parseClass.relation("sessions");
 
   var query = new Parse.Query("ClassSession");
-  var allSessions = await query.limit(300).find();
+  var allSessions = await query.limit(MAX_QUERY_COUNT).find();
   for (var i = 0; i < allSessions.length; i++) {
     relation.add(allSessions[i]);
     logger.info(
@@ -245,6 +250,7 @@ const populateSessions = async function(parseClass) {
 };
 
 const loadStudentDashboard = async function(parseUser) {
+  const logger = require("parse-server").logger;
   const userId = parseUser._getId();
   const dashboard = {
     classes: []
@@ -256,6 +262,7 @@ const loadStudentDashboard = async function(parseUser) {
   for (var i = 0; i < parseClasses.length; i++) {
     const parseClass = parseClasses[i];
     const classInfo = {
+      id: parseClass._getId(),
       name: parseClass.get("name"),
       url: parseClass.get("url"),
       classSessions: [],
@@ -389,6 +396,7 @@ Parse.Cloud.define(
 Parse.Cloud.define(
   "home:reportPracticeCount",
   async ({ user, params: { practiceId, reportedAt, count } }) => {
+    const logger = require("parse-server").logger;
     requireAuth(user);
 
     userId = user.id;
@@ -419,6 +427,66 @@ Parse.Cloud.define(
 
     relation.add(newCount);
     await practice.save(null, MASTER_KEY);
+
+    return result;
+  }
+);
+
+Parse.Cloud.define(
+  "class:fetchSessions",
+  async ({ user, params: { classId } }) => {
+    requireAuth(user);
+
+    var query = new Parse.Query("Class");
+    query.equalTo("objectId", classId);
+    const parseClass = await query.first();
+
+    const classInfo = {
+      id: parseClass._getId(),
+      name: parseClass.get("name"),
+      url: parseClass.get("url"),
+      classSessions: [],
+      attendances: []
+    };
+
+    query = parseClass.relation("sessions").query();
+    query.descending("scheduledAt");
+    const classSessions = await query.limit(MAX_QUERY_COUNT).find();
+
+    for (var i = 0; i < classSessions.length; i++) {
+      const classSession = classSessions[i];
+      const attendance = await loadStudentAttendance(user.id, classSession);
+      classInfo.classSessions.push(classSession);
+      classInfo.attendances.push(attendance);
+    }
+
+    return classInfo;
+  }
+);
+
+Parse.Cloud.define(
+  "class:updateClassSession",
+  async ({ user, params: { session } }) => {
+    requireAuth(user);
+    const logger = require("parse-server").logger;
+    logger.info(
+      `updateClassSession - userId: ${user.id} session: ${JSON.stringify(
+        session
+      )}`
+    );
+
+    var result = {};
+    var query = new Parse.Query("ClassSession");
+    query.equalTo("objectId", session.id);
+    const classSession = await query.first();
+
+    if (classSession) {
+      classSession.set("scheduledAt", session.scheduledAt);
+      classSession.set("description", session.description);
+      await classSession.save(null, MASTER_KEY);
+
+      result = classSession;
+    }
 
     return result;
   }

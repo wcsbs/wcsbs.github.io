@@ -12,15 +12,17 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: "/user-management",
-      name: "user-management",
-      component: () => import("@/views/UserManagement"),
+      path: "/sessions/:buddhaClassId",
+      name: "session-management",
+      component: () => import("@/views/SessionManagement"),
+      props: true,
       meta: { requiresAuth: true }
     },
     {
-      path: "/class-management",
-      name: "class-management",
-      component: () => import("@/views/UserManagement"),
+      path: "/counts/:practiceId",
+      name: "practice-management",
+      component: () => import("@/views/PracticeManagement"),
+      props: true,
       meta: { requiresAuth: true }
     },
     {

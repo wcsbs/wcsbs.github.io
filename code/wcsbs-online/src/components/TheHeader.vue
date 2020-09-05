@@ -10,6 +10,7 @@
         class="navbar-brand"
         >用户管理</router-link
       >
+      <!--
       <router-link
         v-if="isClassAdmin"
         :to="{ name: 'class-management' }"
@@ -22,6 +23,7 @@
         class="navbar-brand"
         >课程助理</router-link
       >
+      -->
       <ul class="nav navbar-nav pull-xs-right" style="list-style-type:none">
         <li class="nav-item float-xs-right">
           <router-link

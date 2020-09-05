@@ -1,13 +1,44 @@
 <template>
   <div>
-    <b-card class="text-center" :header="session.name">
+    <b-form v-if="editing" @submit="onSubmit">
+      <h4>{{ session.name ? session.name : "创建新课" }}</h4>
+      <b-input-group prepend="选择课程：" class="mt-3">
+        <select v-model="session.id">
+          <option
+            v-for="newSession in newSessions"
+            v-bind:key="newSession.id"
+            v-bind:value="newSession.id"
+          >
+            {{ newSession.name }}
+          </option>
+        </select>
+      </b-input-group>
+      <b-form-textarea
+        v-model="session.description"
+        placeholder="输入上课通知"
+        rows="8"
+        max-rows="20"
+      ></b-form-textarea>
+      <b-input-group prepend="选择日期：" class="mt-3">
+        <v-date-picker
+          v-model="session.scheduledAt"
+          :input-props="{
+            readonly: true
+          }"
+        />
+        <b-input-group-append>
+          <b-button type="submit" variant="primary">提交</b-button>
+        </b-input-group-append>
+      </b-input-group>
+    </b-form>
+    <b-card v-else class="text-center" :header="session.name">
       <b-card-text>
         <b-input-group prepend="上课时间：" class="mt-3">
           <b-form-input
             readonly
             v-model="session.scheduledAtLocalDateTimeString"
           ></b-form-input>
-          <b-input-group-append>
+          <b-input-group-append v-if="!editing">
             <b-button
               variant="info"
               :href="addToGoogleCalendarUrl()"
@@ -68,25 +99,31 @@ export default {
   name: "ClassSession",
   props: {
     classSession: { type: Object, required: true },
-    attendance: { type: Object, required: true }
+    attendance: { type: Object, required: true },
+    classInfo: { type: Object, required: false },
+    newSessions: { type: Array, required: false },
+    editing: Boolean
   },
   data: function() {
     return {
-      session: {
-        id: this.classSession.get("objectId"),
-        name: this.classSession.get("name"),
-        url: this.classSession.get("url"),
-        description: this.classSession.get("description"),
-        scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
-          this.classSession.get("scheduledAt")
-        ),
-        showDescription: false,
-        showAttendanceButton: this.needToShowAttendanceButton(
-          this.classSession.get("scheduledAt")
-        ),
-        attendanceState: this.toAttendanceStateString(this.attendance),
-        materialState: this.toMaterialStateString(this.attendance)
-      }
+      session: this.classSession.dummy
+        ? {}
+        : {
+            id: this.classSession.get("objectId"),
+            name: this.classSession.get("name"),
+            url: this.classSession.get("url"),
+            description: this.classSession.get("description"),
+            scheduledAt: this.classSession.get("scheduledAt"),
+            scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
+              this.classSession.get("scheduledAt")
+            ),
+            showDescription: false,
+            showAttendanceButton: this.needToShowAttendanceButton(
+              this.classSession.get("scheduledAt")
+            ),
+            attendanceState: this.toAttendanceStateString(this.attendance),
+            materialState: this.toMaterialStateString(this.attendance)
+          }
     };
   },
   methods: {
@@ -97,6 +134,14 @@ export default {
         day: "numeric",
         hour: "numeric",
         minute: "numeric"
+      };
+      return date.toLocaleDateString("zh-CN", options);
+    },
+    toLocalDateString(date) {
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
       };
       return date.toLocaleDateString("zh-CN", options);
     },
@@ -136,7 +181,7 @@ export default {
       return `${chuanCheng}/${faBen}`;
     },
     addToGoogleCalendarUrl() {
-      var eventStart = this.classSession.get("scheduledAt");
+      var eventStart = this.session.scheduledAt;
       var eventEnd = new Date();
       eventEnd.setTime(eventStart.getTime() + 4 * 60 * 60 * 1000);
       eventStart = eventStart
@@ -218,6 +263,49 @@ export default {
               classSession.session.attendanceState = classSession.toAttendanceStateString(
                 classSession.attendance
               );
+            })
+            .catch(e => {
+              console.log(`error in updateAttendance: ${e}`);
+            });
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
+    },
+    onSubmit(evt) {
+      evt.preventDefault();
+      const sesionId = this.session.id;
+      const classSession = this.classInfo.classSessions.filter(
+        e => e.id === sesionId
+      )[0];
+
+      const options = {
+        okText: "确认",
+        cancelText: "取消"
+      };
+      const message = {
+        title: this.classInfo.name,
+        body: `创建新课 《${classSession.get(
+          "name"
+        )}》 @ ${this.toLocalDateString(this.session.scheduledAt)}？`
+      };
+
+      const thisComponent = this;
+      const session = this.session;
+      var dt = new Date(session.scheduledAt);
+      dt.setHours(9); //TODO: allow setting time
+      session.scheduledAt = dt;
+
+      this.$dialog
+        .confirm(message, options)
+        .then(function() {
+          Parse.Cloud.run("class:updateClassSession", { session })
+            .then(result => {
+              console.log(
+                `updateClassSession - result: ${JSON.stringify(result)}`
+              );
+
+              thisComponent.$router.go();
             })
             .catch(e => {
               console.log(`error in updateAttendance: ${e}`);

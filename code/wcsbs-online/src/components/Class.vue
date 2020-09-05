@@ -16,7 +16,7 @@
         :attendance="buddhaClass.attendances[index]"
         :key="classSession.id + index"
       />
-      <b-button block variant="info" :href="buddhaClass.url" target="_blank"
+      <b-button block variant="info" @click="listSession"
         >查看上课记录</b-button
       >
       <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
@@ -49,8 +49,12 @@ export default {
     };
   },
   methods: {
-    createUser() {
-      this.$router.push({ name: "userCreate" });
+    listSession() {
+      const buddhaClass = this.buddhaClass;
+      this.$router.push({
+        name: "session-management",
+        params: { buddhaClassId: buddhaClass.id }
+      });
     }
   }
 };
