@@ -60,7 +60,7 @@
           rows="3"
           max-rows="8"
         ></b-form-textarea>
-        <b-button block variant="info" href="" target="_blank"
+        <b-button block variant="info" @click="listPracticeCount"
           >查看报数记录</b-button
         >
       </b-card-text>
@@ -179,6 +179,13 @@ export default {
         .catch(e => {
           console.log(`error: ${e}`);
         });
+    },
+    listPracticeCount() {
+      const practiceId = this.practice.id;
+      this.$router.push({
+        name: "count-list",
+        params: { practiceId: practiceId }
+      });
     }
   }
 };

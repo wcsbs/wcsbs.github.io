@@ -12,6 +12,12 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: "/user-management",
+      name: "user-management",
+      component: () => import("@/views/UserManagement"),
+      meta: { requiresAuth: true }
+    },
+    {
       path: "/sessions/:buddhaClassId",
       name: "session-management",
       component: () => import("@/views/SessionManagement"),
@@ -20,8 +26,8 @@ export default new Router({
     },
     {
       path: "/counts/:practiceId",
-      name: "practice-management",
-      component: () => import("@/views/PracticeManagement"),
+      name: "count-list",
+      component: () => import("@/views/CountList"),
       props: true,
       meta: { requiresAuth: true }
     },

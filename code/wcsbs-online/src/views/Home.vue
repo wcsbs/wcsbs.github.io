@@ -7,7 +7,9 @@
       <div v-if="home.studentDashboard" class="user-preview">
         <StudentDashboard :dashboard="home.studentDashboard" />
       </div>
-      <div v-else><h1>TODO</h1></div>
+      <div v-else>
+        <h1>TODO {{ isSystemAdmin ? "系统管理员主页" : "学修管理员主页" }}</h1>
+      </div>
     </div>
   </div>
 </template>
@@ -34,7 +36,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["home", "isLoadingDashboards"])
+    ...mapGetters(["home", "isLoadingDashboards", "isSystemAdmin"])
   },
   mounted() {
     //this.$forceUpdate();
