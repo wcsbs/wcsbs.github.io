@@ -1,16 +1,15 @@
 <template>
   <div>
-    <b-form v-if="editing" @submit="onSubmit">
+    <b-form v-if="editing" @submit="onSubmit" @reset="onReset">
       <h4>{{ session.name ? session.name : "创建新课" }}</h4>
-      <b-input-group prepend="选择课程：" class="mt-3">
+      <b-input-group v-if="session.creating" prepend="选择课程：" class="mt-3">
         <select v-model="session.id">
           <option
-            v-for="newSession in newSessions"
-            v-bind:key="newSession.id"
-            v-bind:value="newSession.id"
+            v-for="newSession in newClassSessions"
+            v-bind:key="newSession.key"
+            v-bind:value="newSession.key"
+            >{{ newSession.value }}</option
           >
-            {{ newSession.name }}
-          </option>
         </select>
       </b-input-group>
       <b-form-textarea
@@ -28,6 +27,9 @@
         />
         <b-input-group-append>
           <b-button type="submit" variant="primary">提交</b-button>
+          <b-button v-if="!session.creating" type="reset" variant="primary"
+            >取消</b-button
+          >
         </b-input-group-append>
       </b-input-group>
     </b-form>
@@ -38,7 +40,13 @@
             readonly
             v-model="session.scheduledAtLocalDateTimeString"
           ></b-form-input>
-          <b-input-group-append v-if="!editing">
+          <b-input-group-append>
+            <b-button
+              variant="warning"
+              v-if="isClassAdmin || isTeachingAssistant"
+              v-on:click="editSession"
+              >修改</b-button
+            >
             <b-button
               variant="info"
               :href="addToGoogleCalendarUrl()"
@@ -102,31 +110,51 @@ export default {
     attendance: { type: Object, required: true },
     classInfo: { type: Object, required: false },
     newSessions: { type: Array, required: false },
-    editing: Boolean
+    isStudent: { type: Boolean, default: true },
+    editing: Boolean,
+    isClassAdmin: Boolean,
+    isTeachingAssistant: Boolean
   },
   data: function() {
     return {
       session: this.classSession.dummy
-        ? {}
-        : {
-            id: this.classSession.get("objectId"),
-            name: this.classSession.get("name"),
-            url: this.classSession.get("url"),
-            description: this.classSession.get("description"),
-            scheduledAt: this.classSession.get("scheduledAt"),
-            scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
-              this.classSession.get("scheduledAt")
-            ),
-            showDescription: false,
-            showAttendanceButton: this.needToShowAttendanceButton(
-              this.classSession.get("scheduledAt")
-            ),
-            attendanceState: this.toAttendanceStateString(this.attendance),
-            materialState: this.toMaterialStateString(this.attendance)
-          }
+        ? { creating: true, editing: true }
+        : this.initSession(),
+      newClassSessions: []
     };
   },
+  mounted() {
+    this.buildNewClassSessions();
+  },
   methods: {
+    initSession() {
+      return {
+        id: this.classSession.id,
+        name: this.classSession.get("name"),
+        url: this.classSession.get("url"),
+        description: this.classSession.get("description"),
+        scheduledAt: this.classSession.get("scheduledAt"),
+        scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
+          this.classSession.get("scheduledAt")
+        ),
+        showDescription: false,
+        showAttendanceButton: this.needToShowAttendanceButton(
+          this.classSession.get("scheduledAt")
+        ),
+        attendanceState: this.toAttendanceStateString(this.attendance),
+        materialState: this.toMaterialStateString(this.attendance)
+      };
+    },
+    buildNewClassSessions() {
+      if (!this.editing) {
+        this.newClassSessions = [];
+        return;
+      }
+      this.newClassSessions = this.newSessions.map(e => {
+        return { key: e.id, value: e.name };
+      });
+      console.log(`${JSON.stringify(this.newClassSessions)}`);
+    },
     toLocalDateTimeString(date) {
       const options = {
         year: "numeric",
@@ -146,10 +174,14 @@ export default {
       return date.toLocaleDateString("zh-CN", options);
     },
     needToShowAttendanceButton(scheduledAt) {
-      const today = new Date();
-      // console.log(`today: ${today} scheduledAt: ${scheduledAt}`);
-      //student must submit attendance with 3 days
-      return today.getTime() < scheduledAt.getTime() + 3 * 24 * 60 * 60 * 1000;
+      if (this.isStudent) {
+        const today = new Date();
+        //student must submit attendance with 3 days
+        return (
+          today.getTime() < scheduledAt.getTime() + 3 * 24 * 60 * 60 * 1000
+        );
+      }
+      return false;
     },
     toAttendanceStateString(attendance) {
       if (attendance) {
@@ -272,11 +304,21 @@ export default {
           console.log(`error: ${e}`);
         });
     },
+    editSession() {
+      this.session = this.initSession();
+      this.editing = true;
+    },
+    onReset(evt) {
+      evt.preventDefault();
+      this.editing = false;
+    },
     onSubmit(evt) {
       evt.preventDefault();
-      const sesionId = this.session.id;
+      const sessionId = this.session.id;
+      console.log(`sessionId: ${sessionId}`);
+
       const classSession = this.classInfo.classSessions.filter(
-        e => e.id === sesionId
+        e => e.id === sessionId
       )[0];
 
       const options = {
@@ -285,9 +327,11 @@ export default {
       };
       const message = {
         title: this.classInfo.name,
-        body: `创建新课 《${classSession.get(
-          "name"
-        )}》 @ ${this.toLocalDateString(this.session.scheduledAt)}？`
+        body: `${
+          this.session.creating ? "创建新课" : "修改"
+        } 《${classSession.get("name")}》 @ ${this.toLocalDateString(
+          this.session.scheduledAt
+        )}？`
       };
 
       const thisComponent = this;

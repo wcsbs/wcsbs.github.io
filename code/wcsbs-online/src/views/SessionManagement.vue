@@ -41,13 +41,18 @@
         :classSession="newClassSession"
         :attendance="newAttendance"
         :newSessions="newSessions"
-        :editing="true"
+        :editing="isClassAdmin || isTeachingAssistant"
       />
       <ClassSession
         v-for="(classSession, index) in classSessions"
+        :classInfo="classInfo"
         :classSession="classSession"
         :attendance="attendances[index]"
+        :newSessions="newSessions"
         :key="classSession.id + index"
+        :isClassAdmin="isClassAdmin"
+        :isTeachingAssistant="isTeachingAssistant"
+        :isStudent="isStudent"
       />
     </div>
   </div>
@@ -72,7 +77,8 @@ export default {
       "attendances",
       "newSessions",
       "isClassAdmin",
-      "isTeachingAssistant"
+      "isTeachingAssistant",
+      "isStudent"
     ])
   },
   beforeRouteEnter(to, from, next) {

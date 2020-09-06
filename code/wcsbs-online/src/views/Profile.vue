@@ -7,13 +7,30 @@
           <form class="auth-form" @submit.prevent="updateSettings()">
             <fieldset>
               <fieldset class="form-group">
+                <label style="font-size:22px;">用户名</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="text"
+                  v-model="currentUser.username"
+                  placeholder="用户名"
+                />
+              </fieldset>
+              <fieldset class="form-group">
                 <label style="font-size:22px;">姓名</label>
                 <input
                   class="form-control form-control-lg"
                   type="text"
                   v-model="currentUser.name"
                   placeholder="姓名"
-                  id="name"
+                />
+              </fieldset>
+              <fieldset class="form-group">
+                <label style="font-size:22px;">电邮地址</label>
+                <input
+                  class="form-control form-control-lg"
+                  type="email"
+                  v-model="currentUser.email"
+                  placeholder="电邮地址"
                 />
               </fieldset>
               <fieldset class="form-group">
