@@ -41,7 +41,6 @@
         :classSession="newClassSession"
         :attendance="newAttendance"
         :newSessions="newSessions"
-        :editing="isClassAdmin || isTeachingAssistant"
       />
       <ClassSession
         v-for="(classSession, index) in classSessions"

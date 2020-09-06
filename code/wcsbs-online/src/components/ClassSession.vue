@@ -111,7 +111,6 @@ export default {
     classInfo: { type: Object, required: false },
     newSessions: { type: Array, required: false },
     isStudent: { type: Boolean, default: true },
-    editing: Boolean,
     isClassAdmin: Boolean,
     isTeachingAssistant: Boolean
   },
@@ -120,7 +119,8 @@ export default {
       session: this.classSession.dummy
         ? { creating: true, editing: true }
         : this.initSession(),
-      newClassSessions: []
+      newClassSessions: [],
+      editing: this.classSession.dummy
     };
   },
   mounted() {
