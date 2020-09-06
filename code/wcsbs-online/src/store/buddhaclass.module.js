@@ -9,7 +9,6 @@ import {
 import {
   FETCH_SESSIONS_START,
   FETCH_SESSIONS_END,
-  UPDATE_SESSION_IN_LIST,
   FILTER_SESSIONS_IN_LIST
 } from "./mutations.type";
 
@@ -108,25 +107,6 @@ const mutations = {
     });
 
     state.isLoadingSessions = false;
-  },
-  [UPDATE_SESSION_IN_LIST](state, classSession) {
-    var found = false;
-    var place = 0;
-    for (var i = 0; i < state.allSessions.length; i++) {
-      if (state.allSessions[i].id == classSession.id) {
-        found = true;
-        state.allSessions[i] = classSession;
-        break;
-      }
-      if (classSession.name > state.allSessions[i].name) {
-        place = i + 1;
-      }
-    }
-    if (!found) {
-      state.allSessions.splice(place, 0, classSession);
-    }
-
-    state.classSessions = state.allSessions;
   },
   [FILTER_SESSIONS_IN_LIST](state, filterText) {
     state.classSessions = [];

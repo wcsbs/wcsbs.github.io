@@ -10,5 +10,4 @@ export const FETCH_DASHBOARDS_END = "setDashboards";
 export const FETCH_DASHBOARDS_START = "setLoadingDashboards";
 export const FETCH_SESSIONS_START = "setLoadingSessions";
 export const FETCH_SESSIONS_END = "setSessions";
-export const UPDATE_SESSION_IN_LIST = "updateSessionInList";
 export const FILTER_SESSIONS_IN_LIST = "filterSessionsInList";

@@ -478,7 +478,7 @@ Parse.Cloud.define(
     var result = {};
     var query = new Parse.Query("ClassSession");
     query.equalTo("objectId", session.id);
-    const classSession = await query.first();
+    var classSession = await query.first();
 
     if (classSession) {
       classSession.set("scheduledAt", session.scheduledAt);
@@ -486,6 +486,17 @@ Parse.Cloud.define(
       await classSession.save(null, MASTER_KEY);
 
       result = classSession;
+    }
+
+    if (session.id != session.oldId) {
+      query = new Parse.Query("ClassSession");
+      query.equalTo("objectId", session.oldId);
+      classSession = await query.first();
+
+      if (classSession) {
+        classSession.unset("scheduledAt");
+        await classSession.save(null, MASTER_KEY);
+      }
     }
 
     return result;

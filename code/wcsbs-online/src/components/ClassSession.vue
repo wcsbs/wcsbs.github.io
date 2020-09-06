@@ -2,13 +2,13 @@
   <div>
     <b-form v-if="editing" @submit="onSubmit" @reset="onReset">
       <h4>{{ session.name ? session.name : "创建新课" }}</h4>
-      <b-input-group v-if="session.creating" prepend="选择课程：" class="mt-3">
+      <b-input-group prepend="选择课程：" class="mt-3">
         <select v-model="session.id">
           <option
             v-for="newSession in newClassSessions"
-            v-bind:key="newSession.key"
-            v-bind:value="newSession.key"
-            >{{ newSession.value }}</option
+            v-bind:key="newSession.id"
+            v-bind:value="newSession.id"
+            >{{ newSession.name }}</option
           >
         </select>
       </b-input-group>
@@ -146,14 +146,32 @@ export default {
       };
     },
     buildNewClassSessions() {
+      this.newClassSessions = [];
       if (!this.editing) {
-        this.newClassSessions = [];
         return;
       }
-      this.newClassSessions = this.newSessions.map(e => {
-        return { key: e.id, value: e.name };
-      });
-      console.log(`${JSON.stringify(this.newClassSessions)}`);
+      if (this.classSession.dummy) {
+        this.newClassSessions = this.newSessions;
+      } else {
+        const currentSession = {
+          id: this.classSession.id,
+          name: this.classSession.get("name")
+        };
+        console.log(`${JSON.stringify(currentSession)}`);
+        const order = parseInt(currentSession.name.match(/(\d+)/)[0]);
+        var currentSessionPushed = false;
+        for (var i = 0; i < this.newSessions.length; i++) {
+          const s = this.newSessions[i];
+          if (
+            !currentSessionPushed &&
+            parseInt(s.name.match(/(\d+)/)[0]) > order
+          ) {
+            this.newClassSessions.push(currentSession);
+            currentSessionPushed = true;
+          }
+          this.newClassSessions.push(s);
+        }
+      }
     },
     toLocalDateTimeString(date) {
       const options = {
@@ -307,6 +325,7 @@ export default {
     editSession() {
       this.session = this.initSession();
       this.editing = true;
+      this.buildNewClassSessions();
     },
     onReset(evt) {
       evt.preventDefault();
@@ -336,6 +355,7 @@ export default {
 
       const thisComponent = this;
       const session = this.session;
+      session.oldId = this.classSession.id;
       var dt = new Date(session.scheduledAt);
       dt.setHours(9); //TODO: allow setting time
       session.scheduledAt = dt;
