@@ -23,7 +23,7 @@
       <Practice
         v-for="(practice, index) in buddhaClass.practices"
         :practice="practice"
-        :practiceCount="buddhaClass.counts[index]"
+        :latestPracticeCount="buddhaClass.counts[index]"
         :key="practice.id + index"
       />
     </div>

@@ -3,13 +3,16 @@ import Toasted from "vue-toasted";
 import Vue from "vue";
 import {
   FETCH_SESSIONS,
+  FETCH_PRACTICE_COUNTS,
   FILTER_SESSIONS,
   UPDATE_SESSION
 } from "./actions.type";
 import {
   FETCH_SESSIONS_START,
   FETCH_SESSIONS_END,
-  FILTER_SESSIONS_IN_LIST
+  FILTER_SESSIONS_IN_LIST,
+  FETCH_PRACTICE_COUNTS_START,
+  FETCH_PRACTICE_COUNTS_END
 } from "./mutations.type";
 
 Vue.use(Toasted);
@@ -20,7 +23,9 @@ const state = {
   newSessions: [],
   attendances: [],
   classInfo: {},
-  isLoadingSessions: true
+  practiceInfo: {},
+  isLoadingSessions: false,
+  isLoadingPracticeCounts: false
 };
 
 const getters = {
@@ -41,6 +46,12 @@ const getters = {
   },
   isLoadingSessions(state) {
     return state.isLoadingSessions;
+  },
+  isLoadingPracticeCounts(state) {
+    return state.isLoadingPracticeCounts;
+  },
+  practiceInfo(state) {
+    return state.practiceInfo;
   }
 };
 
@@ -63,6 +74,24 @@ const actions = {
         throw new Error(e);
       });
   },
+  [FETCH_PRACTICE_COUNTS](context, practiceId) {
+    console.log(`${FETCH_PRACTICE_COUNTS} - practiceId: ${practiceId}`);
+    context.commit(FETCH_PRACTICE_COUNTS_START);
+
+    const fetchPracticeCounts = "class:fetchPracticeCounts";
+    Parse.Cloud.run(fetchPracticeCounts, { practiceId })
+      .then(practiceInfo => {
+        console.log(
+          `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length}`
+        );
+        context.commit(FETCH_PRACTICE_COUNTS_END, practiceInfo);
+      })
+      .catch(e => {
+        // console.log(`error loading classSession list: ${e.message}`);
+        console.log(`error loading practice counts: ${JSON.stringify(e)}`);
+        throw new Error(e);
+      });
+  },
   [FILTER_SESSIONS](context, filterText) {
     console.log(
       `${FILTER_SESSIONS} - filterText: ${JSON.stringify(filterText)}`
@@ -80,6 +109,13 @@ const actions = {
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const mutations = {
+  [FETCH_PRACTICE_COUNTS_START](state) {
+    state.isLoadingPracticeCounts = true;
+  },
+  [FETCH_PRACTICE_COUNTS_END](state, practiceInfo) {
+    state.practiceInfo = practiceInfo;
+    state.isLoadingPracticeCounts = false;
+  },
   [FETCH_SESSIONS_START](state) {
     state.isLoadingSessions = true;
   },

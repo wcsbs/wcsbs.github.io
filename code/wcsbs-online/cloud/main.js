@@ -222,11 +222,24 @@ const loadStudentPracticeCounts = async function(userId, practices) {
   var result = [];
   if (practices && practices.length > 0) {
     for (var i = 0; i < practices.length; i++) {
-      var query = practices[i].relation("counts").query();
+      var practiceCount = {};
+      const relation = practices[i].relation("counts");
+      var query = relation.query();
       query.equalTo("userId", userId);
-      query.descending("createdAt");
-      const practiceCount = await query.first();
-      result.push(practiceCount ? practiceCount : { dummy: true });
+      query.equalTo("reportedAt", undefined);
+      const accumulatedCount = await query.first();
+
+      if (accumulatedCount) {
+        query = relation.query();
+        query.equalTo("userId", userId);
+        query.descending("reportedAt");
+        const latestCount = await query.first();
+
+        practiceCount.count = latestCount.get("count");
+        practiceCount.reportedAt = latestCount.get("reportedAt");
+        practiceCount.accumulatedCount = accumulatedCount.get("count");
+      }
+      result.push(practiceCount);
     }
   }
 
@@ -408,25 +421,82 @@ Parse.Cloud.define(
     query.equalTo("objectId", practiceId);
     const practice = await query.first();
     const relation = practice.relation("counts");
+    var newCount = false;
+    var delta = count;
 
     query = relation.query();
     query.equalTo("userId", userId);
-    query.descending("createdAt");
-    const latestPracticeCount = await query.first();
+    query.equalTo("reportedAt", reportedAt);
+    var currentPracticeCount = await query.first();
 
-    const newCount = new Parse.Object("UserPracticeCount");
-    newCount.set("userId", userId);
-    newCount.set("reportedAt", reportedAt);
-    newCount.set("count", count);
-
-    if (latestPracticeCount) {
-      count += latestPracticeCount.get("accumulatedCount");
+    if (!currentPracticeCount) {
+      currentPracticeCount = new Parse.Object("UserPracticeCount");
+      currentPracticeCount.set("userId", userId);
+      currentPracticeCount.set("reportedAt", reportedAt);
+      newCount = true;
+    } else {
+      delta -= currentPracticeCount.get("count");
     }
-    newCount.set("accumulatedCount", count);
-    const result = await newCount.save(null, MASTER_KEY);
 
-    relation.add(newCount);
-    await practice.save(null, MASTER_KEY);
+    currentPracticeCount.set("count", count);
+    currentPracticeCount = await currentPracticeCount.save(null, MASTER_KEY);
+
+    query = relation.query();
+    query.equalTo("userId", userId);
+    query.equalTo("reportedAt", undefined);
+    var accumulatedCount = await query.first();
+
+    if (accumulatedCount) {
+      count = accumulatedCount.get("count") + delta;
+    } else {
+      accumulatedCount = new Parse.Object("UserPracticeCount");
+      accumulatedCount.set("userId", userId);
+      accumulatedCount.set("reportedAt", undefined);
+      newCount = true;
+    }
+
+    accumulatedCount.set("count", count);
+    accumulatedCount = await accumulatedCount.save(null, MASTER_KEY);
+
+    if (newCount) {
+      relation.add(currentPracticeCount);
+      relation.add(accumulatedCount);
+      await practice.save(null, MASTER_KEY);
+    }
+
+    return {
+      id: currentPracticeCount._getId(),
+      count: currentPracticeCount.get("count"),
+      reportedAt: currentPracticeCount.get("reportedAt"),
+      accumulatedCount: accumulatedCount.get("count")
+    };
+  }
+);
+
+Parse.Cloud.define(
+  "class:fetchPracticeCounts",
+  async ({ user, params: { practiceId } }) => {
+    const logger = require("parse-server").logger;
+    requireAuth(user);
+
+    userId = user.id;
+    logger.info(
+      `home:fetchPracticeCounts - userId: ${userId} practiceId: ${practiceId}`
+    );
+
+    var query = new Parse.Query("Practice");
+    query.equalTo("objectId", practiceId);
+    const practice = await query.first();
+    const result = {
+      practice: practice,
+      counts: []
+    };
+    const relation = practice.relation("counts");
+
+    query = relation.query();
+    query.equalTo("userId", userId);
+    query.descending("reportedAt");
+    result.counts = await query.limit(MAX_QUERY_COUNT).find();
 
     return result;
   }

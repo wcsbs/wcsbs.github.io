@@ -12,3 +12,4 @@ export const ADMIN_FETCH_USER = "adminFetchUser";
 export const FETCH_SESSIONS = "fetchSessions";
 export const FILTER_SESSIONS = "filterSessions";
 export const UPDATE_SESSION = "updateSession";
+export const FETCH_PRACTICE_COUNTS = "fetchPracticeCounts";

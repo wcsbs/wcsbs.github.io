@@ -14,9 +14,9 @@
             v-model="practiceCountObj.accumulatedCount"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="warning" v-on:click="toggleReportingCount()">
-              {{ practiceObj.showReportingCount ? "完成报数" : "我要报数" }}
-            </b-button>
+            <b-button variant="warning" v-on:click="toggleReportingCount()">{{
+              practiceObj.showReportingCount ? "完成报数" : "我要报数"
+            }}</b-button>
             <b-button
               variant="info"
               v-on:click="
@@ -35,6 +35,8 @@
           <b-input-group prepend="选择日期：" class="mt-3">
             <v-date-picker
               v-model="practiceObj.newCountReportedAt"
+              :min-date="minDateForCountReporting()"
+              :max-date="new Date()"
               :input-props="{
                 readonly: true
               }"
@@ -60,7 +62,11 @@
           rows="3"
           max-rows="8"
         ></b-form-textarea>
-        <b-button block variant="info" @click="listPracticeCount"
+        <div v-if="practiceCounts">
+          <h5>总计有 {{ items.length }} 条报数记录</h5>
+          <b-table striped hover :items="items" :fields="fields"></b-table>
+        </div>
+        <b-button v-else block variant="info" @click="listPracticeCount"
           >查看报数记录</b-button
         >
       </b-card-text>
@@ -79,7 +85,8 @@ export default {
   },
   props: {
     practice: { type: Object, required: true },
-    practiceCount: { type: Object, required: true }
+    latestPracticeCount: { type: Object, required: true },
+    practiceCounts: { type: Array, required: false }
   },
   data: function() {
     return {
@@ -91,19 +98,52 @@ export default {
         newCountReportedAt: "",
         newCount: ""
       },
-      practiceCountObj: {
-        latestCount: this.practiceCount.dummy
-          ? "未报数"
-          : `${this.practiceCount.get("count")} @ ${this.toLocalDateString(
-              this.practiceCount.get("reportedAt")
-            )}`,
-        accumulatedCount: this.practiceCount.dummy
-          ? "未报数"
-          : this.practiceCount.get("accumulatedCount")
-      }
+      practiceCountObj: this.buildPracticeObj(this.latestPracticeCount),
+      fields: [
+        {
+          key: "reportedAt",
+          label: "日期",
+          sortable: true
+        },
+        {
+          key: "count",
+          label: "报数",
+          sortable: true
+        }
+      ],
+      items: this.practiceCounts
+        ? this.practiceCounts
+            .filter(x => x.get("reportedAt"))
+            .map(e => {
+              return {
+                reportedAt: this.toLocalDateString(e.get("reportedAt")),
+                count: e.get("count")
+              };
+            })
+        : []
     };
   },
   methods: {
+    buildPracticeObj(latestPracticeCount) {
+      console.log(`buildPracticeObj - ${JSON.stringify(latestPracticeCount)}`);
+      return {
+        latestCount:
+          latestPracticeCount && latestPracticeCount.reportedAt
+            ? `${latestPracticeCount.count} @ ${this.toLocalDateString(
+                latestPracticeCount.reportedAt
+              )}`
+            : "未报数",
+        accumulatedCount:
+          latestPracticeCount && latestPracticeCount.reportedAt
+            ? latestPracticeCount.accumulatedCount
+            : "未报数"
+      };
+    },
+    minDateForCountReporting() {
+      const today = new Date();
+      //student must report count with 3 days
+      return new Date(today.getTime() - 3 * 24 * 60 * 60 * 1000);
+    },
     toLocalDateTimeString(date) {
       const options = {
         year: "numeric",
@@ -151,8 +191,7 @@ export default {
 
       this.$dialog
         .confirm(message, options)
-        .then(function(dialog) {
-          console.log(`${JSON.stringify(dialog)}`);
+        .then(function() {
           Parse.Cloud.run("home:reportPracticeCount", {
             practiceId,
             reportedAt,
@@ -163,14 +202,13 @@ export default {
                 `reportPracticeCount - result: ${JSON.stringify(result)}`
               );
 
-              thisComponent.practiceCountObj = {
-                latestCount: `${result.get(
-                  "count"
-                )} @ ${thisComponent.toLocalDateString(
-                  result.get("reportedAt")
-                )}`,
-                accumulatedCount: result.get("accumulatedCount")
-              };
+              thisComponent.practiceCountObj = thisComponent.buildPracticeObj(
+                result
+              );
+
+              if (thisComponent.practiceCounts) {
+                thisComponent.$router.go();
+              }
             })
             .catch(e => {
               console.log(`error in updateAttendance: ${e}`);

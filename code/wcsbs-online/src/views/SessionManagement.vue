@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isLoadingSessions" class="classSession-preview">
-      正在获取上课列表...
+      正在获取上课记录...
     </div>
     <div v-else>
       <h3 v-text="classInfo.name" />

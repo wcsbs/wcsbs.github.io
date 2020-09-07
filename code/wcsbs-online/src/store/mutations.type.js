@@ -11,3 +11,5 @@ export const FETCH_DASHBOARDS_START = "setLoadingDashboards";
 export const FETCH_SESSIONS_START = "setLoadingSessions";
 export const FETCH_SESSIONS_END = "setSessions";
 export const FILTER_SESSIONS_IN_LIST = "filterSessionsInList";
+export const FETCH_PRACTICE_COUNTS_START = "setLoadingPracticeCounts";
+export const FETCH_PRACTICE_COUNTS_END = "setPracticeCounts";
