@@ -1,12 +1,11 @@
 <template>
   <div>
     <h3 v-text="buddhaClass.name" />
-    <h4>辅导员：{{ teachers }} 师兄</h4>
-    <b-button block variant="info" :href="buddhaClass.url" target="_blank"
-      >学习资料网页</b-button
-    >
+    <h4>
+      辅导员：{{ teachers }} 师兄
+      <a :href="buddhaClass.url" target="_blank">学习资料网页</a>
+    </h4>
     <div v-if="forApplication">
-      <br />
       <b-button block variant="info" @click="listSession">查看详情</b-button>
     </div>
     <div v-else>
@@ -20,6 +19,7 @@
           :classSession="classSession"
           :attendance="buddhaClass.attendances[index]"
           :key="classSession.id + index"
+          :forApplication="forApplication"
         />
         <b-button block variant="info" @click="listSession"
           >查看上课记录</b-button

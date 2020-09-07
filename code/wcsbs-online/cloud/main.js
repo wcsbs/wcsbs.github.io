@@ -331,13 +331,17 @@ const loadStudentDashboard = async function(parseUser) {
 
   query = new Parse.Query("Class");
   query.equalTo("openForApplication", true);
-  query.exclude("objectId", enrolledClassList);
+  // query.exclude("objectId", enrolledClassList); TODO: how to do SQL NOT IN [a, b, c]
   parseClasses = await query.find();
 
   for (i = 0; i < parseClasses.length; i++) {
     const parseClass = parseClasses[i];
+    const id = parseClass._getId();
+    if (enrolledClassList.includes(id)) {
+      continue;
+    }
     const classInfo = {
-      id: parseClass._getId(),
+      id: id,
       name: parseClass.get("name"),
       url: parseClass.get("url")
     };

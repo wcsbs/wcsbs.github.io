@@ -22,6 +22,12 @@
           >
             清除
           </button>
+          <b-button
+            variant="warning"
+            v-if="classInfo.forApplication"
+            v-on:click="applyClass()"
+            >我要报名</b-button
+          >
           <button
             v-if="isClassAdmin || isTeachingAssistant"
             class="btn btn-outline-secondary"
@@ -45,6 +51,7 @@
       <ClassSession
         v-for="(classSession, index) in classSessions"
         :classInfo="classInfo"
+        :forApplication="classInfo.forApplication"
         :classSession="classSession"
         :attendance="attendances[index]"
         :newSessions="newSessions"
@@ -62,6 +69,7 @@ import { mapGetters } from "vuex";
 import ClassSession from "@/components/ClassSession";
 import { FETCH_SESSIONS, FILTER_SESSIONS } from "../store/actions.type";
 import store from "@/store";
+import Parse from "parse";
 
 export default {
   name: "SessionManagement",
@@ -104,6 +112,39 @@ export default {
     },
     createSession() {
       this.creatingSession = !this.creatingSession;
+    },
+    applyClass() {
+      const classId = this.classInfo.id;
+      const options = {
+        okText: "确认",
+        cancelText: "取消"
+      };
+      const message = {
+        title: this.classInfo.name,
+        body: `顶礼上师三宝！真的要报名？`
+      };
+      const thisComponent = this;
+
+      console.log(`applyClass - classId: ${classId}`);
+
+      this.$dialog
+        .confirm(message, options)
+        .then(function() {
+          Parse.Cloud.run("class:apply", {
+            classId
+          })
+            .then(result => {
+              console.log(`class:apply - result: ${JSON.stringify(result)}`);
+
+              thisComponent.$router.push({ name: "home" });
+            })
+            .catch(e => {
+              console.log(`error in class:apply: ${e}`);
+            });
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
     }
   }
 };

@@ -9,7 +9,7 @@
       :buddhaClass="buddhaClass"
       :key="buddhaClass.id + index"
     />
-    <h2>学会最新课程</h2>
+    <h2 v-if="dashboard.newClasses.length">学会最新课程</h2>
     <Class
       v-for="(buddhaClass, index) in dashboard.newClasses"
       :buddhaClass="buddhaClass"

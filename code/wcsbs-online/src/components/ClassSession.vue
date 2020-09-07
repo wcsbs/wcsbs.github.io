@@ -65,7 +65,7 @@
           </b-input-group-append>
         </b-input-group>
         <b-input-group
-          v-if="!classInfo.forApplication"
+          v-if="!session.forApplication"
           prepend="上课出勤："
           class="mt-3"
         >
@@ -116,7 +116,8 @@ export default {
     newSessions: { type: Array, required: false },
     isStudent: { type: Boolean, default: true },
     isClassAdmin: Boolean,
-    isTeachingAssistant: Boolean
+    isTeachingAssistant: Boolean,
+    forApplication: Boolean
   },
   data: function() {
     return {
@@ -134,6 +135,9 @@ export default {
     initSession() {
       return {
         id: this.classSession.id,
+        forApplication: this.classInfo
+          ? this.classInfo.forApplication
+          : this.forApplication,
         name: this.classSession.get("name"),
         url: this.classSession.get("url"),
         description: this.classSession.get("description"),
@@ -221,6 +225,9 @@ export default {
       return "未报考勤";
     },
     toMaterialStateString(attendance) {
+      if (this.forApplication) {
+        return "请看完传承/法本";
+      }
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
       if (attendance) {
