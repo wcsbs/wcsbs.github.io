@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isLoadingSessions" class="classSession-preview">
-      正在获取上课记录...
+      正在获取课程详情...
     </div>
     <div v-else>
       <h3 v-text="classInfo.name" />
@@ -81,8 +81,8 @@ export default {
     ])
   },
   beforeRouteEnter(to, from, next) {
-    // console.log(`beforeRouteEnter - to: ${JSON.stringify(to)}`);
-    store.dispatch(FETCH_SESSIONS, to.params["buddhaClassId"]).then(() => {
+    console.log(`beforeRouteEnter - to: ${JSON.stringify(to)}`);
+    store.dispatch(FETCH_SESSIONS, to.params).then(() => {
       next();
     });
   },

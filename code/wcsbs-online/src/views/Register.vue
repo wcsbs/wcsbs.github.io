@@ -76,6 +76,7 @@ export default {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
       phone: ""
     };
   },

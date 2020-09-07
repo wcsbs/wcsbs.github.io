@@ -56,12 +56,16 @@ const getters = {
 };
 
 const actions = {
-  [FETCH_SESSIONS](context, classId) {
-    console.log(`${FETCH_SESSIONS} - classId: ${classId}`);
+  [FETCH_SESSIONS](context, params) {
+    const classId = params["classId"];
+    const forApplication = params["forApplication"];
+    console.log(
+      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication}`
+    );
     context.commit(FETCH_SESSIONS_START);
 
     const fetchSessions = "class:fetchSessions";
-    Parse.Cloud.run(fetchSessions, { classId })
+    Parse.Cloud.run(fetchSessions, { classId, forApplication })
       .then(classInfo => {
         console.log(
           `${FETCH_SESSIONS} - #classSessions: ${classInfo.classSessions.length}`

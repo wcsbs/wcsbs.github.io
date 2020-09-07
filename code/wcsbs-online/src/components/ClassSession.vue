@@ -64,7 +64,11 @@
             </b-button>
           </b-input-group-append>
         </b-input-group>
-        <b-input-group prepend="上课出勤：" class="mt-3">
+        <b-input-group
+          v-if="!classInfo.forApplication"
+          prepend="上课出勤："
+          class="mt-3"
+        >
           <b-form-input
             readonly
             v-model="session.attendanceState"
@@ -107,7 +111,7 @@ export default {
   name: "ClassSession",
   props: {
     classSession: { type: Object, required: true },
-    attendance: { type: Object, required: true },
+    attendance: { type: Object, required: false },
     classInfo: { type: Object, required: false },
     newSessions: { type: Array, required: false },
     isStudent: { type: Boolean, default: true },

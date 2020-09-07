@@ -5,27 +5,33 @@
     <b-button block variant="info" :href="buddhaClass.url" target="_blank"
       >学习资料网页</b-button
     >
-    <div v-if="buddhaClass.classSessions.length === 0" class="user-preview">
-      还没有开课，敬请期待！
+    <div v-if="forApplication">
+      <br />
+      <b-button block variant="info" @click="listSession">查看详情</b-button>
     </div>
-    <div v-else class="user-preview">
-      <h4>正在闻思</h4>
-      <ClassSession
-        v-for="(classSession, index) in buddhaClass.classSessions"
-        :classSession="classSession"
-        :attendance="buddhaClass.attendances[index]"
-        :key="classSession.id + index"
-      />
-      <b-button block variant="info" @click="listSession"
-        >查看上课记录</b-button
-      >
-      <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
-      <Practice
-        v-for="(practice, index) in buddhaClass.practices"
-        :practice="practice"
-        :latestPracticeCount="buddhaClass.counts[index]"
-        :key="practice.id + index"
-      />
+    <div v-else>
+      <div v-if="buddhaClass.classSessions.length === 0" class="user-preview">
+        还没有开课，敬请期待！
+      </div>
+      <div v-else class="user-preview">
+        <h4>正在闻思</h4>
+        <ClassSession
+          v-for="(classSession, index) in buddhaClass.classSessions"
+          :classSession="classSession"
+          :attendance="buddhaClass.attendances[index]"
+          :key="classSession.id + index"
+        />
+        <b-button block variant="info" @click="listSession"
+          >查看上课记录</b-button
+        >
+        <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
+        <Practice
+          v-for="(practice, index) in buddhaClass.practices"
+          :practice="practice"
+          :latestPracticeCount="buddhaClass.counts[index]"
+          :key="practice.id + index"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -41,7 +47,8 @@ export default {
     Practice
   },
   props: {
-    buddhaClass: { type: Object, required: true }
+    buddhaClass: { type: Object, required: true },
+    forApplication: Boolean
   },
   data: function() {
     return {
@@ -50,10 +57,12 @@ export default {
   },
   methods: {
     listSession() {
-      const buddhaClass = this.buddhaClass;
       this.$router.push({
         name: "session-management",
-        params: { buddhaClassId: buddhaClass.id }
+        params: {
+          classId: this.buddhaClass.id,
+          forApplication: this.forApplication
+        }
       });
     }
   }

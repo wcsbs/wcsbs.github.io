@@ -266,11 +266,13 @@ const loadStudentDashboard = async function(parseUser) {
   const logger = require("parse-server").logger;
   const userId = parseUser._getId();
   const dashboard = {
-    classes: []
+    enrolledClasses: [],
+    newClasses: []
   };
   var query = new Parse.Query("Class");
   query.equalTo("students", parseUser);
-  const parseClasses = await query.find();
+  var parseClasses = await query.find();
+  const enrolledClassList = [];
 
   for (var i = 0; i < parseClasses.length; i++) {
     const parseClass = parseClasses[i];
@@ -283,6 +285,7 @@ const loadStudentDashboard = async function(parseUser) {
       practices: [],
       counts: []
     };
+    enrolledClassList.push(parseClass._getId());
 
     query = parseClass.relation("classAdminUsers").query();
     const classAdminUsers = await query.find();
@@ -322,8 +325,28 @@ const loadStudentDashboard = async function(parseUser) {
       classInfo.practices
     );
 
-    dashboard.classes.push(classInfo);
+    dashboard.enrolledClasses.push(classInfo);
     // await populateSessions(parseClass);
+  }
+
+  query = new Parse.Query("Class");
+  query.equalTo("openForApplication", true);
+  query.exclude("objectId", enrolledClassList);
+  parseClasses = await query.find();
+
+  for (i = 0; i < parseClasses.length; i++) {
+    const parseClass = parseClasses[i];
+    const classInfo = {
+      id: parseClass._getId(),
+      name: parseClass.get("name"),
+      url: parseClass.get("url")
+    };
+
+    query = parseClass.relation("classAdminUsers").query();
+    const classAdminUsers = await query.find();
+    classInfo.teachers = classAdminUsers.map(u => u.get("name"));
+
+    dashboard.newClasses.push(classInfo);
   }
 
   return dashboard;
@@ -504,7 +527,7 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "class:fetchSessions",
-  async ({ user, params: { classId } }) => {
+  async ({ user, params: { classId, forApplication } }) => {
     requireAuth(user);
 
     var query = new Parse.Query("Class");
@@ -515,6 +538,7 @@ Parse.Cloud.define(
       id: parseClass._getId(),
       name: parseClass.get("name"),
       url: parseClass.get("url"),
+      forApplication: forApplication,
       classSessions: [],
       attendances: []
     };
@@ -525,14 +549,35 @@ Parse.Cloud.define(
 
     for (var i = 0; i < classSessions.length; i++) {
       const classSession = classSessions[i];
-      const attendance = await loadStudentAttendance(user.id, classSession);
       classInfo.classSessions.push(classSession);
-      classInfo.attendances.push(attendance);
+
+      if (forApplication) {
+        classInfo.attendances.push(undefined);
+      } else {
+        const attendance = await loadStudentAttendance(user.id, classSession);
+        classInfo.attendances.push(attendance);
+      }
     }
 
     return classInfo;
   }
 );
+
+Parse.Cloud.define("class:apply", async ({ user, params: { classId } }) => {
+  requireAuth(user);
+
+  var query = new Parse.Query("Class");
+  query.equalTo("objectId", classId);
+  const parseClass = await query.first(MASTER_KEY);
+
+  var userQuery = new Parse.Query(Parse.User);
+  userQuery.equalTo("objectId", user.id);
+  var parseUser = await userQuery.first(MASTER_KEY);
+
+  parseClass.relation("students").add(parseUser);
+
+  return await parseClass.save(null, MASTER_KEY);
+});
 
 Parse.Cloud.define(
   "class:updateClassSession",

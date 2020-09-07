@@ -1,13 +1,20 @@
 <template>
   <div class="user-preview">
-    <div v-if="dashboard.classes.length === 0" class="user-preview">
+    <div v-if="dashboard.enrolledClasses.length === 0" class="user-preview">
       您还没有参加任何佛学课程！
     </div>
     <Class
       v-else
-      v-for="(buddhaClass, index) in dashboard.classes"
+      v-for="(buddhaClass, index) in dashboard.enrolledClasses"
       :buddhaClass="buddhaClass"
-      :key="index"
+      :key="buddhaClass.id + index"
+    />
+    <h2>学会最新课程</h2>
+    <Class
+      v-for="(buddhaClass, index) in dashboard.newClasses"
+      :buddhaClass="buddhaClass"
+      :key="buddhaClass.id + index"
+      :forApplication="true"
     />
   </div>
 </template>
