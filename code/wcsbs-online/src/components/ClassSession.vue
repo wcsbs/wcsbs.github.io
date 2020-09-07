@@ -5,7 +5,7 @@
       <b-input-group prepend="选择课程：" class="mt-3">
         <select v-model="session.id">
           <option
-            v-for="newSession in newClassSessions"
+            v-for="newSession in sessionDropdownOptions"
             v-bind:key="newSession.id"
             v-bind:value="newSession.id"
             >{{ newSession.name }}</option
@@ -119,12 +119,12 @@ export default {
       session: this.classSession.dummy
         ? { creating: true, editing: true }
         : this.initSession(),
-      newClassSessions: [],
+      sessionDropdownOptions: [],
       editing: this.classSession.dummy
     };
   },
   mounted() {
-    this.buildNewClassSessions();
+    this.buildSessionDropdownOptions();
   },
   methods: {
     initSession() {
@@ -145,13 +145,13 @@ export default {
         materialState: this.toMaterialStateString(this.attendance)
       };
     },
-    buildNewClassSessions() {
-      this.newClassSessions = [];
+    buildSessionDropdownOptions() {
+      this.sessionDropdownOptions = [];
       if (!this.editing) {
         return;
       }
       if (this.classSession.dummy) {
-        this.newClassSessions = this.newSessions;
+        this.sessionDropdownOptions = this.newSessions;
       } else {
         const currentSession = {
           id: this.classSession.id,
@@ -166,10 +166,10 @@ export default {
             !currentSessionPushed &&
             parseInt(s.name.match(/(\d+)/)[0]) > order
           ) {
-            this.newClassSessions.push(currentSession);
+            this.sessionDropdownOptions.push(currentSession);
             currentSessionPushed = true;
           }
-          this.newClassSessions.push(s);
+          this.sessionDropdownOptions.push(s);
         }
       }
     },
@@ -325,7 +325,7 @@ export default {
     editSession() {
       this.session = this.initSession();
       this.editing = true;
-      this.buildNewClassSessions();
+      this.buildSessionDropdownOptions();
     },
     onReset(evt) {
       evt.preventDefault();
