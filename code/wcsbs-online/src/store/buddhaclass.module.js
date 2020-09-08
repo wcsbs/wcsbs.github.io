@@ -58,9 +58,13 @@ const getters = {
 const actions = {
   [FETCH_SESSIONS](context, params) {
     const classId = params["classId"];
-    const forApplication = params["forApplication"];
+    var forApplication = params["forApplication"];
+
+    if (typeof forApplication === "string") {
+      forApplication = forApplication === "true";
+    }
     console.log(
-      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication}`
+      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication} ${typeof forApplication}`
     );
     context.commit(FETCH_SESSIONS_START);
 

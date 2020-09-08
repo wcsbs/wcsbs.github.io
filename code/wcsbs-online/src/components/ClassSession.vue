@@ -226,7 +226,7 @@ export default {
     },
     toMaterialStateString(attendance) {
       if (this.forApplication) {
-        return "请看完传承/法本";
+        return "请在课前看完传承/法本";
       }
       var chuanCheng = "未看传承";
       var faBen = "未看法本";

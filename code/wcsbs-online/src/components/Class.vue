@@ -7,6 +7,7 @@
     </h4>
     <div v-if="forApplication">
       <b-button block variant="info" @click="listSession">查看详情</b-button>
+      <hr />
     </div>
     <div v-else>
       <div v-if="buddhaClass.classSessions.length === 0" class="user-preview">
@@ -24,6 +25,7 @@
         <b-button block variant="info" @click="listSession"
           >查看上课记录</b-button
         >
+        <hr />
         <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
         <Practice
           v-for="(practice, index) in buddhaClass.practices"

@@ -66,11 +66,16 @@
           <h5>总计有 {{ items.length }} 条报数记录</h5>
           <b-table striped hover :items="items" :fields="fields"></b-table>
         </div>
-        <b-button v-else block variant="info" @click="listPracticeCount"
-          >查看报数记录</b-button
-        >
       </b-card-text>
     </b-card>
+    <b-button
+      v-if="!practiceCounts"
+      block
+      variant="info"
+      @click="listPracticeCount"
+      >查看报数记录</b-button
+    >
+    <hr />
   </div>
 </template>
 
