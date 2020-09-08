@@ -43,7 +43,7 @@
           <b-input-group-append>
             <b-button
               variant="warning"
-              v-if="isClassAdmin || isTeachingAssistant"
+              v-if="newSessions && (isClassAdmin || isTeachingAssistant)"
               v-on:click="editSession"
               >修改</b-button
             >
@@ -106,6 +106,7 @@
 
 <script>
 import Parse from "parse";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ClassSession",
@@ -114,9 +115,6 @@ export default {
     attendance: { type: Object, required: false },
     classInfo: { type: Object, required: false },
     newSessions: { type: Array, required: false },
-    isStudent: { type: Boolean, default: true },
-    isClassAdmin: Boolean,
-    isTeachingAssistant: Boolean,
     forApplication: Boolean
   },
   data: function() {
@@ -127,6 +125,9 @@ export default {
       sessionDropdownOptions: [],
       editing: this.classSession.dummy
     };
+  },
+  computed: {
+    ...mapGetters(["isClassAdmin", "isTeachingAssistant", "isStudent"])
   },
   mounted() {
     this.buildSessionDropdownOptions();

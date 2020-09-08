@@ -56,9 +56,6 @@
         :attendance="attendances[index]"
         :newSessions="newSessions"
         :key="classSession.id + index"
-        :isClassAdmin="isClassAdmin"
-        :isTeachingAssistant="isTeachingAssistant"
-        :isStudent="isStudent"
       />
     </div>
   </div>

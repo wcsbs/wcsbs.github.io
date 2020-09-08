@@ -2,18 +2,28 @@
   <div>
     <h3 v-text="buddhaClass.name" />
     <h4>
-      辅导员：{{ teachers }} 师兄
-      <a :href="buddhaClass.url" target="_blank">学习资料网页</a>
+      <center>
+        <ul style="list-style-type:none">
+          <li>辅导员：{{ teachers }} 师兄</li>
+          <li v-if="buddhaClass.snapshotObj">
+            学生人数：{{ buddhaClass.snapshotObj.studentCount }}
+          </li>
+          <li>
+            学习资料：
+            <a :href="buddhaClass.url" target="_blank">网页链接</a>
+          </li>
+        </ul>
+      </center>
     </h4>
     <div v-if="forApplication">
       <b-button block variant="info" @click="listSession">查看详情</b-button>
       <hr />
     </div>
     <div v-else>
-      <div v-if="buddhaClass.classSessions.length === 0" class="user-preview">
+      <div v-if="buddhaClass.classSessions.length === 0">
         还没有开课，敬请期待！
       </div>
-      <div v-else class="user-preview">
+      <div v-else>
         <h4>正在闻思</h4>
         <ClassSession
           v-for="(classSession, index) in buddhaClass.classSessions"

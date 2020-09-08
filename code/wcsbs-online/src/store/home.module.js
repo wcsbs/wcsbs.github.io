@@ -30,6 +30,31 @@ const actions = {
       Parse.Cloud.run("home:loadDashboards", { user })
         .then(result => {
           console.log(
+            // `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
+            `${FETCH_DASHBOARDS} - result: ${result}`
+          );
+          if (result.systemAdminDashboard) {
+            for (
+              var i = 0;
+              i < result.systemAdminDashboard.classes.length;
+              i++
+            ) {
+              var c = result.systemAdminDashboard.classes[i];
+              console.log(
+                `${FETCH_DASHBOARDS} - c.snapshot: ${JSON.stringify(
+                  c.snapshot
+                )}`
+              );
+              c.snapshotObj = JSON.parse(c.snapshot.get("json"));
+            }
+          }
+          if (result.classAdminDashboard) {
+            for (i = 0; i < result.classAdminDashboard.classes.length; i++) {
+              c = result.classAdminDashboard.classes[i];
+              c.snapshotObj = JSON.parse(c.snapshot.get("json"));
+            }
+          }
+          console.log(
             `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
             // `${FETCH_DASHBOARDS} - result: ${result}`
           );
@@ -50,10 +75,6 @@ const mutations = {
     state.isLoadingDashboards = true;
   },
   [FETCH_DASHBOARDS_END](state, result) {
-    if (result.studentDashboard) {
-      result.studentDashboard.name = "我的闻思修";
-    }
-
     state.home = result;
     state.isLoadingDashboards = false;
   }

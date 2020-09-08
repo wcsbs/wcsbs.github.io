@@ -14,9 +14,14 @@
             v-model="practiceCountObj.accumulatedCount"
           ></b-form-input>
           <b-input-group-append>
-            <b-button variant="warning" v-on:click="toggleReportingCount()">{{
-              practiceObj.showReportingCount ? "完成报数" : "我要报数"
-            }}</b-button>
+            <b-button
+              v-if="isStudent"
+              variant="warning"
+              v-on:click="toggleReportingCount()"
+              >{{
+                practiceObj.showReportingCount ? "完成报数" : "我要报数"
+              }}</b-button
+            >
             <b-button
               variant="info"
               v-on:click="
@@ -82,6 +87,7 @@
 <script>
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import Parse from "parse";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Practice",
@@ -90,8 +96,11 @@ export default {
   },
   props: {
     practice: { type: Object, required: true },
-    latestPracticeCount: { type: Object, required: true },
+    latestPracticeCount: { type: Object, required: false },
     practiceCounts: { type: Array, required: false }
+  },
+  computed: {
+    ...mapGetters(["isStudent"])
   },
   data: function() {
     return {

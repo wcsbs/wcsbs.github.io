@@ -262,15 +262,72 @@ const populateSessions = async function(parseClass) {
   await parseClass.save(null, MASTER_KEY);
 };
 
-const loadStudentDashboard = async function(parseUser) {
+const generateClassSnapshotJson = async function(parseClass) {
   const logger = require("parse-server").logger;
-  const userId = parseUser._getId();
-  const dashboard = {
-    enrolledClasses: [],
-    newClasses: []
-  };
+  logger.info(`generateClassSnapshotJson - classId: ${parseClass._getId()}`);
+  const result = {};
+  var query = parseClass.relation("students").query();
+  result.studentCount = await query.count();
+
+  return JSON.stringify(result);
+};
+
+const loadClassSnapshot = async function(parseClass) {
+  const logger = require("parse-server").logger;
+  logger.info(`loadClassSnapshot - classId: ${parseClass._getId()}`);
+
+  const relation = parseClass.relation("snapshots");
+  var query = relation.query();
+  query.descending("updatedAt");
+  var snapshot = await query.first();
+
+  var needToRegenerate = true;
+  var newObject = false;
+
+  if (!snapshot) {
+    newObject = true;
+    snapshot = new Parse.Object("ClassSnapshot");
+  } else {
+    //TODO: check date
+  }
+
+  if (needToRegenerate) {
+    const json = await generateClassSnapshotJson(parseClass);
+    snapshot.set("json", json);
+    snapshot = await snapshot.save(null, MASTER_KEY);
+
+    if (newObject) {
+      relation.add(snapshot);
+      await parseClass.save(null, MASTER_KEY);
+    }
+  }
+  // logger.info(`loadClassSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
+  return snapshot;
+};
+
+const loadDashboard = async function(parseUser, forStudent) {
+  const logger = require("parse-server").logger;
+  const userId = parseUser ? parseUser._getId() : undefined;
+  const dashboard = forStudent
+    ? {
+        enrolledClasses: [],
+        newClasses: []
+      }
+    : {
+        classes: []
+      };
+
   var query = new Parse.Query("Class");
-  query.equalTo("students", parseUser);
+
+  //undefined if loading System Admin Dashboard
+  if (parseUser) {
+    if (forStudent) {
+      query.equalTo("students", parseUser);
+    } else {
+      query.equalTo("classAdminUsers", parseUser);
+    }
+  }
+
   var parseClasses = await query.find();
   const enrolledClassList = [];
 
@@ -298,10 +355,13 @@ const loadStudentDashboard = async function(parseUser) {
     const nextSession = await query.first();
     if (nextSession) {
       classInfo.classSessions.push(nextSession);
-      const attendance = await loadStudentAttendance(userId, nextSession);
-      logger.info(
-        `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
-      );
+      var attendance = undefined;
+      if (forStudent) {
+        attendance = await loadStudentAttendance(userId, nextSession);
+        logger.info(
+          `loadDashboard - attendance: ${JSON.stringify(attendance)}`
+        );
+      }
       classInfo.attendances.push(attendance);
     }
 
@@ -311,46 +371,61 @@ const loadStudentDashboard = async function(parseUser) {
     const lastSession = await query.first();
     if (lastSession) {
       classInfo.classSessions.push(lastSession);
-      const attendance = await loadStudentAttendance(userId, lastSession);
-      logger.info(
-        `loadStudentDashboard - attendance: ${JSON.stringify(attendance)}`
-      );
+      attendance = undefined;
+      if (forStudent) {
+        attendance = await loadStudentAttendance(userId, lastSession);
+        logger.info(
+          `loadDashboard - attendance: ${JSON.stringify(attendance)}`
+        );
+      }
       classInfo.attendances.push(attendance);
     }
 
     query = parseClass.relation("practices").query();
     classInfo.practices = await query.find();
-    classInfo.counts = await loadStudentPracticeCounts(
-      userId,
-      classInfo.practices
-    );
 
-    dashboard.enrolledClasses.push(classInfo);
-    // await populateSessions(parseClass);
+    if (forStudent) {
+      classInfo.counts = await loadStudentPracticeCounts(
+        userId,
+        classInfo.practices
+      );
+    } else {
+      classInfo.counts = Array(classInfo.practices.length).fill();
+      classInfo.snapshot = await loadClassSnapshot(parseClass);
+    }
+
+    if (forStudent) {
+      dashboard.enrolledClasses.push(classInfo);
+      // await populateSessions(parseClass);
+    } else {
+      dashboard.classes.push(classInfo);
+    }
   }
 
-  query = new Parse.Query("Class");
-  query.equalTo("openForApplication", true);
-  // query.exclude("objectId", enrolledClassList); TODO: how to do SQL NOT IN [a, b, c]
-  parseClasses = await query.find();
+  if (forStudent) {
+    query = new Parse.Query("Class");
+    query.equalTo("openForApplication", true);
+    // query.exclude("objectId", enrolledClassList); TODO: how to do SQL NOT IN [a, b, c]
+    parseClasses = await query.find();
 
-  for (i = 0; i < parseClasses.length; i++) {
-    const parseClass = parseClasses[i];
-    const id = parseClass._getId();
-    if (enrolledClassList.includes(id)) {
-      continue;
+    for (i = 0; i < parseClasses.length; i++) {
+      const parseClass = parseClasses[i];
+      const id = parseClass._getId();
+      if (enrolledClassList.includes(id)) {
+        continue;
+      }
+      const classInfo = {
+        id: id,
+        name: parseClass.get("name"),
+        url: parseClass.get("url")
+      };
+
+      query = parseClass.relation("classAdminUsers").query();
+      const classAdminUsers = await query.find();
+      classInfo.teachers = classAdminUsers.map(u => u.get("name"));
+
+      dashboard.newClasses.push(classInfo);
     }
-    const classInfo = {
-      id: id,
-      name: parseClass.get("name"),
-      url: parseClass.get("url")
-    };
-
-    query = parseClass.relation("classAdminUsers").query();
-    const classAdminUsers = await query.find();
-    classInfo.teachers = classAdminUsers.map(u => u.get("name"));
-
-    dashboard.newClasses.push(classInfo);
   }
 
   return dashboard;
@@ -363,7 +438,15 @@ Parse.Cloud.define(
 
     const result = {};
     if (userWithRoles.roles.includes("StudentUser")) {
-      result.studentDashboard = await loadStudentDashboard(user);
+      result.studentDashboard = await loadDashboard(user, true);
+    }
+
+    if (userWithRoles.roles.includes("ClassAdminUser")) {
+      result.classAdminDashboard = await loadDashboard(user, false);
+    }
+
+    if (userWithRoles.roles.includes("B4aAdminUser")) {
+      result.systemAdminDashboard = await loadDashboard();
     }
 
     return result;
