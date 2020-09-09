@@ -286,44 +286,6 @@ const generateClassSnapshotJson = async function(parseClass) {
   return JSON.stringify(result);
 };
 
-const loadClassSnapshot = async function(parseClass) {
-  const logger = require("parse-server").logger;
-  const classId = parseClass.id;
-  logger.info(`loadClassSnapshot - classId: ${classId}`);
-
-  const relation = parseClass.relation("snapshots");
-  var query = relation.query();
-  query.equalTo("forObjectId", classId);
-  var snapshot = await query.first();
-
-  var needToRegenerate = true;
-  var newObject = false;
-
-  if (!snapshot) {
-    newObject = true;
-    snapshot = new Parse.Object("ClassSnapshot");
-    snapshot.set("forObjectId", classId);
-  } else {
-    const today = new Date();
-    //refresh every 24 hours
-    needToRegenerate =
-      today.getTime() > snapshot.updatedAt.getTime() + 24 * 60 * 60 * 1000;
-  }
-
-  if (needToRegenerate) {
-    const json = await generateClassSnapshotJson(parseClass);
-    snapshot.set("json", json);
-    snapshot = await snapshot.save(null, MASTER_KEY);
-
-    if (newObject) {
-      relation.add(snapshot);
-      await parseClass.save(null, MASTER_KEY);
-    }
-  }
-  // logger.info(`loadClassSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
-  return snapshot;
-};
-
 const generateSessionSnapshotJson = async function(parseSession) {
   const logger = require("parse-server").logger;
   logger.info(`generateSessionSnapshotJson - sessionId: ${parseSession.id}`);
@@ -332,60 +294,20 @@ const generateSessionSnapshotJson = async function(parseSession) {
   var query = parseSession.relation("attendances").query();
   var attendances = await query.limit(MAX_QUERY_COUNT).find();
 
-  for (var attendance in attendances) {
-    if (attendance.chuanCheng) {
+  for (var i = 0; i < attendances.length; i++) {
+    const attendance = attendances[i];
+    if (attendance.get("chuanCheng")) {
       result.chuanCheng += 1;
     }
-    if (attendance.faBen) {
+    if (attendance.get("faBen")) {
       result.faBen += 1;
     }
-    if (attendance.shangKe) {
+    if (attendance.get("shangKe")) {
       result.shangKe += 1;
     }
   }
 
   return JSON.stringify(result);
-};
-
-const loadSessionSnapshot = async function(parseClass, parseSession) {
-  const logger = require("parse-server").logger;
-  const classId = parseClass.id;
-  const sessionId = parseSession.id;
-  logger.info(
-    `loadSessionSnapshot - classId: ${classId} sessionId: ${sessionId}`
-  );
-
-  const relation = parseClass.relation("snapshots");
-  var query = relation.query();
-  query.equalTo("forObjectId", sessionId);
-  var snapshot = await query.first();
-
-  var needToRegenerate = true;
-  var newObject = false;
-
-  if (!snapshot) {
-    newObject = true;
-    snapshot = new Parse.Object("ClassSnapshot");
-    snapshot.set("forObjectId", sessionId);
-  } else {
-    const today = new Date();
-    //refresh every 24 hours
-    needToRegenerate =
-      today.getTime() > snapshot.updatedAt.getTime() + 24 * 60 * 60 * 1000;
-  }
-
-  if (needToRegenerate) {
-    const json = await generateSessionSnapshotJson(parseSession);
-    snapshot.set("json", json);
-    snapshot = await snapshot.save(null, MASTER_KEY);
-
-    if (newObject) {
-      relation.add(snapshot);
-      await parseClass.save(null, MASTER_KEY);
-    }
-  }
-  // logger.info(`loadSessionSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
-  return snapshot;
 };
 
 const generatePracticeSnapshotJson = async function(parsePractice) {
@@ -394,12 +316,12 @@ const generatePracticeSnapshotJson = async function(parsePractice) {
 
   const relation = parsePractice.relation("counts");
   query = relation.query();
-  query.equalTo("reportedAt", undefined);
+  // query.notEqualTo("reportedAt", undefined);
 
   // total will be a newly created field to hold the sum of score field
   var pipeline = [{ group: { objectId: null, total: { $sum: "$count" } } }];
   const results = await query.aggregate(pipeline);
-  const accumulatedCount = results[0].total;
+  const accumulatedCount = results[0].total / 2;
   logger.info(
     `generatePracticeSnapshotJson - accumulatedCount: ${accumulatedCount}`
   );
@@ -411,23 +333,20 @@ const generatePracticeSnapshotJson = async function(parsePractice) {
   return JSON.stringify(practiceCount);
 };
 
-const loadPracticeSnapshot = async function(parseClass, parsePractice) {
+const loadSnapshot = async function(parseObject, generateSnapshotJson) {
   const logger = require("parse-server").logger;
-  const practiceId = parsePractice.id;
-  logger.info(`loadPracticeSnapshot - practiceId: ${practiceId}`);
+  const objectId = parseObject.id;
+  logger.info(`loadSnapshot - objectId: ${objectId}`);
 
-  const relation = parseClass.relation("snapshots");
-  var query = relation.query();
-  query.equalTo("forObjectId", practiceId);
+  var query = new Parse.Query("Snapshot");
+  query.equalTo("forObjectId", objectId);
   var snapshot = await query.first();
 
   var needToRegenerate = true;
-  var newObject = false;
 
   if (!snapshot) {
-    newObject = true;
-    snapshot = new Parse.Object("ClassSnapshot");
-    snapshot.set("forObjectId", practiceId);
+    snapshot = new Parse.Object("Snapshot");
+    snapshot.set("forObjectId", objectId);
   } else {
     const today = new Date();
     //refresh every 24 hours
@@ -436,29 +355,24 @@ const loadPracticeSnapshot = async function(parseClass, parsePractice) {
   }
 
   if (needToRegenerate) {
-    const json = await generatePracticeSnapshotJson(parsePractice);
+    const json = await generateSnapshotJson(parseObject);
     snapshot.set("json", json);
     snapshot = await snapshot.save(null, MASTER_KEY);
-
-    if (newObject) {
-      relation.add(snapshot);
-      await parseClass.save(null, MASTER_KEY);
-    }
   }
-  // logger.info(`loadSessionSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
+
   return snapshot;
 };
 
-const loadPracticeSnapshots = async function(parseClass, practices) {
+const loadPracticeSnapshots = async function(practices) {
   const logger = require("parse-server").logger;
-  logger.info(`loadPracticeSnapshots - classId: ${parseClass.id}`);
+  logger.info(`loadPracticeSnapshots - practices: ${practices}`);
 
   var result = [];
   if (practices && practices.length > 0) {
     for (var i = 0; i < practices.length; i++) {
-      const practiceCount = await loadPracticeSnapshot(
-        parseClass,
-        practices[i]
+      const practiceCount = await loadSnapshot(
+        practices[i],
+        generatePracticeSnapshotJson
       );
       result.push(practiceCount);
     }
@@ -521,7 +435,10 @@ const loadDashboard = async function(parseUser, forStudent) {
       if (forStudent) {
         attendance = await loadStudentAttendance(userId, nextSession);
       } else {
-        attendance = await loadSessionSnapshot(parseClass, nextSession);
+        attendance = await loadSnapshot(
+          nextSession,
+          generateSessionSnapshotJson
+        );
       }
       logger.info(`loadDashboard - attendance: ${JSON.stringify(attendance)}`);
       classInfo.attendances.push(attendance);
@@ -537,7 +454,10 @@ const loadDashboard = async function(parseUser, forStudent) {
       if (forStudent) {
         attendance = await loadStudentAttendance(userId, lastSession);
       } else {
-        attendance = await loadSessionSnapshot(parseClass, lastSession);
+        attendance = await loadSnapshot(
+          lastSession,
+          generateSessionSnapshotJson
+        );
       }
       logger.info(`loadDashboard - attendance: ${JSON.stringify(attendance)}`);
       classInfo.attendances.push(attendance);
@@ -552,11 +472,11 @@ const loadDashboard = async function(parseUser, forStudent) {
         classInfo.practices
       );
     } else {
-      classInfo.counts = await loadPracticeSnapshots(
+      classInfo.counts = await loadPracticeSnapshots(classInfo.practices);
+      classInfo.snapshot = await loadSnapshot(
         parseClass,
-        classInfo.practices
+        generateClassSnapshotJson
       );
-      classInfo.snapshot = await loadClassSnapshot(parseClass);
     }
 
     if (forStudent) {
@@ -808,7 +728,7 @@ Parse.Cloud.define(
         classInfo.attendances.push(undefined);
       } else {
         const attendance = forAdmin
-          ? await loadSessionSnapshot(parseClass, classSession)
+          ? await loadSnapshot(classSession, generateSessionSnapshotJson)
           : await loadStudentAttendance(user.id, classSession);
         classInfo.attendances.push(attendance);
       }
