@@ -2,19 +2,17 @@
   <div>
     <h3 v-text="buddhaClass.name" />
     <h4>
-      <center>
-        <ul style="list-style-type:none">
-          <li>辅导员：{{ teachers }} 师兄</li>
-          <li v-if="buddhaClass.snapshotObj">
-            学生人数：{{ buddhaClass.snapshotObj.studentCount }}
-          </li>
-          <li>
-            学习资料：
-            <a :href="buddhaClass.url" target="_blank">网页链接</a>
-          </li>
-        </ul>
-      </center>
+      辅导员：{{ teachers }} 师兄 学习资料：
+      <a :href="buddhaClass.url" target="_blank">网页链接</a>
     </h4>
+    <div v-if="buddhaClass.classSnapshot">
+      <b-table
+        striped
+        hover
+        :items="items"
+        thead-class="hidden_header"
+      ></b-table>
+    </div>
     <div v-if="forApplication">
       <b-button block variant="info" @click="listSession">查看详情</b-button>
       <hr />
@@ -32,9 +30,7 @@
           :key="classSession.id + index"
           :forApplication="forApplication"
         />
-        <b-button block variant="info" @click="listSession"
-          >查看上课记录</b-button
-        >
+        <b-button block variant="info" @click="listSession">查看详情</b-button>
         <hr />
         <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
         <Practice
@@ -64,7 +60,27 @@ export default {
   },
   data: function() {
     return {
-      teachers: this.buddhaClass.teachers.join()
+      teachers: this.buddhaClass.teachers.join(),
+      items: this.buddhaClass.classSnapshot
+        ? [
+            {
+              key: "学生人数",
+              value: this.buddhaClass.classSnapshot.studentCount
+            },
+            {
+              key: "总计上课",
+              value: this.buddhaClass.classSnapshot.sessionTotal
+            },
+            {
+              key: "已计划上课",
+              value: this.buddhaClass.classSnapshot.sessionScheduled
+            },
+            {
+              key: " 已完成上课",
+              value: this.buddhaClass.classSnapshot.sessionCompleted
+            }
+          ]
+        : []
     };
   },
   methods: {
@@ -73,10 +89,17 @@ export default {
         name: "session-management",
         params: {
           classId: this.buddhaClass.id,
-          forApplication: this.forApplication
+          forApplication: this.forApplication,
+          forAdmin: this.buddhaClass.classSnapshot != undefined
         }
       });
     }
   }
 };
 </script>
+
+<style>
+.hidden_header {
+  display: none;
+}
+</style>

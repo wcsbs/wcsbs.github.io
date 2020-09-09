@@ -63,13 +63,18 @@ const actions = {
     if (typeof forApplication === "string") {
       forApplication = forApplication === "true";
     }
+    var forAdmin = params["forAdmin"];
+
+    if (typeof forAdmin === "string") {
+      forAdmin = forAdmin === "true";
+    }
     console.log(
-      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication} ${typeof forApplication}`
+      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication} forAdmin: ${forAdmin}`
     );
     context.commit(FETCH_SESSIONS_START);
 
     const fetchSessions = "class:fetchSessions";
-    Parse.Cloud.run(fetchSessions, { classId, forApplication })
+    Parse.Cloud.run(fetchSessions, { classId, forApplication, forAdmin })
       .then(classInfo => {
         console.log(
           `${FETCH_SESSIONS} - #classSessions: ${classInfo.classSessions.length}`
@@ -136,7 +141,11 @@ const mutations = {
       const s = classInfo.classSessions[i];
       if (s.get("scheduledAt")) {
         state.classSessions.push(s);
-        state.attendances.push(classInfo.attendances[i]);
+        var attendance = classInfo.attendances[i];
+        if (classInfo.forAdmin) {
+          attendance = JSON.parse(attendance.get("json"));
+        }
+        state.attendances.push(attendance);
       } else {
         state.newSessions.push({
           id: s.id,

@@ -21,6 +21,17 @@ const getters = {
   }
 };
 
+function processAdminDashboard(dashboard) {
+  var c, i;
+  for (i = 0; i < dashboard.classes.length; i++) {
+    c = dashboard.classes[i];
+    c.classSnapshot = JSON.parse(c.snapshot.get("json"));
+
+    c.attendances = c.attendances.map(e => JSON.parse(e.get("json")));
+    c.counts = c.counts.map(e => JSON.parse(e.get("json")));
+  }
+}
+
 const actions = {
   [FETCH_DASHBOARDS]({ commit }) {
     const user = store.state.auth.user;
@@ -34,25 +45,10 @@ const actions = {
             `${FETCH_DASHBOARDS} - result: ${result}`
           );
           if (result.systemAdminDashboard) {
-            for (
-              var i = 0;
-              i < result.systemAdminDashboard.classes.length;
-              i++
-            ) {
-              var c = result.systemAdminDashboard.classes[i];
-              console.log(
-                `${FETCH_DASHBOARDS} - c.snapshot: ${JSON.stringify(
-                  c.snapshot
-                )}`
-              );
-              c.snapshotObj = JSON.parse(c.snapshot.get("json"));
-            }
+            processAdminDashboard(result.systemAdminDashboard);
           }
           if (result.classAdminDashboard) {
-            for (i = 0; i < result.classAdminDashboard.classes.length; i++) {
-              c = result.classAdminDashboard.classes[i];
-              c.snapshotObj = JSON.parse(c.snapshot.get("json"));
-            }
+            processAdminDashboard(result.classAdminDashboard);
           }
           console.log(
             `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`

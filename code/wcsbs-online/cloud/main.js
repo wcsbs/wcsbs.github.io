@@ -264,21 +264,36 @@ const populateSessions = async function(parseClass) {
 
 const generateClassSnapshotJson = async function(parseClass) {
   const logger = require("parse-server").logger;
-  logger.info(`generateClassSnapshotJson - classId: ${parseClass._getId()}`);
+  logger.info(`generateClassSnapshotJson - classId: ${parseClass.id}`);
+
   const result = {};
   var query = parseClass.relation("students").query();
   result.studentCount = await query.count();
+
+  const sessions = parseClass.relation("sessions");
+  query = sessions.query();
+  result.sessionTotal = await query.count();
+
+  query = sessions.query();
+  query.exists("scheduledAt");
+  result.sessionScheduled = await query.count();
+
+  query = sessions.query();
+  query.exists("scheduledAt");
+  query.lessThanOrEqualTo("scheduledAt", new Date());
+  result.sessionCompleted = await query.count();
 
   return JSON.stringify(result);
 };
 
 const loadClassSnapshot = async function(parseClass) {
   const logger = require("parse-server").logger;
-  logger.info(`loadClassSnapshot - classId: ${parseClass._getId()}`);
+  const classId = parseClass.id;
+  logger.info(`loadClassSnapshot - classId: ${classId}`);
 
   const relation = parseClass.relation("snapshots");
   var query = relation.query();
-  query.descending("updatedAt");
+  query.equalTo("forObjectId", classId);
   var snapshot = await query.first();
 
   var needToRegenerate = true;
@@ -287,8 +302,12 @@ const loadClassSnapshot = async function(parseClass) {
   if (!snapshot) {
     newObject = true;
     snapshot = new Parse.Object("ClassSnapshot");
+    snapshot.set("forObjectId", classId);
   } else {
-    //TODO: check date
+    const today = new Date();
+    //refresh every 24 hours
+    needToRegenerate =
+      today.getTime() > snapshot.updatedAt.getTime() + 24 * 60 * 60 * 1000;
   }
 
   if (needToRegenerate) {
@@ -303,6 +322,149 @@ const loadClassSnapshot = async function(parseClass) {
   }
   // logger.info(`loadClassSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
   return snapshot;
+};
+
+const generateSessionSnapshotJson = async function(parseSession) {
+  const logger = require("parse-server").logger;
+  logger.info(`generateSessionSnapshotJson - sessionId: ${parseSession.id}`);
+
+  const result = { chuanCheng: 0, faBen: 0, shangKe: 0 };
+  var query = parseSession.relation("attendances").query();
+  var attendances = await query.limit(MAX_QUERY_COUNT).find();
+
+  for (var attendance in attendances) {
+    if (attendance.chuanCheng) {
+      result.chuanCheng += 1;
+    }
+    if (attendance.faBen) {
+      result.faBen += 1;
+    }
+    if (attendance.shangKe) {
+      result.shangKe += 1;
+    }
+  }
+
+  return JSON.stringify(result);
+};
+
+const loadSessionSnapshot = async function(parseClass, parseSession) {
+  const logger = require("parse-server").logger;
+  const classId = parseClass.id;
+  const sessionId = parseSession.id;
+  logger.info(
+    `loadSessionSnapshot - classId: ${classId} sessionId: ${sessionId}`
+  );
+
+  const relation = parseClass.relation("snapshots");
+  var query = relation.query();
+  query.equalTo("forObjectId", sessionId);
+  var snapshot = await query.first();
+
+  var needToRegenerate = true;
+  var newObject = false;
+
+  if (!snapshot) {
+    newObject = true;
+    snapshot = new Parse.Object("ClassSnapshot");
+    snapshot.set("forObjectId", sessionId);
+  } else {
+    const today = new Date();
+    //refresh every 24 hours
+    needToRegenerate =
+      today.getTime() > snapshot.updatedAt.getTime() + 24 * 60 * 60 * 1000;
+  }
+
+  if (needToRegenerate) {
+    const json = await generateSessionSnapshotJson(parseSession);
+    snapshot.set("json", json);
+    snapshot = await snapshot.save(null, MASTER_KEY);
+
+    if (newObject) {
+      relation.add(snapshot);
+      await parseClass.save(null, MASTER_KEY);
+    }
+  }
+  // logger.info(`loadSessionSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
+  return snapshot;
+};
+
+const generatePracticeSnapshotJson = async function(parsePractice) {
+  const logger = require("parse-server").logger;
+  logger.info(`generatePracticeSnapshotJson - classId: ${parsePractice.id}`);
+
+  const relation = parsePractice.relation("counts");
+  query = relation.query();
+  query.equalTo("reportedAt", undefined);
+
+  // total will be a newly created field to hold the sum of score field
+  var pipeline = [{ group: { objectId: null, total: { $sum: "$count" } } }];
+  const results = await query.aggregate(pipeline);
+  const accumulatedCount = results[0].total;
+  logger.info(
+    `generatePracticeSnapshotJson - accumulatedCount: ${accumulatedCount}`
+  );
+
+  var practiceCount = {};
+  practiceCount.accumulatedCount = accumulatedCount;
+  practiceCount.reportedAt = new Date();
+
+  return JSON.stringify(practiceCount);
+};
+
+const loadPracticeSnapshot = async function(parseClass, parsePractice) {
+  const logger = require("parse-server").logger;
+  const practiceId = parsePractice.id;
+  logger.info(`loadPracticeSnapshot - practiceId: ${practiceId}`);
+
+  const relation = parseClass.relation("snapshots");
+  var query = relation.query();
+  query.equalTo("forObjectId", practiceId);
+  var snapshot = await query.first();
+
+  var needToRegenerate = true;
+  var newObject = false;
+
+  if (!snapshot) {
+    newObject = true;
+    snapshot = new Parse.Object("ClassSnapshot");
+    snapshot.set("forObjectId", practiceId);
+  } else {
+    const today = new Date();
+    //refresh every 24 hours
+    needToRegenerate =
+      today.getTime() > snapshot.updatedAt.getTime() + 24 * 60 * 60 * 1000;
+  }
+
+  if (needToRegenerate) {
+    const json = await generatePracticeSnapshotJson(parsePractice);
+    snapshot.set("json", json);
+    snapshot = await snapshot.save(null, MASTER_KEY);
+
+    if (newObject) {
+      relation.add(snapshot);
+      await parseClass.save(null, MASTER_KEY);
+    }
+  }
+  // logger.info(`loadSessionSnapshot - snapshot: ${JSON.stringify(snapshot)}`);
+  return snapshot;
+};
+
+const loadPracticeSnapshots = async function(parseClass, practices) {
+  const logger = require("parse-server").logger;
+  logger.info(`loadPracticeSnapshots - classId: ${parseClass.id}`);
+
+  var result = [];
+  if (practices && practices.length > 0) {
+    for (var i = 0; i < practices.length; i++) {
+      const practiceCount = await loadPracticeSnapshot(
+        parseClass,
+        practices[i]
+      );
+      result.push(practiceCount);
+    }
+  }
+
+  return result;
 };
 
 const loadDashboard = async function(parseUser, forStudent) {
@@ -355,13 +517,13 @@ const loadDashboard = async function(parseUser, forStudent) {
     const nextSession = await query.first();
     if (nextSession) {
       classInfo.classSessions.push(nextSession);
-      var attendance = undefined;
+      var attendance;
       if (forStudent) {
         attendance = await loadStudentAttendance(userId, nextSession);
-        logger.info(
-          `loadDashboard - attendance: ${JSON.stringify(attendance)}`
-        );
+      } else {
+        attendance = await loadSessionSnapshot(parseClass, nextSession);
       }
+      logger.info(`loadDashboard - attendance: ${JSON.stringify(attendance)}`);
       classInfo.attendances.push(attendance);
     }
 
@@ -371,13 +533,13 @@ const loadDashboard = async function(parseUser, forStudent) {
     const lastSession = await query.first();
     if (lastSession) {
       classInfo.classSessions.push(lastSession);
-      attendance = undefined;
+
       if (forStudent) {
         attendance = await loadStudentAttendance(userId, lastSession);
-        logger.info(
-          `loadDashboard - attendance: ${JSON.stringify(attendance)}`
-        );
+      } else {
+        attendance = await loadSessionSnapshot(parseClass, lastSession);
       }
+      logger.info(`loadDashboard - attendance: ${JSON.stringify(attendance)}`);
       classInfo.attendances.push(attendance);
     }
 
@@ -390,7 +552,10 @@ const loadDashboard = async function(parseUser, forStudent) {
         classInfo.practices
       );
     } else {
-      classInfo.counts = Array(classInfo.practices.length).fill();
+      classInfo.counts = await loadPracticeSnapshots(
+        parseClass,
+        classInfo.practices
+      );
       classInfo.snapshot = await loadClassSnapshot(parseClass);
     }
 
@@ -614,7 +779,7 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "class:fetchSessions",
-  async ({ user, params: { classId, forApplication } }) => {
+  async ({ user, params: { classId, forApplication, forAdmin } }) => {
     requireAuth(user);
 
     var query = new Parse.Query("Class");
@@ -626,6 +791,7 @@ Parse.Cloud.define(
       name: parseClass.get("name"),
       url: parseClass.get("url"),
       forApplication: forApplication,
+      forAdmin: forAdmin,
       classSessions: [],
       attendances: []
     };
@@ -638,10 +804,12 @@ Parse.Cloud.define(
       const classSession = classSessions[i];
       classInfo.classSessions.push(classSession);
 
-      if (forApplication) {
+      if (forApplication || !classSession.get("scheduledAt")) {
         classInfo.attendances.push(undefined);
       } else {
-        const attendance = await loadStudentAttendance(user.id, classSession);
+        const attendance = forAdmin
+          ? await loadSessionSnapshot(parseClass, classSession)
+          : await loadStudentAttendance(user.id, classSession);
         classInfo.attendances.push(attendance);
       }
     }

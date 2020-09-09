@@ -2,7 +2,10 @@
   <div>
     <b-card class="text-center" :header="practiceObj.name">
       <b-card-text>
-        <b-input-group prepend="最新报数：" class="mt-3">
+        <b-input-group
+          :prepend="practiceCountObj.countStats ? '统计日期：' : '最新报数：'"
+          class="mt-3"
+        >
           <b-form-input
             readonly
             v-model="practiceCountObj.latestCount"
@@ -78,7 +81,7 @@
       block
       variant="info"
       @click="listPracticeCount"
-      >查看报数记录</b-button
+      >查看详情</b-button
     >
     <hr />
   </div>
@@ -140,18 +143,30 @@ export default {
   methods: {
     buildPracticeObj(latestPracticeCount) {
       console.log(`buildPracticeObj - ${JSON.stringify(latestPracticeCount)}`);
-      return {
-        latestCount:
-          latestPracticeCount && latestPracticeCount.reportedAt
-            ? `${latestPracticeCount.count} @ ${this.toLocalDateString(
-                latestPracticeCount.reportedAt
-              )}`
-            : "未报数",
-        accumulatedCount:
-          latestPracticeCount && latestPracticeCount.reportedAt
-            ? latestPracticeCount.accumulatedCount
-            : "未报数"
-      };
+      return latestPracticeCount && latestPracticeCount.count
+        ? {
+            latestCount:
+              latestPracticeCount && latestPracticeCount.reportedAt
+                ? `${latestPracticeCount.count} @ ${this.toLocalDateString(
+                    latestPracticeCount.reportedAt
+                  )}`
+                : "未报数",
+            accumulatedCount:
+              latestPracticeCount && latestPracticeCount.reportedAt
+                ? latestPracticeCount.accumulatedCount
+                : "未报数"
+          }
+        : {
+            countStats: true,
+            latestCount: latestPracticeCount
+              ? `${this.toLocalDateString(
+                  new Date(latestPracticeCount.reportedAt)
+                )}`
+              : "未报数",
+            accumulatedCount: latestPracticeCount
+              ? latestPracticeCount.accumulatedCount
+              : "未报数"
+          };
     },
     minDateForCountReporting() {
       const today = new Date();

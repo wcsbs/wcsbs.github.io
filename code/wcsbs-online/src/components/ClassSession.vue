@@ -212,6 +212,9 @@ export default {
     },
     toAttendanceStateString(attendance) {
       if (attendance) {
+        if (typeof attendance.shangKe == "number") {
+          return `${attendance.shangKe}人已上课`;
+        }
         if (attendance.qingJia) {
           return "已请假";
         }
@@ -232,10 +235,14 @@ export default {
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
       if (attendance) {
-        if (attendance.chuanCheng) {
+        if (typeof attendance.chuanCheng == "number") {
+          chuanCheng = `${attendance.chuanCheng}人已看传承`;
+        } else if (attendance.chuanCheng) {
           chuanCheng = "已看传承";
         }
-        if (attendance.faBen == true) {
+        if (typeof attendance.faBen == "number") {
+          faBen = `${attendance.faBen}人已看法本`;
+        } else if (attendance.faBen) {
           faBen = "已看法本";
         }
       }
