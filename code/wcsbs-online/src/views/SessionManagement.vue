@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isLoadingSessions" class="classSession-preview">
+    <div v-if="isLoadingSessions">
       正在获取课程详情...
     </div>
     <div v-else>
@@ -28,14 +28,12 @@
             v-on:click="applyClass()"
             >我要报名</b-button
           >
-          <button
+          <b-button
+            variant="warning"
             v-if="isClassAdmin || isTeachingAssistant"
-            class="btn btn-outline-secondary"
-            type="button"
             @click="createSession"
+            >{{ creatingSession ? "取消创建" : "创建新课" }}</b-button
           >
-            {{ creatingSession ? "取消创建" : "创建新课" }}
-          </button>
         </div>
       </div>
       <div v-if="classSessions.length === 0">

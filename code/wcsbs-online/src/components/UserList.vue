@@ -20,13 +20,9 @@
           >
             清除
           </button>
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            @click="createUser"
-          >
+          <b-button variant="warning" type="button" @click="createUser">
             创建新用户
-          </button>
+          </b-button>
         </div>
       </div>
       <div v-if="users.length === 0" class="user-preview">

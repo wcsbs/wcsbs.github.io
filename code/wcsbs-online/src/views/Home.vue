@@ -4,21 +4,32 @@
       正在获取主页数据...
     </div>
     <div v-else>
-      <div v-if="home.studentDashboard">
-        <h2>{{ currentUser.name }}的闻思修</h2>
-        <hr />
-        <StudentDashboard :dashboard="home.studentDashboard" />
-      </div>
-      <div v-if="home.classAdminDashboard">
-        <h2>{{ currentUser.name }}辅导的课程</h2>
-        <hr />
-        <AdminDashboard :dashboard="home.classAdminDashboard" />
-      </div>
-      <div v-if="home.systemAdminDashboard">
-        <h2>学会全部课程</h2>
-        <hr />
-        <AdminDashboard :dashboard="home.systemAdminDashboard" />
-      </div>
+      <b-tabs pills content-class="mt-3" align="center">
+        <b-tab
+          v-if="home.studentDashboard"
+          :title="studentDashboardTitle()"
+          title-item-class="mytab"
+          acitve
+        >
+          <StudentDashboard :dashboard="home.studentDashboard" />
+        </b-tab>
+        <b-tab
+          v-if="home.classAdminDashboard"
+          :title="classAdminDashboardTitle()"
+          title-item-class="mytab"
+          acitve
+        >
+          <AdminDashboard :dashboard="home.classAdminDashboard" />
+        </b-tab>
+        <b-tab
+          v-if="home.systemAdminDashboard"
+          title="学会全部课程"
+          title-item-class="mytab"
+          acitve
+        >
+          <AdminDashboard :dashboard="home.systemAdminDashboard" />
+        </b-tab>
+      </b-tabs>
     </div>
   </div>
 </template>
@@ -35,6 +46,14 @@ export default {
   components: {
     StudentDashboard,
     AdminDashboard
+  },
+  methods: {
+    studentDashboardTitle() {
+      return `${this.currentUser.name}的闻思修`;
+    },
+    classAdminDashboardTitle() {
+      return `${this.currentUser.name}辅导的课程`;
+    }
   },
   computed: {
     ...mapGetters([
@@ -56,3 +75,19 @@ export default {
   }
 };
 </script>
+
+<style>
+.nav-pills li {
+  list-style-type: none;
+}
+
+.nav-pills .mytab .nav-link:not(.active) {
+  background-color: red !important;
+  font-size: 22px;
+}
+
+.nav-pills .mytab .nav-link {
+  background-color: blue !important;
+  font-size: 22px;
+}
+</style>
