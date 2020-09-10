@@ -7,6 +7,7 @@
       :practice="practiceInfo.practice"
       :latestPracticeCount="buildLatestPracticeCount()"
       :practiceCounts="practiceInfo.counts"
+      :users="practiceInfo.users"
     />
   </div>
 </template>
@@ -27,9 +28,10 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     const practiceId = to.params.practiceId;
-    console.log(`from: ${from.path} practiceId: ${practiceId}`);
+    const forAdmin = to.params.forAdmin;
+    console.log(`forAdmin: ${forAdmin} practiceId: ${practiceId}`);
 
-    store.dispatch(FETCH_PRACTICE_COUNTS, practiceId).then(() => {
+    store.dispatch(FETCH_PRACTICE_COUNTS, to.params).then(() => {
       next();
     });
   },
@@ -37,13 +39,23 @@ export default {
     buildLatestPracticeCount() {
       var latestPracticeCount = {};
       if (this.practiceInfo.counts[0]) {
-        latestPracticeCount = {
-          count: this.practiceInfo.counts[0].get("count"),
-          reportedAt: this.practiceInfo.counts[0].get("reportedAt"),
-          accumulatedCount: this.practiceInfo.counts[
-            this.practiceInfo.counts.length - 1
-          ].get("count")
-        };
+        if (this.practiceInfo.forAdmin) {
+          latestPracticeCount.reportedAt = new Date();
+          latestPracticeCount.accumulatedCount = 0;
+          for (var i = 0; i < this.practiceInfo.counts.length; i++) {
+            latestPracticeCount.accumulatedCount += this.practiceInfo.counts[
+              i
+            ].get("count");
+          }
+        } else {
+          latestPracticeCount = {
+            count: this.practiceInfo.counts[0].get("count"),
+            reportedAt: this.practiceInfo.counts[0].get("reportedAt"),
+            accumulatedCount: this.practiceInfo.counts[
+              this.practiceInfo.counts.length - 1
+            ].get("count")
+          };
+        }
       }
       return latestPracticeCount;
     }

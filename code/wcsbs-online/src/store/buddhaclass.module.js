@@ -87,15 +87,26 @@ const actions = {
         throw new Error(e);
       });
   },
-  [FETCH_PRACTICE_COUNTS](context, practiceId) {
-    console.log(`${FETCH_PRACTICE_COUNTS} - practiceId: ${practiceId}`);
+  [FETCH_PRACTICE_COUNTS](context, params) {
+    const practiceId = params["practiceId"];
+    var forAdmin = params["forAdmin"];
+
+    if (typeof forAdmin === "string") {
+      forAdmin = forAdmin === "true";
+    }
+    console.log(
+      `${FETCH_PRACTICE_COUNTS} - practiceId: ${practiceId} forAdmin: ${forAdmin}`
+    );
     context.commit(FETCH_PRACTICE_COUNTS_START);
 
     const fetchPracticeCounts = "class:fetchPracticeCounts";
-    Parse.Cloud.run(fetchPracticeCounts, { practiceId })
+    Parse.Cloud.run(fetchPracticeCounts, { practiceId, forAdmin })
       .then(practiceInfo => {
         console.log(
-          `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length}`
+          // `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length}`
+          `${FETCH_PRACTICE_COUNTS} - practiceInfo: ${JSON.stringify(
+            practiceInfo
+          )}`
         );
         context.commit(FETCH_PRACTICE_COUNTS_END, practiceInfo);
       })

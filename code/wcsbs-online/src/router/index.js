@@ -25,7 +25,7 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: "/counts/:practiceId",
+      path: "/counts/:practiceId/:forAdmin",
       name: "count-list",
       component: () => import("@/views/CountList"),
       props: true,

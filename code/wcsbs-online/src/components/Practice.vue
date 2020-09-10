@@ -100,7 +100,8 @@ export default {
   props: {
     practice: { type: Object, required: true },
     latestPracticeCount: { type: Object, required: false },
-    practiceCounts: { type: Array, required: false }
+    practiceCounts: { type: Array, required: false },
+    users: { type: Array, required: false }
   },
   computed: {
     ...mapGetters(["isStudent"])
@@ -116,10 +117,16 @@ export default {
         newCount: ""
       },
       practiceCountObj: this.buildPracticeObj(this.latestPracticeCount),
-      fields: [
+      fields: this.buildPracticeCountFields(),
+      items: this.buildPracticeCountItems()
+    };
+  },
+  methods: {
+    buildPracticeCountFields() {
+      return [
         {
-          key: "reportedAt",
-          label: "日期",
+          key: this.users ? "name" : "reportedAt",
+          label: this.users ? "姓名" : "日期",
           sortable: true
         },
         {
@@ -127,20 +134,30 @@ export default {
           label: "报数",
           sortable: true
         }
-      ],
-      items: this.practiceCounts
-        ? this.practiceCounts
-            .filter(x => x.get("reportedAt"))
-            .map(e => {
-              return {
-                reportedAt: this.toLocalDateString(e.get("reportedAt")),
-                count: e.get("count")
-              };
-            })
-        : []
-    };
-  },
-  methods: {
+      ];
+    },
+    buildPracticeCountItems() {
+      var items = [];
+      //for Admin
+      if (this.users) {
+        for (var i = 0; i < this.practiceCounts.length; i++) {
+          items.push({
+            name: this.users[i],
+            count: this.practiceCounts[i].get("count")
+          });
+        }
+      } else {
+        items = this.practiceCounts
+          .filter(x => x.get("reportedAt"))
+          .map(e => {
+            return {
+              reportedAt: this.toLocalDateString(e.get("reportedAt")),
+              count: e.get("count")
+            };
+          });
+      }
+      return items;
+    },
     buildPracticeObj(latestPracticeCount) {
       console.log(`buildPracticeObj - ${JSON.stringify(latestPracticeCount)}`);
       return latestPracticeCount && latestPracticeCount.count
@@ -248,10 +265,12 @@ export default {
         });
     },
     listPracticeCount() {
-      const practiceId = this.practice.id;
       this.$router.push({
         name: "count-list",
-        params: { practiceId: practiceId }
+        params: {
+          practiceId: this.practice.id,
+          forAdmin: this.practiceCountObj.countStats != undefined
+        }
       });
     }
   }

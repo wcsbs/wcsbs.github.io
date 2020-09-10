@@ -670,28 +670,43 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "class:fetchPracticeCounts",
-  async ({ user, params: { practiceId } }) => {
+  async ({ user, params: { practiceId, forAdmin } }) => {
     const logger = require("parse-server").logger;
     requireAuth(user);
 
     userId = user.id;
     logger.info(
-      `home:fetchPracticeCounts - userId: ${userId} practiceId: ${practiceId}`
+      `home:fetchPracticeCounts - userId: ${userId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
     );
 
     var query = new Parse.Query("Practice");
     query.equalTo("objectId", practiceId);
     const practice = await query.first();
     const result = {
+      forAdmin: forAdmin,
       practice: practice,
-      counts: []
+      counts: [],
+      users: []
     };
     const relation = practice.relation("counts");
 
     query = relation.query();
-    query.equalTo("userId", userId);
-    query.descending("reportedAt");
+    if (forAdmin) {
+      query.equalTo("reportedAt", undefined);
+    } else {
+      query.equalTo("userId", userId);
+      query.descending("reportedAt");
+    }
     result.counts = await query.limit(MAX_QUERY_COUNT).find();
+
+    if (forAdmin) {
+      for (var i = 0; i < result.counts.length; i++) {
+        var userQuery = new Parse.Query(Parse.User);
+        userQuery.equalTo("objectId", result.counts[i].get("userId"));
+        const user = await userQuery.first();
+        result.users.push(user.get("name"));
+      }
+    }
 
     return result;
   }
