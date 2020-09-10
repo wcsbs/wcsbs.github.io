@@ -3,7 +3,7 @@
     <b-card class="text-center" :header="practiceObj.name">
       <b-card-text>
         <b-input-group
-          :prepend="practiceCountObj.countStats ? '统计日期：' : '最新报数：'"
+          :prepend="forAdmin ? '统计日期：' : '最新报数：'"
           class="mt-3"
         >
           <b-form-input
@@ -101,7 +101,8 @@ export default {
     practice: { type: Object, required: true },
     latestPracticeCount: { type: Object, required: false },
     practiceCounts: { type: Array, required: false },
-    users: { type: Array, required: false }
+    users: { type: Array, required: false },
+    forAdmin: Boolean
   },
   computed: {
     ...mapGetters(["isStudent"])
@@ -125,8 +126,8 @@ export default {
     buildPracticeCountFields() {
       return [
         {
-          key: this.users ? "name" : "reportedAt",
-          label: this.users ? "姓名" : "日期",
+          key: this.forAdmin ? "name" : "reportedAt",
+          label: this.forAdmin ? "姓名" : "日期",
           sortable: true
         },
         {
@@ -138,30 +139,43 @@ export default {
     },
     buildPracticeCountItems() {
       var items = [];
-      //for Admin
-      if (this.users) {
-        for (var i = 0; i < this.practiceCounts.length; i++) {
-          items.push({
-            name: this.users[i],
-            count: this.practiceCounts[i].get("count")
-          });
+      if (this.practiceCounts) {
+        if (this.forAdmin) {
+          for (var i = 0; i < this.practiceCounts.length; i++) {
+            items.push({
+              name: this.users[i],
+              count: this.practiceCounts[i].get("count")
+            });
+          }
+        } else {
+          items = this.practiceCounts
+            .filter(x => x.get("reportedAt"))
+            .map(e => {
+              return {
+                reportedAt: this.toLocalDateString(e.get("reportedAt")),
+                count: e.get("count")
+              };
+            });
         }
-      } else {
-        items = this.practiceCounts
-          .filter(x => x.get("reportedAt"))
-          .map(e => {
-            return {
-              reportedAt: this.toLocalDateString(e.get("reportedAt")),
-              count: e.get("count")
-            };
-          });
       }
       return items;
     },
     buildPracticeObj(latestPracticeCount) {
       console.log(`buildPracticeObj - ${JSON.stringify(latestPracticeCount)}`);
-      return latestPracticeCount && latestPracticeCount.count
+      return this.forAdmin
         ? {
+            latestCount:
+              latestPracticeCount && latestPracticeCount.reportedAt
+                ? `${this.toLocalDateString(
+                    new Date(latestPracticeCount.reportedAt)
+                  )}`
+                : "未报数",
+            accumulatedCount:
+              latestPracticeCount && latestPracticeCount.accumulatedCount
+                ? latestPracticeCount.accumulatedCount
+                : "未报数"
+          }
+        : {
             latestCount:
               latestPracticeCount && latestPracticeCount.reportedAt
                 ? `${latestPracticeCount.count} @ ${this.toLocalDateString(
@@ -169,20 +183,9 @@ export default {
                   )}`
                 : "未报数",
             accumulatedCount:
-              latestPracticeCount && latestPracticeCount.reportedAt
+              latestPracticeCount && latestPracticeCount.accumulatedCount
                 ? latestPracticeCount.accumulatedCount
                 : "未报数"
-          }
-        : {
-            countStats: true,
-            latestCount: latestPracticeCount
-              ? `${this.toLocalDateString(
-                  new Date(latestPracticeCount.reportedAt)
-                )}`
-              : "未报数",
-            accumulatedCount: latestPracticeCount
-              ? latestPracticeCount.accumulatedCount
-              : "未报数"
           };
     },
     minDateForCountReporting() {
@@ -269,7 +272,7 @@ export default {
         name: "count-list",
         params: {
           practiceId: this.practice.id,
-          forAdmin: this.practiceCountObj.countStats != undefined
+          forAdmin: this.forAdmin
         }
       });
     }

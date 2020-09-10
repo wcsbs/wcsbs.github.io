@@ -8,6 +8,7 @@
       :latestPracticeCount="buildLatestPracticeCount()"
       :practiceCounts="practiceInfo.counts"
       :users="practiceInfo.users"
+      :forAdmin="practiceInfo.forAdmin"
     />
   </div>
 </template>

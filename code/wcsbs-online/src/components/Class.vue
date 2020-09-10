@@ -2,8 +2,8 @@
   <div>
     <h3 v-text="buddhaClass.name" />
     <h4>
-      辅导员：{{ teachers }} 师兄 学习资料：
-      <a :href="buddhaClass.url" target="_blank">网页链接</a>
+      辅导员：{{ teachers }} 师兄&nbsp;&nbsp;
+      <a :href="buddhaClass.url" target="_blank">学习资料网页</a>
     </h4>
     <div v-if="buddhaClass.classSnapshot">
       <b-table
@@ -38,6 +38,7 @@
           :practice="practice"
           :latestPracticeCount="buddhaClass.counts[index]"
           :key="practice.id + index"
+          :forAdmin="buddhaClass.classSnapshot != undefined"
         />
       </div>
     </div>
