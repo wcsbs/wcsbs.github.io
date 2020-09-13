@@ -98,6 +98,7 @@
           placeholder="Auto height textarea"
           rows="3"
           max-rows="8"
+          readonly
         ></b-form-textarea>
       </b-card-text>
     </b-card>

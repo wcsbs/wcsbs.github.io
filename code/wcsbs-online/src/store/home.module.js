@@ -50,10 +50,6 @@ const actions = {
           if (result.classAdminDashboard) {
             processAdminDashboard(result.classAdminDashboard);
           }
-          console.log(
-            `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
-            // `${FETCH_DASHBOARDS} - result: ${result}`
-          );
           commit(FETCH_DASHBOARDS_END, result);
           resolve();
         })

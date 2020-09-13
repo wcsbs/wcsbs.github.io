@@ -69,6 +69,7 @@
           placeholder="Auto height textarea"
           rows="3"
           max-rows="8"
+          readonly
         ></b-form-textarea>
         <div v-if="practiceCounts">
           <h5>总计有 {{ items.length }} 条报数记录</h5>
