@@ -18,7 +18,7 @@
           ></b-form-input>
           <b-input-group-append>
             <b-button
-              v-if="isStudent"
+              v-if="isStudent && !forAdmin"
               variant="warning"
               v-on:click="toggleReportingCount()"
               >{{
