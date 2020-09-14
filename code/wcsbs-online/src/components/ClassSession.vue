@@ -81,7 +81,7 @@
           <b-input-group-append>
             <b-button
               variant="warning"
-              v-if="session.showAttendanceButton"
+              v-if="needToShowAttendanceButton()"
               v-on:click="updateAttendance()"
               >{{ attendanceButtonName() }}</b-button
             >
@@ -153,9 +153,6 @@ export default {
           this.classSession.get("scheduledAt")
         ),
         showDescription: false,
-        showAttendanceButton: this.needToShowAttendanceButton(
-          this.classSession.get("scheduledAt")
-        ),
         attendanceState: this.toAttendanceStateString(this.attendance),
         materialState: this.toMaterialStateString(this.attendance)
       };
@@ -206,7 +203,8 @@ export default {
       };
       return date.toLocaleDateString("zh-CN", options);
     },
-    needToShowAttendanceButton(scheduledAt) {
+    needToShowAttendanceButton() {
+      const scheduledAt = this.classSession.get("scheduledAt");
       if (this.isStudent) {
         const today = new Date();
         //student must submit attendance with 3 days
@@ -314,7 +312,8 @@ export default {
       const classSession = this;
       const options = {
         okText: "确认",
-        cancelText: "取消"
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
       };
       const message = {
         title: this.session.name,
@@ -338,6 +337,7 @@ export default {
               classSession.session.attendanceState = classSession.toAttendanceStateString(
                 classSession.attendance
               );
+              dialog.close();
             })
             .catch(e => {
               console.log(`error in updateAttendance: ${e}`);
@@ -367,7 +367,8 @@ export default {
 
       const options = {
         okText: "确认",
-        cancelText: "取消"
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
       };
       const message = {
         title: this.classInfo.name,
@@ -378,7 +379,6 @@ export default {
         )}？`
       };
 
-      const thisComponent = this;
       const session = this.session;
       session.oldId = this.classSession.id;
       var dt = new Date(session.scheduledAt);
@@ -387,14 +387,15 @@ export default {
 
       this.$dialog
         .confirm(message, options)
-        .then(function() {
+        .then(function(dialog) {
           Parse.Cloud.run("class:updateClassSession", { session })
             .then(result => {
               console.log(
                 `updateClassSession - result: ${JSON.stringify(result)}`
               );
-
-              thisComponent.$router.go();
+              dialog.close();
+              // thisComponent.$router.go();
+              window.location.reload();
             })
             .catch(e => {
               console.log(`error in updateAttendance: ${e}`);

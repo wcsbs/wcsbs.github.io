@@ -223,7 +223,8 @@ export default {
       evt.preventDefault();
       const options = {
         okText: "确认",
-        cancelText: "取消"
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
       };
       const message = {
         title: this.practiceObj.name,
@@ -242,7 +243,7 @@ export default {
 
       this.$dialog
         .confirm(message, options)
-        .then(function() {
+        .then(function(dialog) {
           Parse.Cloud.run("home:reportPracticeCount", {
             practiceId,
             reportedAt,
@@ -257,8 +258,10 @@ export default {
                 result
               );
 
+              dialog.close();
               if (thisComponent.practiceCounts) {
-                thisComponent.$router.go();
+                // thisComponent.$router.go();
+                window.location.reload();
               }
             })
             .catch(e => {
