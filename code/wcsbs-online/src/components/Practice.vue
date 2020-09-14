@@ -42,6 +42,7 @@
         <b-form @submit="onSubmit" v-if="practiceObj.showReportingCount">
           <b-input-group prepend="选择日期：" class="mt-3">
             <v-date-picker
+              locale="zh-CN"
               v-model="practiceObj.newCountReportedAt"
               :min-date="minDateForCountReporting()"
               :max-date="new Date()"

@@ -11,6 +11,11 @@
             >{{ newSession.name }}</option
           >
         </select>
+        <b-input-group-append>
+          <b-button v-if="!session.creating" type="reset" variant="warning">
+            <b-icon icon="x-circle"></b-icon>
+          </b-button>
+        </b-input-group-append>
       </b-input-group>
       <b-form-textarea
         v-model="session.description"
@@ -20,16 +25,16 @@
       ></b-form-textarea>
       <b-input-group prepend="选择日期：" class="mt-3">
         <v-date-picker
+          locale="zh-CN"
           v-model="session.scheduledAt"
           :input-props="{
             readonly: true
           }"
         />
         <b-input-group-append>
-          <b-button type="submit" variant="primary">提交</b-button>
-          <b-button v-if="!session.creating" type="reset" variant="primary"
-            >取消</b-button
-          >
+          <b-button type="submit" variant="success">
+            <b-icon icon="check-circle"></b-icon>
+          </b-button>
         </b-input-group-append>
       </b-input-group>
     </b-form>

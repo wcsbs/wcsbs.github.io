@@ -59,7 +59,17 @@ Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 
 // Install VCalendar
-Vue.use(VCalendar);
+Vue.use(VCalendar, {
+  locales: {
+    "zh-CN": {
+      firstDayOfWeek: 1,
+      masks: {
+        L: "YYYY年MM月DD日",
+        title: "YYYY年MMM"
+      }
+    }
+  }
+});
 
 // Install VuejsDialog
 Vue.use(VuejsDialog);

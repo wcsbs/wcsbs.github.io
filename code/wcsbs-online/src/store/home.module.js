@@ -41,8 +41,8 @@ const actions = {
       Parse.Cloud.run("home:loadDashboards", { user })
         .then(result => {
           console.log(
-            // `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
-            `${FETCH_DASHBOARDS} - result: ${result}`
+            `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
+            // `${FETCH_DASHBOARDS} - result: ${result}`
           );
           if (result.systemAdminDashboard) {
             processAdminDashboard(result.systemAdminDashboard);
