@@ -349,9 +349,9 @@ const loadSnapshot = async function(parseObject, generateSnapshotJson) {
     snapshot.set("forObjectId", objectId);
   } else {
     const today = new Date();
-    //refresh every 24 hours
+    //refresh every 1 hour
     needToRegenerate =
-      today.getTime() > snapshot.updatedAt.getTime() + 24 * 60 * 60 * 1000;
+      today.getTime() > snapshot.updatedAt.getTime() + 1 * 60 * 60 * 1000;
   }
 
   if (needToRegenerate) {
