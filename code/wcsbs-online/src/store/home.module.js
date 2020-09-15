@@ -55,6 +55,9 @@ const actions = {
         })
         .catch(e => {
           console.log(`error loading dashboards: ${e.message}`);
+          Vue.toasted.error(`error loading dashboards: ${e.message}`, {
+            duration: 5000
+          });
           reject();
         });
     });

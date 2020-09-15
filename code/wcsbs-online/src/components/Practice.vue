@@ -265,7 +265,9 @@ export default {
               }
             })
             .catch(e => {
-              console.log(`error in updateAttendance: ${e}`);
+              console.log(`error in reportPracticeCount: ${e}`);
+              dialog.close();
+              thisComponent.$dialog.alert(`error in reportPracticeCount: ${e}`);
             });
         })
         .catch(e => {

@@ -319,6 +319,8 @@ export default {
         title: this.session.name,
         body: msg + "?"
       };
+      const thisComponent = this;
+
       this.$dialog
         .confirm(message, options)
         .then(function(dialog) {
@@ -341,6 +343,8 @@ export default {
             })
             .catch(e => {
               console.log(`error in updateAttendance: ${e}`);
+              dialog.close();
+              thisComponent.$dialog.alert(`error in updateAttendance: ${e}`);
             });
         })
         .catch(e => {
@@ -384,6 +388,7 @@ export default {
       var dt = new Date(session.scheduledAt);
       dt.setHours(9); //TODO: allow setting time
       session.scheduledAt = dt;
+      const thisComponent = this;
 
       this.$dialog
         .confirm(message, options)
@@ -398,7 +403,9 @@ export default {
               window.location.reload();
             })
             .catch(e => {
-              console.log(`error in updateAttendance: ${e}`);
+              console.log(`error in updateClassSession: ${JSON.stringify(e)}`);
+              dialog.close();
+              thisComponent.$dialog.alert(`error in updateClassSession: ${e}`);
             });
         })
         .catch(e => {
