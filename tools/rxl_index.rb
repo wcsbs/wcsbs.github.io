@@ -21,7 +21,7 @@ def process_one_file(template_file, input_file, title, faben_link, chuancheng_li
 end
 
 def process_index(template_file, input_dir, output_dir)
-    csv = File.open('./rxl_sessions.csv', 'w')
+    csv = File.open('./csv/rxl_sessions.csv', 'w')
     csv.puts "name,url"
 
     index_file = output_dir + "index.html"
