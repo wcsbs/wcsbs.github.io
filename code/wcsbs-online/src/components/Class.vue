@@ -18,11 +18,11 @@
       <hr />
     </div>
     <div v-else>
-      <div v-if="buddhaClass.classSessions.length === 0">
-        还没有开课，敬请期待！
-      </div>
-      <div v-else>
+      <div>
         <h4>正在闻思</h4>
+        <div v-if="buddhaClass.classSessions.length === 0">
+          还没有开课，敬请期待！
+        </div>
         <ClassSession
           v-for="(classSession, index) in buddhaClass.classSessions"
           :classSession="classSession"

@@ -250,16 +250,24 @@ const loadStudentPracticeCounts = async function(userId, practices) {
 const populateSessions = async function(parseClass) {
   const logger = require("parse-server").logger;
   var relation = parseClass.relation("sessions");
+  var query = relation.query();
+  const done = await query.first();
 
-  var query = new Parse.Query("ClassSession");
-  var allSessions = await query.limit(MAX_QUERY_COUNT).find();
-  for (var i = 0; i < allSessions.length; i++) {
-    relation.add(allSessions[i]);
-    logger.info(
-      `populateSessions - i: ${i} classSession: ${allSessions[i].get("name")}`
-    );
+  if (!done) {
+    const url = parseClass.get("url");
+    query = new Parse.Query("ClassSession");
+    query.startsWith("url", url);
+
+    var allSessions = await query.limit(MAX_QUERY_COUNT).find();
+    for (var i = 0; i < allSessions.length; i++) {
+      relation.add(allSessions[i]);
+      logger.info(
+        `populateSessions - i: ${i} classSession: ${allSessions[i].get("name")}`
+      );
+    }
+
+    await parseClass.save(null, MASTER_KEY);
   }
-  await parseClass.save(null, MASTER_KEY);
 };
 
 const generateClassSnapshotJson = async function(parseClass) {
@@ -321,7 +329,7 @@ const generatePracticeSnapshotJson = async function(parsePractice) {
   // total will be a newly created field to hold the sum of score field
   var pipeline = [{ group: { objectId: null, total: { $sum: "$count" } } }];
   const results = await query.aggregate(pipeline);
-  const accumulatedCount = results[0].total / 2;
+  const accumulatedCount = results.length ? results[0].total / 2 : 0;
   logger.info(
     `generatePracticeSnapshotJson - accumulatedCount: ${accumulatedCount}`
   );
@@ -481,9 +489,9 @@ const loadDashboard = async function(parseUser, forStudent) {
 
     if (forStudent) {
       dashboard.enrolledClasses.push(classInfo);
-      // await populateSessions(parseClass);
     } else {
       dashboard.classes.push(classInfo);
+      // await populateSessions(parseClass);
     }
   }
 

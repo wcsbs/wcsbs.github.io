@@ -131,6 +131,11 @@ const actions = {
   }
 };
 
+function parseSessionIndex(sessionName) {
+  const match = sessionName.match(/(\d+)/);
+  return match ? parseInt(match[0]) : 0;
+}
+
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const mutations = {
   [FETCH_PRACTICE_COUNTS_START](state) {
@@ -165,8 +170,8 @@ const mutations = {
       }
     }
     state.newSessions.sort((s1, s2) => {
-      var a = parseInt(s1.name.match(/(\d+)/)[0]);
-      var b = parseInt(s2.name.match(/(\d+)/)[0]);
+      var a = parseSessionIndex(s1.name);
+      var b = parseSessionIndex(s2.name);
       return a > b ? 1 : b > a ? -1 : 0;
     });
 
