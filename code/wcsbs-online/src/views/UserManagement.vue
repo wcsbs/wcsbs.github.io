@@ -21,9 +21,6 @@ export default {
     } else {
       next();
     }
-  },
-  mounted() {
-    //this.$forceUpdate();
   }
 };
 </script>

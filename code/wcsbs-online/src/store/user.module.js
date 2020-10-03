@@ -160,6 +160,9 @@ const mutations = {
     for (var i = 0; i < state.allUsers.length; i++) {
       if (state.allUsers[i].id == user.id) {
         found = true;
+        if (!user.email) {
+          user.email = state.allUsers[i].email;
+        }
         state.allUsers[i] = user;
         break;
       }
