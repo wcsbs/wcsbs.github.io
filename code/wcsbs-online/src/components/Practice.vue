@@ -192,8 +192,8 @@ export default {
     },
     minDateForCountReporting() {
       const today = new Date();
-      //student must report count with 3 days
-      return new Date(today.getTime() - 3 * 24 * 60 * 60 * 1000);
+      //student must report count within 365 days
+      return new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
     },
     toLocalDateTimeString(date) {
       const options = {
