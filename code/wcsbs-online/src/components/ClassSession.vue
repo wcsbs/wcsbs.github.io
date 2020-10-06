@@ -207,10 +207,13 @@ export default {
       const scheduledAt = this.classSession.get("scheduledAt");
       if (this.isStudent) {
         const today = new Date();
-        //student must submit attendance with 3 days
-        return (
-          today.getTime() < scheduledAt.getTime() + 3 * 24 * 60 * 60 * 1000
+        //student must submit attendance within 3 days
+        var cutoffTime = new Date(
+          scheduledAt.getTime() + 4 * 24 * 60 * 60 * 1000
         );
+        cutoffTime.setHours(0, 0, 0, 0); //set to midnight
+        // console.log(`needToShowAttendanceButton - cutoffTime: ${cutoffTime}`);
+        return today.getTime() < cutoffTime.getTime();
       }
       return false;
     },
@@ -386,8 +389,10 @@ export default {
       const session = this.session;
       session.oldId = this.classSession.id;
       var dt = new Date(session.scheduledAt);
-      dt.setHours(9); //TODO: allow setting time
+      dt.setHours(classSession.get("url").includes("rpsxl") ? 9 : 14); //TODO: allow setting time
       session.scheduledAt = dt;
+      // console.log(`session.scheduledAt: ${session.scheduledAt}`);
+
       const thisComponent = this;
 
       this.$dialog
