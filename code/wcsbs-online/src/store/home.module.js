@@ -21,6 +21,34 @@ const getters = {
   }
 };
 
+function parseSessionIndex(sessionName) {
+  const match = sessionName.match(/(\d+)/);
+  return match ? parseInt(match[0]) : 0;
+}
+
+function processStudentDashboard(dashboard) {
+  var c, i, j;
+  for (i = 0; i < dashboard.enrolledClasses.length; i++) {
+    c = dashboard.enrolledClasses[i];
+
+    for (j = 0; j < c.practiceSessions.length; j++) {
+      var sessions = c.practiceSessions[j];
+      if (sessions.length > 0) {
+        sessions = sessions.map(e => {
+          return { id: e.id, name: e.get("name") };
+        });
+        sessions.sort((s1, s2) => {
+          var a = parseSessionIndex(s1.name);
+          var b = parseSessionIndex(s2.name);
+          return a > b ? 1 : b > a ? -1 : 0;
+        });
+
+        c.practiceSessions[j] = sessions;
+      }
+    }
+  }
+}
+
 function processAdminDashboard(dashboard) {
   var c, i;
   for (i = 0; i < dashboard.classes.length; i++) {
@@ -41,9 +69,12 @@ const actions = {
       Parse.Cloud.run("home:loadDashboards", { user })
         .then(result => {
           console.log(
-            `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
-            // `${FETCH_DASHBOARDS} - result: ${result}`
+            // `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
+            `${FETCH_DASHBOARDS} - result: ${result}`
           );
+          if (result.studentDashboard) {
+            processStudentDashboard(result.studentDashboard);
+          }
           if (result.systemAdminDashboard) {
             processAdminDashboard(result.systemAdminDashboard);
           }

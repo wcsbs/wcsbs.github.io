@@ -51,6 +51,20 @@
               }"
             />
           </b-input-group>
+          <b-input-group
+            v-if="practiceSessions.length > 0"
+            prepend="选择修法："
+            class="mt-3"
+          >
+            <select v-model="practiceObj.sessionId">
+              <option
+                v-for="session in practiceSessions"
+                v-bind:key="session.id"
+                v-bind:value="session.id"
+                >{{ session.name }}</option
+              >
+            </select>
+          </b-input-group>
           <b-input-group prepend="输入报数：" class="mt-3">
             <b-form-input
               id="input-count"
@@ -102,6 +116,7 @@ export default {
   props: {
     practice: { type: Object, required: true },
     latestPracticeCount: { type: Object, required: false },
+    practiceSessions: { type: Array, required: false },
     practiceCounts: { type: Array, required: false },
     users: { type: Array, required: false },
     forAdmin: Boolean
@@ -117,16 +132,17 @@ export default {
         showDescription: false,
         showReportingCount: false,
         newCountReportedAt: "",
-        newCount: ""
+        newCount: "",
+        sessionId: undefined
       },
-      practiceCountObj: this.buildPracticeObj(this.latestPracticeCount),
+      practiceCountObj: this.buildPracticeCountObj(this.latestPracticeCount),
       fields: this.buildPracticeCountFields(),
       items: this.buildPracticeCountItems()
     };
   },
   methods: {
     buildPracticeCountFields() {
-      return [
+      var fields = [
         {
           key: this.forAdmin ? "name" : "reportedAt",
           label: this.forAdmin ? "姓名" : "日期",
@@ -138,6 +154,18 @@ export default {
           sortable: true
         }
       ];
+      if (
+        !this.forAdmin &&
+        this.practiceSessions &&
+        this.practiceSessions.length > 0
+      ) {
+        fields.splice(0, 0, {
+          key: "sessionName",
+          label: "修法",
+          sortable: true
+        });
+      }
+      return fields;
     },
     buildPracticeCountItems() {
       var items = [];
@@ -150,10 +178,18 @@ export default {
             });
           }
         } else {
+          const practiceSessions = this.practiceSessions;
           items = this.practiceCounts
             .filter(x => x.get("reportedAt"))
             .map(e => {
+              const sessionId = e.get("sessionId");
+              var sessionName = undefined;
+              if (sessionId) {
+                sessionName = practiceSessions.find(e => e.id == sessionId)
+                  .name;
+              }
               return {
+                sessionName: sessionName,
                 reportedAt: this.toLocalDateString(e.get("reportedAt")),
                 count: e.get("count")
               };
@@ -162,8 +198,8 @@ export default {
       }
       return items;
     },
-    buildPracticeObj(latestPracticeCount) {
-      console.log(`buildPracticeObj - ${JSON.stringify(latestPracticeCount)}`);
+    buildPracticeCountObj(latestPracticeCount) {
+      // console.log(`buildPracticeCountObj - ${JSON.stringify(latestPracticeCount)}`);
       return this.forAdmin
         ? {
             latestCount:
@@ -218,6 +254,7 @@ export default {
         .showReportingCount;
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
+      this.practiceObj.sessionId = undefined;
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -226,11 +263,17 @@ export default {
         cancelText: "取消",
         loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
       };
+      const practiceSessionId = this.practiceObj.sessionId;
+      var sessionName = "";
+      if (practiceSessionId) {
+        sessionName = this.practiceSessions.find(e => e.id == practiceSessionId)
+          .name;
+      }
       const message = {
         title: this.practiceObj.name,
-        body: `新增报数${this.practiceObj.newCount} @ ${this.toLocalDateString(
-          this.practiceObj.newCountReportedAt
-        )}？`
+        body: `新增${sessionName}报数${
+          this.practiceObj.newCount
+        } @ ${this.toLocalDateString(this.practiceObj.newCountReportedAt)}？`
       };
       const practiceId = this.practice.id;
       const reportedAt = this.practiceObj.newCountReportedAt;
@@ -238,7 +281,7 @@ export default {
       const thisComponent = this;
 
       console.log(
-        `home:reportPracticeCount - practiceId: ${practiceId} reportedAt: ${reportedAt} count: ${count}`
+        `home:reportPracticeCount - practiceId: ${practiceId} practiceSessionId: ${practiceSessionId} reportedAt: ${reportedAt} count: ${count}`
       );
 
       this.$dialog
@@ -246,6 +289,7 @@ export default {
         .then(function(dialog) {
           Parse.Cloud.run("home:reportPracticeCount", {
             practiceId,
+            practiceSessionId,
             reportedAt,
             count
           })
@@ -254,7 +298,7 @@ export default {
                 `reportPracticeCount - result: ${JSON.stringify(result)}`
               );
 
-              thisComponent.practiceCountObj = thisComponent.buildPracticeObj(
+              thisComponent.practiceCountObj = thisComponent.buildPracticeCountObj(
                 result
               );
 

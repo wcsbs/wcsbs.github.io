@@ -37,6 +37,7 @@
           v-for="(practice, index) in buddhaClass.practices"
           :practice="practice"
           :latestPracticeCount="buddhaClass.counts[index]"
+          :practiceSessions="buddhaClass.practiceSessions[index]"
           :key="practice.id + index"
           :forAdmin="buddhaClass.classSnapshot != undefined"
         />

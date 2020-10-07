@@ -215,15 +215,16 @@ const loadStudentAttendance = async function(userId, classSession) {
   return result;
 };
 
-const loadStudentPracticeCounts = async function(userId, practices) {
+const loadStudentPracticeDetails = async function(userId, practices) {
   const logger = require("parse-server").logger;
-  logger.info(`loadStudentPracticeCounts - userId: ${userId}`);
+  logger.info(`loadStudentPracticeDetails - userId: ${userId}`);
 
-  var result = [];
+  var counts = [];
+  var sessions = [];
   if (practices && practices.length > 0) {
     for (var i = 0; i < practices.length; i++) {
       var practiceCount = {};
-      const relation = practices[i].relation("counts");
+      var relation = practices[i].relation("counts");
       var query = relation.query();
       query.equalTo("userId", userId);
       query.equalTo("reportedAt", undefined);
@@ -239,11 +240,17 @@ const loadStudentPracticeCounts = async function(userId, practices) {
         practiceCount.reportedAt = latestCount.get("reportedAt");
         practiceCount.accumulatedCount = accumulatedCount.get("count");
       }
-      result.push(practiceCount);
+      counts.push(practiceCount);
+
+      relation = practices[i].relation("sessions");
+      query = relation.query();
+      const practiceSessions = await query.limit(MAX_QUERY_COUNT).find();
+
+      sessions.push(practiceSessions);
     }
   }
 
-  return result;
+  return { counts: counts, sessions: sessions };
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -424,7 +431,8 @@ const loadDashboard = async function(parseUser, forStudent) {
       classSessions: [],
       attendances: [],
       practices: [],
-      counts: []
+      counts: [],
+      practiceSessions: []
     };
     enrolledClassList.push(parseClass._getId());
 
@@ -475,10 +483,12 @@ const loadDashboard = async function(parseUser, forStudent) {
     classInfo.practices = await query.find();
 
     if (forStudent) {
-      classInfo.counts = await loadStudentPracticeCounts(
+      const practiceDetails = await loadStudentPracticeDetails(
         userId,
         classInfo.practices
       );
+      classInfo.counts = practiceDetails.counts;
+      classInfo.practiceSessions = practiceDetails.sessions;
     } else {
       classInfo.counts = await loadPracticeSnapshots(classInfo.practices);
       classInfo.snapshot = await loadSnapshot(
@@ -622,13 +632,16 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "home:reportPracticeCount",
-  async ({ user, params: { practiceId, reportedAt, count } }) => {
+  async ({
+    user,
+    params: { practiceId, practiceSessionId, reportedAt, count }
+  }) => {
     const logger = require("parse-server").logger;
     requireAuth(user);
 
     userId = user.id;
     logger.info(
-      `home:reportPracticeCount - userId: ${userId} practiceId: ${practiceId} reportedAt: ${reportedAt} count: ${count}`
+      `home:reportPracticeCount - userId: ${userId} practiceId: ${practiceId} practiceSessionId: ${practiceSessionId} reportedAt: ${reportedAt} count: ${count}`
     );
 
     var query = new Parse.Query("Practice");
@@ -640,6 +653,7 @@ Parse.Cloud.define(
 
     query = relation.query();
     query.equalTo("userId", userId);
+    query.equalTo("sessionId", practiceSessionId);
     query.equalTo("reportedAt", reportedAt);
     var currentPracticeCount = await query.first();
 
@@ -647,6 +661,7 @@ Parse.Cloud.define(
       currentPracticeCount = new Parse.Object("UserPracticeCount");
       currentPracticeCount.set("userId", userId);
       currentPracticeCount.set("reportedAt", reportedAt);
+      currentPracticeCount.set("sessionId", practiceSessionId);
       newCount = true;
     } else {
       delta -= currentPracticeCount.get("count");
@@ -686,6 +701,10 @@ Parse.Cloud.define(
     };
   }
 );
+function parseSessionIndex(sessionName) {
+  const match = sessionName.match(/(\d+)/);
+  return match ? parseInt(match[0]) : 0;
+}
 
 Parse.Cloud.define(
   "class:fetchPracticeCounts",
@@ -705,9 +724,10 @@ Parse.Cloud.define(
       forAdmin: forAdmin,
       practice: practice,
       counts: [],
-      users: []
+      users: [],
+      sessions: []
     };
-    const relation = practice.relation("counts");
+    var relation = practice.relation("counts");
 
     query = relation.query();
     if (forAdmin) {
@@ -725,6 +745,18 @@ Parse.Cloud.define(
         const user = await userQuery.first();
         result.users.push(user.get("name"));
       }
+    } else {
+      relation = practice.relation("sessions");
+      query = relation.query();
+      const sessions = await query.limit(MAX_QUERY_COUNT).find();
+      result.sessions = sessions.map(e => {
+        return { id: e.id, name: e.get("name") };
+      });
+      result.sessions.sort((s1, s2) => {
+        var a = parseSessionIndex(s1.name);
+        var b = parseSessionIndex(s2.name);
+        return a > b ? 1 : b > a ? -1 : 0;
+      });
     }
 
     return result;
