@@ -554,8 +554,13 @@ Parse.Cloud.define(
     pathname = pathname.replace("/wcsbs", "");
     var query = new Parse.Query("ClassSession");
     query.contains("url", pathname);
-    const classSession = await query.first();
-    return loadStudentAttendance(user.id, classSession);
+    var session = await query.first();
+    if (!session) {
+      query = new Parse.Query("PracticeSession");
+      query.contains("url", pathname);
+      session = await query.first();
+    }
+    return loadStudentAttendance(user.id, session);
   }
 );
 
@@ -568,10 +573,16 @@ Parse.Cloud.define(
     pathname = pathname.replace("/wcsbs", "");
     var query = new Parse.Query("ClassSession");
     query.contains("url", pathname);
-    const classSession = await query.first();
+    var session = await query.first();
 
-    if (classSession) {
-      const relation = classSession.relation("attendances");
+    if (!session) {
+      query = new Parse.Query("PracticeSession");
+      query.contains("url", pathname);
+      session = await query.first();
+    }
+
+    if (session) {
+      const relation = session.relation("attendances");
       query = relation.query();
 
       query.equalTo("userId", user.id);
@@ -595,7 +606,7 @@ Parse.Cloud.define(
 
       if (creatingAttendance) {
         relation.add(parseAttendance);
-        await classSession.save(null, MASTER_KEY);
+        await session.save(null, MASTER_KEY);
       }
 
       result.chuanCheng = parseAttendance.get("chuanCheng");
