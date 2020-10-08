@@ -113,6 +113,7 @@
 <script>
 import Parse from "parse";
 import { mapGetters } from "vuex";
+import { parseSessionIndex } from "../store/buddhaclass.module";
 
 export default {
   name: "ClassSession",
@@ -169,15 +170,11 @@ export default {
           id: this.classSession.id,
           name: this.classSession.get("name")
         };
-        console.log(`${JSON.stringify(currentSession)}`);
-        const order = parseInt(currentSession.name.match(/(\d+)/)[0]);
+        const order = parseSessionIndex(currentSession.name);
         var currentSessionPushed = false;
         for (var i = 0; i < this.newSessions.length; i++) {
           const s = this.newSessions[i];
-          if (
-            !currentSessionPushed &&
-            parseInt(s.name.match(/(\d+)/)[0]) > order
-          ) {
+          if (!currentSessionPushed && parseSessionIndex(s.name) > order) {
             this.sessionDropdownOptions.push(currentSession);
             currentSessionPushed = true;
           }

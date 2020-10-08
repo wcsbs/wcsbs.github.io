@@ -131,7 +131,7 @@ const actions = {
   }
 };
 
-function parseSessionIndex(sessionName) {
+export function parseSessionIndex(sessionName) {
   const match = sessionName.match(/(\d+)/);
   return match ? parseInt(match[0]) : 0;
 }
