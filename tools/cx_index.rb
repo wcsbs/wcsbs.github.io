@@ -98,4 +98,6 @@ usage: ruby #{File.basename($0)} template_file1 template_file2 input_dir moduleI
   main
 
 end
+
 #./cx_index.rb templates/qxgs_session.html templates/checkbox.html ../docs/lxfhj/ APljoXNn6a
+#./cx_index.rb templates/qxgs_session.html templates/checkbox.html ../docs/zhzcdn/ 37y7Nbat2W
