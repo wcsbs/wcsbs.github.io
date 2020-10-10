@@ -480,7 +480,7 @@ const loadDashboard = async function(parseUser, forStudent) {
     }
 
     query = parseClass.relation("practices").query();
-    query.ascending("order");
+    query.ascending("index");
     classInfo.practices = await query.find();
 
     if (forStudent) {

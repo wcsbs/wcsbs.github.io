@@ -100,7 +100,7 @@
         <b-form-textarea
           v-if="session.showDescription"
           v-model="session.description"
-          placeholder="Auto height textarea"
+          placeholder=""
           rows="3"
           max-rows="8"
           readonly

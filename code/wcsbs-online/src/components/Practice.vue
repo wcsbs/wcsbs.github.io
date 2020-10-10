@@ -81,7 +81,7 @@
         <b-form-textarea
           v-if="practiceObj.showDescription"
           v-model="practiceObj.description"
-          placeholder="Auto height textarea"
+          placeholder=""
           rows="3"
           max-rows="8"
           readonly
