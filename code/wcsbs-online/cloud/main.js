@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const MASTER_KEY = { useMasterKey: true };
 const MAX_QUERY_COUNT = 300;
+const logger = require("parse-server").logger;
 
 const requireAuth = user => {
   if (!user) throw new Error("User must be authenticated!");
@@ -185,7 +186,6 @@ Parse.Cloud.define(
 );
 
 const loadStudentAttendance = async function(userId, classSession) {
-  const logger = require("parse-server").logger;
   logger.info(
     `loadStudentAttendance - userId: ${userId} classSession: ${JSON.stringify(
       classSession
@@ -216,7 +216,6 @@ const loadStudentAttendance = async function(userId, classSession) {
 };
 
 const loadStudentPracticeDetails = async function(userId, practices) {
-  const logger = require("parse-server").logger;
   logger.info(`loadStudentPracticeDetails - userId: ${userId}`);
 
   var counts = [];
@@ -255,7 +254,6 @@ const loadStudentPracticeDetails = async function(userId, practices) {
 
 // eslint-disable-next-line no-unused-vars
 const populateSessions = async function(parseClass) {
-  const logger = require("parse-server").logger;
   var relation = parseClass.relation("sessions");
   var query = relation.query();
   const done = await query.first();
@@ -278,7 +276,6 @@ const populateSessions = async function(parseClass) {
 };
 
 const generateClassSnapshotJson = async function(parseClass) {
-  const logger = require("parse-server").logger;
   logger.info(`generateClassSnapshotJson - classId: ${parseClass.id}`);
 
   const result = {};
@@ -302,7 +299,6 @@ const generateClassSnapshotJson = async function(parseClass) {
 };
 
 const generateSessionSnapshotJson = async function(parseSession) {
-  const logger = require("parse-server").logger;
   logger.info(`generateSessionSnapshotJson - sessionId: ${parseSession.id}`);
 
   const result = { chuanCheng: 0, faBen: 0, shangKe: 0 };
@@ -326,7 +322,6 @@ const generateSessionSnapshotJson = async function(parseSession) {
 };
 
 const generatePracticeSnapshotJson = async function(parsePractice) {
-  const logger = require("parse-server").logger;
   logger.info(`generatePracticeSnapshotJson - classId: ${parsePractice.id}`);
 
   const relation = parsePractice.relation("counts");
@@ -349,7 +344,6 @@ const generatePracticeSnapshotJson = async function(parsePractice) {
 };
 
 const loadSnapshot = async function(parseObject, generateSnapshotJson) {
-  const logger = require("parse-server").logger;
   const objectId = parseObject.id;
   logger.info(`loadSnapshot - objectId: ${objectId}`);
 
@@ -379,7 +373,6 @@ const loadSnapshot = async function(parseObject, generateSnapshotJson) {
 };
 
 const loadPracticeSnapshots = async function(practices) {
-  const logger = require("parse-server").logger;
   logger.info(`loadPracticeSnapshots - practices: ${practices}`);
 
   var result = [];
@@ -397,7 +390,6 @@ const loadPracticeSnapshots = async function(practices) {
 };
 
 const loadDashboard = async function(parseUser, forStudent) {
-  const logger = require("parse-server").logger;
   const userId = parseUser ? parseUser._getId() : undefined;
   const dashboard = forStudent
     ? {
@@ -631,13 +623,93 @@ Parse.Cloud.define(
   }
 );
 
+const loadUserStudyRecord = async function(userId, submoduleId) {
+  logger.info(
+    `loadUserStudyRecord - userId: ${userId} submoduleId: ${submoduleId}`
+  );
+
+  var result = {};
+  query = new Parse.Query("UserStudyRecord");
+  query.equalTo("userId", userId);
+  query.equalTo("submoduleId", submoduleId);
+  var record = await query.first();
+
+  if (record) {
+    result.lineage = record.get("lineage");
+    result.textbook = record.get("textbook");
+  }
+  return result;
+};
+
+Parse.Cloud.define(
+  "home:getUserStudyRecord",
+  async ({ user, params: { pathname } }) => {
+    requireAuth(user);
+    const userId = user.id;
+
+    logger.info(
+      `getUserStudyRecord - userId: ${userId} pathname: ${pathname}}`
+    );
+
+    pathname = pathname.replace("/wcsbs", "");
+    var query = new Parse.Query("Submodule");
+    query.contains("url", pathname);
+    var submodule = await query.first();
+
+    return loadUserStudyRecord(userId, submodule._getId());
+  }
+);
+
+Parse.Cloud.define(
+  "home:updateUserStudyRecord",
+  async ({ user, params: { pathname, userStudyRecord } }) => {
+    requireAuth(user);
+
+    const result = {};
+    const userId = user.id;
+
+    logger.info(
+      `updateUserStudyRecord - userId: ${userId} pathname: ${pathname}}`
+    );
+
+    pathname = pathname.replace("/wcsbs", "");
+    var query = new Parse.Query("Submodule");
+    query.contains("url", pathname);
+    var submodule = await query.first();
+
+    if (submodule) {
+      const submoduleId = submodule._getId();
+      query = new Parse.Query("UserStudyRecord");
+
+      query.equalTo("userId", userId);
+      query.equalTo("submoduleId", submoduleId);
+      var parseUserStudyRecord = await query.first();
+
+      if (!parseUserStudyRecord) {
+        parseUserStudyRecord = new Parse.Object("UserStudyRecord");
+        parseUserStudyRecord.set("userId", user.id);
+        parseUserStudyRecord.set("submoduleId", submoduleId);
+      }
+
+      parseUserStudyRecord.set("lineage", userStudyRecord.lineage);
+      parseUserStudyRecord.set("textbook", userStudyRecord.textbook);
+
+      parseUserStudyRecord = await parseUserStudyRecord.save(null, MASTER_KEY);
+
+      result.lineage = parseUserStudyRecord.get("lineage");
+      result.textbook = parseUserStudyRecord.get("textbook");
+    }
+
+    return result;
+  }
+);
+
 Parse.Cloud.define(
   "home:reportPracticeCount",
   async ({
     user,
     params: { practiceId, practiceSessionId, reportedAt, count }
   }) => {
-    const logger = require("parse-server").logger;
     requireAuth(user);
 
     userId = user.id;
@@ -710,7 +782,6 @@ function parseSessionIndex(sessionName) {
 Parse.Cloud.define(
   "class:fetchPracticeCounts",
   async ({ user, params: { practiceId, forAdmin } }) => {
-    const logger = require("parse-server").logger;
     requireAuth(user);
 
     userId = user.id;
@@ -825,7 +896,7 @@ Parse.Cloud.define(
   "class:updateClassSession",
   async ({ user, params: { session } }) => {
     requireAuth(user);
-    const logger = require("parse-server").logger;
+
     logger.info(
       `updateClassSession - userId: ${user.id} session: ${JSON.stringify(
         session

@@ -1,7 +1,28 @@
 var Parse = window.Parse;
 
+function setupCheckbox(element, pathname, forLineage) {
+	if (element) {
+		element.addEventListener('change', function () {
+			const userStudyRecord = forLineage ? { lineage: this.checked } : { textbook: this.checked };
+
+			Parse.Cloud.run("home:updateUserStudyRecord", { pathname, userStudyRecord })
+				.then(result => {
+					console.log(
+						`updateUserStudyRecord - result: ${JSON.stringify(result)}`
+					);
+				})
+				.catch(e => {
+					console.log(`error in updateUserStudyRecord: ${e}`);
+				});
+		});
+	}
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 	const loggedInUser = Parse.User.current();
+	// console.log(
+	// 	`loggedInUser: ${JSON.stringify(loggedInUser)}`
+	// );
 
 	var element = document.getElementById(loggedInUser ? 'member' : 'non-member');
 
@@ -38,78 +59,29 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (loggedInUser) {
-		element = document.getElementById('chuanchengCheck');
+		element = document.getElementById('lineageCheckbox');
 
 		if (element) {
 			const pathname = window.location.pathname;
-			Parse.Cloud.run("home:getAttendance", { pathname })
+			Parse.Cloud.run("home:getUserStudyRecord", { pathname })
 				.then(result => {
 					console.log(
-						`getAttendance - result: ${JSON.stringify(result)}`
+						`getUserStudyRecord - result: ${JSON.stringify(result)}`
 					);
 					element.setAttribute('type', 'checkbox');
-					element.checked = result.chuanCheng;
+					element.checked = result.lineage;
+					setupCheckbox(element, pathname, true);
 
-					element.addEventListener('change', function () {
-						const attendance = { chuanCheng: this.checked };
-
-						Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
-							.then(result => {
-								console.log(
-									`updateAttendance - result: ${JSON.stringify(result)}`
-								);
-							})
-							.catch(e => {
-								console.log(`error in updateAttendance: ${e}`);
-							});
-					});
-
-
-					element = document.getElementById('fabenCheck');
+					element = document.getElementById('textbookCheckbox');
 
 					if (element) {
 						element.setAttribute('type', 'checkbox');
-						element.checked = result.faBen;
-
-						element.addEventListener('change', function () {
-							const attendance = { faBen: this.checked };
-
-							Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
-								.then(result => {
-									console.log(
-										`updateAttendance - result: ${JSON.stringify(result)}`
-									);
-								})
-								.catch(e => {
-									console.log(`error in updateAttendance: ${e}`);
-								});
-						});
+						element.checked = result.textbook;
+						setupCheckbox(element, pathname, false);
 					}
-
-					element = document.getElementById('fudaoCheck');
-
-					if (element) {
-						element.setAttribute('type', 'checkbox');
-						element.checked = result.fuDao;
-
-						element.addEventListener('change', function () {
-							const attendance = { fuDao: this.checked };
-	
-							Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
-								.then(result => {
-									console.log(
-										`updateAttendance - result: ${JSON.stringify(result)}`
-									);
-								})
-								.catch(e => {
-									console.log(`error in updateAttendance: ${e}`);
-								});
-						});
-						}
-
 				})
 				.catch(e => {
-					console.log(`error in getAttendance: ${e}`);
+					console.log(`error in getUserStudyRecord: ${e}`);
 				});
 		}
 	}
