@@ -38,23 +38,40 @@ Parse.Cloud.define(
       sessionV2.set("scheduledAt", session.get("scheduledAt"));
 
       query = new Parse.Query("Submodule");
-      query.equalTo("url", session.get("url"));
+      const url = session.get("url");
+      query.equalTo("url", url);
       var submodule = await query.first();
 
-      const content = { modules: [] };
+      const content = { submodules: [] };
       if (submodule) {
-        content.modules.push(submodule.id);
+        content.submodules.push(submodule.id);
+
+        if (url.includes("dymqx")) {
+          const description = session.get("description");
+
+          if (description && description.length > 0) {
+            const match = description.match(/(\d+)/);
+            if (match) {
+              const index = parseInt(match[0]);
+              query = new Parse.Query("Submodule");
+              query.equalTo("index", index);
+              query.equalTo("moduleId", submodule.get("moduleId"));
+              submodule = await query.first();
+              content.submodules.push(submodule.id);
+              logger.info(
+                `upgradeClassSessionToV2 - content: ${JSON.stringify(content)}`
+              );
+            }
+          }
+        }
       }
       sessionV2.set("content", content);
 
-      // sessionV2 = await sessionV2.save(null, MASTER_KEY);
-      logger.info(
-        `upgradeClassSessionToV2 - sessionV2: ${JSON.stringify(sessionV2)}`
-      );
+      sessionV2 = await sessionV2.save(null, MASTER_KEY);
 
       allV2Sessions.push(sessionV2);
     }
 
-    return { allV2Sessions };
+    return { count: allV2Sessions.length };
   }
 );
