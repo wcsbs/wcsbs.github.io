@@ -2,11 +2,11 @@
 
 require 'nokogiri'
 
-def process_one_file(template_file, input_file, title, faben_link, chuancheng_link)
+def process_one_file(template_file, input_file, title, textbook_link, lineage_link)
     template = File.read(template_file)
     template = template.gsub('class_title', title)
-    template = template.gsub('faben_link', faben_link)
-    template = template.gsub('chuancheng_link', chuancheng_link)
+    template = template.gsub('textbook_link', textbook_link)
+    template = template.gsub('lineage_link', lineage_link)
 
     new_node = Nokogiri::HTML(template)
   
@@ -20,12 +20,12 @@ def process_one_file(template_file, input_file, title, faben_link, chuancheng_li
     puts "Done for #{doc.title} - #{input_file}"
 end
 
-def process_node(node, template_file1, class_title, class_html, faben_link, chuancheng_link)
+def process_node(node, template_file1, class_title, class_html, textbook_link, lineage_link)
     template = File.read(template_file1)
     template = template.gsub('class_title', class_title)
     template = template.gsub('class_html', class_html)
-    template = template.gsub('faben_link', faben_link)
-    template = template.gsub('chuancheng_link', chuancheng_link)
+    template = template.gsub('textbook_link', textbook_link)
+    template = template.gsub('lineage_link', lineage_link)
 
     new_node = Nokogiri::HTML(template)
     node2 = node.replace(new_node.at_css('div'))

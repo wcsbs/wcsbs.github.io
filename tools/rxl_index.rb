@@ -2,11 +2,11 @@
 
 require 'nokogiri'
 
-def process_one_file(template_file, input_file, title, faben_link, chuancheng_link)
+def process_one_file(template_file, input_file, title, textbook_link, lineage_link)
     template = File.read(template_file)
     template = template.gsub('class_title', title)
-    template = template.gsub('faben_link', faben_link)
-    template = template.gsub('chuancheng_link', chuancheng_link)
+    template = template.gsub('textbook_link', textbook_link)
+    template = template.gsub('lineage_link', lineage_link)
 
     new_node = Nokogiri::HTML(template)
   
