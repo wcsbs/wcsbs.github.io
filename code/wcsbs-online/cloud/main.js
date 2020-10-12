@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
+require("./adminFunctions.js");
+
 const MASTER_KEY = { useMasterKey: true };
-const MAX_QUERY_COUNT = 300;
+const MAX_QUERY_COUNT = 3000;
 const logger = require("parse-server").logger;
 
 const requireAuth = user => {

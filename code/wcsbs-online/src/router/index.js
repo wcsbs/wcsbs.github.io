@@ -64,6 +64,12 @@ export default new Router({
       path: "/userCreate",
       meta: { requiresAuth: true },
       component: () => import("@/views/User")
+    },
+    {
+      name: "adminFunctions",
+      path: "/adminFunctions",
+      meta: { requiresAuth: true },
+      component: () => import("@/views/AdminFunctions")
     }
   ]
 });
