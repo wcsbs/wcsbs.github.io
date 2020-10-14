@@ -52,13 +52,13 @@
             />
           </b-input-group>
           <b-input-group
-            v-if="practiceSessions.length > 0"
+            v-if="practiceSubmodules.length > 0"
             prepend="选择修法："
             class="mt-3"
           >
-            <select v-model="practiceObj.sessionId">
+            <select v-model="practiceObj.submoduleId">
               <option
-                v-for="session in practiceSessions"
+                v-for="session in practiceSubmodules"
                 v-bind:key="session.id"
                 v-bind:value="session.id"
                 >{{ session.name }}</option
@@ -116,7 +116,7 @@ export default {
   props: {
     practice: { type: Object, required: true },
     latestPracticeCount: { type: Object, required: false },
-    practiceSessions: { type: Array, required: false },
+    practiceSubmodules: { type: Array, required: false },
     practiceCounts: { type: Array, required: false },
     users: { type: Array, required: false },
     forAdmin: Boolean
@@ -133,7 +133,7 @@ export default {
         showReportingCount: false,
         newCountReportedAt: "",
         newCount: "",
-        sessionId: undefined
+        submoduleId: undefined
       },
       practiceCountObj: this.buildPracticeCountObj(this.latestPracticeCount),
       fields: this.buildPracticeCountFields(),
@@ -156,8 +156,8 @@ export default {
       ];
       if (
         !this.forAdmin &&
-        this.practiceSessions &&
-        this.practiceSessions.length > 0
+        this.practiceSubmodules &&
+        this.practiceSubmodules.length > 0
       ) {
         fields.splice(0, 0, {
           key: "sessionName",
@@ -178,14 +178,14 @@ export default {
             });
           }
         } else {
-          const practiceSessions = this.practiceSessions;
+          const practiceSubmodules = this.practiceSubmodules;
           items = this.practiceCounts
             .filter(x => x.get("reportedAt"))
             .map(e => {
-              const sessionId = e.get("sessionId");
+              const submoduleId = e.get("submoduleId");
               var sessionName = undefined;
-              if (sessionId) {
-                sessionName = practiceSessions.find(e => e.id == sessionId)
+              if (submoduleId) {
+                sessionName = practiceSubmodules.find(e => e.id == submoduleId)
                   .name;
               }
               return {
@@ -199,7 +199,11 @@ export default {
       return items;
     },
     buildPracticeCountObj(latestPracticeCount) {
-      // console.log(`buildPracticeCountObj - ${JSON.stringify(latestPracticeCount)}`);
+      // console.log(
+      //   `buildPracticeCountObj - this.forAdmin: ${
+      //     this.forAdmin
+      //   } ${JSON.stringify(latestPracticeCount)}`
+      // );
       return this.forAdmin
         ? {
             latestCount:
@@ -254,7 +258,7 @@ export default {
         .showReportingCount;
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
-      this.practiceObj.sessionId = undefined;
+      this.practiceObj.submoduleId = undefined;
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -263,11 +267,12 @@ export default {
         cancelText: "取消",
         loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
       };
-      const practiceSessionId = this.practiceObj.sessionId;
+      const practiceSubmoduleId = this.practiceObj.submoduleId;
       var sessionName = "";
-      if (practiceSessionId) {
-        sessionName = this.practiceSessions.find(e => e.id == practiceSessionId)
-          .name;
+      if (practiceSubmoduleId) {
+        sessionName = this.practiceSubmodules.find(
+          e => e.id == practiceSubmoduleId
+        ).name;
       }
       const message = {
         title: this.practiceObj.name,
@@ -281,15 +286,15 @@ export default {
       const thisComponent = this;
 
       console.log(
-        `home:reportPracticeCount - practiceId: ${practiceId} practiceSessionId: ${practiceSessionId} reportedAt: ${reportedAt} count: ${count}`
+        `home:reportPracticeCount - practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count}`
       );
 
       this.$dialog
         .confirm(message, options)
         .then(function(dialog) {
-          Parse.Cloud.run("home:reportPracticeCount", {
+          Parse.Cloud.run("home:reportPracticeCountV2", {
             practiceId,
-            practiceSessionId,
+            practiceSubmoduleId,
             reportedAt,
             count
           })

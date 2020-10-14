@@ -26,9 +26,10 @@
         <ClassSession
           v-for="(classSession, index) in buddhaClass.classSessions"
           :classSession="classSession"
-          :attendance="buddhaClass.attendances[index]"
+          :sessionDetails="buddhaClass.sessionDetails[index]"
           :key="classSession.id + index"
           :forApplication="forApplication"
+          :forAdmin="buddhaClass.classSnapshot != undefined"
         />
         <b-button block variant="info" @click="listSession">查看详情</b-button>
         <hr />
@@ -37,7 +38,7 @@
           v-for="(practice, index) in buddhaClass.practices"
           :practice="practice"
           :latestPracticeCount="buddhaClass.counts[index]"
-          :practiceSessions="buddhaClass.practiceSessions[index]"
+          :practiceSubmodules="buddhaClass.practiceSubmodules[index]"
           :key="practice.id + index"
           :forAdmin="buddhaClass.classSnapshot != undefined"
         />
@@ -68,10 +69,6 @@ export default {
             {
               key: "学生人数",
               value: this.buddhaClass.classSnapshot.studentCount
-            },
-            {
-              key: "总计上课",
-              value: this.buddhaClass.classSnapshot.sessionTotal
             },
             {
               key: "已计划上课",

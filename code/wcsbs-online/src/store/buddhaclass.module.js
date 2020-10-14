@@ -21,7 +21,6 @@ const state = {
   classSession: {},
   classSessions: [],
   newSessions: [],
-  attendances: [],
   classInfo: {},
   practiceInfo: {},
   isLoadingSessions: false,
@@ -34,9 +33,6 @@ const getters = {
   },
   classSession(state) {
     return state.classSession;
-  },
-  attendances(state) {
-    return state.attendances;
   },
   classSessions(state) {
     return state.classSessions;
@@ -73,11 +69,12 @@ const actions = {
     );
     context.commit(FETCH_SESSIONS_START);
 
-    const fetchSessions = "class:fetchSessions";
+    const fetchSessions = "class:fetchSessionsV2";
     Parse.Cloud.run(fetchSessions, { classId, forApplication, forAdmin })
       .then(classInfo => {
         console.log(
-          `${FETCH_SESSIONS} - #classSessions: ${classInfo.classSessions.length}`
+          `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
+          // `${fetchSessions} - #classSessions: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_SESSIONS_END, classInfo);
       })
@@ -99,14 +96,14 @@ const actions = {
     );
     context.commit(FETCH_PRACTICE_COUNTS_START);
 
-    const fetchPracticeCounts = "class:fetchPracticeCounts";
+    const fetchPracticeCounts = "class:fetchPracticeCountsV2";
     Parse.Cloud.run(fetchPracticeCounts, { practiceId, forAdmin })
       .then(practiceInfo => {
         console.log(
-          `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length} #practiceSession: ${practiceInfo.sessions.length}`
-          // `${FETCH_PRACTICE_COUNTS} - practiceInfo: ${JSON.stringify(
-          //   practiceInfo
-          // )}`
+          // `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length}`
+          `${FETCH_PRACTICE_COUNTS} - practiceInfo: ${JSON.stringify(
+            practiceInfo
+          )}`
         );
         context.commit(FETCH_PRACTICE_COUNTS_END, practiceInfo);
       })
@@ -152,51 +149,29 @@ const mutations = {
     state.classInfo = classInfo;
     state.classSessions = [];
     state.newSessions = [];
-    state.attendances = [];
-    for (var i = 0; i < classInfo.classSessions.length; i++) {
-      const s = classInfo.classSessions[i];
-      if (s.get("scheduledAt")) {
-        state.classSessions.push(s);
-        var attendance = classInfo.attendances[i];
-        if (classInfo.forAdmin) {
-          attendance = JSON.parse(attendance.get("json"));
-        }
-        state.attendances.push(attendance);
-      } else {
-        state.newSessions.push({
-          id: s.id,
-          name: s.get("name")
-        });
-      }
-    }
-    state.newSessions.sort((s1, s2) => {
-      var a = parseSessionIndex(s1.name);
-      var b = parseSessionIndex(s2.name);
-      return a > b ? 1 : b > a ? -1 : 0;
-    });
 
     state.isLoadingSessions = false;
   },
   [FILTER_SESSIONS_IN_LIST](state, filterText) {
-    state.classSessions = [];
-    state.attendances = [];
+    // state.classSessions = [];
+    // state.attendances = [];
 
-    for (var i = 0; i < state.classInfo.classSessions.length; i++) {
-      const s = state.classInfo.classSessions[i];
-      if (s.get("scheduledAt")) {
-        if (
-          !filterText ||
-          filterText == "" ||
-          s
-            .get("name")
-            .toLowerCase()
-            .includes(filterText.toLowerCase())
-        ) {
-          state.classSessions.push(s);
-          state.attendances.push(state.classInfo.attendances[i]);
-        }
-      }
-    }
+    // for (var i = 0; i < state.classInfo.classSessions.length; i++) {
+    //   const s = state.classInfo.classSessions[i];
+    //   if (s.get("scheduledAt")) {
+    //     if (
+    //       !filterText ||
+    //       filterText == "" ||
+    //       s
+    //         .get("name")
+    //         .toLowerCase()
+    //         .includes(filterText.toLowerCase())
+    //     ) {
+    //       state.classSessions.push(s);
+    //       state.attendances.push(state.classInfo.attendances[i]);
+    //     }
+    //   }
+    // }
   }
 };
 

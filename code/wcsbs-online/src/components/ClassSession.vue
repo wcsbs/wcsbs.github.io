@@ -8,8 +8,9 @@
             v-for="newSession in sessionDropdownOptions"
             v-bind:key="newSession.id"
             v-bind:value="newSession.id"
-            >{{ newSession.name }}</option
           >
+            {{ newSession.name }}
+          </option>
         </select>
         <b-input-group-append>
           <b-button v-if="!session.creating" type="reset" variant="warning">
@@ -52,6 +53,7 @@
               v-on:click="editSession"
               >修改</b-button
             >
+            <!--
             <b-button
               variant="info"
               :href="addToGoogleCalendarUrl()"
@@ -59,9 +61,14 @@
             >
               <b-icon icon="calendar-plus"></b-icon>
             </b-button>
+            -->
           </b-input-group-append>
         </b-input-group>
-        <b-input-group prepend="课前学习：" class="mt-3">
+        <b-input-group
+          v-if="sessionDetails.submodules.length == 1"
+          prepend="课前学习："
+          class="mt-3"
+        >
           <b-form-input readonly v-model="session.materialState"></b-form-input>
           <b-input-group-append>
             <b-button variant="info" :href="session.url" target="_blank">
@@ -69,6 +76,26 @@
             </b-button>
           </b-input-group-append>
         </b-input-group>
+        <div
+          v-else
+          v-for="(submodule, index) in sessionDetails.submodules"
+          :key="submodule.id + index"
+        >
+          <b-link :href="submodule.url" target="_blank">{{
+            `(${index + 1}) ${submodule.name}`
+          }}</b-link>
+          <b-input-group prepend="课前学习：" class="mt-3">
+            <b-form-input
+              readonly
+              v-model="session.materialState"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button variant="info" :href="submodule.url" target="_blank">
+                <b-icon icon="book"></b-icon>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </div>
         <b-input-group
           v-if="!session.forApplication"
           prepend="上课出勤："
@@ -119,10 +146,11 @@ export default {
   name: "ClassSession",
   props: {
     classSession: { type: Object, required: true },
-    attendance: { type: Object, required: false },
+    sessionDetails: { type: Object, required: false },
     classInfo: { type: Object, required: false },
     newSessions: { type: Array, required: false },
-    forApplication: Boolean
+    forApplication: Boolean,
+    forAdmin: Boolean
   },
   data: function() {
     return {
@@ -147,15 +175,15 @@ export default {
           ? this.classInfo.forApplication
           : this.forApplication,
         name: this.classSession.get("name"),
-        url: this.classSession.get("url"),
+        url: this.sessionDetails.submodules[0].url,
         description: this.classSession.get("description"),
         scheduledAt: this.classSession.get("scheduledAt"),
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
           this.classSession.get("scheduledAt")
         ),
         showDescription: false,
-        attendanceState: this.toAttendanceStateString(this.attendance),
-        materialState: this.toMaterialStateString(this.attendance)
+        attendanceState: this.toAttendanceStateString(this.sessionDetails),
+        materialState: this.toMaterialStateString(this.sessionDetails, 0)
       };
     },
     buildSessionDropdownOptions() {
@@ -201,11 +229,14 @@ export default {
       return date.toLocaleDateString("zh-CN", options);
     },
     needToShowAttendanceButton() {
-      return true;
+      // console.log(
+      //   `needToShowAttendanceButton - this.isStudent: ${this.isStudent} this.forAdmin: ${this.forAdmin} this.forApplication: ${this.forApplication}`
+      // );
+      return this.isStudent && !this.forAdmin && !this.forApplication;
       // const scheduledAt = this.classSession.get("scheduledAt");
       // if (this.isStudent) {
       //   const today = new Date();
-      //   //student must submit attendance within 3 days
+      //   //student must submit sessionDetails within 3 days
       //   var cutoffTime = new Date(
       //     scheduledAt.getTime() + 4 * 24 * 60 * 60 * 1000
       //   );
@@ -215,39 +246,43 @@ export default {
       // }
       // return false;
     },
-    toAttendanceStateString(attendance) {
-      if (attendance) {
-        if (typeof attendance.shangKe == "number") {
-          return `${attendance.shangKe}人已上课`;
+    toAttendanceStateString(sessionDetails) {
+      if (sessionDetails) {
+        if (typeof sessionDetails.attendance.attendance == "number") {
+          return `${sessionDetails.attendance.attendance}人已上课`;
         }
-        if (attendance.qingJia) {
+        if (sessionDetails.attendance.onLeave) {
           return "已请假";
         }
-        if (attendance.shangKe == true) {
+        if (sessionDetails.attendance.attendance == true) {
           return "已上课";
         }
-        if (attendance.shangKe == false && attendance.qingJia == undefined) {
+        if (
+          sessionDetails.attendance.attendance == false &&
+          sessionDetails.attendance.onLeave == undefined
+        ) {
           return "未上课";
         }
       }
 
       return "未报考勤";
     },
-    toMaterialStateString(attendance) {
+    toMaterialStateString(sessionDetails, index) {
       if (this.forApplication) {
         return "请在课前看完传承/法本";
       }
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
-      if (attendance) {
-        if (typeof attendance.chuanCheng == "number") {
-          chuanCheng = `${attendance.chuanCheng}人已看传承`;
-        } else if (attendance.chuanCheng) {
+      if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
+        const studyRecord = sessionDetails.submodules[index].studyRecord;
+        if (typeof studyRecord.lineage == "number") {
+          chuanCheng = `${studyRecord.lineage}人已看传承`;
+        } else if (studyRecord.lineage) {
           chuanCheng = "已看传承";
         }
-        if (typeof attendance.faBen == "number") {
-          faBen = `${attendance.faBen}人已看法本`;
-        } else if (attendance.faBen) {
+        if (typeof studyRecord.textbook == "number") {
+          faBen = `${studyRecord.textbook}人已看法本`;
+        } else if (studyRecord.textbook) {
           faBen = "已看法本";
         }
       }
@@ -275,12 +310,12 @@ export default {
     attendanceButtonName() {
       const d = new Date();
       if (d < this.classSession.get("scheduledAt")) {
-        if (this.attendance.qingJia) {
+        if (this.sessionDetails.attendance.onLeave) {
           return "取消请假";
         }
         return "我要请假";
       } else {
-        if (this.attendance.shangKe != undefined) {
+        if (this.sessionDetails.attendance.attendance != undefined) {
           return "我要改考勤";
         }
         return "我要报考勤";
@@ -288,29 +323,28 @@ export default {
     },
     updateAttendance() {
       const d = new Date();
-      const attendance = {};
       var msg = "确认";
+      var attendance = this.sessionDetails.attendance;
       if (d < this.classSession.get("scheduledAt")) {
-        if (this.attendance.qingJia) {
-          attendance.qingJia = false;
+        if (attendance.onLeave) {
+          attendance.onLeave = false;
           msg += "取消请假";
         } else {
-          attendance.qingJia = true;
-          attendance.shangKe = false;
+          attendance.onLeave = true;
+          attendance.attendance = false;
           msg += "请假";
         }
       } else {
-        if (this.attendance.shangKe) {
-          attendance.shangKe = false;
+        if (attendance.attendance) {
+          attendance.attendance = false;
           msg += "没有上课";
         } else {
-          attendance.shangKe = true;
+          attendance.attendance = true;
           msg += "已上课";
         }
       }
 
-      const pathname = this.classSession.get("url");
-      const classSession = this;
+      const sessionId = this.classSession.id;
       const options = {
         okText: "确认",
         cancelText: "取消",
@@ -325,25 +359,26 @@ export default {
       this.$dialog
         .confirm(message, options)
         .then(function(dialog) {
-          console.log(`${JSON.stringify(dialog)}`);
-          Parse.Cloud.run("home:updateAttendance", { pathname, attendance })
+          Parse.Cloud.run("home:updateAttendanceV2", { sessionId, attendance })
             .then(result => {
               console.log(
-                `updateAttendance - result: ${JSON.stringify(result)}`
+                `updateAttendanceV2 - result: ${JSON.stringify(result)}`
               );
-              if (result.qingJia != undefined) {
-                classSession.attendance.qingJia = result.qingJia;
+              if (result.attendance.onLeave != undefined) {
+                thisComponent.sessionDetails.attendance.onLeave =
+                  result.attendance.onLeave;
               }
-              if (result.shangKe != undefined) {
-                classSession.attendance.shangKe = result.shangKe;
+              if (result.attendance.attendance != undefined) {
+                thisComponent.sessionDetails.attendance.attendance =
+                  result.attendance.attendance;
               }
-              classSession.session.attendanceState = classSession.toAttendanceStateString(
-                classSession.attendance
+              thisComponent.session.attendanceState = thisComponent.toAttendanceStateString(
+                thisComponent.sessionDetails
               );
               dialog.close();
             })
             .catch(e => {
-              console.log(`error in updateAttendance: ${e}`);
+              console.log(`error in updateAttendanceV2: ${e}`);
               dialog.close();
               thisComponent.$dialog.alert(`error in updateAttendance: ${e}`);
             });

@@ -75,3 +75,43 @@ Parse.Cloud.define(
     return { count: allV2Sessions.length };
   }
 );
+
+Parse.Cloud.define(
+  "admin:updateClassSessionV2",
+  async ({ user, params: { user: userWithRoles } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
+    var query = new Parse.Query("ClassSessionV2");
+    query.descending("scheduledAt");
+    var allSessions = await query.limit(MAX_QUERY_COUNT).find();
+    var updatedSessions = [];
+
+    for (var i = 0; i < allSessions.length; i++) {
+      const session = allSessions[i];
+      var content = session.get("content");
+      if (content.submodules.length == 1) {
+        continue;
+      }
+
+      const description = session.get("description");
+      if (description && description.length > 0) {
+        const match = description.match(/(\d+)/);
+        if (match) {
+          const index = parseInt(match[0]);
+          query = new Parse.Query("Submodule");
+          query.equalTo("index", index);
+          query.equalTo("moduleId", "ZwfTADbqUK");
+          submodule = await query.first();
+          content.submodules[1] = submodule.id;
+        }
+        session.set("content", content);
+
+        const sessionV2 = await session.save(null, MASTER_KEY);
+        updatedSessions.push(sessionV2);
+      }
+    }
+
+    return { count: updatedSessions.length, allV2Sessions: updatedSessions };
+  }
+);
