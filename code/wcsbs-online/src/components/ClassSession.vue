@@ -2,6 +2,23 @@
   <div>
     <b-form v-if="editing" @submit="onSubmit" @reset="onReset">
       <h4>{{ session.name ? session.name : "创建新课" }}</h4>
+      <b-input-group prepend="选择日期：" class="mt-3">
+        <v-date-picker
+          locale="zh-CN"
+          v-model="session.scheduledAt"
+          :input-props="{
+            readonly: true
+          }"
+        />
+        <b-input-group-append>
+          <b-button v-if="!session.creating" type="reset" variant="warning">
+            <b-icon icon="x-circle"></b-icon>
+          </b-button>
+          <b-button type="submit" variant="success">
+            <b-icon icon="check-circle"></b-icon>
+          </b-button>
+        </b-input-group-append>
+      </b-input-group>
       <b-input-group prepend="选择课程：" class="mt-3">
         <select v-model="session.id">
           <option
@@ -24,20 +41,6 @@
         rows="8"
         max-rows="20"
       ></b-form-textarea>
-      <b-input-group prepend="选择日期：" class="mt-3">
-        <v-date-picker
-          locale="zh-CN"
-          v-model="session.scheduledAt"
-          :input-props="{
-            readonly: true
-          }"
-        />
-        <b-input-group-append>
-          <b-button type="submit" variant="success">
-            <b-icon icon="check-circle"></b-icon>
-          </b-button>
-        </b-input-group-append>
-      </b-input-group>
     </b-form>
     <b-card v-else class="text-center" :header="session.name">
       <b-card-text>

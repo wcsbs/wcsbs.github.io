@@ -20,7 +20,7 @@ Vue.use(Toasted);
 const state = {
   classSession: {},
   classSessions: [],
-  newSessions: [],
+  sessionDetails: [],
   classInfo: {},
   practiceInfo: {},
   isLoadingSessions: false,
@@ -37,8 +37,8 @@ const getters = {
   classSessions(state) {
     return state.classSessions;
   },
-  newSessions(state) {
-    return state.newSessions;
+  sessionDetails(state) {
+    return state.sessionDetails;
   },
   isLoadingSessions(state) {
     return state.isLoadingSessions;
@@ -73,8 +73,8 @@ const actions = {
     Parse.Cloud.run(fetchSessions, { classId, forApplication, forAdmin })
       .then(classInfo => {
         console.log(
-          `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
-          // `${fetchSessions} - #classSessions: ${JSON.stringify(classInfo)}`
+          // `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
+          `${fetchSessions} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_SESSIONS_END, classInfo);
       })
@@ -147,31 +147,32 @@ const mutations = {
   },
   [FETCH_SESSIONS_END](state, classInfo) {
     state.classInfo = classInfo;
-    state.classSessions = [];
-    state.newSessions = [];
+    state.classSessions = classInfo.classSessions;
+    state.sessionDetails = classInfo.sessionDetails;
 
     state.isLoadingSessions = false;
   },
   [FILTER_SESSIONS_IN_LIST](state, filterText) {
-    // state.classSessions = [];
-    // state.attendances = [];
+    if (!filterText || filterText == "") {
+      state.classSessions = state.classInfo.classSessions;
+      state.sessionDetails = state.classInfo.sessionDetails;
+    } else {
+      state.classSessions = [];
+      state.sessionDetails = [];
 
-    // for (var i = 0; i < state.classInfo.classSessions.length; i++) {
-    //   const s = state.classInfo.classSessions[i];
-    //   if (s.get("scheduledAt")) {
-    //     if (
-    //       !filterText ||
-    //       filterText == "" ||
-    //       s
-    //         .get("name")
-    //         .toLowerCase()
-    //         .includes(filterText.toLowerCase())
-    //     ) {
-    //       state.classSessions.push(s);
-    //       state.attendances.push(state.classInfo.attendances[i]);
-    //     }
-    //   }
-    // }
+      for (var i = 0; i < state.classInfo.classSessions.length; i++) {
+        const s = state.classInfo.classSessions[i];
+        if (
+          s
+            .get("name")
+            .toLowerCase()
+            .includes(filterText.toLowerCase())
+        ) {
+          state.classSessions.push(s);
+          state.sessionDetails.push(state.classInfo.sessionDetails[i]);
+        }
+      }
+    }
   }
 };
 

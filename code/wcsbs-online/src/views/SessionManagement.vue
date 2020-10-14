@@ -36,24 +36,21 @@
           >
         </div>
       </div>
-      <div v-if="classInfo.classSessions.length === 0">
+      <div v-if="classSessions.length === 0">
         没有找到上课记录！
       </div>
       <ClassSession
         v-if="creatingSession"
         :classInfo="classInfo"
         :classSession="newClassSession"
-        :attendance="newAttendance"
-        :newSessions="newSessions"
       />
       <ClassSession
-        v-for="(classSession, index) in classInfo.classSessions"
+        v-for="(classSession, index) in classSessions"
         :classInfo="classInfo"
         :forApplication="classInfo.forApplication"
         :forAdmin="classInfo.forAdmin"
         :classSession="classSession"
-        :sessionDetails="classInfo.sessionDetails[index]"
-        :newSessions="newSessions"
+        :sessionDetails="sessionDetails[index]"
         :key="classSession.id + index"
       />
     </div>
@@ -76,7 +73,8 @@ export default {
     ...mapGetters([
       "isLoadingSessions",
       "classInfo",
-      "newSessions",
+      "classSessions",
+      "sessionDetails",
       "isClassAdmin",
       "isTeachingAssistant",
       "isStudent"
