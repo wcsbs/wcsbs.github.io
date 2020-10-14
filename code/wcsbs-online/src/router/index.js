@@ -18,7 +18,7 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: "/sessions/:classId/:forApplication/:forAdmin",
+      path: "/sessions/:classId/:forApplication/:forAdmin/:loadingNewSessions",
       name: "session-management",
       component: () => import("@/views/SessionManagement"),
       props: true,

@@ -50,6 +50,7 @@
 <script>
 import ClassSession from "./ClassSession";
 import Practice from "./Practice";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Class",
@@ -82,6 +83,9 @@ export default {
         : []
     };
   },
+  computed: {
+    ...mapGetters(["isClassAdmin", "isTeachingAssistant"])
+  },
   methods: {
     listSession() {
       this.$router.push({
@@ -89,7 +93,8 @@ export default {
         params: {
           classId: this.buddhaClass.id,
           forApplication: this.forApplication,
-          forAdmin: this.buddhaClass.classSnapshot != undefined
+          forAdmin: this.buddhaClass.classSnapshot != undefined,
+          loadingNewSessions: this.isClassAdmin || this.isTeachingAssistant
         }
       });
     }

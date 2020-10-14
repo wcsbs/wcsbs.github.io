@@ -81,7 +81,6 @@ export default {
     ])
   },
   beforeRouteEnter(to, from, next) {
-    // console.log(`beforeRouteEnter - to: ${JSON.stringify(to)}`);
     store.dispatch(FETCH_SESSIONS, to.params).then(() => {
       next();
     });

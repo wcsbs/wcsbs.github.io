@@ -54,27 +54,38 @@ const getters = {
 const actions = {
   [FETCH_SESSIONS](context, params) {
     const classId = params["classId"];
-    var forApplication = params["forApplication"];
 
+    var forApplication = params["forApplication"];
     if (typeof forApplication === "string") {
       forApplication = forApplication === "true";
     }
-    var forAdmin = params["forAdmin"];
 
+    var forAdmin = params["forAdmin"];
     if (typeof forAdmin === "string") {
       forAdmin = forAdmin === "true";
     }
+
+    var loadingNewSessions = params["loadingNewSessions"];
+    if (typeof loadingNewSessions === "string") {
+      loadingNewSessions = loadingNewSessions === "true";
+    }
+
     console.log(
-      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication} forAdmin: ${forAdmin}`
+      `${FETCH_SESSIONS} - classId: ${classId} forApplication: ${forApplication} forAdmin: ${forAdmin} loadingNewSessions: ${loadingNewSessions}`
     );
     context.commit(FETCH_SESSIONS_START);
 
     const fetchSessions = "class:fetchSessionsV2";
-    Parse.Cloud.run(fetchSessions, { classId, forApplication, forAdmin })
+    Parse.Cloud.run(fetchSessions, {
+      classId,
+      forApplication,
+      forAdmin,
+      loadingNewSessions
+    })
       .then(classInfo => {
         console.log(
-          // `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
-          `${fetchSessions} - classInfo: ${JSON.stringify(classInfo)}`
+          `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
+          // `${fetchSessions} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_SESSIONS_END, classInfo);
       })

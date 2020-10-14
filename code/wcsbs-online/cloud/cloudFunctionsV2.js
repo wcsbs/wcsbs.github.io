@@ -252,6 +252,7 @@ const loadClassSessionDetails = async function(
 
       if (parseSubmodule) {
         submodule.id = submoduleId;
+        submodule.index = parseSubmodule.get("index");
         submodule.name = parseSubmodule.get("name");
         submodule.url = parseSubmodule.get("url");
         submodule.studyRecord = forStudent
@@ -547,9 +548,42 @@ Parse.Cloud.define(
   }
 );
 
+const loadNewSessions = async function(parseClass, classInfo) {
+  var submoduleIds = [];
+  for (var i = 0; i < classInfo.sessionDetails.length; i++) {
+    for (var j = 0; j < classInfo.sessionDetails[i].submodules.length; j++) {
+      submoduleIds.push(classInfo.sessionDetails[i].submodules[j].id);
+    }
+  }
+
+  classInfo.modules = [];
+  var query = parseClass.relation("modules").query();
+  query.ascending("index");
+  const modules = await query.limit(MAX_QUERY_COUNT).find();
+
+  for (i = 0; i < modules.length; i++) {
+    query = new Parse.Query("Submodule");
+    query.equalTo("moduleId", modules[i].id);
+    query.notContainedIn("objectId", submoduleIds);
+    query.ascending("index");
+    const parseSubmodules = await query.limit(MAX_QUERY_COUNT).find();
+
+    classInfo.modules.push({
+      id: modules[i].id,
+      name: modules[i].get("name"),
+      newSubmodules: parseSubmodules.map(e => {
+        return { id: e.id, index: e.get("index"), name: e.get("name") };
+      })
+    });
+  }
+};
+
 Parse.Cloud.define(
   "class:fetchSessionsV2",
-  async ({ user, params: { classId, forApplication, forAdmin } }) => {
+  async ({
+    user,
+    params: { classId, forApplication, forAdmin, loadingNewSessions }
+  }) => {
     requireAuth(user);
 
     var query = new Parse.Query("Class");
@@ -577,6 +611,10 @@ Parse.Cloud.define(
         classSessions[i],
         !forAdmin
       );
+    }
+
+    if (loadingNewSessions) {
+      await loadNewSessions(parseClass, classInfo);
     }
 
     return classInfo;
