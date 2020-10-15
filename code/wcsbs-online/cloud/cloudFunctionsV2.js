@@ -255,6 +255,7 @@ const loadClassSessionDetails = async function(
         submodule.index = parseSubmodule.get("index");
         submodule.name = parseSubmodule.get("name");
         submodule.url = parseSubmodule.get("url");
+        submodule.moduleId = parseSubmodule.get("moduleId");
         submodule.studyRecord = forStudent
           ? await loadUserStudyRecord(userId, submoduleId)
           : attendance.studyRecords[i];
@@ -572,7 +573,13 @@ const loadNewSessions = async function(parseClass, classInfo) {
       id: modules[i].id,
       name: modules[i].get("name"),
       newSubmodules: parseSubmodules.map(e => {
-        return { id: e.id, index: e.get("index"), name: e.get("name") };
+        return {
+          id: e.id,
+          index: e.get("index"),
+          name: e.get("name"),
+          url: e.get("url"),
+          moduleId: e.get("moduleId")
+        };
       })
     });
   }
@@ -627,33 +634,42 @@ Parse.Cloud.define(
     requireAuth(user);
 
     logger.info(
-      `updateClassSession - userId: ${user.id} session: ${JSON.stringify(
+      `updateClassSessionV2 - userId: ${user.id} session: ${JSON.stringify(
         session
       )}`
     );
 
-    var result = {};
-    var query = new Parse.Query("ClassSession");
-    query.equalTo("objectId", session.id);
-    var classSession = await query.first();
+    var classSession;
+    var newSession;
 
-    if (classSession) {
-      classSession.set("scheduledAt", session.scheduledAt);
-      classSession.set("description", session.description);
-      await classSession.save(null, MASTER_KEY);
-
-      result = classSession;
+    if (session.id) {
+      var query = new Parse.Query("ClassSessionV2");
+      query.equalTo("objectId", session.id);
+      classSession = await query.first();
+    } else {
+      classSession = new Parse.Object("ClassSessionV2");
+      newSession = true;
     }
 
-    if (session.id != session.oldId) {
-      query = new Parse.Query("ClassSession");
-      query.equalTo("objectId", session.oldId);
-      classSession = await query.first();
+    classSession.set("scheduledAt", session.scheduledAt);
+    classSession.set("name", session.name);
+    classSession.set("description", session.description);
 
-      if (classSession) {
-        classSession.unset("scheduledAt");
-        await classSession.save(null, MASTER_KEY);
-      }
+    const submodules = session.submodules.map(e => e.id);
+    classSession.set("content", { submodules });
+
+    classSession = await classSession.save(null, MASTER_KEY);
+    const result = { classSessionId: classSession.id };
+
+    if (newSession) {
+      query = new Parse.Query("Class");
+      query.equalTo("objectId", session.classId);
+      const parseClass = await query.first();
+      result.classId = parseClass.id;
+
+      const sessions = parseClass.relation("sessionsV2");
+      sessions.add(classSession);
+      await parseClass.save(null, MASTER_KEY);
     }
 
     return result;

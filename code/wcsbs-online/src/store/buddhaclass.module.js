@@ -111,10 +111,10 @@ const actions = {
     Parse.Cloud.run(fetchPracticeCounts, { practiceId, forAdmin })
       .then(practiceInfo => {
         console.log(
-          // `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length}`
-          `${FETCH_PRACTICE_COUNTS} - practiceInfo: ${JSON.stringify(
-            practiceInfo
-          )}`
+          `${FETCH_PRACTICE_COUNTS} - #practiceCount: ${practiceInfo.counts.length}`
+          // `${FETCH_PRACTICE_COUNTS} - practiceInfo: ${JSON.stringify(
+          //   practiceInfo
+          // )}`
         );
         context.commit(FETCH_PRACTICE_COUNTS_END, practiceInfo);
       })
@@ -138,11 +138,6 @@ const actions = {
     );
   }
 };
-
-export function parseSessionIndex(sessionName) {
-  const match = sessionName.match(/(\d+)/);
-  return match ? parseInt(match[0]) : 0;
-}
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const mutations = {

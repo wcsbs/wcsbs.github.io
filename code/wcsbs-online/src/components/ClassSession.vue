@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form v-if="editing" @submit="onSubmit" @reset="onReset">
-      <h4>{{ session.name ? session.name : "创建新课" }}</h4>
+      <h4>{{ this.session.creating ? "创建新课" : session.name }}</h4>
       <b-input-group prepend="选择日期：" class="mt-3">
         <v-date-picker
           locale="zh-CN"
@@ -19,21 +19,53 @@
           </b-button>
         </b-input-group-append>
       </b-input-group>
-      <b-input-group prepend="选择课程：" class="mt-3">
-        <select v-model="session.id">
-          <option
-            v-for="newSession in sessionDropdownOptions"
-            v-bind:key="newSession.id"
-            v-bind:value="newSession.id"
-          >
-            {{ newSession.name }}
-          </option>
-        </select>
+      <b-input-group
+        v-if="moduleDropdownOptions.length > 1"
+        prepend="选择模块："
+        class="mt-3"
+      >
+        <b-form-select
+          v-model="session.moduleId"
+          v-on:change="refreshUI"
+          :options="moduleDropdownOptions"
+        ></b-form-select>
+      </b-input-group>
+      <b-input-group prepend="选子模块：" class="mt-3">
+        <b-form-select
+          v-model="session.submoduleId"
+          :options="submoduleDropdownOptions"
+        ></b-form-select>
         <b-input-group-append>
-          <b-button v-if="!session.creating" type="reset" variant="warning">
-            <b-icon icon="x-circle"></b-icon>
-          </b-button>
+          <b-button
+            v-if="canAddSubmodule"
+            variant="warning"
+            v-on:click="addSubmodule()"
+            >加入上课内容</b-button
+          >
         </b-input-group-append>
+      </b-input-group>
+      <b-input-group
+        v-for="(submodule, index) in session.submodules"
+        :key="submodule.id + index"
+        prepend="上课内容："
+        class="mt-3"
+      >
+        <b-form-input
+          readonly
+          :value="`(${index + 1}) ${submodule.name}`"
+        ></b-form-input>
+        <b-input-group-append>
+          <b-button variant="warning" v-on:click="removeSubmodule(index)"
+            >删除</b-button
+          >
+        </b-input-group-append>
+      </b-input-group>
+      <b-input-group
+        v-if="session.submodules.length > 0"
+        prepend="上课名称："
+        class="mt-3"
+      >
+        <b-form-input v-model="session.name"></b-form-input>
       </b-input-group>
       <b-form-textarea
         v-model="session.description"
@@ -52,7 +84,11 @@
           <b-input-group-append>
             <b-button
               variant="warning"
-              v-if="newSessions && (isClassAdmin || isTeachingAssistant)"
+              v-if="
+                classInfo &&
+                  !session.creating &&
+                  (isClassAdmin || isTeachingAssistant)
+              "
               v-on:click="editSession"
               >修改</b-button
             >
@@ -131,8 +167,8 @@
           v-if="session.showDescription"
           v-model="session.description"
           placeholder=""
-          rows="3"
-          max-rows="8"
+          rows="8"
+          max-rows="20"
           readonly
         ></b-form-textarea>
       </b-card-text>
@@ -143,7 +179,6 @@
 <script>
 import Parse from "parse";
 import { mapGetters } from "vuex";
-import { parseSessionIndex } from "../store/buddhaclass.module";
 
 export default {
   name: "ClassSession",
@@ -158,17 +193,19 @@ export default {
   data: function() {
     return {
       session: this.classSession.dummy
-        ? { creating: true, editing: true }
+        ? { creating: true, editing: true, submodules: [] }
         : this.initSession(),
-      sessionDropdownOptions: [],
-      editing: this.classSession.dummy
+      moduleDropdownOptions: [],
+      submoduleDropdownOptions: [],
+      editing: this.classSession.dummy,
+      canAddSubmodule: false
     };
   },
   computed: {
     ...mapGetters(["isClassAdmin", "isTeachingAssistant", "isStudent"])
   },
   mounted() {
-    this.buildSessionDropdownOptions();
+    this.refreshUI();
   },
   methods: {
     initSession() {
@@ -178,7 +215,7 @@ export default {
           ? this.classInfo.forApplication
           : this.forApplication,
         name: this.classSession.get("name"),
-        url: this.sessionDetails.submodules[0].url,
+        submodules: this.sessionDetails.submodules,
         description: this.classSession.get("description"),
         scheduledAt: this.classSession.get("scheduledAt"),
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
@@ -189,29 +226,103 @@ export default {
         materialState: this.toMaterialStateString(this.sessionDetails, 0)
       };
     },
-    buildSessionDropdownOptions() {
-      this.sessionDropdownOptions = [];
+    refreshUI() {
+      this.moduleDropdownOptions = [];
+      this.submoduleDropdownOptions = [];
       if (!this.editing) {
         return;
       }
-      if (this.classSession.dummy) {
-        this.sessionDropdownOptions = this.newSessions;
-      } else {
-        const currentSession = {
-          id: this.classSession.id,
-          name: this.classSession.get("name")
+      this.moduleDropdownOptions = this.classInfo.modules.map(e => {
+        return {
+          value: e.id,
+          text: e.name
         };
-        const order = parseSessionIndex(currentSession.name);
-        var currentSessionPushed = false;
-        for (var i = 0; i < this.newSessions.length; i++) {
-          const s = this.newSessions[i];
-          if (!currentSessionPushed && parseSessionIndex(s.name) > order) {
-            this.sessionDropdownOptions.push(currentSession);
-            currentSessionPushed = true;
-          }
-          this.sessionDropdownOptions.push(s);
+      });
+
+      const session = this.session;
+      console.log(`refreshUI - session.moduleId: ${session.moduleId}`);
+
+      var selectedModule;
+      for (var i = 0; i < this.classInfo.modules.length; i++) {
+        selectedModule = this.classInfo.modules[i];
+        if (!session.moduleId || session.moduleId == selectedModule.id) {
+          break;
         }
       }
+      if (!session.moduleId) {
+        session.moduleId = selectedModule.id;
+      }
+      console.log(`refreshUI - selectedModule: ${selectedModule.name}`);
+
+      this.submoduleDropdownOptions = selectedModule.newSubmodules;
+
+      if (!this.classSession.dummy) {
+        for (i = 0; i < this.sessionDetails.submodules.length; i++) {
+          const submodule = this.sessionDetails.submodules[i];
+          if (submodule.moduleId == selectedModule.id) {
+            this.submoduleDropdownOptions.push(submodule);
+          }
+        }
+      }
+      for (i = 0; i < this.session.submodules.length; i++) {
+        const submodule = this.session.submodules[i];
+        if (submodule.moduleId == selectedModule.id) {
+          this.submoduleDropdownOptions = this.submoduleDropdownOptions.filter(
+            e => {
+              return e.id != submodule.id;
+            }
+          );
+        }
+      }
+      if (this.submoduleDropdownOptions.length > 0) {
+        this.submoduleDropdownOptions.sort((s1, s2) => {
+          var a = s1.index;
+          var b = s2.index;
+          return a > b ? 1 : b > a ? -1 : 0;
+        });
+
+        this.session.submoduleId = this.submoduleDropdownOptions[0].id;
+        this.canAddSubmodule = true;
+      } else {
+        this.canAddSubmodule = false;
+      }
+      this.submoduleDropdownOptions = this.submoduleDropdownOptions.map(e => {
+        return {
+          value: e.id,
+          text: e.name
+        };
+      });
+      console.log(`refreshUI - submoduleId: ${this.session.submoduleId}`);
+    },
+    addSubmodule() {
+      const session = this.session;
+      console.log(
+        `addSubmodule - moduleId: ${session.moduleId} submoduleId: ${session.submoduleId}`
+      );
+
+      var selectedModule;
+      for (var i = 0; i < this.classInfo.modules.length; i++) {
+        selectedModule = this.classInfo.modules[i];
+        if (!session.moduleId || session.moduleId == selectedModule.id) {
+          break;
+        }
+      }
+
+      for (i = 0; i < selectedModule.newSubmodules.length; i++) {
+        const submodule = selectedModule.newSubmodules[i];
+        if (submodule.id == session.submoduleId) {
+          session.submodules.push(submodule);
+          if (!session.name) {
+            session.name = submodule.name;
+          }
+          break;
+        }
+      }
+      this.refreshUI();
+    },
+    removeSubmodule(index) {
+      this.session.submodules.splice(index, 1);
+      this.refreshUI();
     },
     toLocalDateTimeString(date) {
       const options = {
@@ -291,24 +402,6 @@ export default {
       }
 
       return `${chuanCheng}/${faBen}`;
-    },
-    addToGoogleCalendarUrl() {
-      var eventStart = this.session.scheduledAt;
-      var eventEnd = new Date();
-      eventEnd.setTime(eventStart.getTime() + 4 * 60 * 60 * 1000);
-      eventStart = eventStart
-        .toISOString()
-        .replace(/.000/g, "")
-        .replace(/:/g, "")
-        .replace(/-/g, "");
-      eventEnd = eventEnd
-        .toISOString()
-        .replace(/.000/g, "")
-        .replace(/:/g, "")
-        .replace(/-/g, "");
-      var url = `${this.session.name}&details=${this.session.description}`;
-      url = encodeURI(url);
-      return `https://www.google.com/calendar/render?action=TEMPLATE&text=${url}&dates=${eventStart}%2F${eventEnd}`;
     },
     attendanceButtonName() {
       const d = new Date();
@@ -393,7 +486,7 @@ export default {
     editSession() {
       this.session = this.initSession();
       this.editing = true;
-      this.buildSessionDropdownOptions();
+      this.refreshUI();
     },
     onReset(evt) {
       evt.preventDefault();
@@ -401,12 +494,12 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      const sessionId = this.session.id;
-      console.log(`sessionId: ${sessionId}`);
+      const session = this.session;
 
-      const classSession = this.classInfo.classSessions.filter(
-        e => e.id === sessionId
-      )[0];
+      if (!session.scheduledAt || session.submodules.length < 1) {
+        this.$dialog.alert("请输入上课时间和内容！");
+        return;
+      }
 
       const options = {
         okText: "确认",
@@ -415,26 +508,23 @@ export default {
       };
       const message = {
         title: this.classInfo.name,
-        body: `${
-          this.session.creating ? "创建新课" : "修改"
-        } 《${classSession.get("name")}》 @ ${this.toLocalDateString(
-          this.session.scheduledAt
-        )}？`
+        body: `${session.creating ? "创建新课" : "修改"} 《${
+          session.name
+        }》 @ ${this.toLocalDateString(session.scheduledAt)}？`
       };
 
-      const session = this.session;
-      session.oldId = this.classSession.id;
       var dt = new Date(session.scheduledAt);
-      dt.setHours(classSession.get("url").includes("rpsxl") ? 9 : 14); //TODO: allow setting time
+      dt.setHours(session.submodules[0].url.includes("rpsxl") ? 9 : 14); //TODO: allow setting time
       session.scheduledAt = dt;
       // console.log(`session.scheduledAt: ${session.scheduledAt}`);
+      session.classId = this.classInfo.id;
 
       const thisComponent = this;
 
       this.$dialog
         .confirm(message, options)
         .then(function(dialog) {
-          Parse.Cloud.run("class:updateClassSession", { session })
+          Parse.Cloud.run("class:updateClassSessionV2", { session })
             .then(result => {
               console.log(
                 `updateClassSession - result: ${JSON.stringify(result)}`
