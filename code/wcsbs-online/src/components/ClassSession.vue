@@ -85,7 +85,8 @@
             <b-button
               variant="warning"
               v-if="
-                classInfo &&
+                !forApplication &&
+                  classInfo &&
                   !session.creating &&
                   (isClassAdmin || isTeachingAssistant)
               "
@@ -110,7 +111,11 @@
         >
           <b-form-input readonly v-model="session.materialState"></b-form-input>
           <b-input-group-append>
-            <b-button variant="info" :href="session.url" target="_blank">
+            <b-button
+              variant="info"
+              :href="sessionDetails.submodules[0].url"
+              target="_blank"
+            >
               <b-icon icon="book"></b-icon>
             </b-button>
           </b-input-group-append>

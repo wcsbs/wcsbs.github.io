@@ -30,7 +30,9 @@
           >
           <b-button
             variant="warning"
-            v-if="isClassAdmin || isTeachingAssistant"
+            v-if="
+              !classInfo.forApplication && (isClassAdmin || isTeachingAssistant)
+            "
             @click="createSession"
             >{{ creatingSession ? "取消创建" : "创建新课" }}</b-button
           >
