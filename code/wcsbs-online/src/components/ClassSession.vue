@@ -215,7 +215,7 @@ export default {
           ? this.classInfo.forApplication
           : this.forApplication,
         name: this.classSession.get("name"),
-        submodules: this.sessionDetails.submodules,
+        submodules: [].concat(this.sessionDetails.submodules),
         description: this.classSession.get("description"),
         scheduledAt: this.classSession.get("scheduledAt"),
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
@@ -240,7 +240,6 @@ export default {
       });
 
       const session = this.session;
-      console.log(`refreshUI - session.moduleId: ${session.moduleId}`);
 
       var selectedModule;
       for (var i = 0; i < this.classInfo.modules.length; i++) {
@@ -292,7 +291,6 @@ export default {
           text: e.name
         };
       });
-      console.log(`refreshUI - submoduleId: ${this.session.submoduleId}`);
     },
     addSubmodule() {
       const session = this.session;
@@ -490,6 +488,7 @@ export default {
     },
     onReset(evt) {
       evt.preventDefault();
+      this.session = this.initSession();
       this.editing = false;
     },
     onSubmit(evt) {
