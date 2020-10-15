@@ -237,6 +237,7 @@ export default {
       if (!this.editing) {
         return;
       }
+
       this.moduleDropdownOptions = this.classInfo.modules.map(e => {
         return {
           value: e.id,
@@ -258,7 +259,9 @@ export default {
       }
       console.log(`refreshUI - selectedModule: ${selectedModule.name}`);
 
-      this.submoduleDropdownOptions = selectedModule.newSubmodules;
+      this.submoduleDropdownOptions = this.submoduleDropdownOptions.concat(
+        selectedModule.newSubmodules
+      );
 
       if (!this.classSession.dummy) {
         for (i = 0; i < this.sessionDetails.submodules.length; i++) {
@@ -286,10 +289,14 @@ export default {
         });
 
         this.session.submoduleId = this.submoduleDropdownOptions[0].id;
+        console.log(
+          `refreshUI - selectedSubmodule: ${this.submoduleDropdownOptions[0].name}`
+        );
         this.canAddSubmodule = true;
       } else {
         this.canAddSubmodule = false;
       }
+
       this.submoduleDropdownOptions = this.submoduleDropdownOptions.map(e => {
         return {
           value: e.id,
