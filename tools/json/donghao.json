@@ -1,0 +1,15 @@
+{
+  "function": "admin:upgradeClassSessionToV2",
+  "user": {
+    "id": "P59KfjAwDT",
+    "name": "黄东浩",
+    "username": "donghao",
+    "phone": "+65 9733 6176",
+    "email": "donghao.huang@gmail.com",
+    "roles": [
+      "StudentUser",
+      "B4aAdminUser",
+      "TeachingAssistantUser"
+    ]
+  }
+}

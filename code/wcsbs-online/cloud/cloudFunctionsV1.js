@@ -31,13 +31,15 @@ Parse.Cloud.define(
   }
 );
 
-Parse.Cloud.define("user:getRoles", async ({ user }) => {
+const loadUserRoles = async function(parseUser) {
   var userRoleQuery = new Parse.Query(Parse.Role);
-  userRoleQuery.equalTo("users", user);
+  userRoleQuery.equalTo("users", parseUser);
   const roles = await userRoleQuery.find(MASTER_KEY);
-  const rolesToReturn =
-    roles.length > 0 ? roles.map(r => r.get("name")) : ["StudentUser"];
+  return roles.length > 0 ? roles.map(r => r.get("name")) : ["StudentUser"];
+};
 
+Parse.Cloud.define("user:getRoles", async ({ user }) => {
+  const rolesToReturn = await loadUserRoles(user);
   return {
     id: user.id,
     name: user.get("name"),
@@ -57,9 +59,9 @@ Parse.Cloud.define(
 
     var userQuery = new Parse.Query(Parse.User);
     userQuery.ascending("name");
-    const results = await userQuery.find(MASTER_KEY);
-    const usersCount = results.length;
-    const users = results.map(user => {
+    const parseUsers = await userQuery.find(MASTER_KEY);
+    const usersCount = parseUsers.length;
+    const users = parseUsers.map(user => {
       return {
         id: user.id,
         name: user.get("name"),
@@ -68,6 +70,9 @@ Parse.Cloud.define(
         email: user.get("email")
       };
     });
+    for (var i = 0; i < parseUsers.length; i++) {
+      users[i].roles = await loadUserRoles(parseUsers[i]);
+    }
     return { users, usersCount };
   }
 );
@@ -80,22 +85,19 @@ Parse.Cloud.define(
 
     var userQuery = new Parse.Query(Parse.User);
     userQuery.equalTo("objectId", userSlug);
-    userWithRoles = await userQuery.first(MASTER_KEY);
+    var parseUser = await userQuery.first(MASTER_KEY);
 
-    var userRoleQuery = new Parse.Query(Parse.Role);
-    userRoleQuery.equalTo("users", userWithRoles);
-    const roles = await userRoleQuery.find(MASTER_KEY);
+    const roles = await loadUserRoles(parseUser);
 
-    userWithRoles = {
-      id: userWithRoles.id,
-      name: userWithRoles.get("name"),
-      username: userWithRoles.get("username"),
-      phone: userWithRoles.get("phone"),
-      email: userWithRoles.get("email"),
-      state: userWithRoles.get("state"),
-      roles: roles.map(r => r.get("name"))
+    return {
+      id: parseUser.id,
+      name: parseUser.get("name"),
+      username: parseUser.get("username"),
+      phone: parseUser.get("phone"),
+      email: parseUser.get("email"),
+      state: parseUser.get("state"),
+      roles: roles
     };
-    return userWithRoles;
   }
 );
 
