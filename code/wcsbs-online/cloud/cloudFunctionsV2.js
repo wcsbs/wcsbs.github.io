@@ -270,6 +270,29 @@ const loadClassSessionDetails = async function(
   }
 };
 
+const loadUserRoles = async function(parseUser) {
+  var userRoleQuery = new Parse.Query(Parse.Role);
+  userRoleQuery.equalTo("users", parseUser);
+  const roles = await userRoleQuery.find(MASTER_KEY);
+  return roles.length > 0 ? roles.map(r => r.get("name")) : ["StudentUser"];
+};
+
+const loadClassTeachers = async function(parseClass) {
+  const teachers = [];
+  var query = parseClass.relation("classAdminUsers").query();
+  var classAdminUsers = await query.find();
+  for (var i = 0; i < classAdminUsers.length; i++) {
+    const parseUser = classAdminUsers[i];
+    const roles = await loadUserRoles(parseUser);
+
+    if (!roles.includes("StudentUser")) {
+      teachers.push(parseUser.get("name"));
+    }
+  }
+
+  return teachers;
+};
+
 const loadDashboardV2 = async function(parseUser, forStudent) {
   const userId = parseUser ? parseUser._getId() : undefined;
   const dashboard = forStudent
@@ -309,9 +332,7 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
     };
     enrolledClassList.push(parseClass._getId());
 
-    query = parseClass.relation("classAdminUsers").query();
-    const classAdminUsers = await query.find();
-    classInfo.teachers = classAdminUsers.map(u => u.get("name"));
+    classInfo.teachers = await loadClassTeachers(parseClass);
 
     query = parseClass.relation("sessionsV2").query();
     var d = new Date();
@@ -354,25 +375,18 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
   if (forStudent) {
     query = new Parse.Query("Class");
     query.equalTo("openForApplication", true);
-    // query.exclude("objectId", enrolledClassList); TODO: how to do SQL NOT IN [a, b, c]
+    query.notContainedIn("objectId", enrolledClassList);
     parseClasses = await query.find();
 
     for (i = 0; i < parseClasses.length; i++) {
       const parseClass = parseClasses[i];
-      const id = parseClass._getId();
-      if (enrolledClassList.includes(id)) {
-        continue;
-      }
       const classInfo = {
-        id: id,
+        id: parseClass.id,
         name: parseClass.get("name"),
         url: parseClass.get("url")
       };
 
-      query = parseClass.relation("classAdminUsers").query();
-      const classAdminUsers = await query.find();
-      classInfo.teachers = classAdminUsers.map(u => u.get("name"));
-
+      classInfo.teachers = await loadClassTeachers(parseClass);
       dashboard.newClasses.push(classInfo);
     }
   }

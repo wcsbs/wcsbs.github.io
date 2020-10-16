@@ -43,28 +43,50 @@
                     {
                         "attendance": {
                             "attendance": 0,
-                            "reportedAt": "2020-10-14T07:18:50.167Z"
+                            "studyRecords": [
+                                {
+                                    "lineage": 2,
+                                    "textbook": 2
+                                }
+                            ],
+                            "reportedAt": "2020-10-16T00:23:15.491Z"
                         },
                         "submodules": [
                             {
                                 "id": "LhkYPS4GMI",
+                                "index": 42,
                                 "name": "入行论 第42课",
                                 "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/203.html",
-                                "studyRecord": {}
+                                "moduleId": "t3WZcHjZcw",
+                                "studyRecord": {
+                                    "lineage": 2,
+                                    "textbook": 2
+                                }
                             }
                         ]
                     },
                     {
                         "attendance": {
                             "attendance": 1,
-                            "reportedAt": "2020-10-14T07:18:50.211Z"
+                            "studyRecords": [
+                                {
+                                    "lineage": 1,
+                                    "textbook": 1
+                                }
+                            ],
+                            "reportedAt": "2020-10-16T00:23:15.543Z"
                         },
                         "submodules": [
                             {
                                 "id": "ujLY3AsBcv",
+                                "index": 41,
                                 "name": "入行论 第41课",
                                 "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/201.html",
-                                "studyRecord": {}
+                                "moduleId": "t3WZcHjZcw",
+                                "studyRecord": {
+                                    "lineage": 1,
+                                    "textbook": 1
+                                }
                             }
                         ]
                     }
@@ -73,7 +95,7 @@
                     {
                         "name": "观音心咒",
                         "createdAt": "2020-08-27T08:54:29.964Z",
-                        "updatedAt": "2020-10-14T01:28:09.306Z",
+                        "updatedAt": "2020-10-15T15:48:45.577Z",
                         "description": "19入行论观音心咒每日共修顶礼上师三宝！各位师兄好！从2020年2月24号起， 2019入行论中组观音心咒的共修就正式开始了！时间是每天早晨五点半到七点。2月24日也是铁鼠年藏历新年正月初一神变节，神变月的开端。神变月是吾等本师释迦牟尼佛降伏外道六本师、大力显扬佛法圣教的殊妙吉祥佳日，众多佛教经论中都曾提到过神变月的殊胜功德。我们的观音心咒共修正好肇始于神变月的开端，这真是无比胜妙的缘起！观音心咒是主修入行论学员的必修课。我们也鼓励学修任务不是很重的旁听组学员也尽量参与。一元复始，万象更新，唯愿从此日日勤修不辍！随喜道友们以三殊胜参加共修！预祝师兄们法喜充满、日日增上!🙏🙏🙏",
                         "counts": {
                             "__type": "Relation",
@@ -88,8 +110,8 @@
                 ],
                 "counts": [
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.248Z"
+                        "accumulatedCount": 72300,
+                        "reportedAt": "2020-10-16T00:23:15.581Z"
                     }
                 ],
                 "practiceSubmodules": [],
@@ -97,10 +119,10 @@
                     "真诚"
                 ],
                 "classSnapshot": {
-                    "studentCount": 3,
-                    "sessionScheduled": 42,
+                    "studentCount": 4,
+                    "sessionScheduled": 44,
                     "sessionCompleted": 41,
-                    "reportedAt": "2020-10-14T07:18:50.283Z"
+                    "reportedAt": "2020-10-16T00:23:15.622Z"
                 }
             },
             {
@@ -147,40 +169,80 @@
                     {
                         "attendance": {
                             "attendance": 0,
-                            "reportedAt": "2020-10-14T07:18:50.319Z"
+                            "studyRecords": [
+                                {
+                                    "lineage": 1,
+                                    "textbook": 1
+                                },
+                                {
+                                    "lineage": 0,
+                                    "textbook": 0
+                                }
+                            ],
+                            "reportedAt": "2020-10-16T00:23:15.676Z"
                         },
                         "submodules": [
                             {
                                 "id": "AE22HzW3TC",
+                                "index": 40,
                                 "name": "前行广释 第40课",
                                 "url": "../dymqx/qxgs/8322.html",
-                                "studyRecord": {}
+                                "moduleId": "xEQHxK8hlM",
+                                "studyRecord": {
+                                    "lineage": 1,
+                                    "textbook": 1
+                                }
                             },
                             {
                                 "id": "0GIzL3xzSe",
+                                "index": 23,
                                 "name": "前行实修法第23修法",
                                 "url": "../dymqx/qxsx/10124.html",
-                                "studyRecord": {}
+                                "moduleId": "ZwfTADbqUK",
+                                "studyRecord": {
+                                    "lineage": 0,
+                                    "textbook": 0
+                                }
                             }
                         ]
                     },
                     {
                         "attendance": {
                             "attendance": 0,
-                            "reportedAt": "2020-10-14T07:18:50.373Z"
+                            "studyRecords": [
+                                {
+                                    "lineage": 0,
+                                    "textbook": 0
+                                },
+                                {
+                                    "lineage": 0,
+                                    "textbook": 0
+                                }
+                            ],
+                            "reportedAt": "2020-10-16T00:23:15.747Z"
                         },
                         "submodules": [
                             {
                                 "id": "DB4t9EWoLY",
+                                "index": 39,
                                 "name": "前行广释 第39课",
                                 "url": "../dymqx/qxgs/8320.html",
-                                "studyRecord": {}
+                                "moduleId": "xEQHxK8hlM",
+                                "studyRecord": {
+                                    "lineage": 0,
+                                    "textbook": 0
+                                }
                             },
                             {
                                 "id": "Vlw1FFcGeD",
+                                "index": 22,
                                 "name": "前行实修法第22修法",
                                 "url": "../dymqx/qxsx/10122.html",
-                                "studyRecord": {}
+                                "moduleId": "ZwfTADbqUK",
+                                "studyRecord": {
+                                    "lineage": 0,
+                                    "textbook": 0
+                                }
                             }
                         ]
                     }
@@ -189,7 +251,7 @@
                     {
                         "name": "前行实修法",
                         "createdAt": "2020-10-07T00:50:12.507Z",
-                        "updatedAt": "2020-10-14T01:26:42.321Z",
+                        "updatedAt": "2020-10-14T09:04:36.988Z",
                         "index": 1,
                         "moduleId": "ZwfTADbqUK",
                         "counts": {
@@ -295,32 +357,32 @@
                 ],
                 "counts": [
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.433Z"
+                        "accumulatedCount": 59,
+                        "reportedAt": "2020-10-16T00:23:15.804Z"
                     },
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.454Z"
+                        "accumulatedCount": 1300,
+                        "reportedAt": "2020-10-16T00:23:15.853Z"
                     },
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.469Z"
+                        "accumulatedCount": 0,
+                        "reportedAt": "2020-10-16T00:23:15.878Z"
                     },
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.485Z"
+                        "accumulatedCount": 0,
+                        "reportedAt": "2020-10-16T00:23:15.900Z"
                     },
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.504Z"
+                        "accumulatedCount": 0,
+                        "reportedAt": "2020-10-16T00:23:15.921Z"
                     },
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.518Z"
+                        "accumulatedCount": 0,
+                        "reportedAt": "2020-10-16T00:23:15.960Z"
                     },
                     {
-                        "accumulatedCount": 1626,
-                        "reportedAt": "2020-10-14T07:18:50.532Z"
+                        "accumulatedCount": 0,
+                        "reportedAt": "2020-10-16T00:23:15.984Z"
                     }
                 ],
                 "practiceSubmodules": [],
@@ -328,10 +390,10 @@
                     "真诚"
                 ],
                 "classSnapshot": {
-                    "studentCount": 3,
-                    "sessionScheduled": 23,
-                    "sessionCompleted": 18,
-                    "reportedAt": "2020-10-14T07:18:50.559Z"
+                    "studentCount": 2,
+                    "sessionScheduled": 24,
+                    "sessionCompleted": 19,
+                    "reportedAt": "2020-10-16T00:23:16.026Z"
                 }
             }
         ]

@@ -52,7 +52,9 @@ export default {
       return `${this.currentUser.name}的闻思修`;
     },
     classAdminDashboardTitle() {
-      return `${this.currentUser.name}辅导的课程`;
+      return `${this.currentUser.name}${
+        this.isStudent ? "管理" : "辅导"
+      }的课程`;
     }
   },
   computed: {
@@ -60,7 +62,8 @@ export default {
       "home",
       "currentUser",
       "isLoadingDashboards",
-      "isSystemAdmin"
+      "isSystemAdmin",
+      "isStudent"
     ])
   },
   beforeRouteEnter(to, from, next) {
