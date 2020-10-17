@@ -285,7 +285,7 @@ const loadClassTeachers = async function(parseClass) {
     const parseUser = classAdminUsers[i];
     const roles = await loadUserRoles(parseUser);
 
-    if (!roles.includes("StudentUser")) {
+    if (roles.includes("TeacherUser")) {
       teachers.push(parseUser.get("name"));
     }
   }
@@ -615,6 +615,7 @@ Parse.Cloud.define(
       id: parseClass._getId(),
       name: parseClass.get("name"),
       url: parseClass.get("url"),
+      singleSubmodule: parseClass.get("singleSubmodule"),
       forApplication: forApplication,
       forAdmin: forAdmin,
       classSessions: [],

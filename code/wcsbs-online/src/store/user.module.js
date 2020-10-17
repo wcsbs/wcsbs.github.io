@@ -184,6 +184,7 @@ const mutations = {
         const array = [
           { name: "B4aAdminUser", displayName: "系统管理员" },
           { name: "ClassAdminUser", displayName: "学修管理员" },
+          { name: "TeacherUser", displayName: "辅导员" },
           { name: "TeachingAssistantUser", displayName: "学修助理" },
           { name: "StudentUser", displayName: "学员" }
         ];

@@ -1,10 +1,42 @@
-class:fetchSessionsV2 - classInfo: {
+{
     "id": "7QFVjl9Av0",
     "name": "2019级预科系入行班",
     "url": "../rpsxl",
+    "singleSubmodule": true,
     "forApplication": false,
     "forAdmin": false,
     "classSessions": [
+        {
+            "scheduledAt": {
+                "__type": "Date",
+                "iso": "2020-10-31T01:00:00.000Z"
+            },
+            "content": {
+                "submodules": [
+                    "6Lpf86nyal"
+                ]
+            },
+            "name": "入行论 第44课",
+            "createdAt": "2020-10-15T06:33:18.287Z",
+            "updatedAt": "2020-10-15T06:33:18.287Z",
+            "objectId": "3BL91BcCiv"
+        },
+        {
+            "scheduledAt": {
+                "__type": "Date",
+                "iso": "2020-10-24T01:00:00.000Z"
+            },
+            "content": {
+                "submodules": [
+                    "uWCg0j6uB2"
+                ]
+            },
+            "name": "入行论 第43课",
+            "createdAt": "2020-10-15T05:08:23.589Z",
+            "updatedAt": "2020-10-17T10:29:45.349Z",
+            "description": "19届入行论第三学期第二十一周学习安排\n\n顶礼上师三宝！\n\n各位师兄好！\n\n本周学习时间：10/24/2020\n\n 《入行论释·善说海》讲记 第四十三节课\n\n学习资料网址：\n视频：\nhttps://www.youtube.com/watch?v=_ucz9mlKJD0&list=PLHUvfASP8AiyBGkbhutmej3gPZddHpvv9&index=8\n\n入行论所有视频：\nhttps://www.youtube.com/playlist?list=PLHUvfASP8AiyBGkbhutmej3gPZddHpvv9\n\n入行论法本和法师辅导资料：\nhttps://1drv.ms/f/s!AiI8B6pnZ5UkgZMdQu8DlKgqdLnneQ\n\n* step1、请各位师兄自己在家如理如法看/听视频，读课本。\n\n* step2、思维以下题目：\n\n 《入行论广解》讲记 第四十三节课  \n\n第四十三节课\n思考题\n1.有些人坐的是高级轿车，住的是星级宾馆，吃的是人间美味；而有些人幕天席地，以山洞为家，以山泉野果为食，天天修持佛法精要，这两种生活哪种快乐？为什么？李淑勤师兄\n\n2.地狱中的阎罗狱卒以及各种刑具、动物等都是真实存在的吗？为什么？罗良玉师兄\n\n3.什么才是真正顶天立地的大丈夫？请说明你的理由。许乃文师兄\n\n\n* step3、参加集体共修\n\n集体共修计入考勤，请师兄们安排好时间，若不能出席请提前向组长请假。\n\n日期： 10月24 日（星期六）\n\n具体安排：\n\n播课員 : 照伢 师兄\n\n请大家登录以下的网站https://zoom.us/j/2019060309， 执行以下步骤接下来按 Join Meeting\n\n看到Please enter your meeting password, 输入1234\n按 Call via Device Audio\n按 participant\n选择你的用户名， 按Rename， 输入你的名字\n9:00～9:08供灯\n9:08～9:30课前诵\n9:30～12:45  第四十二课复述， 讨论《入行论释·善说海》讲记 第四十三节课\n12:45～1:00 课后诵\n\n随喜道友们以三殊胜参加共修！预祝师兄们法喜充满、日日增上!祝师兄们法喜充满、日日增上!",
+            "objectId": "ykHsf10MCS"
+        },
         {
             "scheduledAt": {
                 "__type": "Date",
@@ -683,19 +715,51 @@ class:fetchSessionsV2 - classInfo: {
             "attendance": {},
             "submodules": [
                 {
+                    "id": "6Lpf86nyal",
+                    "index": 44,
+                    "name": "入行论 第44课",
+                    "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/207.html",
+                    "moduleId": "t3WZcHjZcw",
+                    "studyRecord": {}
+                }
+            ]
+        },
+        {
+            "attendance": {},
+            "submodules": [
+                {
+                    "id": "uWCg0j6uB2",
+                    "index": 43,
+                    "name": "入行论 第43课",
+                    "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/205.html",
+                    "moduleId": "t3WZcHjZcw",
+                    "studyRecord": {}
+                }
+            ]
+        },
+        {
+            "attendance": {
+                "attendance": true,
+                "onLeave": false
+            },
+            "submodules": [
+                {
                     "id": "LhkYPS4GMI",
                     "index": 42,
                     "name": "入行论 第42课",
                     "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/203.html",
                     "moduleId": "t3WZcHjZcw",
                     "studyRecord": {
-                        "lineage": true
+                        "lineage": true,
+                        "textbook": true
                     }
                 }
             ]
         },
         {
-            "attendance": {},
+            "attendance": {
+                "attendance": false
+            },
             "submodules": [
                 {
                     "id": "ujLY3AsBcv",
@@ -1233,20 +1297,6 @@ class:fetchSessionsV2 - classInfo: {
             "id": "t3WZcHjZcw",
             "name": "入菩萨行论",
             "newSubmodules": [
-                {
-                    "id": "uWCg0j6uB2",
-                    "index": 43,
-                    "name": "入行论 第43课",
-                    "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/205.html",
-                    "moduleId": "t3WZcHjZcw"
-                },
-                {
-                    "id": "6Lpf86nyal",
-                    "index": 44,
-                    "name": "入行论 第44课",
-                    "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/207.html",
-                    "moduleId": "t3WZcHjZcw"
-                },
                 {
                     "id": "0fievgi7u5",
                     "index": 45,

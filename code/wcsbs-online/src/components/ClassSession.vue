@@ -44,29 +44,31 @@
           >
         </b-input-group-append>
       </b-input-group>
-      <b-input-group
-        v-for="(submodule, index) in session.submodules"
-        :key="submodule.id + index"
-        prepend="上课内容："
-        class="mt-3"
-      >
-        <b-form-input
-          readonly
-          :value="`(${index + 1}) ${submodule.name}`"
-        ></b-form-input>
-        <b-input-group-append>
-          <b-button variant="warning" v-on:click="removeSubmodule(index)"
-            >删除</b-button
-          >
-        </b-input-group-append>
-      </b-input-group>
-      <b-input-group
-        v-if="session.submodules.length > 0"
-        prepend="上课名称："
-        class="mt-3"
-      >
-        <b-form-input v-model="session.name"></b-form-input>
-      </b-input-group>
+      <div v-if="!classInfo.singleSubmodule">
+        <b-input-group
+          v-for="(submodule, index) in session.submodules"
+          :key="submodule.id + index"
+          prepend="上课内容："
+          class="mt-3"
+        >
+          <b-form-input
+            readonly
+            :value="`(${index + 1}) ${submodule.name}`"
+          ></b-form-input>
+          <b-input-group-append>
+            <b-button variant="warning" v-on:click="removeSubmodule(index)"
+              >删除</b-button
+            >
+          </b-input-group-append>
+        </b-input-group>
+        <b-input-group
+          v-if="session.submodules.length > 0"
+          prepend="上课名称："
+          class="mt-3"
+        >
+          <b-form-input v-model="session.name"></b-form-input>
+        </b-input-group>
+      </div>
       <b-form-textarea
         v-model="session.description"
         placeholder="输入上课通知"
@@ -268,19 +270,24 @@ export default {
           const submodule = this.sessionDetails.submodules[i];
           if (submodule.moduleId == selectedModule.id) {
             this.submoduleDropdownOptions.push(submodule);
+            console.log(`refreshUI - pushed: ${submodule.name}`);
           }
         }
       }
-      for (i = 0; i < this.session.submodules.length; i++) {
-        const submodule = this.session.submodules[i];
-        if (submodule.moduleId == selectedModule.id) {
-          this.submoduleDropdownOptions = this.submoduleDropdownOptions.filter(
-            e => {
-              return e.id != submodule.id;
-            }
-          );
+
+      if (!this.classInfo.singleSubmodule) {
+        for (i = 0; i < this.session.submodules.length; i++) {
+          const submodule = this.session.submodules[i];
+          if (submodule.moduleId == selectedModule.id) {
+            this.submoduleDropdownOptions = this.submoduleDropdownOptions.filter(
+              e => {
+                return e.id != submodule.id;
+              }
+            );
+          }
         }
       }
+
       if (this.submoduleDropdownOptions.length > 0) {
         this.submoduleDropdownOptions.sort((s1, s2) => {
           var a = s1.index;
@@ -288,11 +295,14 @@ export default {
           return a > b ? 1 : b > a ? -1 : 0;
         });
 
-        this.session.submoduleId = this.submoduleDropdownOptions[0].id;
-        console.log(
-          `refreshUI - selectedSubmodule: ${this.submoduleDropdownOptions[0].name}`
-        );
-        this.canAddSubmodule = true;
+        const selectedSubmodule =
+          this.classInfo.singleSubmodule && !this.classSession.dummy
+            ? this.session.submodules[0]
+            : this.submoduleDropdownOptions[0];
+        console.log(`refreshUI - selectedSubmodule: ${selectedSubmodule.name}`);
+
+        this.session.submoduleId = selectedSubmodule.id;
+        this.canAddSubmodule = !this.classInfo.singleSubmodule;
       } else {
         this.canAddSubmodule = false;
       }
@@ -322,13 +332,15 @@ export default {
         const submodule = selectedModule.newSubmodules[i];
         if (submodule.id == session.submoduleId) {
           session.submodules.push(submodule);
-          if (!session.name) {
+          if (!session.name || this.classInfo.singleSubmodule) {
             session.name = submodule.name;
           }
           break;
         }
       }
-      this.refreshUI();
+      if (!this.classInfo.singleSubmodule) {
+        this.refreshUI();
+      }
     },
     removeSubmodule(index) {
       this.session.submodules.splice(index, 1);
@@ -506,6 +518,14 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       const session = this.session;
+
+      if (this.classInfo.singleSubmodule) {
+        if (this.session.submodules.length > 0) {
+          this.session.submodules.splice(0, 1);
+        }
+        this.addSubmodule();
+      }
+      console.log(`session.submodules: ${JSON.stringify(session.submodules)}`);
 
       if (!session.scheduledAt || session.submodules.length < 1) {
         this.$dialog.alert("请输入上课时间和内容！");
