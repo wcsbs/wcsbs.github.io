@@ -14,9 +14,6 @@
           <b-button v-if="!session.creating" type="reset" variant="warning">
             <b-icon icon="x-circle"></b-icon>
           </b-button>
-          <b-button type="submit" variant="success">
-            <b-icon icon="check-circle"></b-icon>
-          </b-button>
         </b-input-group-append>
       </b-input-group>
       <b-input-group
@@ -36,6 +33,9 @@
           :options="submoduleDropdownOptions"
         ></b-form-select>
         <b-input-group-append>
+          <b-button type="submit" variant="success">
+            <b-icon icon="check-circle"></b-icon>
+          </b-button>
           <b-button
             v-if="canAddSubmodule"
             variant="warning"
@@ -67,6 +67,33 @@
           class="mt-3"
         >
           <b-form-input v-model="session.name"></b-form-input>
+        </b-input-group>
+      </div>
+      <div v-if="!session.creating">
+        <b-input-group prepend="材料链接：" type="url" class="mt-3">
+          <b-form-input v-model="session.materialUrl"></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="材料名称：" class="mt-3">
+          <b-form-input v-model="session.materialName"></b-form-input>
+          <b-button variant="warning" v-on:click="addMaterial()"
+            >加入上课材料</b-button
+          >
+        </b-input-group>
+        <b-input-group
+          v-for="(material, index) in session.materials"
+          :key="material.url + index"
+          prepend="上课材料："
+          class="mt-3"
+        >
+          <b-form-input
+            readonly
+            :value="`(${index + 1}) ${material.name}`"
+          ></b-form-input>
+          <b-input-group-append>
+            <b-button variant="warning" v-on:click="removeMaterial(index)"
+              >删除</b-button
+            >
+          </b-input-group-append>
         </b-input-group>
       </div>
       <b-form-textarea
@@ -111,7 +138,7 @@
           prepend="课前学习："
           class="mt-3"
         >
-          <b-form-input readonly v-model="session.materialState"></b-form-input>
+          <b-form-input readonly v-model="session.prestudyState"></b-form-input>
           <b-input-group-append>
             <b-button
               variant="info"
@@ -133,7 +160,7 @@
           <b-input-group prepend="课前学习：" class="mt-3">
             <b-form-input
               readonly
-              v-model="session.materialState"
+              :value="toPrestudyStateString(sessionDetails, index)"
             ></b-form-input>
             <b-input-group-append>
               <b-button variant="info" :href="submodule.url" target="_blank">
@@ -160,24 +187,41 @@
             >
             <b-button
               variant="info"
-              v-on:click="session.showDescription = !session.showDescription"
+              v-on:click="session.showMoreDetails = !session.showMoreDetails"
             >
               <b-icon
-                v-if="session.showDescription"
+                v-if="session.showMoreDetails"
                 icon="chevron-double-up"
               ></b-icon>
               <b-icon v-else icon="chevron-double-down"></b-icon>
             </b-button>
           </b-input-group-append>
         </b-input-group>
-        <b-form-textarea
-          v-if="session.showDescription"
-          v-model="session.description"
-          placeholder=""
-          rows="8"
-          max-rows="20"
-          readonly
-        ></b-form-textarea>
+        <div v-if="session.showMoreDetails">
+          <b-input-group
+            v-for="(material, index) in session.materials"
+            :key="material.url + index"
+            prepend="上课材料："
+            class="mt-3"
+          >
+            <b-form-input
+              readonly
+              :value="`(${index + 1}) ${material.name}`"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button variant="info" :href="material.url" target="_blank">
+                <b-icon icon="book"></b-icon>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <b-form-textarea
+            v-model="session.description"
+            placeholder=""
+            rows="8"
+            max-rows="20"
+            readonly
+          ></b-form-textarea>
+        </div>
       </b-card-text>
     </b-card>
   </div>
@@ -223,14 +267,17 @@ export default {
           : this.forApplication,
         name: this.classSession.get("name"),
         submodules: [].concat(this.sessionDetails.submodules),
+        materials: this.classSession.get("content").materials
+          ? [].concat(this.classSession.get("content").materials)
+          : [],
         description: this.classSession.get("description"),
         scheduledAt: this.classSession.get("scheduledAt"),
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(
           this.classSession.get("scheduledAt")
         ),
-        showDescription: false,
+        showMoreDetails: false,
         attendanceState: this.toAttendanceStateString(this.sessionDetails),
-        materialState: this.toMaterialStateString(this.sessionDetails, 0)
+        prestudyState: this.toPrestudyStateString(this.sessionDetails, 0)
       };
     },
     refreshUI() {
@@ -321,6 +368,8 @@ export default {
       );
 
       var selectedModule;
+      var selectedSubmodule;
+
       for (var i = 0; i < this.classInfo.modules.length; i++) {
         selectedModule = this.classInfo.modules[i];
         if (!session.moduleId || session.moduleId == selectedModule.id) {
@@ -328,23 +377,48 @@ export default {
         }
       }
 
-      for (i = 0; i < selectedModule.newSubmodules.length; i++) {
-        const submodule = selectedModule.newSubmodules[i];
+      for (i = 0; i < this.sessionDetails.submodules.length; i++) {
+        const submodule = this.sessionDetails.submodules[i];
         if (submodule.id == session.submoduleId) {
-          session.submodules.push(submodule);
-          if (!session.name || this.classInfo.singleSubmodule) {
-            session.name = submodule.name;
-          }
+          selectedSubmodule = submodule;
           break;
         }
       }
+      if (!selectedSubmodule) {
+        for (i = 0; i < selectedModule.newSubmodules.length; i++) {
+          const submodule = selectedModule.newSubmodules[i];
+          if (submodule.id == session.submoduleId) {
+            selectedSubmodule = submodule;
+            break;
+          }
+        }
+      }
+      session.submodules.push(selectedSubmodule);
+      if (!session.name || this.classInfo.singleSubmodule) {
+        session.name = selectedSubmodule.name;
+      }
       if (!this.classInfo.singleSubmodule) {
         this.refreshUI();
+      } else {
+        console.log(
+          `addSubmodule - selectedModule: ${selectedModule.name} selectedSubmodule: ${selectedSubmodule.name}`
+        );
       }
     },
     removeSubmodule(index) {
       this.session.submodules.splice(index, 1);
       this.refreshUI();
+    },
+    addMaterial() {
+      this.session.materials.push({
+        name: this.session.materialName,
+        url: this.session.materialUrl
+      });
+      this.session.materialName = "";
+      this.session.materialUrl = "";
+    },
+    removeMaterial(index) {
+      this.session.materials.splice(index, 1);
     },
     toLocalDateTimeString(date) {
       const options = {
@@ -403,7 +477,7 @@ export default {
 
       return "未报考勤";
     },
-    toMaterialStateString(sessionDetails, index) {
+    toPrestudyStateString(sessionDetails, index) {
       if (this.forApplication) {
         return "请在课前看完传承/法本";
       }
@@ -517,7 +591,6 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      const session = this.session;
 
       if (this.classInfo.singleSubmodule) {
         if (this.session.submodules.length > 0) {
@@ -525,6 +598,7 @@ export default {
         }
         this.addSubmodule();
       }
+      const session = this.session;
       console.log(`session.submodules: ${JSON.stringify(session.submodules)}`);
 
       if (!session.scheduledAt || session.submodules.length < 1) {

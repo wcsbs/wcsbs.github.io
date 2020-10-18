@@ -671,7 +671,7 @@ Parse.Cloud.define(
     classSession.set("description", session.description);
 
     const submodules = session.submodules.map(e => e.id);
-    classSession.set("content", { submodules });
+    classSession.set("content", { submodules, materials: session.materials });
 
     classSession = await classSession.save(null, MASTER_KEY);
     const result = { classSessionId: classSession.id };

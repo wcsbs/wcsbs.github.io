@@ -9,16 +9,41 @@
         {
             "scheduledAt": {
                 "__type": "Date",
+                "iso": "2020-11-06T01:00:00.000Z"
+            },
+            "content": {
+                "submodules": [
+                    "0fievgi7u5"
+                ]
+            },
+            "name": "入行论 第45课",
+            "createdAt": "2020-10-17T15:33:21.788Z",
+            "updatedAt": "2020-10-17T15:47:13.664Z",
+            "objectId": "uo0bA6tFft"
+        },
+        {
+            "scheduledAt": {
+                "__type": "Date",
                 "iso": "2020-10-31T01:00:00.000Z"
             },
             "content": {
                 "submodules": [
                     "6Lpf86nyal"
+                ],
+                "materials": [
+                    {
+                        "name": "b",
+                        "url": "a"
+                    },
+                    {
+                        "name": "e",
+                        "url": "d"
+                    }
                 ]
             },
             "name": "入行论 第44课",
             "createdAt": "2020-10-15T06:33:18.287Z",
-            "updatedAt": "2020-10-15T06:33:18.287Z",
+            "updatedAt": "2020-10-18T04:55:18.649Z",
             "objectId": "3BL91BcCiv"
         },
         {
@@ -715,6 +740,19 @@
             "attendance": {},
             "submodules": [
                 {
+                    "id": "0fievgi7u5",
+                    "index": 45,
+                    "name": "入行论 第45课",
+                    "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/209.html",
+                    "moduleId": "t3WZcHjZcw",
+                    "studyRecord": {}
+                }
+            ]
+        },
+        {
+            "attendance": {},
+            "submodules": [
+                {
                     "id": "6Lpf86nyal",
                     "index": 44,
                     "name": "入行论 第44课",
@@ -1297,13 +1335,6 @@
             "id": "t3WZcHjZcw",
             "name": "入菩萨行论",
             "newSubmodules": [
-                {
-                    "id": "0fievgi7u5",
-                    "index": 45,
-                    "name": "入行论 第45课",
-                    "url": "../rpsxl/%E4%B8%8A%E5%B8%88%E8%AE%B2%E8%AE%B0/209.html",
-                    "moduleId": "t3WZcHjZcw"
-                },
                 {
                     "id": "J51dOBC1GW",
                     "index": 46,
