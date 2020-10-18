@@ -33,15 +33,15 @@
           :options="submoduleDropdownOptions"
         ></b-form-select>
         <b-input-group-append>
-          <b-button type="submit" variant="success">
-            <b-icon icon="check-circle"></b-icon>
-          </b-button>
           <b-button
             v-if="canAddSubmodule"
             variant="warning"
             v-on:click="addSubmodule()"
             >加入上课内容</b-button
           >
+          <b-button type="submit" variant="success">
+            <b-icon icon="check-circle"></b-icon>
+          </b-button>
         </b-input-group-append>
       </b-input-group>
       <div v-if="!classInfo.singleSubmodule">
