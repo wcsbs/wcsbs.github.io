@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "wcsbs"
+    },
+    "wcsbs": {
+      "applicationId": "ac8UZVIGoUpTW7dIF9no0KsaG8AvEWJV5ykCjJSS"
+    }
+  }
+}

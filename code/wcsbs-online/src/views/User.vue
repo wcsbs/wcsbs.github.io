@@ -92,6 +92,17 @@
                     <input
                       class="form-check-input"
                       type="checkbox"
+                      id="isTeacher"
+                      v-model="user.isTeacher"
+                    />
+                    <label class="form-check-label" for="isTeacher"
+                      >&nbsp;辅导员</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
                       id="isTeachingAssistant"
                       v-model="user.isTeachingAssistant"
                     />

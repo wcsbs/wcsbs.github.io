@@ -110,6 +110,7 @@ Parse.Cloud.define(
     const array = [
       { enabled: userToUpdate.isSystemAdmin, roleName: "B4aAdminUser" },
       { enabled: userToUpdate.isClassAdmin, roleName: "ClassAdminUser" },
+      { enabled: userToUpdate.isTeacher, roleName: "TeacherUser" },
       {
         enabled: userToUpdate.isTeachingAssistant,
         roleName: "TeachingAssistantUser"

@@ -84,6 +84,7 @@ const actions = {
           );
           user.isClassAdmin = user.roles.includes("ClassAdminUser");
           user.isSystemAdmin = user.roles.includes("B4aAdminUser");
+          user.isTeacher = user.roles.includes("TeacherUser");
 
           context.commit(SET_USER, user);
           resolve();
