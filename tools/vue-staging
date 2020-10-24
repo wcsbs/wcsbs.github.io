@@ -1,0 +1,7 @@
+#!/bin/bash
+cd `dirname $0`
+cd ../code/wcsbs-online 
+pwd
+yarn cache clean && yarn run build --mode staging
+rm -rf ../../docs/online
+mv dist ../../docs/online

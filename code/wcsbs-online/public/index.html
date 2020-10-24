@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title itemprop="name">学修平台 </title>
-  <meta name="keywords" content="新加坡智悲佛学会,佛,佛法,学佛,修行">
+  <meta name="keywords" content="<%= VUE_APP_WCSBS %>,佛,佛法,学佛,修行">
   <meta name="theme-color" content="#3f51b5">
 
   <link rel="icon" href="<%= VUE_APP_PARENT_URL %>/shared/images/logo-32x32.png" sizes="32x32" />
@@ -49,7 +49,7 @@
     <nav role="navigation">
       <div id="mdx_menu" class="mdui-list">
         <ul style="font-size: 20px; ">
-          <a href="<%= VUE_APP_PARENT_URL %>/">新加坡智悲佛学会</a>
+          <a href="<%= VUE_APP_PARENT_URL %>/"><%= VUE_APP_WCSBS %></a>
         </ul>
         <ul style="font-size: 20px; line-height: 1.8; PADDING-LEFT: 80px">
           <li><a href="<%= VUE_APP_PARENT_URL %>/lxfhj/">离幸福很近</a></li>
@@ -75,7 +75,7 @@
       <div class="mdui-toolbar mdui-appbar-fixed">
         <button class="mdui-btn mdui-btn-icon" id="menu" mdui-drawer="{target:'#left-drawer',overlay:true}"><i
             class="mdui-icon material-icons">menu</i></button>
-        <a href="<%= VUE_APP_PARENT_URL %>/" class="mdui-typo-headline">新加坡智悲佛学会</a>
+        <a href="<%= VUE_APP_PARENT_URL %>/" class="mdui-typo-headline"><%= VUE_APP_WCSBS %></a>
         <div class="mdui-toolbar-spacer"></div>
         <button class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#qrcode'}" mdui-tooltip="{content: '在其他设备上继续阅读'}"
           id="oth-div"><i class="mdui-icon material-icons">&#xe326;</i></button>

@@ -19,6 +19,14 @@
         rows="8"
         max-rows="20"
       ></b-form-textarea>
+      <TextReader @load="text = $event" />
+      <b-form-textarea
+        v-model="text"
+        placeholder="File content will appear here"
+        rows="10"
+        max-rows="30"
+        readonly
+      ></b-form-textarea>
     </b-form>
     <div class="multiline">Result: {{ result }}</div>
   </div>
@@ -26,11 +34,16 @@
 
 <script>
 import Parse from "parse";
+import TextReader from "../components/TextReader";
 
 export default {
   name: "AdminDashboard",
+  components: {
+    TextReader
+  },
   data: function() {
     return {
+      text: "",
       name: "",
       params: "",
       result: ""
@@ -39,6 +52,7 @@ export default {
   methods: {
     onReset(evt) {
       evt.preventDefault();
+      this.text = "";
       this.name = "";
       this.params = "";
       this.result = "";

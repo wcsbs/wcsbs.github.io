@@ -2,9 +2,14 @@
 cd `dirname $0`
 pwd
 ruby refresh_all.rb templates/template.html ../docs/
+cp ../docs/member/js/parse.js-production ../docs/member/js/parse.js
 
 cd ../code/wcsbs-online 
 pwd
-yarn run build
+yarn cache clean && yarn run build
 rm -rf ../../docs/online
 mv dist ../../docs/online
+
+yarn cache clean && yarn run build --mode staging
+rm -rf ../../docs/staging
+mv dist ../../docs/staging
