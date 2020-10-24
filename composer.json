@@ -1,4 +1,8 @@
 {
+    "version": "1.0.0",
+    "require": {
+        "twitter/bootstrap": ">=3.0"
+    },
     "scripts": {
         "post-install-cmd": [
             "tools/build-heroku"

@@ -1,3 +1,4 @@
 *.pem
+composer.lock
 certs/
 vendor/
