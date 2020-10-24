@@ -6,6 +6,9 @@ echo API_APP_NAME: ${API_APP_NAME}
 echo SOURCE_VERSION: ${SOURCE_VERSION}
 
 if [ "${API_APP_NAME}" == "staging" ] ; then
-        echo "build for Staging"
-        ./build-staging
+    echo "build for Staging"
+    ./build-staging
+else
+    echo "build for Production"
+    ./build-production
 fi
