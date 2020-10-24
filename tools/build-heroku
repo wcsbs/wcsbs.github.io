@@ -7,8 +7,16 @@ echo SOURCE_VERSION: ${SOURCE_VERSION}
 
 if [ "${API_APP_NAME}" == "staging" ] ; then
     echo "build for Staging"
-    ./build-staging
+    sed -i 's/Sandbox/Staging/' ../docs/version.php
 else
     echo "build for Production"
-    ./build-production
+    sed -i 's/Sandbox/Production/' ../docs/version.php
 fi
+
+sed -i "s/unknown/$SOURCE_VERSION/" ../docs/version.php
+
+sed -i "s/Epnm6TgPniBOshr6vgRJIFmBFMRyMEWiUdymo2TS/$VUE_APP_PARSE_APP_ID/" ../docs/member/js/parse.js
+sed -i "s/9NDN1RClNLlvel1jXUH4VXTpnknCxRthYNyWQqCU/$VUE_APP_PARSE_JS_KEY/" ../docs/member/js/parse.js
+
+sed -i "s/Epnm6TgPniBOshr6vgRJIFmBFMRyMEWiUdymo2TS/$VUE_APP_PARSE_APP_ID/" ../docs/online/app.js
+sed -i "s/9NDN1RClNLlvel1jXUH4VXTpnknCxRthYNyWQqCU/$VUE_APP_PARSE_JS_KEY/" ../docs/online/app.js

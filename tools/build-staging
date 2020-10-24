@@ -1,6 +1,0 @@
-#!/bin/bash
-cd `dirname $0`
-pwd
-cp ../docs/member/js/parse.js-staging ../docs/member/js/parse.js
-sed -i "s/unknown/$SOURCE_VERSION/" ../docs/version.php
-sed -i 's/Sandbox/Staging/' ../docs/version.php

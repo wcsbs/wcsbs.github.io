@@ -1,7 +1,0 @@
-#!/bin/bash
-cd `dirname $0`
-pwd
-sed -i "s/ac8UZVIGoUpTW7dIF9no0KsaG8AvEWJV5ykCjJSS/$VUE_APP_PARSE_APP_ID/" ../docs/member/js/parse.js
-sed -i "s/07aVCHnW5psmgZ9fcSM54VAfTgsAwOTHud7HkyZH/$VUE_APP_PARSE_JS_KEY/" ../docs/member/js/parse.js
-sed -i "s/unknown/$SOURCE_VERSION/" ../docs/version.php
-sed -i 's/Sandbox/Production/' ../docs/version.php
