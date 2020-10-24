@@ -1,6 +1,6 @@
 Parse.initialize(
-  'd5cGjIzjxBmhDfKknJSrr5utsqtjr1PUUL9oOvQO', // YOUR APP ID 
-  '1YcVUm1Uy9P6OVJOEeLwz6byi8shqrsjrLJJhzoX' // YOUR Javascript  KEY
+  'Epnm6TgPniBOshr6vgRJIFmBFMRyMEWiUdymo2TS', // YOUR APP ID 
+  '9NDN1RClNLlvel1jXUH4VXTpnknCxRthYNyWQqCU' // YOUR Javascript  KEY
 );
 // YOUR SERVER URL
 Parse.serverURL = 'https://parseapi.back4app.com';
