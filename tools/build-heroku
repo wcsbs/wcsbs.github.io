@@ -3,8 +3,8 @@ cd `dirname $0`
 pwd
 #GIT_BRANCH=`git branch --show-current`
 echo GIT_BRANCH: ${GIT_BRANCH}
-echo ENV_DIR: ${ENV_DIR}
-ls ${ENV_DIR}
+echo SOURCE_VERSION: ${SOURCE_VERSION}
+
 if [ "${GIT_BRANCH}" == "staging" ] ; then
         echo "build for Staging"
         ./build-staging
