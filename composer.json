@@ -1,2 +1,7 @@
-{}
-
+{
+    "scripts": {
+        "post-install-cmd": [
+            "tools/build-heroku"
+        ]
+    }
+}
