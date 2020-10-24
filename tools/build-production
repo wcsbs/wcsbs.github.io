@@ -1,5 +1,0 @@
-#!/bin/bash
-cd `dirname $0`
-pwd
-rm -rf ../docs/staging
-sed -i "s/unknown/$SOURCE_VERSION/" ../docs/version.php
