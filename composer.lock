@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f122c04209c4f24e5fae0ab00763830e",
+    "content-hash": "737fd0a026b7c5d38f74810d886625bf",
     "packages": [
         {
             "name": "twitter/bootstrap",

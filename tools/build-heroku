@@ -1,8 +1,9 @@
 #!/bin/bash
 cd `dirname $0`
 pwd
-echo Staging: ${Staging}
-if [ "${Staging}" == "true" ] ; then
+GIT_BRANCH=`git branch --show-current`
+echo GIT_BRANCH: ${GIT_BRANCH}
+if [ "${GIT_BRANCH}" == "staging" ] ; then
         echo "build for Staging"
         ./build-staging
 fi
