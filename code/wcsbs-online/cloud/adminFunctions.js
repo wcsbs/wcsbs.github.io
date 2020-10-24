@@ -115,3 +115,14 @@ Parse.Cloud.define(
     return { count: updatedSessions.length, allV2Sessions: updatedSessions };
   }
 );
+
+Parse.Cloud.define(
+  "admin:importCsv",
+  async ({ user, params: { user: userWithRoles, csv } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+    const lines = csv.split(/\r?\n/);
+
+    return { lines: lines };
+  }
+);

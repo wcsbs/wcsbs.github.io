@@ -69,12 +69,16 @@ export default {
         body: `Confirm to run function ${this.name}？`
       };
 
+      const params = JSON.parse(this.params);
+      if (this.text) {
+        params.csv = this.text;
+      }
       const thisComponent = this;
 
       this.$dialog
         .confirm(message, options)
         .then(function(dialog) {
-          Parse.Cloud.run(thisComponent.name, JSON.parse(thisComponent.params))
+          Parse.Cloud.run(thisComponent.name, params)
             .then(result => {
               thisComponent.result = JSON.stringify(result, null, 4);
               dialog.close();

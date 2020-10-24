@@ -1,5 +1,5 @@
 {
-  "function": "admin:upgradeClassSessionToV2",
+  "function": "admin:importCsv",
   "user": {
     "id": "P59KfjAwDT",
     "name": "黄东浩",
