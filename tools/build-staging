@@ -4,3 +4,5 @@ pwd
 cp ../docs/member/js/parse.js-staging ../docs/member/js/parse.js
 rm -rf ../docs/online
 mv ../docs/staging ../docs/online
+sed -i 's/unknown/$SOURCE_VERSION/' ../docs/version.php
+sed -i 's/Production/Staging/' ../docs/version.php
