@@ -2,10 +2,10 @@
 cd `dirname $0`
 pwd
 
-echo API_APP_NAME: ${API_APP_NAME}
+echo VUE_APP_WCSBS: ${VUE_APP_WCSBS}
 echo SOURCE_VERSION: ${SOURCE_VERSION}
 
-if [ "${API_APP_NAME}" == "staging" ] ; then
+if [ "${VUE_APP_WCSBS}" == "WCSBS (staging)" ] ; then
     echo "build for Staging"
     sed -i 's/Sandbox/Staging/' ../docs/version.php
 else
