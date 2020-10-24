@@ -1,11 +1,6 @@
 #!/bin/bash
 cd `dirname $0`
 pwd
-ruby refresh_all.rb templates/template-staging.html ../docs/
 cp ../docs/member/js/parse.js-staging ../docs/member/js/parse.js
-
-cd ../code/wcsbs-online 
-pwd
-yarn cache clean && yarn run build --mode staging
-rm -rf ../../docs/online
-mv dist ../../docs/online
+rm -rf ../docs/online
+mv ../docs/staging ../docs/online

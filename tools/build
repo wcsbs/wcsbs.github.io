@@ -9,3 +9,7 @@ pwd
 yarn cache clean && yarn run build
 rm -rf ../../docs/online
 mv dist ../../docs/online
+
+yarn cache clean && yarn run build --mode staging
+rm -rf ../../docs/staging
+mv dist ../../docs/staging
