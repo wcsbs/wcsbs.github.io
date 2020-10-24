@@ -2,7 +2,7 @@
 cd `dirname $0`
 pwd
 #GIT_BRANCH=`git branch --show-current`
-echo GIT_BRANCH: ${GIT_BRANCH}
+echo API_APP_NAME: ${API_APP_NAME}
 echo SOURCE_VERSION: ${SOURCE_VERSION}
 
 if [ "${GIT_BRANCH}" == "staging" ] ; then
