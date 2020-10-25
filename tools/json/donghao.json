@@ -1,5 +1,7 @@
 {
-  "function": "admin:importCsv",
+  "functionName": "admin:importCsv",
+  "classId": "7QFVjl9Av0",
+  "practiceId": "0apCh4htRA",
   "user": {
     "id": "P59KfjAwDT",
     "name": "黄东浩",

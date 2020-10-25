@@ -116,13 +116,170 @@ Parse.Cloud.define(
   }
 );
 
+const reportPracticeCountV2 = async function(
+  user,
+  practiceId,
+  practiceSubmoduleId,
+  reportedAt,
+  count
+) {
+  requireAuth(user);
+
+  userId = user.id;
+  logger.info(
+    `reportPracticeCountV2 - userId: ${userId} practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count}`
+  );
+
+  var query = new Parse.Query("Practice");
+  query.equalTo("objectId", practiceId);
+  const practice = await query.first();
+  const relation = practice.relation("counts");
+  var newCount = false;
+  var delta = count;
+
+  query = relation.query();
+  query.equalTo("userId", userId);
+  query.equalTo("submoduleId", practiceSubmoduleId);
+  query.equalTo("reportedAt", reportedAt);
+  var currentPracticeCount = await query.first();
+
+  if (!currentPracticeCount) {
+    currentPracticeCount = new Parse.Object("UserPracticeCount");
+    currentPracticeCount.set("userId", userId);
+    currentPracticeCount.set("reportedAt", reportedAt);
+    currentPracticeCount.set("submoduleId", practiceSubmoduleId);
+    newCount = true;
+  } else {
+    delta -= currentPracticeCount.get("count");
+  }
+
+  currentPracticeCount.set("count", count);
+  currentPracticeCount = await currentPracticeCount.save(null, MASTER_KEY);
+
+  query = relation.query();
+  query.equalTo("userId", userId);
+  query.equalTo("reportedAt", undefined);
+  var accumulatedCount = await query.first();
+
+  if (accumulatedCount) {
+    count = accumulatedCount.get("count") + delta;
+  } else {
+    accumulatedCount = new Parse.Object("UserPracticeCount");
+    accumulatedCount.set("userId", userId);
+    accumulatedCount.set("reportedAt", undefined);
+    newCount = true;
+  }
+
+  accumulatedCount.set("count", count);
+  accumulatedCount = await accumulatedCount.save(null, MASTER_KEY);
+
+  if (newCount) {
+    relation.add(currentPracticeCount);
+    relation.add(accumulatedCount);
+    await practice.save(null, MASTER_KEY);
+  }
+
+  return {
+    id: currentPracticeCount._getId(),
+    count: currentPracticeCount.get("count"),
+    reportedAt: currentPracticeCount.get("reportedAt"),
+    accumulatedCount: accumulatedCount.get("count")
+  };
+};
+
 Parse.Cloud.define(
   "admin:importCsv",
-  async ({ user, params: { user: userWithRoles, csv } }) => {
+  async ({
+    user,
+    params: { user: userWithRoles, classId, practiceId, csv }
+  }) => {
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");
-    const lines = csv.split(/\r?\n/);
 
-    return { lines: lines };
+    var query = new Parse.Query("Class");
+    query.equalTo("objectId", classId);
+    var parseClass = await query.first();
+
+    var mapDates = {};
+    for (var key in csv[0]) {
+      const start = key.indexOf("-");
+      if (start > 0) {
+        const value = key.substring(start + 1);
+        mapDates[key] = new Date(value + " 2020");
+      }
+    }
+
+    var teams = [];
+    var users = [];
+    var results = [];
+
+    for (var i = 0; i < csv.length; i++) {
+      const record = csv[i];
+      var name = record["组员"];
+      if (!name || name.length == 0) {
+        continue;
+      }
+      const index = parseInt(record["组别"]);
+      name = name.replace("组长", "");
+      query = new Parse.Query(Parse.User);
+      query.equalTo("name", name);
+
+      var parseUser = await query.first();
+      if (!parseUser) {
+        parseUser = new Parse.User();
+        parseUser.set("name", name);
+        parseUser.set("username", `${classId}_T${index}_U${i}`);
+        parseUser.set("password", "wcsbs2020");
+        parseUser = await parseUser.save(null, MASTER_KEY);
+        users.push(parseUser);
+
+        parseClass.relation("students").add(parseUser);
+        parseClass = await parseClass.save(null, MASTER_KEY);
+      }
+
+      team = teams.find(e => e.get("index") == index);
+      if (!team) {
+        query = new Parse.Query("Team");
+        query.equalTo("classId", classId);
+        query.equalTo("index", index);
+        team = await query.first();
+
+        if (!team) {
+          team = new Parse.Object("Team");
+          team.set("classId", classId);
+          team.set("leaderId", parseUser.id);
+          team.set("index", index);
+          team.set("name", `第${index}组`);
+          team = await team.save(null, MASTER_KEY);
+          teams.push(team);
+        }
+        team.relation("members").add(parseUser);
+        team = await team.save(null, MASTER_KEY);
+      }
+
+      var result = { user: parseUser };
+      for (key in record) {
+        const reportedAt = mapDates[key];
+        if (reportedAt) {
+          const countStr = record[key].split(",").join("");
+          const count =
+            countStr && countStr.length > 0 ? parseInt(countStr) : 0;
+          if (practiceId) {
+            if (count > 0) {
+              result.count = await reportPracticeCountV2(
+                parseUser,
+                practiceId,
+                undefined,
+                reportedAt,
+                count
+              );
+            }
+          }
+        }
+      }
+      results.push(result);
+    }
+
+    return { teams, users, results };
   }
 );

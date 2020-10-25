@@ -1,18 +1,32 @@
 <template>
-  <label class="text-reader">
-    Read File
-    <input type="file" @change="loadTextFromFile" />
-  </label>
+  <div>
+    <label class="text-reader">
+      Read CSV File
+      <input type="file" @change="loadCSVFieldsFromFile" />
+    </label>
+    {{ fileName }}
+  </div>
 </template>
 
 <script>
 export default {
+  data: function() {
+    return {
+      fileName: undefined
+    };
+  },
   methods: {
-    loadTextFromFile(ev) {
+    loadCSVFieldsFromFile(ev) {
       const file = ev.target.files[0];
+      this.fileName = file.name;
       const reader = new FileReader();
 
-      reader.onload = e => this.$emit("load", e.target.result);
+      reader.onload = e => {
+        const lines = e.target.result.split(/\r?\n/);
+        const fields = lines[0].split(",");
+        console.log(`fields: ${JSON.stringify(fields)}`);
+        this.$emit("load", fields);
+      };
       reader.readAsText(file);
     }
   }
