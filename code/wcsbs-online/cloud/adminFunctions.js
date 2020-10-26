@@ -230,6 +230,7 @@ Parse.Cloud.define(
         parseUser.set("name", name);
         parseUser.set("username", `${classId}_T${index}_U${i}`);
         parseUser.set("password", "wcsbs2020");
+        parseUser.set("emailVerified", true);
         parseUser = await parseUser.save(null, MASTER_KEY);
         users.push(parseUser);
 
