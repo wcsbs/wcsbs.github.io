@@ -281,7 +281,14 @@ export default {
         } @ ${this.toLocalDateString(this.practiceObj.newCountReportedAt)}？`
       };
       const practiceId = this.practice.id;
-      const reportedAt = this.practiceObj.newCountReportedAt;
+
+      const reportedAt = new Date(0);
+      reportedAt.setUTCFullYear(
+        this.practiceObj.newCountReportedAt.getFullYear()
+      );
+      reportedAt.setUTCMonth(this.practiceObj.newCountReportedAt.getMonth());
+      reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
+
       const count = parseInt(this.practiceObj.newCount);
       const thisComponent = this;
 
