@@ -84,8 +84,8 @@ const actions = {
     })
       .then(classInfo => {
         console.log(
-          // `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
-          `${fetchSessions} - classInfo: ${JSON.stringify(classInfo)}`
+          `${fetchSessions} - #classSessions: ${classInfo.classSessions.length}`
+          // `${fetchSessions} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_SESSIONS_END, classInfo);
       })

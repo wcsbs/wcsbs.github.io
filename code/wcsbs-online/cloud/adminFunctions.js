@@ -125,8 +125,17 @@ Parse.Cloud.define(
     for (var key in csv[0]) {
       const start = key.indexOf("-");
       if (start > 0) {
-        const value = key.substring(start + 1);
-        mapDates[key] = new Date(value + " 2020");
+        var value = key;
+        if (key.length - start > 4) {
+          //this must be a range for a week - taking last date
+          value = key.substring(start + 1);
+        }
+        const date = new Date(value + " 2020");
+        if (!practiceId) {
+          // RXL starts at 9am SGT while DYM at 2pm SGT
+          date.setHours(parseClass.get("url").includes("rpsxl") ? 1 : 6);
+        }
+        mapDates[key] = date;
       }
     }
 
@@ -176,10 +185,10 @@ Parse.Cloud.define(
       team.relation("members").add(parseUser);
       team = await team.save(null, MASTER_KEY);
 
-      var result = { user: parseUser };
+      var result = { user: parseUser, count: 0 };
       for (key in record) {
-        const reportedAt = mapDates[key];
-        if (reportedAt) {
+        const date = mapDates[key];
+        if (date) {
           const countStr = record[key].split(",").join("");
           const count =
             countStr && countStr.length > 0 ? parseInt(countStr) : 0;
@@ -189,9 +198,25 @@ Parse.Cloud.define(
                 parseUser,
                 practiceId,
                 undefined,
-                reportedAt,
+                date,
                 count
               );
+            }
+          } else {
+            query = parseClass.relation("sessionsV2").query();
+            query.equalTo("scheduledAt", date);
+            const classSession = await query.first();
+
+            if (classSession) {
+              var attendance = { attendance: count > 0 };
+              attendance = await commonFunctions.updateAttendanceV2(
+                parseUser,
+                classSession.id,
+                attendance
+              );
+              if (attendance.attendance) {
+                result.count += 1;
+              }
             }
           }
         }
@@ -200,6 +225,6 @@ Parse.Cloud.define(
     }
     parseClass = await parseClass.save(null, MASTER_KEY);
 
-    return { teams, users, results };
+    return { mapDates, teams, users, results };
   }
 );

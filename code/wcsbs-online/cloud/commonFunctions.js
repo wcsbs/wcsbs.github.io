@@ -87,8 +87,35 @@ const reportPracticeCountV2 = async function(
   };
 };
 
+const updateAttendanceV2 = async function(user, sessionId, attendance) {
+  requireAuth(user);
+
+  const result = {};
+  var query = new Parse.Query("UserSessionAttendance");
+  query.equalTo("userId", user.id);
+  query.equalTo("sessionId", sessionId);
+  var sessionAttendance = await query.first();
+
+  if (!sessionAttendance) {
+    sessionAttendance = new Parse.Object("UserSessionAttendance");
+    sessionAttendance.set("userId", user.id);
+    sessionAttendance.set("sessionId", sessionId);
+  }
+
+  sessionAttendance.set("attendance", attendance.attendance);
+  sessionAttendance.set("onLeave", attendance.onLeave);
+
+  sessionAttendance = await sessionAttendance.save(null, MASTER_KEY);
+
+  result.attendance = sessionAttendance.get("attendance");
+  result.onLeave = sessionAttendance.get("onLeave");
+
+  return result;
+};
+
 module.exports = {
   requireAuth,
   requireRole,
-  reportPracticeCountV2
+  reportPracticeCountV2,
+  updateAttendanceV2
 };
