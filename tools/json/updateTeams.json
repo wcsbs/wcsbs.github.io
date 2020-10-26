@@ -2,128 +2,55 @@
   "classId": "7QFVjl9Av0",
   "classTeams": [
     {
-      "id": "default",
-      "name": "未分组学员",
-      "members": [
-        {
-          "id": "0j0Hj8hNZ5",
-          "name": "乔金平",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "BmfVkOkl1x",
-          "name": "李明芳",
-          "assignedTeamId": "default"
-        }
-      ]
-    },
-    {
-      "id": "NEW_xxx_1603728706814",
+      "id": "NEW_x1_1603750485475",
       "classId": "7QFVjl9Av0",
-      "name": "xxx",
-      "members": [
-        {
-          "id": "qDTqArOuU0",
-          "name": "黄薇颖",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "j5BXZHVvUh",
-          "name": "辜宝瑶",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "syAyc9exAx",
-          "name": "曾倩妮",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "9pvsIxawME",
-          "name": "蔡红波",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "Wq13okNm92",
-          "name": "钟慧勤",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "K7JekrFnGq",
-          "name": "龚清山",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "P59KfjAwDT",
-          "name": "黄东浩",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "HOh8Zx93nP",
-          "name": "许乃文",
-          "assignedTeamId": "default"
-        }
-      ]
-    },
-    {
-      "id": "NEW_yyy_1603728716351",
-      "classId": "7QFVjl9Av0",
-      "name": "yyy",
+      "name": "x1",
       "members": [
         {
           "id": "u7ez5hDwvq",
           "name": "圆硕",
-          "assignedTeamId": "default"
+          "assignedTeamId": null
         },
         {
           "id": "lygbIRI66G",
           "name": "周琳琳",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "xBiTPh3xkz",
-          "name": "韩亚璇",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "avm2p5Wn4a",
-          "name": "许艺瀚",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "Ztkj3roCNj",
-          "name": "星伊",
-          "assignedTeamId": "default"
-        },
-        {
-          "id": "fVqyNoYwQM",
-          "name": "李淑勤",
-          "assignedTeamId": "default"
+          "assignedTeamId": null
         }
       ]
     },
     {
-      "id": "NEW_zzz_1603728909336",
+      "id": "NEW_x2_1603750492883",
       "classId": "7QFVjl9Av0",
-      "name": "zzz",
+      "name": "x2",
       "members": [
         {
-          "id": "JoSNtBGpor",
-          "name": "谭美君",
-          "assignedTeamId": "default"
+          "id": "qDTqArOuU0",
+          "name": "黄薇颖",
+          "assignedTeamId": null
         },
         {
-          "id": "8GktGpXkc7",
-          "name": "罗良玉",
-          "assignedTeamId": "default"
+          "id": "j5BXZHVvUh",
+          "name": "辜宝瑶",
+          "assignedTeamId": null
         }
       ]
     }
   ],
   "removedStudents": [
     {
-      "id": "B2d7rVkIJM",
-      "name": "廖佩君",
-      "assignedTeamId": "default"
+      "id": "8GktGpXkc7",
+      "name": "罗良玉",
+      "assignedTeamId": null
+    },
+    {
+      "id": "9pvsIxawME",
+      "name": "蔡红波",
+      "assignedTeamId": null
+    },
+    {
+      "id": "0j0Hj8hNZ5",
+      "name": "乔金平",
+      "assignedTeamId": null
     }
   ]
 }

@@ -4,7 +4,7 @@
       <b-card-text v-if="classTeam.dummy">
         将删除 {{ classTeam.members.length }} 名学员
       </b-card-text>
-      <b-card-text v-else-if="classTeam.id == 'default'">
+      <b-card-text v-else-if="classTeam.id == null">
         共有 {{ classTeam.members.length }} 名学员未分组
       </b-card-text>
       <b-card-text v-else>
@@ -14,9 +14,9 @@
         v-for="(member, index) in classTeam.members"
         :key="member.id + index"
         :prepend="
-          classTeam.id == 'default' || classTeam.dummy
+          classTeam.id == null || classTeam.dummy
             ? '学员'
-            : classTeam.leader && index == 0
+            : !classTeam.dummy && index == 0
             ? '组长：'
             : '组员：'
         "
@@ -28,7 +28,7 @@
         ></b-form-input>
         <b-input-group-append>
           <b-form-select
-            v-if="classTeam.id == 'default'"
+            v-if="classTeam.id == null"
             v-model="member.assignedTeamId"
             :options="classTeamOptions"
             v-on:change="assignTeam($event, index)"
@@ -77,7 +77,7 @@ export default {
       for (var i = 0; i < this.classTeams.length; i++) {
         const team = this.classTeams[i];
         if (team.id == member.assignedTeamId) {
-          member.assignedTeamId = "default";
+          member.assignedTeamId = null;
           team.members.push(member);
           break;
         }
@@ -88,10 +88,10 @@ export default {
       const member = this.classTeam.members[index];
       this.classTeam.members.splice(index, 1);
 
-      if (this.classTeam.id == "default") {
-        this.removedStudents.push(member);
-      } else {
+      if (this.classTeam.id) {
         this.classTeams[0].members.push(member);
+      } else {
+        this.removedStudents.push(member);
       }
 
       this.$store.dispatch(RESET_STUDENTS, { changed: true });

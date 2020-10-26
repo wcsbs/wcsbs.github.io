@@ -86,6 +86,7 @@ export default {
   methods: {
     dummyClassTeam() {
       return {
+        id: `DUMMY_${this.newClassTeamName}_${new Date().getTime()}`,
         dummy: true,
         name: "将删除学员",
         members: this.removedStudents
@@ -144,7 +145,7 @@ export default {
       };
       const thisComponent = this;
       const classId = this.classInfo.id;
-      const classTeams = this.classTeams;
+      const classTeams = this.classTeams.filter(e => e.id);
       const removedStudents = this.removedStudents;
 
       this.$dialog
@@ -157,7 +158,7 @@ export default {
           })
             .then(result => {
               console.log(`updateTeams - result: ${JSON.stringify(result)}`);
-              // window.location.reload();
+              window.location.reload();
               dialog.close();
             })
             .catch(e => {

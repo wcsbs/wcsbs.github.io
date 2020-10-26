@@ -259,17 +259,17 @@ const mutations = {
           leader: e.leader
         };
         team.members = e.members.map(m => {
-          m.assignedTeamId = "default";
+          m.assignedTeamId = null;
           return m;
         });
         return team;
       });
 
-      state.classTeams[0].name = "未分组学员";
-      state.classTeams[0].id = "default";
+      state.classTeams[0].name = "未分组";
+      // state.classTeams[0].id = null;
 
       state.classTeamOptions = state.classTeams.map(e => {
-        return { value: e.id, text: e.name };
+        return { value: e.id ? e.id : null, text: e.name };
       });
 
       state.isLoadingStudents = false;
