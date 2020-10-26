@@ -678,3 +678,12 @@ Parse.Cloud.define(
     return classInfo;
   }
 );
+
+Parse.Cloud.define(
+  "class:updateTeams",
+  async ({ user, params: { classId, classTeams, removedStudents } }) => {
+    requireAuth(user);
+
+    return { classId, classTeams, removedStudents };
+  }
+);

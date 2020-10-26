@@ -7,7 +7,7 @@ import {
   FILTER_SESSIONS,
   UPDATE_SESSION,
   FETCH_STUDENTS,
-  FILTER_STUDENTS
+  RESET_STUDENTS
 } from "./actions.type";
 import {
   FETCH_SESSIONS_START,
@@ -30,7 +30,10 @@ const state = {
   isLoadingSessions: false,
   isLoadingPracticeCounts: false,
   isLoadingStudents: false,
-  classTeams: []
+  classTeams: [],
+  classTeamOptions: [],
+  removedStudents: [],
+  classTeamsChanged: false
 };
 
 const getters = {
@@ -57,6 +60,15 @@ const getters = {
   },
   classTeams(state) {
     return state.classTeams;
+  },
+  classTeamsChanged(state) {
+    return state.classTeamsChanged;
+  },
+  classTeamOptions(state) {
+    return state.classTeamOptions;
+  },
+  removedStudents(state) {
+    return state.removedStudents;
   },
   practiceInfo(state) {
     return state.practiceInfo;
@@ -149,6 +161,9 @@ const actions = {
       )}`
     );
   },
+  [RESET_STUDENTS](context, classInfo) {
+    context.commit(FETCH_STUDENTS_END, classInfo);
+  },
   [FETCH_STUDENTS](context, params) {
     const classId = params["classId"];
     var forAdmin = params["forAdmin"];
@@ -168,8 +183,8 @@ const actions = {
     })
       .then(classInfo => {
         console.log(
-          // `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
-          `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
+          `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
+          // `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_STUDENTS_END, classInfo);
       })
@@ -226,30 +241,38 @@ const mutations = {
     state.isLoadingStudents = true;
   },
   [FETCH_STUDENTS_END](state, classInfo) {
-    state.classInfo = classInfo;
-    state.classTeams = [].concat(classInfo.classTeams);
-    state.classTeams[0].name = "未分组学员";
-    state.classTeams[0].id = "default";
-    state.isLoadingStudents = false;
-  },
-  [FILTER_STUDENTS](state, filterText) {
-    if (!filterText || filterText == "") {
-      state.classTeams = state.classInfo.classTeams;
+    if (classInfo.changed) {
+      state.classTeamsChanged = true;
+      state.classTeamOptions = state.classTeams.map(e => {
+        return { value: e.id, text: e.name };
+      });
     } else {
-      state.classTeams = [];
+      state.classTeamsChanged = false;
+      state.classInfo = classInfo;
+      state.removedStudents = [];
+      state.classTeams = classInfo.classTeams.map(e => {
+        var team = {
+          id: e.id,
+          index: e.index,
+          name: e.name,
+          classId: e.classId,
+          leader: e.leader
+        };
+        team.members = e.members.map(m => {
+          m.assignedTeamId = "default";
+          return m;
+        });
+        return team;
+      });
 
-      for (var i = 0; i < state.classInfo.classTeams.length; i++) {
-        // const s = state.classInfo.classTeams[i];
-        // if (
-        //   s
-        //     .get("name")
-        //     .toLowerCase()
-        //     .includes(filterText.toLowerCase())
-        // ) {
-        //   state.classTeams.push(s);
-        //   state.sessionDetails.push(state.classInfo.sessionDetails[i]);
-        // }
-      }
+      state.classTeams[0].name = "未分组学员";
+      state.classTeams[0].id = "default";
+
+      state.classTeamOptions = state.classTeams.map(e => {
+        return { value: e.id, text: e.name };
+      });
+
+      state.isLoadingStudents = false;
     }
   }
 };

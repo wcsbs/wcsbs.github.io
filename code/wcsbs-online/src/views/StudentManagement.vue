@@ -10,41 +10,41 @@
           type="text"
           class="form-control"
           aria-describedby="basic-addon2"
-          v-model="filterText"
-          v-on:change="filterStudents(filterText)"
-          placeholder="搜索"
+          v-model="newClassTeamName"
+          placeholder="输入新组名称"
         />
-        <div class="input-group-append">
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            @click="clearFilter"
-          >
-            清除
-          </button>
-          <b-button
-            variant="warning"
-            v-if="isClassAdmin || isSystemAdmin"
-            @click="createClassTeam"
-            >{{ creatingClassTeam ? "取消创建" : "创建新组" }}</b-button
-          >
-        </div>
-      </div>
-      <div v-if="classTeams.length === 0">
-        没有找到学员记录！
+        <b-button variant="warning" @click="createClassTeam">创建新组</b-button>
+        <b-button
+          variant="warning"
+          v-if="classTeamsChanged"
+          @click="submitClassTeams"
+          >保存修改</b-button
+        >
+        <b-button
+          variant="warning"
+          v-if="classTeamsChanged"
+          @click="resetClassTeams"
+          >放弃修改</b-button
+        >
       </div>
       <ClassTeam
-        v-if="creatingClassTeam"
-        :classInfo="classInfo"
-        :classTeam="newClassTeam"
+        v-if="removedStudents.length > 0"
+        :classTeam="dummyClassTeam()"
       />
-      <ClassTeam
+      <div
         v-for="(classTeam, index) in classTeams"
-        :classInfo="classInfo"
-        :forAdmin="classInfo.forAdmin"
-        :classTeam="classTeam"
-        :key="classTeam.id + index"
-      />
+        :key="classTeam.id + classTeam.name + index"
+      >
+        <ClassTeam :classTeam="classTeam" />
+        <b-button
+          v-if="index > 0"
+          block
+          variant="warning"
+          @click="removeClass(index)"
+          >删除本组</b-button
+        >
+        <hr />
+      </div>
     </div>
   </div>
 </template>
@@ -52,8 +52,9 @@
 <script>
 import { mapGetters } from "vuex";
 import ClassTeam from "@/components/ClassTeam";
-import { FETCH_STUDENTS, FILTER_STUDENTS } from "../store/actions.type";
+import { FETCH_STUDENTS, RESET_STUDENTS } from "../store/actions.type";
 import store from "@/store";
+import Parse from "parse";
 
 export default {
   name: "StudentManagement",
@@ -67,7 +68,8 @@ export default {
       "classTeams",
       "isClassAdmin",
       "isSystemAdmin",
-      "isStudent"
+      "classTeamsChanged",
+      "removedStudents"
     ])
   },
   beforeRouteEnter(to, from, next) {
@@ -77,21 +79,96 @@ export default {
   },
   data: function() {
     return {
-      filterText: "",
-      creatingClassTeam: false,
-      newClassTeam: { dummy: true }
+      newClassTeamName: "",
+      creatingClassTeam: false
     };
   },
   methods: {
-    filterStudents(filterText) {
-      this.$store.dispatch(FILTER_STUDENTS, filterText);
-    },
-    clearFilter() {
-      this.filterText = "";
-      this.$store.dispatch(FILTER_STUDENTS, this.filterText);
+    dummyClassTeam() {
+      return {
+        dummy: true,
+        name: "将删除学员",
+        members: this.removedStudents
+      };
     },
     createClassTeam() {
-      this.creatingClassTeam = !this.creatingClassTeam;
+      const classTeam = {
+        id: `NEW_${this.newClassTeamName}_${new Date().getTime()}`,
+        classId: this.classInfo.id,
+        name: this.newClassTeamName,
+        members: []
+      };
+      this.newClassTeamName = "";
+      this.classTeams.push(classTeam);
+      store.dispatch(RESET_STUDENTS, { changed: true });
+    },
+    removeClass(index) {
+      this.classTeams[0].members = this.classTeams[0].members.concat(
+        this.classTeams[index].members
+      );
+      this.classTeams.splice(index, 1);
+      store.dispatch(RESET_STUDENTS, { changed: true });
+    },
+    resetClassTeams() {
+      const options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+      };
+      const message = {
+        title: this.classInfo.name,
+        body: "放弃所做修改?"
+      };
+      const thisComponent = this;
+
+      this.$dialog
+        .confirm(message, options)
+        .then(function(dialog) {
+          thisComponent.newClassTeamName = "";
+          store.dispatch(RESET_STUDENTS, this.classInfo);
+          dialog.close();
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
+    },
+    submitClassTeams() {
+      const options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+      };
+      const message = {
+        title: this.classInfo.name,
+        body: "保存所做修改?"
+      };
+      const thisComponent = this;
+      const classId = this.classInfo.id;
+      const classTeams = this.classTeams;
+      const removedStudents = this.removedStudents;
+
+      this.$dialog
+        .confirm(message, options)
+        .then(function(dialog) {
+          Parse.Cloud.run("class:updateTeams", {
+            classId,
+            classTeams,
+            removedStudents
+          })
+            .then(result => {
+              console.log(`updateTeams - result: ${JSON.stringify(result)}`);
+              // window.location.reload();
+              dialog.close();
+            })
+            .catch(e => {
+              console.log(`error in updateTeams: ${e}`);
+              dialog.close();
+              thisComponent.$dialog.alert(`error in updateTeams: ${e}`);
+            });
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
     }
   }
 };
