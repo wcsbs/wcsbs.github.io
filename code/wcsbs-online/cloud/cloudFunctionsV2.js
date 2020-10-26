@@ -609,3 +609,72 @@ Parse.Cloud.define(
     return result;
   }
 );
+
+Parse.Cloud.define(
+  "class:fetchTeams",
+  async ({ user, params: { classId, forAdmin } }) => {
+    requireAuth(user);
+
+    var query = new Parse.Query("Class");
+    query.equalTo("objectId", classId);
+    const parseClass = await query.first();
+
+    const classInfo = {
+      id: parseClass.id,
+      name: parseClass.get("name"),
+      url: parseClass.get("url"),
+      forAdmin: forAdmin,
+      classTeams: [{ members: [] }]
+    };
+
+    query = new Parse.Query("Team");
+    query.equalTo("classId", classId);
+    query.ascending("index");
+    const parseTeams = await query.limit(MAX_QUERY_COUNT).find();
+
+    const studentAssignedInTeams = [];
+    for (var i = 0; i < parseTeams.length; i++) {
+      const parseTeam = parseTeams[i];
+      const team = {
+        id: parseTeam.id,
+        name: parseTeam.get("name"),
+        index: parseTeam.get("index"),
+        classId: parseTeam.get("classId"),
+        leader: undefined,
+        members: []
+      };
+
+      const leaderId = parseTeam.get("leaderId");
+      query = parseTeam.relation("members").query();
+      const teamMembers = await query.limit(MAX_QUERY_COUNT).find();
+
+      for (var j = 0; j < teamMembers.length; j++) {
+        const member = {
+          id: teamMembers[j].id,
+          name: teamMembers[j].get("name")
+        };
+        studentAssignedInTeams.push(member.id);
+        if (member.id == leaderId) {
+          team.leader = member;
+          team.members.splice(0, 0, member);
+        } else {
+          team.members.push(member);
+        }
+      }
+      classInfo.classTeams.push(team);
+    }
+
+    query = parseClass.relation("students").query();
+    query.notContainedIn("objectId", studentAssignedInTeams);
+    const classStudents = await query.limit(MAX_QUERY_COUNT).find();
+    for (j = 0; j < classStudents.length; j++) {
+      const member = {
+        id: classStudents[j].id,
+        name: classStudents[j].get("name")
+      };
+      classInfo.classTeams[0].members.push(member);
+    }
+
+    return classInfo;
+  }
+);

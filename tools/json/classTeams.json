@@ -1,0 +1,111 @@
+{
+  "id": "7QFVjl9Av0",
+  "name": "2019级预科系入行班",
+  "url": "../rpsxl",
+  "forAdmin": true,
+  "classTeams": [
+    {
+      "members": []
+    },
+    {
+      "id": "a2Xtoai5is",
+      "name": "第1组",
+      "index": 1,
+      "classId": "7QFVjl9Av0",
+      "leader": {
+        "id": "P59KfjAwDT",
+        "name": "黄东浩"
+      },
+      "members": [
+        {
+          "id": "P59KfjAwDT",
+          "name": "黄东浩"
+        },
+        {
+          "id": "0j0Hj8hNZ5",
+          "name": "乔金平"
+        },
+        {
+          "id": "8GktGpXkc7",
+          "name": "罗良玉"
+        },
+        {
+          "id": "9pvsIxawME",
+          "name": "蔡红波"
+        },
+        {
+          "id": "BmfVkOkl1x",
+          "name": "李明芳"
+        },
+        {
+          "id": "JoSNtBGpor",
+          "name": "谭美君"
+        },
+        {
+          "id": "lygbIRI66G",
+          "name": "周琳琳"
+        },
+        {
+          "id": "syAyc9exAx",
+          "name": "曾倩妮"
+        },
+        {
+          "id": "u7ez5hDwvq",
+          "name": "圆硕"
+        }
+      ]
+    },
+    {
+      "id": "oaK4ZTTDlr",
+      "name": "第2组",
+      "index": 2,
+      "classId": "7QFVjl9Av0",
+      "leader": {
+        "id": "B2d7rVkIJM",
+        "name": "廖佩君"
+      },
+      "members": [
+        {
+          "id": "B2d7rVkIJM",
+          "name": "廖佩君"
+        },
+        {
+          "id": "HOh8Zx93nP",
+          "name": "许乃文"
+        },
+        {
+          "id": "K7JekrFnGq",
+          "name": "龚清山"
+        },
+        {
+          "id": "Wq13okNm92",
+          "name": "钟慧勤"
+        },
+        {
+          "id": "Ztkj3roCNj",
+          "name": "星伊"
+        },
+        {
+          "id": "avm2p5Wn4a",
+          "name": "许艺瀚"
+        },
+        {
+          "id": "fVqyNoYwQM",
+          "name": "李淑勤"
+        },
+        {
+          "id": "j5BXZHVvUh",
+          "name": "辜宝瑶"
+        },
+        {
+          "id": "qDTqArOuU0",
+          "name": "黄薇颖"
+        },
+        {
+          "id": "xBiTPh3xkz",
+          "name": "韩亚璇"
+        }
+      ]
+    }
+  ]
+}

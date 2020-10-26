@@ -5,14 +5,18 @@ import {
   FETCH_SESSIONS,
   FETCH_PRACTICE_COUNTS,
   FILTER_SESSIONS,
-  UPDATE_SESSION
+  UPDATE_SESSION,
+  FETCH_STUDENTS,
+  FILTER_STUDENTS
 } from "./actions.type";
 import {
   FETCH_SESSIONS_START,
   FETCH_SESSIONS_END,
   FILTER_SESSIONS_IN_LIST,
   FETCH_PRACTICE_COUNTS_START,
-  FETCH_PRACTICE_COUNTS_END
+  FETCH_PRACTICE_COUNTS_END,
+  FETCH_STUDENTS_START,
+  FETCH_STUDENTS_END
 } from "./mutations.type";
 
 Vue.use(Toasted);
@@ -24,7 +28,9 @@ const state = {
   classInfo: {},
   practiceInfo: {},
   isLoadingSessions: false,
-  isLoadingPracticeCounts: false
+  isLoadingPracticeCounts: false,
+  isLoadingStudents: false,
+  classTeams: []
 };
 
 const getters = {
@@ -45,6 +51,12 @@ const getters = {
   },
   isLoadingPracticeCounts(state) {
     return state.isLoadingPracticeCounts;
+  },
+  isLoadingStudents(state) {
+    return state.isLoadingStudents;
+  },
+  classTeams(state) {
+    return state.classTeams;
   },
   practiceInfo(state) {
     return state.practiceInfo;
@@ -136,6 +148,36 @@ const actions = {
         classSessionToUpdate
       )}`
     );
+  },
+  [FETCH_STUDENTS](context, params) {
+    const classId = params["classId"];
+    var forAdmin = params["forAdmin"];
+
+    if (typeof forAdmin === "string") {
+      forAdmin = forAdmin === "true";
+    }
+    console.log(
+      `${FETCH_STUDENTS} - classId: ${classId} forAdmin: ${forAdmin}`
+    );
+    context.commit(FETCH_STUDENTS_START);
+
+    const fetchTeams = "class:fetchTeams";
+    Parse.Cloud.run(fetchTeams, {
+      classId,
+      forAdmin
+    })
+      .then(classInfo => {
+        console.log(
+          // `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
+          `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
+        );
+        context.commit(FETCH_STUDENTS_END, classInfo);
+      })
+      .catch(e => {
+        // console.log(`error loading classTeam list: ${e.message}`);
+        console.log(`error loading classTeam list: ${JSON.stringify(e)}`);
+        throw new Error(e);
+      });
   }
 };
 
@@ -177,6 +219,36 @@ const mutations = {
           state.classSessions.push(s);
           state.sessionDetails.push(state.classInfo.sessionDetails[i]);
         }
+      }
+    }
+  },
+  [FETCH_STUDENTS_START](state) {
+    state.isLoadingStudents = true;
+  },
+  [FETCH_STUDENTS_END](state, classInfo) {
+    state.classInfo = classInfo;
+    state.classTeams = [].concat(classInfo.classTeams);
+    state.classTeams[0].name = "未分组学员";
+    state.classTeams[0].id = "default";
+    state.isLoadingStudents = false;
+  },
+  [FILTER_STUDENTS](state, filterText) {
+    if (!filterText || filterText == "") {
+      state.classTeams = state.classInfo.classTeams;
+    } else {
+      state.classTeams = [];
+
+      for (var i = 0; i < state.classInfo.classTeams.length; i++) {
+        // const s = state.classInfo.classTeams[i];
+        // if (
+        //   s
+        //     .get("name")
+        //     .toLowerCase()
+        //     .includes(filterText.toLowerCase())
+        // ) {
+        //   state.classTeams.push(s);
+        //   state.sessionDetails.push(state.classInfo.sessionDetails[i]);
+        // }
       }
     }
   }

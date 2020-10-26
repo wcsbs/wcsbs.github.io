@@ -13,3 +13,6 @@ export const FETCH_SESSIONS = "fetchSessions";
 export const FILTER_SESSIONS = "filterSessions";
 export const UPDATE_SESSION = "updateSession";
 export const FETCH_PRACTICE_COUNTS = "fetchPracticeCounts";
+export const FETCH_STUDENTS = "fetchStudents";
+export const FILTER_STUDENTS = "filterStudents";
+export const UPDATE_TEAM = "updateTeam";

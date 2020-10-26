@@ -13,3 +13,5 @@ export const FETCH_SESSIONS_END = "setSessions";
 export const FILTER_SESSIONS_IN_LIST = "filterSessionsInList";
 export const FETCH_PRACTICE_COUNTS_START = "setLoadingPracticeCounts";
 export const FETCH_PRACTICE_COUNTS_END = "setPracticeCounts";
+export const FETCH_STUDENTS_START = "setLoadingStudents";
+export const FETCH_STUDENTS_END = "setStudents";

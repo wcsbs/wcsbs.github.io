@@ -25,6 +25,13 @@ export default new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: "/students/:classId/:forAdmin",
+      name: "student-management",
+      component: () => import("@/views/StudentManagement"),
+      props: true,
+      meta: { requiresAuth: true }
+    },
+    {
       path: "/counts/:practiceId/:forAdmin",
       name: "count-list",
       component: () => import("@/views/CountList"),

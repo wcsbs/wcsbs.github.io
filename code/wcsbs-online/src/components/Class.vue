@@ -12,6 +12,7 @@
         :items="items"
         thead-class="hidden_header"
       ></b-table>
+      <b-button block variant="info" @click="listStudent">学员管理</b-button>
     </div>
     <div v-if="forApplication">
       <b-button block variant="info" @click="listSession">查看详情</b-button>
@@ -95,6 +96,15 @@ export default {
           forApplication: this.forApplication,
           forAdmin: this.buddhaClass.classSnapshot != undefined,
           loadingNewSessions: this.isClassAdmin || this.isTeachingAssistant
+        }
+      });
+    },
+    listStudent() {
+      this.$router.push({
+        name: "student-management",
+        params: {
+          classId: this.buddhaClass.id,
+          forAdmin: this.buddhaClass.classSnapshot != undefined
         }
       });
     }
