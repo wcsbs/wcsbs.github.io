@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "_default": {
+      "link": "wcsbs-sandbox"
+    },
+    "wcsbs-sandbox": {
+      "applicationId": "Epnm6TgPniBOshr6vgRJIFmBFMRyMEWiUdymo2TS"
+    }
+  }
+}
