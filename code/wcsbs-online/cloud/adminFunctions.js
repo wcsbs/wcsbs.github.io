@@ -189,7 +189,7 @@ Parse.Cloud.define(
       for (key in record) {
         const date = mapDates[key];
         if (date) {
-          const countStr = record[key].split(",").join("");
+          const countStr = record[key].split(/[,.]/).join("");
           const count =
             countStr && countStr.length > 0 ? parseInt(countStr) : 0;
           if (practiceId) {
