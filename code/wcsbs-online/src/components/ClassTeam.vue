@@ -33,6 +33,12 @@
             :options="classTeamOptions"
             v-on:change="assignTeam($event, index)"
           ></b-form-select>
+          <b-button
+            v-if="!classTeam.dummy && classTeam.id && index > 0"
+            variant="info"
+            v-on:click="setLeader(index)"
+            >设为组长</b-button
+          >
           <b-button variant="warning" v-on:click="removeMember(index)">{{
             classTeam.dummy ? "恢复" : "删除"
           }}</b-button>
@@ -93,6 +99,13 @@ export default {
       } else {
         this.removedStudents.push(member);
       }
+
+      this.$store.dispatch(RESET_STUDENTS, { changed: true });
+    },
+    setLeader(index) {
+      const member = this.classTeam.members[index];
+      this.classTeam.members.splice(index, 1);
+      this.classTeam.members.splice(0, 0, member);
 
       this.$store.dispatch(RESET_STUDENTS, { changed: true });
     },

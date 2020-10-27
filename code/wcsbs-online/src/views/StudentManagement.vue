@@ -13,9 +13,9 @@
           v-model="newClassTeamName"
           placeholder="输入新组名称"
         />
-        <b-button variant="warning" @click="createClassTeam">创建新组</b-button>
+        <b-button variant="info" @click="createClassTeam">创建新组</b-button>
         <b-button
-          variant="warning"
+          variant="success"
           v-if="classTeamsChanged"
           @click="submitClassTeams"
           >保存修改</b-button
@@ -126,7 +126,8 @@ export default {
         .confirm(message, options)
         .then(function(dialog) {
           thisComponent.newClassTeamName = "";
-          store.dispatch(RESET_STUDENTS, this.classInfo);
+          thisComponent.classInfo.changed = false;
+          store.dispatch(RESET_STUDENTS, thisComponent.classInfo);
           dialog.close();
         })
         .catch(e => {

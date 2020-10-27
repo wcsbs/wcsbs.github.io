@@ -24,7 +24,6 @@ export default {
       reader.onload = e => {
         const lines = e.target.result.split(/\r?\n/);
         const fields = lines[0].split(",");
-        console.log(`fields: ${JSON.stringify(fields)}`);
         this.$emit("load", fields);
       };
       reader.readAsText(file);

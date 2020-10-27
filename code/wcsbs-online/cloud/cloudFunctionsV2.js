@@ -684,19 +684,20 @@ Parse.Cloud.define(
   async ({ user, params: { classId, classTeams, removedStudents } }) => {
     requireAuth(user);
 
-    const removedStudentIds = [removedStudents.map(e => e.id)];
-    if (removedStudentIds.length > 0) {
+    var removedStudentParseUsers = [];
+    if (removedStudents.length > 0) {
+      const removedStudentIds = [removedStudents.map(e => e.id)];
       var query = new Parse.Query("Class");
       query.equalTo("objectId", classId);
       var parseClass = await query.first();
       var relation = parseClass.relation("students");
 
-      query = new Parse.Query("User");
-      query.containedIn("objectId", removedStudentIds);
-      var parseUsers = await query.limit(MAX_QUERY_COUNT).find();
-
-      for (var i = 0; i < parseUsers.length; i++) {
-        relation.remove(parseUsers[i]);
+      for (var i = 0; i < removedStudents.length; i++) {
+        query = new Parse.Query("User");
+        query.equalTo("objectId", removedStudents[i].id);
+        const parseUser = await query.first();
+        removedStudentParseUsers.push(parseUser);
+        relation.remove(parseUser);
       }
       parseClass = await parseClass.save(null, MASTER_KEY);
     }
@@ -736,6 +737,9 @@ Parse.Cloud.define(
       teams.push(parseTeam);
     }
 
-    return { removedStudentIds, teams };
+    return {
+      removedStudentParseUsers,
+      teams
+    };
   }
 );

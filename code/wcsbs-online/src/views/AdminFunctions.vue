@@ -69,10 +69,7 @@ export default {
   methods: {
     onReset(evt) {
       evt.preventDefault();
-      this.name = "";
-      this.params = "";
-      this.result = "";
-      this.fields = undefined;
+      window.location.reload();
     },
     onSubmit(evt) {
       evt.preventDefault();
