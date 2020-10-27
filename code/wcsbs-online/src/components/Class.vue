@@ -33,16 +33,37 @@
           :forAdmin="buddhaClass.classSnapshot != undefined"
         />
         <b-button block variant="info" @click="listSession">查看详情</b-button>
+        <b-button
+          v-if="buddhaClass.canDownloadReports"
+          block
+          variant="info"
+          @click="downloadReports(undefined)"
+          >下载统计报表</b-button
+        >
         <hr />
         <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
-        <Practice
+        <div
           v-for="(practice, index) in buddhaClass.practices"
-          :practice="practice"
-          :latestPracticeCount="buddhaClass.counts[index]"
-          :practiceSubmodules="buddhaClass.practiceSubmodules[index]"
           :key="practice.id + index"
-          :forAdmin="buddhaClass.classSnapshot != undefined"
-        />
+        >
+          <Practice
+            :practice="practice"
+            :latestPracticeCount="buddhaClass.counts[index]"
+            :practiceSubmodules="buddhaClass.practiceSubmodules[index]"
+            :forAdmin="buddhaClass.classSnapshot != undefined"
+          />
+          <b-button block variant="info" @click="listPracticeCount(practice)"
+            >查看详情</b-button
+          >
+          <b-button
+            v-if="buddhaClass.canDownloadReports"
+            block
+            variant="info"
+            @click="downloadReports(practice.id)"
+            >下载统计报表</b-button
+          >
+          <hr />
+        </div>
       </div>
     </div>
   </div>
@@ -99,7 +120,26 @@ export default {
         }
       });
     },
+    listPracticeCount(practice) {
+      this.$router.push({
+        name: "count-list",
+        params: {
+          practiceId: practice.id,
+          forAdmin: this.buddhaClass.classSnapshot != undefined
+        }
+      });
+    },
     listStudent() {
+      this.$router.push({
+        name: "student-management",
+        params: {
+          classId: this.buddhaClass.id,
+          forAdmin: this.buddhaClass.classSnapshot != undefined
+        }
+      });
+    },
+    downloadReports(practiceId){
+      console.log(`downloadReports - practiceId: ${practiceId}`);
       this.$router.push({
         name: "student-management",
         params: {

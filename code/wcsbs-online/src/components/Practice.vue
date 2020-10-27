@@ -92,14 +92,6 @@
         </div>
       </b-card-text>
     </b-card>
-    <b-button
-      v-if="!practiceCounts"
-      block
-      variant="info"
-      @click="listPracticeCount"
-      >查看详情</b-button
-    >
-    <hr />
   </div>
 </template>
 
@@ -329,15 +321,6 @@ export default {
         .catch(e => {
           console.log(`error: ${e}`);
         });
-    },
-    listPracticeCount() {
-      this.$router.push({
-        name: "count-list",
-        params: {
-          practiceId: this.practice.id,
-          forAdmin: this.forAdmin
-        }
-      });
     }
   }
 };

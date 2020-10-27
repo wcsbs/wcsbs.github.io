@@ -298,10 +298,12 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
 
   var query = new Parse.Query("Class");
 
+  var canDownloadReports = true;
   //undefined if loading System Admin Dashboard
   if (parseUser) {
     if (forStudent) {
       query.equalTo("students", parseUser);
+      canDownloadReports = false;
     } else {
       query.equalTo("classAdminUsers", parseUser);
     }
@@ -320,11 +322,22 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
       sessionDetails: [],
       practices: [],
       counts: [],
-      practiceSubmodules: []
+      practiceSubmodules: [],
+      canDownloadReports
     };
     enrolledClassList.push(parseClass._getId());
 
     classInfo.teachers = await loadClassTeachers(parseClass);
+
+    if (!canDownloadReports) {
+      query = new Parse.Query("Team");
+      query.equalTo("leaderId", parseUser.id);
+      query.equalTo("classId", parseClass.id);
+      const team = await query.first();
+      if (team) {
+        classInfo.canDownloadReports = team.id;
+      }
+    }
 
     query = parseClass.relation("sessionsV2").query();
     var d = new Date();
