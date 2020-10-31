@@ -140,9 +140,31 @@ const updateAttendanceV2 = async function(
   return result;
 };
 
+const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice, year) {
+  var mapDates = {};
+  for (var key in csvHeader) {
+    const start = key.indexOf("-");
+    if (start > 0) {
+      var value = key;
+      if (key.length - start > 4) {
+        //this must be a range for a week - taking last date
+        value = key.substring(start + 1);
+      }
+      const date = new Date(`${value} ${year}`);
+      if (!isPractice) {
+        // RXL starts at 9am SGT while DYM at 2pm SGT
+        date.setHours(isRxl ? 1 : 6);
+      }
+      mapDates[key] = date;
+    }
+  }
+  return mapDates;
+};
+
 module.exports = {
   requireAuth,
   requireRole,
   reportPracticeCountV2,
-  updateAttendanceV2
+  updateAttendanceV2,
+  getDatesFromCsvHeader
 };

@@ -24,6 +24,14 @@
         max-rows="20"
         readonly
       ></b-form-textarea>
+      <JsonExcel
+        class="btn btn-info btn-block"
+        :data="parseCsv"
+        worksheet="My Worksheet"
+        name="filename.xls"
+      >
+        Download Excel
+      </JsonExcel>
       <b-form-textarea
         v-model="params"
         placeholder="Enter parameters"
@@ -50,12 +58,16 @@
 import Parse from "parse";
 import TextReader from "../components/TextReader";
 import { VueCsvImport } from "vue-csv-import";
+import JsonExcel from "vue-json-excel";
+import Vue from "vue";
+Vue.component("JsonExcel", JsonExcel);
 
 export default {
   name: "AdminDashboard",
   components: {
     TextReader,
-    VueCsvImport
+    VueCsvImport,
+    JsonExcel
   },
   data: function() {
     return {

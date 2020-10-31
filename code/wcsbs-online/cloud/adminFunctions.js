@@ -121,23 +121,12 @@ Parse.Cloud.define(
     query.equalTo("objectId", classId);
     var parseClass = await query.first();
 
-    var mapDates = {};
-    for (var key in csv[0]) {
-      const start = key.indexOf("-");
-      if (start > 0) {
-        var value = key;
-        if (key.length - start > 4) {
-          //this must be a range for a week - taking last date
-          value = key.substring(start + 1);
-        }
-        const date = new Date(value + " 2020");
-        if (!practiceId) {
-          // RXL starts at 9am SGT while DYM at 2pm SGT
-          date.setHours(parseClass.get("url").includes("rpsxl") ? 1 : 6);
-        }
-        mapDates[key] = date;
-      }
-    }
+    var mapDates = commonFunctions.getDatesFromCsvHeader(
+      csv[0],
+      parseClass.get("url").includes("rpsxl"),
+      practiceId,
+      2020
+    );
 
     var teams = [];
     var users = [];
