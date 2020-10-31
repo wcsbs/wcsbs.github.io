@@ -17,3 +17,4 @@ export const FETCH_STUDENTS = "fetchStudents";
 export const FILTER_STUDENTS = "filterStudents";
 export const UPDATE_TEAM = "updateTeam";
 export const RESET_STUDENTS = "resetStudents";
+export const FETCH_STATS = "fetchStats";

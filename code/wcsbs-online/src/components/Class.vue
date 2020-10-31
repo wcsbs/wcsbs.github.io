@@ -37,7 +37,7 @@
           v-if="buddhaClass.canDownloadReports"
           block
           variant="info"
-          @click="downloadReports(undefined)"
+          @click="downloadReports('dummy')"
           >出席统计</b-button
         >
         <hr />
@@ -133,19 +133,18 @@ export default {
       this.$router.push({
         name: "student-management",
         params: {
-          classId: this.buddhaClass.id,
-          forAdmin: true
+          classId: this.buddhaClass.id
         }
       });
     },
-    downloadReports(practiceId){
+    downloadReports(practiceId) {
       console.log(`downloadReports - practiceId: ${practiceId}`);
       this.$router.push({
-        name: "student-management",
+        name: "report-management",
         params: {
           classId: this.buddhaClass.id,
-          forAdmin: false,
-          practiceId
+          practiceId,
+          forAdmin: this.buddhaClass.classSnapshot != undefined
         }
       });
     }

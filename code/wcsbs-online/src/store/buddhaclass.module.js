@@ -7,7 +7,8 @@ import {
   FILTER_SESSIONS,
   UPDATE_SESSION,
   FETCH_STUDENTS,
-  RESET_STUDENTS
+  RESET_STUDENTS,
+  FETCH_STATS
 } from "./actions.type";
 import {
   FETCH_SESSIONS_START,
@@ -16,7 +17,9 @@ import {
   FETCH_PRACTICE_COUNTS_START,
   FETCH_PRACTICE_COUNTS_END,
   FETCH_STUDENTS_START,
-  FETCH_STUDENTS_END
+  FETCH_STUDENTS_END,
+  FETCH_STATS_START,
+  FETCH_STATS_END
 } from "./mutations.type";
 import store from "./index";
 
@@ -31,6 +34,7 @@ const state = {
   isLoadingSessions: false,
   isLoadingPracticeCounts: false,
   isLoadingStudents: false,
+  isLoadingStats: false,
   classTeams: [],
   classTeamOptions: [],
   removedStudents: [],
@@ -58,6 +62,9 @@ const getters = {
   },
   isLoadingStudents(state) {
     return state.isLoadingStudents;
+  },
+  isLoadingStats(state) {
+    return state.isLoadingStats;
   },
   classTeams(state) {
     return state.classTeams;
@@ -168,34 +175,60 @@ const actions = {
   [FETCH_STUDENTS](context, params) {
     const user = store.state.auth.user;
     const classId = params["classId"];
-    const practiceId = params["practiceId"];
-    var forAdmin = params["forAdmin"];
 
-    if (typeof forAdmin === "string") {
-      forAdmin = forAdmin === "true";
-    }
-    console.log(
-      `${FETCH_STUDENTS} - classId: ${classId} forAdmin: ${forAdmin} practiceId: ${practiceId}`
-    );
+    console.log(`${FETCH_STUDENTS} - classId: ${classId}`);
     context.commit(FETCH_STUDENTS_START);
 
     const fetchTeams = "class:fetchTeams";
     Parse.Cloud.run(fetchTeams, {
       user,
-      classId,
-      forAdmin,
-      practiceId
+      classId
     })
       .then(classInfo => {
         console.log(
-          `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
-          // `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
+          // `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
+          `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_STUDENTS_END, classInfo);
       })
       .catch(e => {
         // console.log(`error loading classTeam list: ${e.message}`);
         console.log(`error loading classTeam list: ${JSON.stringify(e)}`);
+        throw new Error(e);
+      });
+  },
+  [FETCH_STATS](context, params) {
+    const user = store.state.auth.user;
+    const classId = params["classId"];
+    var practiceId = params["practiceId"];
+    var forAdmin = params["forAdmin"];
+
+    if (typeof forAdmin === "string") {
+      forAdmin = forAdmin === "true";
+    }
+
+    if (practiceId == "dummy") {
+      practiceId = undefined;
+    }
+    console.log(
+      `${FETCH_STUDENTS} - classId: ${classId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
+    );
+    context.commit(FETCH_STATS_START);
+
+    const fetchStats = "class:fetchStats";
+    Parse.Cloud.run(fetchStats, {
+      user,
+      classId,
+      practiceId,
+      forAdmin
+    })
+      .then(classInfo => {
+        console.log(`${fetchStats} - classInfo: ${JSON.stringify(classInfo)}`);
+        context.commit(FETCH_STATS_END, classInfo);
+      })
+      .catch(e => {
+        // console.log(`error loading classTeam list: ${e.message}`);
+        console.log(`error in ${fetchStats}: ${JSON.stringify(e)}`);
         throw new Error(e);
       });
   }
@@ -279,6 +312,16 @@ const mutations = {
 
       state.isLoadingStudents = false;
     }
+  },
+  [FETCH_STATS_START](state) {
+    state.isLoadingStats = true;
+  },
+  [FETCH_STATS_END](state, classInfo) {
+    state.classInfo = classInfo;
+    state.classInfo.canDownloadClassReport = state.classInfo.forAdmin;
+    state.classInfo.forAdmin = false;
+    state.classTeams = classInfo.classTeams;
+    state.isLoadingStats = false;
   }
 };
 

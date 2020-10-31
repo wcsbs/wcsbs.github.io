@@ -27,13 +27,13 @@
           :value="`(${index + 1}) ${member.name}`"
         ></b-form-input>
         <b-input-group-append>
-          <b-form-select
-            v-if="classTeam.id == null"
-            v-model="member.assignedTeamId"
-            :options="classTeamOptions"
-            v-on:change="assignTeam($event, index)"
-          ></b-form-select>
           <div v-if="classInfo.forAdmin">
+            <b-form-select
+              v-if="classTeam.id == null"
+              v-model="member.assignedTeamId"
+              :options="classTeamOptions"
+              v-on:change="assignTeam($event, index)"
+            ></b-form-select>
             <b-button
               v-if="!classTeam.dummy && classTeam.id && index > 0"
               variant="info"

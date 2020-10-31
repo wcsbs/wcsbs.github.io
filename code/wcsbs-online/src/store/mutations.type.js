@@ -15,3 +15,5 @@ export const FETCH_PRACTICE_COUNTS_START = "setLoadingPracticeCounts";
 export const FETCH_PRACTICE_COUNTS_END = "setPracticeCounts";
 export const FETCH_STUDENTS_START = "setLoadingStudents";
 export const FETCH_STUDENTS_END = "setStudents";
+export const FETCH_STATS_START = "setLoadingStats";
+export const FETCH_STATS_END = "setStats";
