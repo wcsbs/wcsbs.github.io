@@ -1,11 +1,18 @@
 <template>
   <div>
-    <div v-if="isLoadingStudents">
-      正在获取学员详情...
-    </div>
+    <div v-if="isLoadingStudents">正在获取学员详情...</div>
     <div v-else>
-      <h3>{{ classInfo.name }} -- 学员管理</h3>
-      <div class="input-group mb-3">
+      <h3>
+        {{ classInfo.name }} --
+        {{
+          classInfo.forAdmin
+            ? "学员管理"
+            : classInfo.practiceId
+            ? "出席统计"
+            : "实修统计"
+        }}
+      </h3>
+      <div v-if="classInfo.forAdmin" class="input-group mb-3">
         <input
           type="text"
           class="form-control"
@@ -35,9 +42,9 @@
         v-for="(classTeam, index) in classTeams"
         :key="classTeam.id + classTeam.name + index"
       >
-        <ClassTeam :classTeam="classTeam" />
+        <ClassTeam v-if="index > 0" :classTeam="classTeam" />
         <b-button
-          v-if="index > 0"
+          v-if="index > 0 && classInfo.forAdmin"
           block
           variant="warning"
           @click="removeClass(index)"

@@ -38,7 +38,7 @@
           block
           variant="info"
           @click="downloadReports(undefined)"
-          >下载统计报表</b-button
+          >出席统计</b-button
         >
         <hr />
         <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>
@@ -60,7 +60,7 @@
             block
             variant="info"
             @click="downloadReports(practice.id)"
-            >下载统计报表</b-button
+            >实修统计</b-button
           >
           <hr />
         </div>
@@ -134,7 +134,7 @@ export default {
         name: "student-management",
         params: {
           classId: this.buddhaClass.id,
-          forAdmin: this.buddhaClass.classSnapshot != undefined
+          forAdmin: true
         }
       });
     },
@@ -144,7 +144,8 @@ export default {
         name: "student-management",
         params: {
           classId: this.buddhaClass.id,
-          forAdmin: this.buddhaClass.classSnapshot != undefined
+          forAdmin: false,
+          practiceId
         }
       });
     }

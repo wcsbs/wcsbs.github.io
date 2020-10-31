@@ -33,15 +33,17 @@
             :options="classTeamOptions"
             v-on:change="assignTeam($event, index)"
           ></b-form-select>
-          <b-button
-            v-if="!classTeam.dummy && classTeam.id && index > 0"
-            variant="info"
-            v-on:click="setLeader(index)"
-            >设为组长</b-button
-          >
-          <b-button variant="warning" v-on:click="removeMember(index)">{{
-            classTeam.dummy ? "恢复" : "删除"
-          }}</b-button>
+          <div v-if="classInfo.forAdmin">
+            <b-button
+              v-if="!classTeam.dummy && classTeam.id && index > 0"
+              variant="info"
+              v-on:click="setLeader(index)"
+              >设为组长</b-button
+            >
+            <b-button variant="warning" v-on:click="removeMember(index)">{{
+              classTeam.dummy ? "恢复" : "删除"
+            }}</b-button>
+          </div>
         </b-input-group-append>
       </b-input-group>
     </b-card>

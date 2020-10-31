@@ -18,6 +18,7 @@ import {
   FETCH_STUDENTS_START,
   FETCH_STUDENTS_END
 } from "./mutations.type";
+import store from "./index";
 
 Vue.use(Toasted);
 
@@ -165,21 +166,25 @@ const actions = {
     context.commit(FETCH_STUDENTS_END, classInfo);
   },
   [FETCH_STUDENTS](context, params) {
+    const user = store.state.auth.user;
     const classId = params["classId"];
+    const practiceId = params["practiceId"];
     var forAdmin = params["forAdmin"];
 
     if (typeof forAdmin === "string") {
       forAdmin = forAdmin === "true";
     }
     console.log(
-      `${FETCH_STUDENTS} - classId: ${classId} forAdmin: ${forAdmin}`
+      `${FETCH_STUDENTS} - classId: ${classId} forAdmin: ${forAdmin} practiceId: ${practiceId}`
     );
     context.commit(FETCH_STUDENTS_START);
 
     const fetchTeams = "class:fetchTeams";
     Parse.Cloud.run(fetchTeams, {
+      user,
       classId,
-      forAdmin
+      forAdmin,
+      practiceId
     })
       .then(classInfo => {
         console.log(

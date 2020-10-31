@@ -477,14 +477,18 @@ Parse.Cloud.define(
       query.equalTo("userId", userId);
       query.descending("reportedAt");
     }
-    result.counts = await query.limit(MAX_QUERY_COUNT).find();
+    const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
 
     if (forAdmin) {
-      for (var i = 0; i < result.counts.length; i++) {
+      for (var i = 0; i < parseCounts.length; i++) {
         var userQuery = new Parse.Query(Parse.User);
-        userQuery.equalTo("objectId", result.counts[i].get("userId"));
+        userQuery.equalTo("objectId", parseCounts[i].get("userId"));
         const user = await userQuery.first();
-        result.users.push(user.get("name"));
+
+        if (user) {
+          result.users.push(user.get("name"));
+          result.counts.push(parseCounts[i]);
+        }
       }
     } else {
       const moduleId = practice.get("moduleId");
@@ -625,7 +629,10 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "class:fetchTeams",
-  async ({ user, params: { classId, forAdmin } }) => {
+  async ({
+    user,
+    params: { user: userWithRoles, classId, forAdmin, practiceId }
+  }) => {
     requireAuth(user);
 
     var query = new Parse.Query("Class");
@@ -636,12 +643,21 @@ Parse.Cloud.define(
       id: parseClass.id,
       name: parseClass.get("name"),
       url: parseClass.get("url"),
-      forAdmin: forAdmin,
-      classTeams: [{ members: [] }]
+      classTeams: [{ members: [] }],
+      forAdmin,
+      practiceId
     };
 
     query = new Parse.Query("Team");
     query.equalTo("classId", classId);
+    if (
+      !forAdmin &&
+      userWithRoles.roles.some(
+        e => e == "B4aAdminUser" || e == "ClassAdminUser"
+      )
+    ) {
+      query.equalTo("leaderId", user.id);
+    }
     query.ascending("index");
     const parseTeams = await query.limit(MAX_QUERY_COUNT).find();
 
@@ -677,15 +693,17 @@ Parse.Cloud.define(
       classInfo.classTeams.push(team);
     }
 
-    query = parseClass.relation("students").query();
-    query.notContainedIn("objectId", studentAssignedInTeams);
-    const classStudents = await query.limit(MAX_QUERY_COUNT).find();
-    for (j = 0; j < classStudents.length; j++) {
-      const member = {
-        id: classStudents[j].id,
-        name: classStudents[j].get("name")
-      };
-      classInfo.classTeams[0].members.push(member);
+    if (forAdmin) {
+      query = parseClass.relation("students").query();
+      query.notContainedIn("objectId", studentAssignedInTeams);
+      const classStudents = await query.limit(MAX_QUERY_COUNT).find();
+      for (j = 0; j < classStudents.length; j++) {
+        const member = {
+          id: classStudents[j].id,
+          name: classStudents[j].get("name")
+        };
+        classInfo.classTeams[0].members.push(member);
+      }
     }
 
     return classInfo;
