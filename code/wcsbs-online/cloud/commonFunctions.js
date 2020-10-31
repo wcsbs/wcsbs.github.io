@@ -142,7 +142,8 @@ const updateAttendanceV2 = async function(
 
 const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice, year) {
   var mapDates = {};
-  for (var key in csvHeader) {
+  for (var i = 0; i < csvHeader.length; i++) {
+    const key = csvHeader[i];
     const start = key.indexOf("-");
     if (start > 0) {
       var value = key;

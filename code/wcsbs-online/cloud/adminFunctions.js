@@ -121,8 +121,12 @@ Parse.Cloud.define(
     query.equalTo("objectId", classId);
     var parseClass = await query.first();
 
+    const csvHeader = [];
+    for (var key in csv[0]) {
+      csvHeader.push(key);
+    }
     var mapDates = commonFunctions.getDatesFromCsvHeader(
-      csv[0],
+      csvHeader,
       parseClass.get("url").includes("rpsxl"),
       practiceId,
       2020
