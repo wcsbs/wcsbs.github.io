@@ -832,3 +832,38 @@ Parse.Cloud.define(
     };
   }
 );
+
+Parse.Cloud.define(
+  "class:generateReport",
+  async ({ user, params: { classId, classTeams, practiceId } }) => {
+    requireAuth(user);
+
+    var query = new Parse.Query("Class");
+    query.equalTo("objectId", classId);
+    var parseClass = await query.first();
+    const { csvHeader, mapDates } = commonFunctions.prepareReportGeneration(
+      parseClass.get("url").includes("rpsxl"),
+      practiceId,
+      2020
+    );
+
+    var teams = [];
+
+    for (i = 0; i < classTeams.length; i++) {
+      const team = classTeams[i];
+      for (var j = 0; j < team.members.length; j++) {
+        query = new Parse.Query(Parse.User);
+        query.equalTo("objectId", team.members[j].id);
+
+        var parseUser = await query.first();
+        if (parseUser) {
+          team.members[j].user = parseUser;
+        }
+      }
+
+      teams.push(team);
+    }
+
+    return { csvHeader, mapDates, teams };
+  }
+);
