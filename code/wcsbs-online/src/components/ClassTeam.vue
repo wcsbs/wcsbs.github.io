@@ -23,8 +23,29 @@
         class="mt-3"
       >
         <b-form-input
+          v-if="classInfo.forAdmin"
           readonly
           :value="`(${index + 1}) ${member.name}`"
+        ></b-form-input>
+        <b-form-input
+          v-else-if="classInfo.practiceId"
+          readonly
+          :value="
+            `(${index + 1}) ${member.name} -- 总计${
+              classInfo.practiceName
+            }：${member.count
+              .toString()
+              .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+            `
+          "
+        ></b-form-input>
+        <b-form-input
+          v-else
+          readonly
+          :value="
+            `(${index + 1}) ${member.name} -- 总计出席：${member.count}
+            `
+          "
         ></b-form-input>
         <b-input-group-append>
           <div v-if="classInfo.forAdmin">

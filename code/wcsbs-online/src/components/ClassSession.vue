@@ -239,7 +239,8 @@ export default {
     classInfo: { type: Object, required: false },
     newSessions: { type: Array, required: false },
     forApplication: Boolean,
-    forAdmin: Boolean
+    forAdmin: Boolean,
+    classId: String
   },
   data: function() {
     return {
@@ -536,6 +537,7 @@ export default {
         }
       }
 
+      const classId = this.classId ? this.classId : this.classInfo.id;
       const sessionId = this.classSession.id;
       const options = {
         okText: "确认",
@@ -551,7 +553,11 @@ export default {
       this.$dialog
         .confirm(message, options)
         .then(function(dialog) {
-          Parse.Cloud.run("home:updateAttendanceV2", { sessionId, attendance })
+          Parse.Cloud.run("home:updateAttendanceV2", {
+            classId,
+            sessionId,
+            attendance
+          })
             .then(result => {
               console.log(
                 `updateAttendanceV2 - result: ${JSON.stringify(result)}`

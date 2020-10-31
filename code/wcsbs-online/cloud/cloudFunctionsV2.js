@@ -423,9 +423,10 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "home:updateAttendanceV2",
-  async ({ user, params: { sessionId, attendance } }) => {
+  async ({ user, params: { classId, sessionId, attendance } }) => {
     return await commonFunctions.updateAttendanceV2(
       user,
+      classId,
       sessionId,
       attendance
     );
@@ -724,8 +725,44 @@ Parse.Cloud.define(
       forAdmin,
       false
     );
+
+    var query, relation;
     if (practiceId) {
+      query = new Parse.Query("Practice");
+      query.equalTo("objectId", practiceId);
+      const practice = await query.first();
+      classInfo.practiceName = practice.get("name");
+      relation = practice.relation("counts");
       classInfo.practiceId = practiceId;
+    }
+
+    for (var i = 0; i < classInfo.classTeams.length; i++) {
+      const team = classInfo.classTeams[i];
+      for (var j = 0; j < team.members.length; j++) {
+        const member = team.members[j];
+        member.count = 0;
+        if (practiceId) {
+          query = relation.query();
+          query.equalTo("reportedAt", undefined);
+          query.equalTo("userId", member.id);
+          const parseCount = await query.limit(MAX_QUERY_COUNT).first();
+          if (parseCount) {
+            member.count += parseCount.get("count");
+          }
+        } else {
+          query = new Parse.Query("UserActivityStats");
+          var key = {
+            userId: member.id,
+            classId
+          };
+          key = JSON.stringify(key);
+          query.equalTo("key", key);
+          const stats = await query.first();
+          if (stats) {
+            member.count += stats.get("count");
+          }
+        }
+      }
     }
     return classInfo;
   }

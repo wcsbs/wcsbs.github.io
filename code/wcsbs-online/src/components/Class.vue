@@ -26,6 +26,7 @@
         </div>
         <ClassSession
           v-for="(classSession, index) in buddhaClass.classSessions"
+          :classId="buddhaClass.id"
           :classSession="classSession"
           :sessionDetails="buddhaClass.sessionDetails[index]"
           :key="classSession.id + index"

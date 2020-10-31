@@ -4,7 +4,11 @@
     <div v-else>
       <h3>
         {{ classInfo.name }} --
-        {{ !classInfo.practiceId ? "出席统计" : "实修统计" }}
+        {{
+          !classInfo.practiceId
+            ? "出席统计"
+            : `${classInfo.practiceName}实修统计`
+        }}
       </h3>
       <div v-if="classInfo.canDownloadClassReport">
         <b-button block variant="info" @click="downloadReportForClass()"

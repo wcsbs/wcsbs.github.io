@@ -211,6 +211,7 @@ Parse.Cloud.define(
               var attendance = { attendance: count > 0 };
               attendance = await commonFunctions.updateAttendanceV2(
                 parseUser,
+                classId,
                 classSession.id,
                 attendance
               );

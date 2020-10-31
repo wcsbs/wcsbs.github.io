@@ -87,9 +87,15 @@ const reportPracticeCountV2 = async function(
   };
 };
 
-const updateAttendanceV2 = async function(user, sessionId, attendance) {
+const updateAttendanceV2 = async function(
+  user,
+  classId,
+  sessionId,
+  attendance
+) {
   requireAuth(user);
 
+  var count = attendance.attendance ? 1 : 0;
   const result = {};
   var query = new Parse.Query("UserSessionAttendance");
   query.equalTo("userId", user.id);
@@ -100,6 +106,10 @@ const updateAttendanceV2 = async function(user, sessionId, attendance) {
     sessionAttendance = new Parse.Object("UserSessionAttendance");
     sessionAttendance.set("userId", user.id);
     sessionAttendance.set("sessionId", sessionId);
+  } else {
+    if (sessionAttendance.get("attendance")) {
+      count -= 1;
+    }
   }
 
   sessionAttendance.set("attendance", attendance.attendance);
@@ -109,6 +119,23 @@ const updateAttendanceV2 = async function(user, sessionId, attendance) {
 
   result.attendance = sessionAttendance.get("attendance");
   result.onLeave = sessionAttendance.get("onLeave");
+
+  query = new Parse.Query("UserActivityStats");
+  var key = {
+    userId: user.id,
+    classId
+  };
+  key = JSON.stringify(key);
+  query.equalTo("key", key);
+  var stats = await query.first();
+  if (stats) {
+    count += stats.get("count");
+  } else {
+    stats = new Parse.Object("UserActivityStats");
+    stats.set("key", key);
+  }
+  stats.set("count", count);
+  result.stats = await stats.save(null, MASTER_KEY);
 
   return result;
 };
