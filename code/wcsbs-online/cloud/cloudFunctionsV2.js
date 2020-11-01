@@ -842,7 +842,8 @@ const loadDataForUser = async function(
   mapDates,
   monthlyTotalOnly
 ) {
-  var total = 0;
+  var monthlyTotal = 0;
+  var yearlyTotal = 0;
   const userId = parseUser.id;
   const result = {};
   var lastDate;
@@ -862,12 +863,14 @@ const loadDataForUser = async function(
           query = relation.query();
           query.equalTo("userId", userId);
           const reportedAt = date;
-          reportedAt.setDate(date.getDate() + 1);
+          reportedAt.setHours(16); //Assuming GMT+8
           query.lessThan("reportedAt", reportedAt);
 
-          if (lastDate) {
-            query.greaterThanOrEqualTo("reportedAt", lastDate);
+          if (!lastDate) {
+            lastDate = new Date(date.getFullYear(), 0, 1);
           }
+          query.greaterThanOrEqualTo("reportedAt", lastDate);
+
           const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
           if (parseCounts) {
             count = 0;
@@ -894,16 +897,21 @@ const loadDataForUser = async function(
           result[key] = commonFunctions.formatCount(count);
         }
         if (count) {
-          total += count;
+          monthlyTotal += count;
         }
       } else {
-        total = commonFunctions.formatCount(total);
-        if (monthlyTotalOnly) {
-          result[key.substring(0, 3)] = total;
+        if (i < csvHeader.length - 1) {
+          yearlyTotal += monthlyTotal;
+          monthlyTotal = commonFunctions.formatCount(monthlyTotal);
+          if (monthlyTotalOnly) {
+            result[key.substring(0, 3)] = monthlyTotal;
+          } else {
+            result[key] = monthlyTotal;
+          }
+          monthlyTotal = 0;
         } else {
-          result[key] = total;
+          result[key] = commonFunctions.formatCount(yearlyTotal);;
         }
-        total = 0;
       }
     }
   }

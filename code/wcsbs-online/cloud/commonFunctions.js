@@ -224,7 +224,8 @@ const prepareReportGeneration = function(isRxl, isPractice, year) {
       "12-Dec",
       "19-Dec",
       "26-Dec",
-      "DEC2020 TOTAL"
+      "DEC2020 TOTAL",
+      "2020 TOTAL"
     ],
     [
       "组别",
@@ -283,7 +284,8 @@ const prepareReportGeneration = function(isRxl, isPractice, year) {
       "7-13DEC",
       "14-20DEC",
       "21-27DEC",
-      "DEC2020 TOTAL"
+      "DEC2020 TOTAL",
+      "2020 TOTAL"
     ]
   ];
 

@@ -223,7 +223,10 @@ const actions = {
       forAdmin
     })
       .then(classInfo => {
-        console.log(`${fetchStats} - classInfo: ${JSON.stringify(classInfo)}`);
+        // console.log(`${fetchStats} - classInfo: ${JSON.stringify(classInfo)}`);
+        console.log(
+          `${fetchStats} - #classTeam: ${classInfo.classTeams.length}`
+        );
         context.commit(FETCH_STATS_END, classInfo);
       })
       .catch(e => {
