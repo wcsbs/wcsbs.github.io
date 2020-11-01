@@ -910,7 +910,7 @@ const loadDataForUser = async function(
           }
           monthlyTotal = 0;
         } else {
-          result[key] = commonFunctions.formatCount(yearlyTotal);;
+          result[key] = commonFunctions.formatCount(yearlyTotal);
         }
       }
     }
