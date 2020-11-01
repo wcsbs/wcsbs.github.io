@@ -292,11 +292,19 @@ const prepareReportGeneration = function(isRxl, isPractice, year) {
   return { csvHeader, mapDates };
 };
 
+const formatCount = function(count) {
+  if (count) {
+    return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+  return "";
+};
+
 module.exports = {
   requireAuth,
   requireRole,
   reportPracticeCountV2,
   updateAttendanceV2,
   getDatesFromCsvHeader,
-  prepareReportGeneration
+  prepareReportGeneration,
+  formatCount
 };

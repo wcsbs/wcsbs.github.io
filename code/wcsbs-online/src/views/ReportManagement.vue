@@ -20,7 +20,7 @@
         v-for="(classTeam, index) in classTeams"
         :key="classTeam.id + classTeam.name + index"
       >
-        <div v-if="index > 0">
+        <div v-if="index > 0 && classTeam.members.length > 0">
           <ClassTeam :classTeam="classTeam" />
           <b-button
             block
@@ -66,14 +66,18 @@ export default {
       console.log(
         `downloadReportForTeam - classTeam: ${classTeam} practiceId: ${this.classInfo.practiceId}`
       );
+
       const thisComponent = this;
       const classId = this.classInfo.id;
       const practiceId = this.classInfo.practiceId;
       const classTeams = classTeam ? [classTeam] : this.classTeams;
+      const monthlyTotalOnly = !classTeam;
+
       Parse.Cloud.run("class:generateReport", {
         classId,
         classTeams,
-        practiceId
+        practiceId,
+        monthlyTotalOnly
       })
         .then(result => {
           console.log(`generateReport - result: ${JSON.stringify(result)}`);

@@ -833,37 +833,137 @@ Parse.Cloud.define(
   }
 );
 
+const loadDataForUser = async function(
+  parseClass,
+  parsePractice,
+  parseUser,
+  parseTeam,
+  csvHeader,
+  mapDates,
+  monthlyTotalOnly
+) {
+  var total = 0;
+  const userId = parseUser.id;
+  const result = {};
+  var lastDate;
+  for (var i = 0; i < csvHeader.length; i++) {
+    const key = csvHeader[i];
+    if (i == 0) {
+      result[key] = parseTeam.get("index").toString();
+    } else if (i == 1) {
+      result[key] = parseUser.get("name");
+    } else {
+      const date = mapDates[key];
+      if (date) {
+        var count;
+        if (parsePractice) {
+          var relation = parsePractice.relation("counts");
+
+          query = relation.query();
+          query.equalTo("userId", userId);
+          const reportedAt = date;
+          reportedAt.setDate(date.getDate() + 1);
+          query.lessThan("reportedAt", reportedAt);
+
+          if (lastDate) {
+            query.greaterThanOrEqualTo("reportedAt", lastDate);
+          }
+          const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
+          if (parseCounts) {
+            count = 0;
+            for (var j = 0; j < parseCounts.length; j++) {
+              count += parseCounts[j].get("count");
+            }
+          }
+
+          lastDate = reportedAt;
+        } else {
+          query = parseClass.relation("sessionsV2").query();
+          query.equalTo("scheduledAt", date);
+          const classSession = await query.first();
+
+          const attendance = await loadStudentAttendanceV2(
+            userId,
+            classSession
+          );
+          if (attendance) {
+            count = attendance.attendance ? 1 : 0;
+          }
+        }
+        if (!monthlyTotalOnly) {
+          result[key] = commonFunctions.formatCount(count);
+        }
+        if (count) {
+          total += count;
+        }
+      } else {
+        total = commonFunctions.formatCount(total);
+        if (monthlyTotalOnly) {
+          result[key.substring(0, 3)] = total;
+        } else {
+          result[key] = total;
+        }
+        total = 0;
+      }
+    }
+  }
+
+  return result;
+};
+
 Parse.Cloud.define(
   "class:generateReport",
-  async ({ user, params: { classId, classTeams, practiceId } }) => {
+  async ({
+    user,
+    params: { classId, classTeams, practiceId, monthlyTotalOnly }
+  }) => {
     requireAuth(user);
 
     var query = new Parse.Query("Class");
     query.equalTo("objectId", classId);
     var parseClass = await query.first();
+
+    var parsePractice;
+    if (practiceId) {
+      query = new Parse.Query("Practice");
+      query.equalTo("objectId", practiceId);
+      parsePractice = await query.first();
+    }
+
     const { csvHeader, mapDates } = commonFunctions.prepareReportGeneration(
       parseClass.get("url").includes("rpsxl"),
       practiceId,
       2020
     );
 
-    var teams = [];
+    var results = [];
 
     for (i = 0; i < classTeams.length; i++) {
       const team = classTeams[i];
+      query = new Parse.Query("Team");
+      query.equalTo("objectId", team.id);
+      const parseTeam = await query.first();
+
       for (var j = 0; j < team.members.length; j++) {
         query = new Parse.Query(Parse.User);
         query.equalTo("objectId", team.members[j].id);
 
         var parseUser = await query.first();
         if (parseUser) {
-          team.members[j].user = parseUser;
+          var result = await loadDataForUser(
+            parseClass,
+            parsePractice,
+            parseUser,
+            parseTeam,
+            csvHeader,
+            mapDates,
+            monthlyTotalOnly
+          );
+          results.push(result);
         }
       }
-
-      teams.push(team);
     }
 
-    return { csvHeader, mapDates, teams };
+    return results;
   }
 );
