@@ -159,6 +159,12 @@ export default {
       }
       return fields;
     },
+    formatCount(count) {
+      if (count) {
+        return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      }
+      return "";
+    },
     buildPracticeCountItems() {
       var items = [];
       if (this.practiceCounts) {
@@ -166,7 +172,7 @@ export default {
           for (var i = 0; i < this.practiceCounts.length; i++) {
             items.push({
               name: this.users[i],
-              count: this.practiceCounts[i].get("count")
+              count: this.formatCount(this.practiceCounts[i].get("count"))
             });
           }
         } else {
@@ -183,7 +189,7 @@ export default {
               return {
                 sessionName: sessionName,
                 reportedAt: this.toLocalDateString(e.get("reportedAt")),
-                count: e.get("count")
+                count: this.formatCount(e.get("count"))
               };
             });
         }
@@ -206,19 +212,21 @@ export default {
                 : "未报数",
             accumulatedCount:
               latestPracticeCount && latestPracticeCount.accumulatedCount
-                ? latestPracticeCount.accumulatedCount
+                ? this.formatCount(latestPracticeCount.accumulatedCount)
                 : "未报数"
           }
         : {
             latestCount:
               latestPracticeCount && latestPracticeCount.reportedAt
-                ? `${latestPracticeCount.count} @ ${this.toLocalDateString(
+                ? `${this.formatCount(
+                    latestPracticeCount.count
+                  )} @ ${this.toLocalDateString(
                     latestPracticeCount.reportedAt
                   )}`
                 : "未报数",
             accumulatedCount:
               latestPracticeCount && latestPracticeCount.accumulatedCount
-                ? latestPracticeCount.accumulatedCount
+                ? this.formatCount(latestPracticeCount.accumulatedCount)
                 : "未报数"
           };
     },

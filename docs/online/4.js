@@ -1,9 +1,9 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonp"] = (typeof self !== 'undefined' ? self : this)["webpackJsonp"] || []).push([[4],{
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/User.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/User.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/Practice.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Practice.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -15,10 +15,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es6.object.keys */ "./node_modules/core-js/modules/es6.object.keys.js");
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/store/actions.type */ "./src/store/actions.type.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/store */ "./src/store/index.js");
+/* harmony import */ var core_js_modules_es6_array_find__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es6.array.find */ "./node_modules/core-js/modules/es6.array.find.js");
+/* harmony import */ var core_js_modules_es6_array_find__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_find__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es6.regexp.to-string */ "./node_modules/core-js/modules/es6.regexp.to-string.js");
+/* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.regexp.replace */ "./node_modules/core-js/modules/es6.regexp.replace.js");
+/* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! v-calendar/lib/components/date-picker.umd */ "./node_modules/v-calendar/lib/components/date-picker.umd.js");
+/* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+
+
 
 
 
@@ -26,7 +40,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 //
 //
@@ -125,105 +139,215 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "User",
-  data: function data() {
-    return {
-      userStates: [{
-        value: "正常",
-        key: undefined
-      }, {
-        value: "密码需更改",
-        key: "needToChangePassword"
-      }, {
-        value: "被屏蔽",
-        key: "blocked"
-      }]
-    };
+  name: "Practice",
+  components: {
+    DatePicker: v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default.a
   },
   props: {
-    slug: {
-      type: String,
+    practice: {
+      type: Object,
+      required: true
+    },
+    latestPracticeCount: {
+      type: Object,
       required: false
-    }
+    },
+    practiceSubmodules: {
+      type: Array,
+      required: false
+    },
+    practiceCounts: {
+      type: Array,
+      required: false
+    },
+    users: {
+      type: Array,
+      required: false
+    },
+    forAdmin: Boolean
   },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    _store__WEBPACK_IMPORTED_MODULE_6__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["ADMIN_FETCH_USER"], to.params.slug).then(function () {
-      next();
-    });
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_10__["mapGetters"])(["isStudent"])),
+  data: function data() {
+    return {
+      practiceObj: {
+        name: this.practice.get("name"),
+        description: this.practice.get("description"),
+        showDescription: false,
+        showReportingCount: false,
+        newCountReportedAt: "",
+        newCount: "",
+        submoduleId: undefined
+      },
+      practiceCountObj: this.buildPracticeCountObj(this.latestPracticeCount),
+      fields: this.buildPracticeCountFields(),
+      items: this.buildPracticeCountItems()
+    };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(["user"])),
   methods: {
-    updateUser: function updateUser() {
+    buildPracticeCountFields: function buildPracticeCountFields() {
+      var fields = [{
+        key: this.forAdmin ? "name" : "reportedAt",
+        label: this.forAdmin ? "姓名" : "日期",
+        sortable: true
+      }, {
+        key: "count",
+        label: "报数",
+        sortable: true
+      }];
+
+      if (!this.forAdmin && this.practiceSubmodules && this.practiceSubmodules.length > 0) {
+        fields.splice(0, 0, {
+          key: "sessionName",
+          label: "修法",
+          sortable: true
+        });
+      }
+
+      return fields;
+    },
+    formatCount: function formatCount(count) {
+      if (count) {
+        return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      }
+
+      return "";
+    },
+    buildPracticeCountItems: function buildPracticeCountItems() {
       var _this = this;
 
-      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["UPDATE_USER_BY_ADMIN"], this.user).then(function () {
-        _this.$router.push({
-          name: "user-management"
+      var items = [];
+
+      if (this.practiceCounts) {
+        if (this.forAdmin) {
+          for (var i = 0; i < this.practiceCounts.length; i++) {
+            items.push({
+              name: this.users[i],
+              count: this.formatCount(this.practiceCounts[i].get("count"))
+            });
+          }
+        } else {
+          var practiceSubmodules = this.practiceSubmodules;
+          items = this.practiceCounts.filter(function (x) {
+            return x.get("reportedAt");
+          }).map(function (e) {
+            var submoduleId = e.get("submoduleId");
+            var sessionName = undefined;
+
+            if (submoduleId) {
+              sessionName = practiceSubmodules.find(function (e) {
+                return e.id == submoduleId;
+              }).name;
+            }
+
+            return {
+              sessionName: sessionName,
+              reportedAt: _this.toLocalDateString(e.get("reportedAt")),
+              count: _this.formatCount(e.get("count"))
+            };
+          });
+        }
+      }
+
+      return items;
+    },
+    buildPracticeCountObj: function buildPracticeCountObj(latestPracticeCount) {
+      // console.log(
+      //   `buildPracticeCountObj - this.forAdmin: ${
+      //     this.forAdmin
+      //   } ${JSON.stringify(latestPracticeCount)}`
+      // );
+      return this.forAdmin ? {
+        latestCount: latestPracticeCount && latestPracticeCount.reportedAt ? "".concat(this.toLocalDateString(new Date(latestPracticeCount.reportedAt))) : "未报数",
+        accumulatedCount: latestPracticeCount && latestPracticeCount.accumulatedCount ? this.formatCount(latestPracticeCount.accumulatedCount) : "未报数"
+      } : {
+        latestCount: latestPracticeCount && latestPracticeCount.reportedAt ? "".concat(this.formatCount(latestPracticeCount.count), " @ ").concat(this.toLocalDateString(latestPracticeCount.reportedAt)) : "未报数",
+        accumulatedCount: latestPracticeCount && latestPracticeCount.accumulatedCount ? this.formatCount(latestPracticeCount.accumulatedCount) : "未报数"
+      };
+    },
+    minDateForCountReporting: function minDateForCountReporting() {
+      var today = new Date(); //student must report count within 365 days
+
+      return new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
+    },
+    toLocalDateTimeString: function toLocalDateTimeString(date) {
+      var options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      };
+      return date.toLocaleDateString("zh-CN", options);
+    },
+    toLocalDateString: function toLocalDateString(date) {
+      var options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      };
+      return date.toLocaleDateString("zh-CN", options);
+    },
+    toggleReportingCount: function toggleReportingCount() {
+      this.practiceObj.showReportingCount = !this.practiceObj.showReportingCount;
+      this.practiceObj.newCountReportedAt = undefined;
+      this.practiceObj.newCount = undefined;
+      this.practiceObj.submoduleId = undefined;
+    },
+    onSubmit: function onSubmit(evt) {
+      evt.preventDefault();
+      var options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+
+      };
+      var practiceSubmoduleId = this.practiceObj.submoduleId;
+      var sessionName = "";
+
+      if (practiceSubmoduleId) {
+        sessionName = this.practiceSubmodules.find(function (e) {
+          return e.id == practiceSubmoduleId;
+        }).name;
+      }
+
+      var message = {
+        title: this.practiceObj.name,
+        body: "\u65B0\u589E".concat(sessionName, "\u62A5\u6570").concat(this.practiceObj.newCount, " @ ").concat(this.toLocalDateString(this.practiceObj.newCountReportedAt), "\uFF1F")
+      };
+      var practiceId = this.practice.id;
+      var reportedAt = new Date(0);
+      reportedAt.setUTCFullYear(this.practiceObj.newCountReportedAt.getFullYear());
+      reportedAt.setUTCMonth(this.practiceObj.newCountReportedAt.getMonth());
+      reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
+      var count = parseInt(this.practiceObj.newCount);
+      var thisComponent = this;
+      console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " practiceSubmoduleId: ").concat(practiceSubmoduleId, " reportedAt: ").concat(reportedAt, " count: ").concat(count));
+      this.$dialog.confirm(message, options).then(function (dialog) {
+        parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("home:reportPracticeCountV2", {
+          practiceId: practiceId,
+          practiceSubmoduleId: practiceSubmoduleId,
+          reportedAt: reportedAt,
+          count: count
+        }).then(function (result) {
+          console.log("reportPracticeCount - result: ".concat(JSON.stringify(result)));
+          thisComponent.practiceCountObj = thisComponent.buildPracticeCountObj(result);
+          dialog.close();
+
+          if (thisComponent.practiceCounts) {
+            // thisComponent.$router.go();
+            window.location.reload();
+          }
+        }).catch(function (e) {
+          console.log("error in reportPracticeCount: ".concat(e));
+          dialog.close();
+          thisComponent.$dialog.alert("error in reportPracticeCount: ".concat(e));
         });
+      }).catch(function (e) {
+        console.log("error: ".concat(e));
       });
     }
   }
@@ -231,10 +355,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 /***/ }),
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/User.vue?vue&type=template&id=e0b47cf6&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/User.vue?vue&type=template&id=e0b47cf6& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/Practice.vue?vue&type=template&id=2cc88beb&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Practice.vue?vue&type=template&id=2cc88beb& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -246,575 +370,287 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "profile-page" }, [
-    _c("div", { staticClass: "container page" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-6 offset-md-3 col-xs-12" }, [
-          _vm.user.id
-            ? _c("h1", { staticClass: "text-xs-center" }, [_vm._v("用户信息")])
-            : _c("h1", { staticClass: "text-xs-center" }, [_vm._v("创建用户")]),
+  return _c(
+    "div",
+    [
+      _c(
+        "b-card",
+        { staticClass: "text-center", attrs: { header: _vm.practiceObj.name } },
+        [
           _c(
-            "form",
-            {
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.updateUser()
-                }
-              }
-            },
+            "b-card-text",
             [
               _c(
-                "fieldset",
+                "b-input-group",
+                {
+                  staticClass: "mt-3",
+                  attrs: { prepend: _vm.forAdmin ? "统计日期：" : "最新报数：" }
+                },
                 [
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("用户名")
-                    ]),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.user.username,
-                          expression: "user.username"
-                        }
-                      ],
-                      staticClass: "form-control form-control-lg",
-                      attrs: { type: "text", placeholder: "用户名" },
-                      domProps: { value: _vm.user.username },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.user, "username", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("姓名")
-                    ]),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.user.name,
-                          expression: "user.name"
-                        }
-                      ],
-                      staticClass: "form-control form-control-lg",
-                      attrs: { type: "text", placeholder: "姓名" },
-                      domProps: { value: _vm.user.name },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.user, "name", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("电邮地址")
-                    ]),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.user.email,
-                          expression: "user.email"
-                        }
-                      ],
-                      staticClass: "form-control form-control-lg",
-                      attrs: { type: "email", placeholder: "电邮地址" },
-                      domProps: { value: _vm.user.email },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.user, "email", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("电话号码")
-                    ]),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.user.phone,
-                          expression: "user.phone"
-                        }
-                      ],
-                      staticClass: "form-control form-control-lg",
-                      attrs: { type: "phone", placeholder: "电话号码" },
-                      domProps: { value: _vm.user.phone },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.user, "phone", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("密码")
-                    ]),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.user.password,
-                          expression: "user.password"
-                        }
-                      ],
-                      staticClass: "form-control form-control-lg",
-                      attrs: {
-                        type: "password",
-                        placeholder: "密码",
-                        autocomplete: "new-password"
+                  _c("b-form-input", {
+                    attrs: { readonly: "" },
+                    model: {
+                      value: _vm.practiceCountObj.latestCount,
+                      callback: function($$v) {
+                        _vm.$set(_vm.practiceCountObj, "latestCount", $$v)
                       },
-                      domProps: { value: _vm.user.password },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.user, "password", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("确认密码")
-                    ]),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.user.confirmPassword,
-                          expression: "user.confirmPassword"
-                        }
-                      ],
-                      staticClass: "form-control form-control-lg",
-                      attrs: {
-                        type: "password",
-                        placeholder: "确认密码",
-                        autocomplete: "new-password"
+                      expression: "practiceCountObj.latestCount"
+                    }
+                  })
+                ],
+                1
+              ),
+              _c(
+                "b-input-group",
+                { staticClass: "mt-3", attrs: { prepend: "总计报数：" } },
+                [
+                  _c("b-form-input", {
+                    attrs: { readonly: "" },
+                    model: {
+                      value: _vm.practiceCountObj.accumulatedCount,
+                      callback: function($$v) {
+                        _vm.$set(_vm.practiceCountObj, "accumulatedCount", $$v)
                       },
-                      domProps: { value: _vm.user.confirmPassword },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.user,
-                            "confirmPassword",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    })
-                  ]),
-                  _c("fieldset", { staticClass: "form-group" }, [
-                    _c("label", { staticStyle: { "font-size": "22px" } }, [
-                      _vm._v("用户角色")
-                    ]),
-                    _c("div", { staticClass: "form-control" }, [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
+                      expression: "practiceCountObj.accumulatedCount"
+                    }
+                  }),
+                  _c(
+                    "b-input-group-append",
+                    [
+                      _vm.isStudent && !_vm.forAdmin
+                        ? _c(
+                            "b-button",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.user.isSystemAdmin,
-                              expression: "user.isSystemAdmin"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: { type: "checkbox", id: "isSystemAdmin" },
-                          domProps: {
-                            checked: Array.isArray(_vm.user.isSystemAdmin)
-                              ? _vm._i(_vm.user.isSystemAdmin, null) > -1
-                              : _vm.user.isSystemAdmin
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.user.isSystemAdmin,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isSystemAdmin",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isSystemAdmin",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.user, "isSystemAdmin", $$c)
-                              }
-                            }
-                          }
-                        }),
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            attrs: { for: "isSystemAdmin" }
-                          },
-                          [_vm._v(" 系统管理员")]
-                        )
-                      ]),
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.user.isClassAdmin,
-                              expression: "user.isClassAdmin"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: { type: "checkbox", id: "isClassAdmin" },
-                          domProps: {
-                            checked: Array.isArray(_vm.user.isClassAdmin)
-                              ? _vm._i(_vm.user.isClassAdmin, null) > -1
-                              : _vm.user.isClassAdmin
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.user.isClassAdmin,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isClassAdmin",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isClassAdmin",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.user, "isClassAdmin", $$c)
-                              }
-                            }
-                          }
-                        }),
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            attrs: { for: "isClassAdmin" }
-                          },
-                          [_vm._v(" 学修管理员")]
-                        )
-                      ]),
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.user.isTeacher,
-                              expression: "user.isTeacher"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: { type: "checkbox", id: "isTeacher" },
-                          domProps: {
-                            checked: Array.isArray(_vm.user.isTeacher)
-                              ? _vm._i(_vm.user.isTeacher, null) > -1
-                              : _vm.user.isTeacher
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.user.isTeacher,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isTeacher",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isTeacher",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.user, "isTeacher", $$c)
-                              }
-                            }
-                          }
-                        }),
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            attrs: { for: "isTeacher" }
-                          },
-                          [_vm._v(" 辅导员")]
-                        )
-                      ]),
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.user.isTeachingAssistant,
-                              expression: "user.isTeachingAssistant"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: {
-                            type: "checkbox",
-                            id: "isTeachingAssistant"
-                          },
-                          domProps: {
-                            checked: Array.isArray(_vm.user.isTeachingAssistant)
-                              ? _vm._i(_vm.user.isTeachingAssistant, null) > -1
-                              : _vm.user.isTeachingAssistant
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.user.isTeachingAssistant,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isTeachingAssistant",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isTeachingAssistant",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.user, "isTeachingAssistant", $$c)
-                              }
-                            }
-                          }
-                        }),
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            attrs: { for: "isTeachingAssistant" }
-                          },
-                          [_vm._v(" 学修助理")]
-                        )
-                      ]),
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.user.isStudent,
-                              expression: "user.isStudent"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: { type: "checkbox", id: "isStudent" },
-                          domProps: {
-                            checked: Array.isArray(_vm.user.isStudent)
-                              ? _vm._i(_vm.user.isStudent, null) > -1
-                              : _vm.user.isStudent
-                          },
-                          on: {
-                            change: function($event) {
-                              var $$a = _vm.user.isStudent,
-                                $$el = $event.target,
-                                $$c = $$el.checked ? true : false
-                              if (Array.isArray($$a)) {
-                                var $$v = null,
-                                  $$i = _vm._i($$a, $$v)
-                                if ($$el.checked) {
-                                  $$i < 0 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isStudent",
-                                      $$a.concat([$$v])
-                                    )
-                                } else {
-                                  $$i > -1 &&
-                                    _vm.$set(
-                                      _vm.user,
-                                      "isStudent",
-                                      $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1))
-                                    )
-                                }
-                              } else {
-                                _vm.$set(_vm.user, "isStudent", $$c)
-                              }
-                            }
-                          }
-                        }),
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            attrs: { for: "isStudent" }
-                          },
-                          [_vm._v(" 学员")]
-                        )
-                      ])
-                    ])
-                  ]),
-                  _vm.user.id
-                    ? _c("fieldset", { staticClass: "form-group" }, [
-                        _c("label", { staticStyle: { "font-size": "22px" } }, [
-                          _vm._v("用户状态")
-                        ]),
-                        _c("div", { staticClass: "form-control" }, [
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.user.state,
-                                  expression: "user.state"
-                                }
-                              ],
+                              attrs: { variant: "warning" },
                               on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.user,
-                                    "state",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
+                                click: function($event) {
+                                  return _vm.toggleReportingCount()
                                 }
                               }
                             },
-                            _vm._l(_vm.userStates, function(state) {
-                              return _c(
-                                "option",
-                                {
-                                  key: state.key,
-                                  domProps: { value: state.key }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                    " +
-                                      _vm._s(state.value) +
-                                      "\n                  "
-                                  )
-                                ]
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.practiceObj.showReportingCount
+                                    ? "完成报数"
+                                    : "我要报数"
+                                )
                               )
-                            }),
-                            0
+                            ]
                           )
-                        ])
-                      ])
-                    : _vm._e(),
-                  _c(
-                    "button",
-                    { staticClass: "btn btn-lg btn-primary pull-xs-right" },
-                    [
-                      _vm.user.id
-                        ? _c("span", [_vm._v(" 更新用户信息")])
-                        : _c("span", [_vm._v(" 创建新用户")])
-                    ]
-                  ),
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "navbar-brand",
-                      attrs: { to: { name: "user-management", skip: "true" } }
-                    },
-                    [_vm._v("返回")]
+                        : _vm._e(),
+                      _c(
+                        "b-button",
+                        {
+                          attrs: { variant: "info" },
+                          on: {
+                            click: function($event) {
+                              _vm.practiceObj.showDescription = !_vm.practiceObj
+                                .showDescription
+                            }
+                          }
+                        },
+                        [
+                          _vm.practiceObj.showDescription
+                            ? _c("b-icon", {
+                                attrs: { icon: "chevron-double-up" }
+                              })
+                            : _c("b-icon", {
+                                attrs: { icon: "chevron-double-down" }
+                              })
+                        ],
+                        1
+                      )
+                    ],
+                    1
                   )
                 ],
                 1
-              )
-            ]
+              ),
+              _vm.practiceObj.showReportingCount
+                ? _c(
+                    "b-form",
+                    { on: { submit: _vm.onSubmit } },
+                    [
+                      _c(
+                        "b-input-group",
+                        {
+                          staticClass: "mt-3",
+                          attrs: { prepend: "选择日期：" }
+                        },
+                        [
+                          _c("v-date-picker", {
+                            attrs: {
+                              locale: "zh-CN",
+                              "min-date": _vm.minDateForCountReporting(),
+                              "max-date": new Date(),
+                              "input-props": {
+                                readonly: true
+                              }
+                            },
+                            model: {
+                              value: _vm.practiceObj.newCountReportedAt,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.practiceObj,
+                                  "newCountReportedAt",
+                                  $$v
+                                )
+                              },
+                              expression: "practiceObj.newCountReportedAt"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm.practiceSubmodules.length > 0
+                        ? _c(
+                            "b-input-group",
+                            {
+                              staticClass: "mt-3",
+                              attrs: { prepend: "选择修法：" }
+                            },
+                            [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.practiceObj.submoduleId,
+                                      expression: "practiceObj.submoduleId"
+                                    }
+                                  ],
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.practiceObj,
+                                        "submoduleId",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                _vm._l(_vm.practiceSubmodules, function(
+                                  session
+                                ) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      key: session.id,
+                                      domProps: { value: session.id }
+                                    },
+                                    [_vm._v(_vm._s(session.name))]
+                                  )
+                                }),
+                                0
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _c(
+                        "b-input-group",
+                        {
+                          staticClass: "mt-3",
+                          attrs: { prepend: "输入报数：" }
+                        },
+                        [
+                          _c("b-form-input", {
+                            attrs: {
+                              id: "input-count",
+                              type: "number",
+                              required: "",
+                              placeholder: "输入报数"
+                            },
+                            model: {
+                              value: _vm.practiceObj.newCount,
+                              callback: function($$v) {
+                                _vm.$set(_vm.practiceObj, "newCount", $$v)
+                              },
+                              expression: "practiceObj.newCount"
+                            }
+                          }),
+                          _c(
+                            "b-input-group-append",
+                            [
+                              _c(
+                                "b-button",
+                                {
+                                  attrs: { type: "submit", variant: "primary" }
+                                },
+                                [_vm._v("提交")]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm.practiceObj.showDescription
+                ? _c("b-form-textarea", {
+                    attrs: {
+                      placeholder: "",
+                      rows: "3",
+                      "max-rows": "8",
+                      readonly: ""
+                    },
+                    model: {
+                      value: _vm.practiceObj.description,
+                      callback: function($$v) {
+                        _vm.$set(_vm.practiceObj, "description", $$v)
+                      },
+                      expression: "practiceObj.description"
+                    }
+                  })
+                : _vm._e(),
+              _vm.practiceCounts
+                ? _c(
+                    "div",
+                    [
+                      _c("h5", [
+                        _vm._v(
+                          "总计有 " + _vm._s(_vm.items.length) + " 条报数记录"
+                        )
+                      ]),
+                      _c("b-table", {
+                        attrs: {
+                          striped: "",
+                          hover: "",
+                          items: _vm.items,
+                          fields: _vm.fields
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ],
+            1
           )
-        ])
-      ])
-    ])
-  ])
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -823,17 +659,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./src/views/User.vue":
-/*!****************************!*\
-  !*** ./src/views/User.vue ***!
-  \****************************/
+/***/ "./src/components/Practice.vue":
+/*!*************************************!*\
+  !*** ./src/components/Practice.vue ***!
+  \*************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./User.vue?vue&type=template&id=e0b47cf6& */ "./src/views/User.vue?vue&type=template&id=e0b47cf6&");
-/* harmony import */ var _User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./User.vue?vue&type=script&lang=js& */ "./src/views/User.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Practice.vue?vue&type=template&id=2cc88beb& */ "./src/components/Practice.vue?vue&type=template&id=2cc88beb&");
+/* harmony import */ var _Practice_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Practice.vue?vue&type=script&lang=js& */ "./src/components/Practice.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -843,9 +679,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Practice_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -859,52 +695,52 @@ if (true) {
   api.install(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js"))
   if (api.compatible) {
     module.hot.accept()
-    if (!api.isRecorded('e0b47cf6')) {
-      api.createRecord('e0b47cf6', component.options)
+    if (!api.isRecorded('2cc88beb')) {
+      api.createRecord('2cc88beb', component.options)
     } else {
-      api.reload('e0b47cf6', component.options)
+      api.reload('2cc88beb', component.options)
     }
-    module.hot.accept(/*! ./User.vue?vue&type=template&id=e0b47cf6& */ "./src/views/User.vue?vue&type=template&id=e0b47cf6&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./User.vue?vue&type=template&id=e0b47cf6& */ "./src/views/User.vue?vue&type=template&id=e0b47cf6&");
+    module.hot.accept(/*! ./Practice.vue?vue&type=template&id=2cc88beb& */ "./src/components/Practice.vue?vue&type=template&id=2cc88beb&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Practice.vue?vue&type=template&id=2cc88beb& */ "./src/components/Practice.vue?vue&type=template&id=2cc88beb&");
 (function () {
-      api.rerender('e0b47cf6', {
-        render: _User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__["render"],
-        staticRenderFns: _User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
+      api.rerender('2cc88beb', {
+        render: _Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__["render"],
+        staticRenderFns: _Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
       })
     })(__WEBPACK_OUTDATED_DEPENDENCIES__); }.bind(this))
   }
 }
-component.options.__file = "src/views/User.vue"
+component.options.__file = "src/components/Practice.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./src/views/User.vue?vue&type=script&lang=js&":
-/*!*****************************************************!*\
-  !*** ./src/views/User.vue?vue&type=script&lang=js& ***!
-  \*****************************************************/
+/***/ "./src/components/Practice.vue?vue&type=script&lang=js&":
+/*!**************************************************************!*\
+  !*** ./src/components/Practice.vue?vue&type=script&lang=js& ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./User.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/User.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Practice_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./Practice.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/Practice.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Practice_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./src/views/User.vue?vue&type=template&id=e0b47cf6&":
-/*!***********************************************************!*\
-  !*** ./src/views/User.vue?vue&type=template&id=e0b47cf6& ***!
-  \***********************************************************/
+/***/ "./src/components/Practice.vue?vue&type=template&id=2cc88beb&":
+/*!********************************************************************!*\
+  !*** ./src/components/Practice.vue?vue&type=template&id=2cc88beb& ***!
+  \********************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./User.vue?vue&type=template&id=e0b47cf6& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/User.vue?vue&type=template&id=e0b47cf6&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./Practice.vue?vue&type=template&id=2cc88beb& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/Practice.vue?vue&type=template&id=2cc88beb&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_e0b47cf6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Practice_vue_vue_type_template_id_2cc88beb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

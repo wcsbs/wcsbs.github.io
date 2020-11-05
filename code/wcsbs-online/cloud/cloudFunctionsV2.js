@@ -456,7 +456,7 @@ Parse.Cloud.define(
 
     userId = user.id;
     logger.info(
-      `home:fetchPracticeCountsV2 - userId: ${userId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
+      `class:fetchPracticeCountsV2 - userId: ${userId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
     );
 
     var query = new Parse.Query("Practice");
@@ -474,6 +474,7 @@ Parse.Cloud.define(
     query = relation.query();
     if (forAdmin) {
       query.equalTo("reportedAt", undefined);
+      query.descending("count");
     } else {
       query.equalTo("userId", userId);
       query.descending("reportedAt");
@@ -494,6 +495,7 @@ Parse.Cloud.define(
     } else {
       const moduleId = practice.get("moduleId");
       result.practiceSubmodules = await loadPracticeSubmodules(moduleId);
+      result.counts = parseCounts;
     }
 
     return result;

@@ -1,1455 +1,1091 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonp"] = (typeof self !== 'undefined' ? self : this)["webpackJsonp"] || []).push([[1],{
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ClassSession.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ClassSession.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es7_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es7.object.get-own-property-descriptors */ "./node_modules/core-js/modules/es7.object.get-own-property-descriptors.js");
-/* harmony import */ var core_js_modules_es7_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es7_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom.iterable */ "./node_modules/core-js/modules/web.dom.iterable.js");
-/* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es6.object.keys */ "./node_modules/core-js/modules/es6.object.keys.js");
-/* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es7.array.includes */ "./node_modules/core-js/modules/es7.array.includes.js");
-/* harmony import */ var core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.string.includes */ "./node_modules/core-js/modules/es6.string.includes.js");
-/* harmony import */ var core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es6.array.sort */ "./node_modules/core-js/modules/es6.array.sort.js");
-/* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
-/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-
-
-
-
-
-
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "ClassSession",
-  props: {
-    classSession: {
-      type: Object,
-      required: true
-    },
-    sessionDetails: {
-      type: Object,
-      required: false
-    },
-    classInfo: {
-      type: Object,
-      required: false
-    },
-    newSessions: {
-      type: Array,
-      required: false
-    },
-    forApplication: Boolean,
-    forAdmin: Boolean,
-    classId: String
-  },
-  data: function data() {
-    return {
-      session: this.classSession.dummy ? {
-        creating: true,
-        editing: true,
-        submodules: []
-      } : this.initSession(),
-      moduleDropdownOptions: [],
-      submoduleDropdownOptions: [],
-      editing: this.classSession.dummy,
-      canAddSubmodule: false
-    };
-  },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_9__["mapGetters"])(["isClassAdmin", "isTeachingAssistant", "isStudent"])),
-  mounted: function mounted() {
-    this.refreshUI();
-  },
-  methods: {
-    initSession: function initSession() {
-      return {
-        id: this.classSession.id,
-        forApplication: this.classInfo ? this.classInfo.forApplication : this.forApplication,
-        name: this.classSession.get("name"),
-        submodules: [].concat(this.sessionDetails.submodules),
-        materials: this.classSession.get("content").materials ? [].concat(this.classSession.get("content").materials) : [],
-        description: this.classSession.get("description"),
-        scheduledAt: this.classSession.get("scheduledAt"),
-        scheduledAtLocalDateTimeString: this.toLocalDateTimeString(this.classSession.get("scheduledAt")),
-        showMoreDetails: false,
-        attendanceState: this.toAttendanceStateString(this.sessionDetails),
-        prestudyState: this.toPrestudyStateString(this.sessionDetails, 0)
-      };
-    },
-    refreshUI: function refreshUI() {
-      var _this = this;
-
-      this.moduleDropdownOptions = [];
-      this.submoduleDropdownOptions = [];
-
-      if (!this.editing) {
-        return;
-      }
-
-      this.moduleDropdownOptions = this.classInfo.modules.map(function (e) {
-        return {
-          value: e.id,
-          text: e.name
-        };
-      });
-      var session = this.session;
-      var selectedModule;
-
-      for (var i = 0; i < this.classInfo.modules.length; i++) {
-        selectedModule = this.classInfo.modules[i];
-
-        if (!session.moduleId || session.moduleId == selectedModule.id) {
-          break;
-        }
-      }
-
-      if (!session.moduleId) {
-        session.moduleId = selectedModule.id;
-      }
-
-      console.log("refreshUI - selectedModule: ".concat(selectedModule.name));
-      this.submoduleDropdownOptions = this.submoduleDropdownOptions.concat(selectedModule.newSubmodules);
-
-      if (!this.classSession.dummy) {
-        for (i = 0; i < this.sessionDetails.submodules.length; i++) {
-          var submodule = this.sessionDetails.submodules[i];
-
-          if (submodule.moduleId == selectedModule.id) {
-            this.submoduleDropdownOptions.push(submodule);
-            console.log("refreshUI - pushed: ".concat(submodule.name));
-          }
-        }
-      }
-
-      if (!this.classInfo.singleSubmodule) {
-        var _loop = function _loop() {
-          var submodule = _this.session.submodules[i];
-
-          if (submodule.moduleId == selectedModule.id) {
-            _this.submoduleDropdownOptions = _this.submoduleDropdownOptions.filter(function (e) {
-              return e.id != submodule.id;
-            });
-          }
-        };
-
-        for (i = 0; i < this.session.submodules.length; i++) {
-          _loop();
-        }
-      }
-
-      if (this.submoduleDropdownOptions.length > 0) {
-        this.submoduleDropdownOptions.sort(function (s1, s2) {
-          var a = s1.index;
-          var b = s2.index;
-          return a > b ? 1 : b > a ? -1 : 0;
-        });
-        var selectedSubmodule = this.classInfo.singleSubmodule && !this.classSession.dummy ? this.session.submodules[0] : this.submoduleDropdownOptions[0];
-        console.log("refreshUI - selectedSubmodule: ".concat(selectedSubmodule.name));
-        this.session.submoduleId = selectedSubmodule.id;
-        this.canAddSubmodule = !this.classInfo.singleSubmodule;
-      } else {
-        this.canAddSubmodule = false;
-      }
-
-      this.submoduleDropdownOptions = this.submoduleDropdownOptions.map(function (e) {
-        return {
-          value: e.id,
-          text: e.name
-        };
-      });
-    },
-    addSubmodule: function addSubmodule() {
-      var session = this.session;
-      console.log("addSubmodule - moduleId: ".concat(session.moduleId, " submoduleId: ").concat(session.submoduleId));
-      var selectedModule;
-      var selectedSubmodule;
-
-      for (var i = 0; i < this.classInfo.modules.length; i++) {
-        selectedModule = this.classInfo.modules[i];
-
-        if (!session.moduleId || session.moduleId == selectedModule.id) {
-          break;
-        }
-      }
-
-      for (i = 0; i < this.sessionDetails.submodules.length; i++) {
-        var submodule = this.sessionDetails.submodules[i];
-
-        if (submodule.id == session.submoduleId) {
-          selectedSubmodule = submodule;
-          break;
-        }
-      }
-
-      if (!selectedSubmodule) {
-        for (i = 0; i < selectedModule.newSubmodules.length; i++) {
-          var _submodule = selectedModule.newSubmodules[i];
-
-          if (_submodule.id == session.submoduleId) {
-            selectedSubmodule = _submodule;
-            break;
-          }
-        }
-      }
-
-      session.submodules.push(selectedSubmodule);
-
-      if (!session.name || this.classInfo.singleSubmodule) {
-        session.name = selectedSubmodule.name;
-      }
-
-      if (!this.classInfo.singleSubmodule) {
-        this.refreshUI();
-      } else {
-        console.log("addSubmodule - selectedModule: ".concat(selectedModule.name, " selectedSubmodule: ").concat(selectedSubmodule.name));
-      }
-    },
-    removeSubmodule: function removeSubmodule(index) {
-      this.session.submodules.splice(index, 1);
-      this.refreshUI();
-    },
-    addMaterial: function addMaterial() {
-      this.session.materials.push({
-        name: this.session.materialName,
-        url: this.session.materialUrl
-      });
-      this.session.materialName = "";
-      this.session.materialUrl = "";
-    },
-    removeMaterial: function removeMaterial(index) {
-      this.session.materials.splice(index, 1);
-    },
-    toLocalDateTimeString: function toLocalDateTimeString(date) {
-      var options = {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric"
-      };
-      return date.toLocaleDateString("zh-CN", options);
-    },
-    toLocalDateString: function toLocalDateString(date) {
-      var options = {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      };
-      return date.toLocaleDateString("zh-CN", options);
-    },
-    needToShowAttendanceButton: function needToShowAttendanceButton() {
-      // console.log(
-      //   `needToShowAttendanceButton - this.isStudent: ${this.isStudent} this.forAdmin: ${this.forAdmin} this.forApplication: ${this.forApplication}`
-      // );
-      return this.isStudent && !this.forAdmin && !this.forApplication; // const scheduledAt = this.classSession.get("scheduledAt");
-      // if (this.isStudent) {
-      //   const today = new Date();
-      //   //student must submit sessionDetails within 3 days
-      //   var cutoffTime = new Date(
-      //     scheduledAt.getTime() + 4 * 24 * 60 * 60 * 1000
-      //   );
-      //   cutoffTime.setHours(0, 0, 0, 0); //set to midnight
-      //   // console.log(`needToShowAttendanceButton - cutoffTime: ${cutoffTime}`);
-      //   return today.getTime() < cutoffTime.getTime();
-      // }
-      // return false;
-    },
-    toAttendanceStateString: function toAttendanceStateString(sessionDetails) {
-      if (sessionDetails) {
-        if (typeof sessionDetails.attendance.attendance == "number") {
-          return "".concat(sessionDetails.attendance.attendance, "\u4EBA\u5DF2\u4E0A\u8BFE");
-        }
-
-        if (sessionDetails.attendance.onLeave) {
-          return "已请假";
-        }
-
-        if (sessionDetails.attendance.attendance == true) {
-          return "已上课";
-        }
-
-        if (sessionDetails.attendance.attendance == false && sessionDetails.attendance.onLeave == undefined) {
-          return "未上课";
-        }
-      }
-
-      return "未报考勤";
-    },
-    toPrestudyStateString: function toPrestudyStateString(sessionDetails, index) {
-      if (this.forApplication) {
-        return "请在课前看完传承/法本";
-      }
-
-      var chuanCheng = "未看传承";
-      var faBen = "未看法本";
-
-      if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
-        var studyRecord = sessionDetails.submodules[index].studyRecord;
-
-        if (typeof studyRecord.lineage == "number") {
-          chuanCheng = "".concat(studyRecord.lineage, "\u4EBA\u5DF2\u770B\u4F20\u627F");
-        } else if (studyRecord.lineage) {
-          chuanCheng = "已看传承";
-        }
-
-        if (typeof studyRecord.textbook == "number") {
-          faBen = "".concat(studyRecord.textbook, "\u4EBA\u5DF2\u770B\u6CD5\u672C");
-        } else if (studyRecord.textbook) {
-          faBen = "已看法本";
-        }
-      }
-
-      return "".concat(chuanCheng, "/").concat(faBen);
-    },
-    attendanceButtonName: function attendanceButtonName() {
-      var d = new Date();
-
-      if (d < this.classSession.get("scheduledAt")) {
-        if (this.sessionDetails.attendance.onLeave) {
-          return "取消请假";
-        }
-
-        return "我要请假";
-      } else {
-        if (this.sessionDetails.attendance.attendance != undefined) {
-          return "我要改考勤";
-        }
-
-        return "我要报考勤";
-      }
-    },
-    updateAttendance: function updateAttendance() {
-      var d = new Date();
-      var msg = "确认";
-      var attendance = this.sessionDetails.attendance;
-
-      if (d < this.classSession.get("scheduledAt")) {
-        if (attendance.onLeave) {
-          attendance.onLeave = false;
-          msg += "取消请假";
-        } else {
-          attendance.onLeave = true;
-          attendance.attendance = false;
-          msg += "请假";
-        }
-      } else {
-        if (attendance.attendance) {
-          attendance.attendance = false;
-          msg += "没有上课";
-        } else {
-          attendance.attendance = true;
-          msg += "已上课";
-        }
-      }
-
-      var classId = this.classId ? this.classId : this.classInfo.id;
-      var sessionId = this.classSession.id;
-      var options = {
-        okText: "确认",
-        cancelText: "取消",
-        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
-
-      };
-      var message = {
-        title: this.session.name,
-        body: msg + "?"
-      };
-      var thisComponent = this;
-      this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_8___default.a.Cloud.run("home:updateAttendanceV2", {
-          classId: classId,
-          sessionId: sessionId,
-          attendance: attendance
-        }).then(function (result) {
-          console.log("updateAttendanceV2 - result: ".concat(JSON.stringify(result)));
-
-          if (result.attendance.onLeave != undefined) {
-            thisComponent.sessionDetails.attendance.onLeave = result.attendance.onLeave;
-          }
-
-          if (result.attendance.attendance != undefined) {
-            thisComponent.sessionDetails.attendance.attendance = result.attendance.attendance;
-          }
-
-          thisComponent.session.attendanceState = thisComponent.toAttendanceStateString(thisComponent.sessionDetails);
-          dialog.close();
-        }).catch(function (e) {
-          console.log("error in updateAttendanceV2: ".concat(e));
-          dialog.close();
-          thisComponent.$dialog.alert("error in updateAttendance: ".concat(e));
-        });
-      }).catch(function (e) {
-        console.log("error: ".concat(e));
-      });
-    },
-    editSession: function editSession() {
-      this.session = this.initSession();
-      this.editing = true;
-      this.refreshUI();
-    },
-    onReset: function onReset(evt) {
-      evt.preventDefault();
-      this.session = this.initSession();
-      this.editing = false;
-    },
-    onSubmit: function onSubmit(evt) {
-      evt.preventDefault();
-
-      if (this.classInfo.singleSubmodule) {
-        if (this.session.submodules.length > 0) {
-          this.session.submodules.splice(0, 1);
-        }
-
-        this.addSubmodule();
-      }
-
-      var session = this.session;
-      console.log("session.submodules: ".concat(JSON.stringify(session.submodules)));
-
-      if (!session.scheduledAt || session.submodules.length < 1) {
-        this.$dialog.alert("请输入上课时间和内容！");
-        return;
-      }
-
-      var options = {
-        okText: "确认",
-        cancelText: "取消",
-        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
-
-      };
-      var message = {
-        title: this.classInfo.name,
-        body: "".concat(session.creating ? "创建新课" : "修改", " \u300A").concat(session.name, "\u300B @ ").concat(this.toLocalDateString(session.scheduledAt), "\uFF1F")
-      };
-      var dt = new Date(session.scheduledAt);
-      dt.setHours(session.submodules[0].url.includes("rpsxl") ? 9 : 14); //TODO: allow setting time
-
-      session.scheduledAt = dt; // console.log(`session.scheduledAt: ${session.scheduledAt}`);
-
-      session.classId = this.classInfo.id;
-      var thisComponent = this;
-      this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_8___default.a.Cloud.run("class:updateClassSessionV2", {
-          session: session
-        }).then(function (result) {
-          console.log("updateClassSession - result: ".concat(JSON.stringify(result)));
-          dialog.close(); // thisComponent.$router.go();
-
-          window.location.reload();
-        }).catch(function (e) {
-          console.log("error in updateClassSession: ".concat(JSON.stringify(e)));
-          dialog.close();
-          thisComponent.$dialog.alert("error in updateClassSession: ".concat(e));
-        });
-      }).catch(function (e) {
-        console.log("error: ".concat(e));
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e&":
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e& ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.editing
-        ? _c(
-            "b-form",
-            { on: { submit: _vm.onSubmit, reset: _vm.onReset } },
-            [
-              _c("h4", [
-                _vm._v(
-                  _vm._s(this.session.creating ? "创建新课" : _vm.session.name)
-                )
-              ]),
-              _c(
-                "b-input-group",
-                { staticClass: "mt-3", attrs: { prepend: "选择日期：" } },
-                [
-                  _c("v-date-picker", {
-                    attrs: {
-                      locale: "zh-CN",
-                      "input-props": {
-                        readonly: true
-                      }
-                    },
-                    model: {
-                      value: _vm.session.scheduledAt,
-                      callback: function($$v) {
-                        _vm.$set(_vm.session, "scheduledAt", $$v)
-                      },
-                      expression: "session.scheduledAt"
-                    }
-                  }),
-                  _c(
-                    "b-input-group-append",
-                    [
-                      !_vm.session.creating
-                        ? _c(
-                            "b-button",
-                            { attrs: { type: "reset", variant: "warning" } },
-                            [_c("b-icon", { attrs: { icon: "x-circle" } })],
-                            1
-                          )
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm.moduleDropdownOptions.length > 1
-                ? _c(
-                    "b-input-group",
-                    { staticClass: "mt-3", attrs: { prepend: "选择模块：" } },
-                    [
-                      _c("b-form-select", {
-                        attrs: { options: _vm.moduleDropdownOptions },
-                        on: { change: _vm.refreshUI },
-                        model: {
-                          value: _vm.session.moduleId,
-                          callback: function($$v) {
-                            _vm.$set(_vm.session, "moduleId", $$v)
-                          },
-                          expression: "session.moduleId"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _c(
-                "b-input-group",
-                { staticClass: "mt-3", attrs: { prepend: "选子模块：" } },
-                [
-                  _c("b-form-select", {
-                    attrs: { options: _vm.submoduleDropdownOptions },
-                    model: {
-                      value: _vm.session.submoduleId,
-                      callback: function($$v) {
-                        _vm.$set(_vm.session, "submoduleId", $$v)
-                      },
-                      expression: "session.submoduleId"
-                    }
-                  }),
-                  _c(
-                    "b-input-group-append",
-                    [
-                      _vm.canAddSubmodule
-                        ? _c(
-                            "b-button",
-                            {
-                              attrs: { variant: "warning" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.addSubmodule()
-                                }
-                              }
-                            },
-                            [_vm._v("加入上课内容")]
-                          )
-                        : _vm._e(),
-                      _c(
-                        "b-button",
-                        { attrs: { type: "submit", variant: "success" } },
-                        [_c("b-icon", { attrs: { icon: "check-circle" } })],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              !_vm.classInfo.singleSubmodule
-                ? _c(
-                    "div",
-                    [
-                      _vm._l(_vm.session.submodules, function(
-                        submodule,
-                        index
-                      ) {
-                        return _c(
-                          "b-input-group",
-                          {
-                            key: submodule.id + index,
-                            staticClass: "mt-3",
-                            attrs: { prepend: "上课内容：" }
-                          },
-                          [
-                            _c("b-form-input", {
-                              attrs: {
-                                readonly: "",
-                                value: "(" + (index + 1) + ") " + submodule.name
-                              }
-                            }),
-                            _c(
-                              "b-input-group-append",
-                              [
-                                _c(
-                                  "b-button",
-                                  {
-                                    attrs: { variant: "warning" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.removeSubmodule(index)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("删除")]
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                      _vm.session.submodules.length > 0
-                        ? _c(
-                            "b-input-group",
-                            {
-                              staticClass: "mt-3",
-                              attrs: { prepend: "上课名称：" }
-                            },
-                            [
-                              _c("b-form-input", {
-                                model: {
-                                  value: _vm.session.name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.session, "name", $$v)
-                                  },
-                                  expression: "session.name"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e()
-                    ],
-                    2
-                  )
-                : _vm._e(),
-              !_vm.session.creating
-                ? _c(
-                    "div",
-                    [
-                      _c(
-                        "b-input-group",
-                        {
-                          staticClass: "mt-3",
-                          attrs: { prepend: "材料链接：", type: "url" }
-                        },
-                        [
-                          _c("b-form-input", {
-                            model: {
-                              value: _vm.session.materialUrl,
-                              callback: function($$v) {
-                                _vm.$set(_vm.session, "materialUrl", $$v)
-                              },
-                              expression: "session.materialUrl"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _c(
-                        "b-input-group",
-                        {
-                          staticClass: "mt-3",
-                          attrs: { prepend: "材料名称：" }
-                        },
-                        [
-                          _c("b-form-input", {
-                            model: {
-                              value: _vm.session.materialName,
-                              callback: function($$v) {
-                                _vm.$set(_vm.session, "materialName", $$v)
-                              },
-                              expression: "session.materialName"
-                            }
-                          }),
-                          _c(
-                            "b-button",
-                            {
-                              attrs: { variant: "warning" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.addMaterial()
-                                }
-                              }
-                            },
-                            [_vm._v("加入上课材料")]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._l(_vm.session.materials, function(material, index) {
-                        return _c(
-                          "b-input-group",
-                          {
-                            key: material.url + index,
-                            staticClass: "mt-3",
-                            attrs: { prepend: "上课材料：" }
-                          },
-                          [
-                            _c("b-form-input", {
-                              attrs: {
-                                readonly: "",
-                                value: "(" + (index + 1) + ") " + material.name
-                              }
-                            }),
-                            _c(
-                              "b-input-group-append",
-                              [
-                                _c(
-                                  "b-button",
-                                  {
-                                    attrs: { variant: "warning" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.removeMaterial(index)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("删除")]
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      })
-                    ],
-                    2
-                  )
-                : _vm._e(),
-              _c("b-form-textarea", {
-                attrs: {
-                  placeholder: "输入上课通知",
-                  rows: "8",
-                  "max-rows": "20"
-                },
-                model: {
-                  value: _vm.session.description,
-                  callback: function($$v) {
-                    _vm.$set(_vm.session, "description", $$v)
-                  },
-                  expression: "session.description"
-                }
-              })
-            ],
-            1
-          )
-        : _c(
-            "b-card",
-            { staticClass: "text-center", attrs: { header: _vm.session.name } },
-            [
-              _c(
-                "b-card-text",
-                [
-                  _c(
-                    "b-input-group",
-                    { staticClass: "mt-3", attrs: { prepend: "上课时间：" } },
-                    [
-                      _c("b-form-input", {
-                        attrs: { readonly: "" },
-                        model: {
-                          value: _vm.session.scheduledAtLocalDateTimeString,
-                          callback: function($$v) {
-                            _vm.$set(
-                              _vm.session,
-                              "scheduledAtLocalDateTimeString",
-                              $$v
-                            )
-                          },
-                          expression: "session.scheduledAtLocalDateTimeString"
-                        }
-                      }),
-                      _c(
-                        "b-input-group-append",
-                        [
-                          !_vm.forApplication &&
-                          _vm.classInfo &&
-                          !_vm.session.creating &&
-                          (_vm.isClassAdmin || _vm.isTeachingAssistant)
-                            ? _c(
-                                "b-button",
-                                {
-                                  attrs: { variant: "warning" },
-                                  on: { click: _vm.editSession }
-                                },
-                                [_vm._v("修改")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm.sessionDetails.submodules.length == 1
-                    ? _c(
-                        "b-input-group",
-                        {
-                          staticClass: "mt-3",
-                          attrs: { prepend: "课前学习：" }
-                        },
-                        [
-                          _c("b-form-input", {
-                            attrs: { readonly: "" },
-                            model: {
-                              value: _vm.session.prestudyState,
-                              callback: function($$v) {
-                                _vm.$set(_vm.session, "prestudyState", $$v)
-                              },
-                              expression: "session.prestudyState"
-                            }
-                          }),
-                          _c(
-                            "b-input-group-append",
-                            [
-                              _c(
-                                "b-button",
-                                {
-                                  attrs: {
-                                    variant: "info",
-                                    href: _vm.sessionDetails.submodules[0].url,
-                                    target: "_blank"
-                                  }
-                                },
-                                [_c("b-icon", { attrs: { icon: "book" } })],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._l(_vm.sessionDetails.submodules, function(
-                        submodule,
-                        index
-                      ) {
-                        return _c(
-                          "div",
-                          { key: submodule.id + index },
-                          [
-                            _c(
-                              "b-link",
-                              {
-                                attrs: { href: submodule.url, target: "_blank" }
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    "(" + (index + 1) + ") " + submodule.name
-                                  )
-                                )
-                              ]
-                            ),
-                            _c(
-                              "b-input-group",
-                              {
-                                staticClass: "mt-3",
-                                attrs: { prepend: "课前学习：" }
-                              },
-                              [
-                                _c("b-form-input", {
-                                  attrs: {
-                                    readonly: "",
-                                    value: _vm.toPrestudyStateString(
-                                      _vm.sessionDetails,
-                                      index
-                                    )
-                                  }
-                                }),
-                                _c(
-                                  "b-input-group-append",
-                                  [
-                                    _c(
-                                      "b-button",
-                                      {
-                                        attrs: {
-                                          variant: "info",
-                                          href: submodule.url,
-                                          target: "_blank"
-                                        }
-                                      },
-                                      [
-                                        _c("b-icon", {
-                                          attrs: { icon: "book" }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }),
-                  !_vm.session.forApplication
-                    ? _c(
-                        "b-input-group",
-                        {
-                          staticClass: "mt-3",
-                          attrs: { prepend: "上课出勤：" }
-                        },
-                        [
-                          _c("b-form-input", {
-                            attrs: { readonly: "" },
-                            model: {
-                              value: _vm.session.attendanceState,
-                              callback: function($$v) {
-                                _vm.$set(_vm.session, "attendanceState", $$v)
-                              },
-                              expression: "session.attendanceState"
-                            }
-                          }),
-                          _c(
-                            "b-input-group-append",
-                            [
-                              _vm.needToShowAttendanceButton()
-                                ? _c(
-                                    "b-button",
-                                    {
-                                      attrs: { variant: "warning" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.updateAttendance()
-                                        }
-                                      }
-                                    },
-                                    [_vm._v(_vm._s(_vm.attendanceButtonName()))]
-                                  )
-                                : _vm._e(),
-                              _c(
-                                "b-button",
-                                {
-                                  attrs: { variant: "info" },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.session.showMoreDetails = !_vm.session
-                                        .showMoreDetails
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm.session.showMoreDetails
-                                    ? _c("b-icon", {
-                                        attrs: { icon: "chevron-double-up" }
-                                      })
-                                    : _c("b-icon", {
-                                        attrs: { icon: "chevron-double-down" }
-                                      })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e(),
-                  _vm.session.showMoreDetails
-                    ? _c(
-                        "div",
-                        [
-                          _vm._l(_vm.session.materials, function(
-                            material,
-                            index
-                          ) {
-                            return _c(
-                              "b-input-group",
-                              {
-                                key: material.url + index,
-                                staticClass: "mt-3",
-                                attrs: { prepend: "上课材料：" }
-                              },
-                              [
-                                _c("b-form-input", {
-                                  attrs: {
-                                    readonly: "",
-                                    value:
-                                      "(" + (index + 1) + ") " + material.name
-                                  }
-                                }),
-                                _c(
-                                  "b-input-group-append",
-                                  [
-                                    _c(
-                                      "b-button",
-                                      {
-                                        attrs: {
-                                          variant: "info",
-                                          href: material.url,
-                                          target: "_blank"
-                                        }
-                                      },
-                                      [
-                                        _c("b-icon", {
-                                          attrs: { icon: "book" }
-                                        })
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          }),
-                          _c("b-form-textarea", {
-                            attrs: {
-                              placeholder: "",
-                              rows: "8",
-                              "max-rows": "20",
-                              readonly: ""
-                            },
-                            model: {
-                              value: _vm.session.description,
-                              callback: function($$v) {
-                                _vm.$set(_vm.session, "description", $$v)
-                              },
-                              expression: "session.description"
-                            }
-                          })
-                        ],
-                        2
-                      )
-                    : _vm._e()
-                ],
-                2
-              )
-            ],
-            1
-          )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/modules/_strict-method.js":
-/*!********************************************************!*\
-  !*** ./node_modules/core-js/modules/_strict-method.js ***!
-  \********************************************************/
+/***/ "./node_modules/core-js/modules/_advance-string-index.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/_advance-string-index.js ***!
+  \***************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/modules/_fails.js");
+var at = __webpack_require__(/*! ./_string-at */ "./node_modules/core-js/modules/_string-at.js")(true);
 
-module.exports = function (method, arg) {
-  return !!method && fails(function () {
-    // eslint-disable-next-line no-useless-call
-    arg ? method.call(null, function () { /* empty */ }, 1) : method.call(null);
-  });
+ // `AdvanceStringIndex` abstract operation
+// https://tc39.github.io/ecma262/#sec-advancestringindex
+module.exports = function (S, index, unicode) {
+  return index + (unicode ? at(S, index).length : 1);
 };
 
 
 /***/ }),
 
-/***/ "./node_modules/core-js/modules/es6.array.sort.js":
-/*!********************************************************!*\
-  !*** ./node_modules/core-js/modules/es6.array.sort.js ***!
-  \********************************************************/
+/***/ "./node_modules/core-js/modules/_fix-re-wks.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/core-js/modules/_fix-re-wks.js ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/modules/_export.js");
-var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/modules/_a-function.js");
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/modules/_to-object.js");
+__webpack_require__(/*! ./es6.regexp.exec */ "./node_modules/core-js/modules/es6.regexp.exec.js");
+var redefine = __webpack_require__(/*! ./_redefine */ "./node_modules/core-js/modules/_redefine.js");
+var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/modules/_hide.js");
 var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/modules/_fails.js");
-var $sort = [].sort;
-var test = [1, 2, 3];
+var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/modules/_defined.js");
+var wks = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/modules/_wks.js");
+var regexpExec = __webpack_require__(/*! ./_regexp-exec */ "./node_modules/core-js/modules/_regexp-exec.js");
 
-$export($export.P + $export.F * (fails(function () {
-  // IE8-
-  test.sort(undefined);
-}) || !fails(function () {
-  // V8 bug
-  test.sort(null);
-  // Old WebKit
-}) || !__webpack_require__(/*! ./_strict-method */ "./node_modules/core-js/modules/_strict-method.js")($sort)), 'Array', {
-  // 22.1.3.25 Array.prototype.sort(comparefn)
-  sort: function sort(comparefn) {
-    return comparefn === undefined
-      ? $sort.call(toObject(this))
-      : $sort.call(toObject(this), aFunction(comparefn));
+var SPECIES = wks('species');
+
+var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function () {
+  // #replace needs built-in support for named groups.
+  // #match works fine because it just return the exec results, even if it has
+  // a "grops" property.
+  var re = /./;
+  re.exec = function () {
+    var result = [];
+    result.groups = { a: '7' };
+    return result;
+  };
+  return ''.replace(re, '$<a>') !== '7';
+});
+
+var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = (function () {
+  // Chrome 51 has a buggy "split" implementation when RegExp#exec !== nativeExec
+  var re = /(?:)/;
+  var originalExec = re.exec;
+  re.exec = function () { return originalExec.apply(this, arguments); };
+  var result = 'ab'.split(re);
+  return result.length === 2 && result[0] === 'a' && result[1] === 'b';
+})();
+
+module.exports = function (KEY, length, exec) {
+  var SYMBOL = wks(KEY);
+
+  var DELEGATES_TO_SYMBOL = !fails(function () {
+    // String methods call symbol-named RegEp methods
+    var O = {};
+    O[SYMBOL] = function () { return 7; };
+    return ''[KEY](O) != 7;
+  });
+
+  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL ? !fails(function () {
+    // Symbol-named RegExp methods call .exec
+    var execCalled = false;
+    var re = /a/;
+    re.exec = function () { execCalled = true; return null; };
+    if (KEY === 'split') {
+      // RegExp[@@split] doesn't call the regex's exec method, but first creates
+      // a new one. We need to return the patched regex when creating the new one.
+      re.constructor = {};
+      re.constructor[SPECIES] = function () { return re; };
+    }
+    re[SYMBOL]('');
+    return !execCalled;
+  }) : undefined;
+
+  if (
+    !DELEGATES_TO_SYMBOL ||
+    !DELEGATES_TO_EXEC ||
+    (KEY === 'replace' && !REPLACE_SUPPORTS_NAMED_GROUPS) ||
+    (KEY === 'split' && !SPLIT_WORKS_WITH_OVERWRITTEN_EXEC)
+  ) {
+    var nativeRegExpMethod = /./[SYMBOL];
+    var fns = exec(
+      defined,
+      SYMBOL,
+      ''[KEY],
+      function maybeCallNative(nativeMethod, regexp, str, arg2, forceStringMethod) {
+        if (regexp.exec === regexpExec) {
+          if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
+            // The native String method already delegates to @@method (this
+            // polyfilled function), leasing to infinite recursion.
+            // We avoid it by directly calling the native @@method method.
+            return { done: true, value: nativeRegExpMethod.call(regexp, str, arg2) };
+          }
+          return { done: true, value: nativeMethod.call(str, regexp, arg2) };
+        }
+        return { done: false };
+      }
+    );
+    var strfn = fns[0];
+    var rxfn = fns[1];
+
+    redefine(String.prototype, KEY, strfn);
+    hide(RegExp.prototype, SYMBOL, length == 2
+      // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
+      // 21.2.5.11 RegExp.prototype[@@split](string, limit)
+      ? function (string, arg) { return rxfn.call(string, this, arg); }
+      // 21.2.5.6 RegExp.prototype[@@match](string)
+      // 21.2.5.9 RegExp.prototype[@@search](string)
+      : function (string) { return rxfn.call(string, this); }
+    );
   }
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_flags.js":
+/*!************************************************!*\
+  !*** ./node_modules/core-js/modules/_flags.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 21.2.5.3 get RegExp.prototype.flags
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+module.exports = function () {
+  var that = anObject(this);
+  var result = '';
+  if (that.global) result += 'g';
+  if (that.ignoreCase) result += 'i';
+  if (that.multiline) result += 'm';
+  if (that.unicode) result += 'u';
+  if (that.sticky) result += 'y';
+  return result;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_regexp-exec-abstract.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/_regexp-exec-abstract.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var classof = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/modules/_classof.js");
+var builtinExec = RegExp.prototype.exec;
+
+ // `RegExpExec` abstract operation
+// https://tc39.github.io/ecma262/#sec-regexpexec
+module.exports = function (R, S) {
+  var exec = R.exec;
+  if (typeof exec === 'function') {
+    var result = exec.call(R, S);
+    if (typeof result !== 'object') {
+      throw new TypeError('RegExp exec method returned something other than an Object or null');
+    }
+    return result;
+  }
+  if (classof(R) !== 'RegExp') {
+    throw new TypeError('RegExp#exec called on incompatible receiver');
+  }
+  return builtinExec.call(R, S);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/_regexp-exec.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/modules/_regexp-exec.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var regexpFlags = __webpack_require__(/*! ./_flags */ "./node_modules/core-js/modules/_flags.js");
+
+var nativeExec = RegExp.prototype.exec;
+// This always refers to the native implementation, because the
+// String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
+// which loads this file before patching the method.
+var nativeReplace = String.prototype.replace;
+
+var patchedExec = nativeExec;
+
+var LAST_INDEX = 'lastIndex';
+
+var UPDATES_LAST_INDEX_WRONG = (function () {
+  var re1 = /a/,
+      re2 = /b*/g;
+  nativeExec.call(re1, 'a');
+  nativeExec.call(re2, 'a');
+  return re1[LAST_INDEX] !== 0 || re2[LAST_INDEX] !== 0;
+})();
+
+// nonparticipating capturing group, copied from es5-shim's String#split patch.
+var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
+
+var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED;
+
+if (PATCH) {
+  patchedExec = function exec(str) {
+    var re = this;
+    var lastIndex, reCopy, match, i;
+
+    if (NPCG_INCLUDED) {
+      reCopy = new RegExp('^' + re.source + '$(?!\\s)', regexpFlags.call(re));
+    }
+    if (UPDATES_LAST_INDEX_WRONG) lastIndex = re[LAST_INDEX];
+
+    match = nativeExec.call(re, str);
+
+    if (UPDATES_LAST_INDEX_WRONG && match) {
+      re[LAST_INDEX] = re.global ? match.index + match[0].length : lastIndex;
+    }
+    if (NPCG_INCLUDED && match && match.length > 1) {
+      // Fix browsers whose `exec` methods don't consistently return `undefined`
+      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
+      // eslint-disable-next-line no-loop-func
+      nativeReplace.call(match[0], reCopy, function () {
+        for (i = 1; i < arguments.length - 2; i++) {
+          if (arguments[i] === undefined) match[i] = undefined;
+        }
+      });
+    }
+
+    return match;
+  };
+}
+
+module.exports = patchedExec;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es6.regexp.exec.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/es6.regexp.exec.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var regexpExec = __webpack_require__(/*! ./_regexp-exec */ "./node_modules/core-js/modules/_regexp-exec.js");
+__webpack_require__(/*! ./_export */ "./node_modules/core-js/modules/_export.js")({
+  target: 'RegExp',
+  proto: true,
+  forced: regexpExec !== /./.exec
+}, {
+  exec: regexpExec
 });
 
 
 /***/ }),
 
-/***/ "./src/components/ClassSession.vue":
-/*!*****************************************!*\
-  !*** ./src/components/ClassSession.vue ***!
-  \*****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/core-js/modules/es6.regexp.split.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/modules/es6.regexp.split.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClassSession.vue?vue&type=template&id=0c6ebf2e& */ "./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e&");
-/* harmony import */ var _ClassSession_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ClassSession.vue?vue&type=script&lang=js& */ "./src/components/ClassSession.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
+var isRegExp = __webpack_require__(/*! ./_is-regexp */ "./node_modules/core-js/modules/_is-regexp.js");
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/modules/_an-object.js");
+var speciesConstructor = __webpack_require__(/*! ./_species-constructor */ "./node_modules/core-js/modules/_species-constructor.js");
+var advanceStringIndex = __webpack_require__(/*! ./_advance-string-index */ "./node_modules/core-js/modules/_advance-string-index.js");
+var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/modules/_to-length.js");
+var callRegExpExec = __webpack_require__(/*! ./_regexp-exec-abstract */ "./node_modules/core-js/modules/_regexp-exec-abstract.js");
+var regexpExec = __webpack_require__(/*! ./_regexp-exec */ "./node_modules/core-js/modules/_regexp-exec.js");
+var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/modules/_fails.js");
+var $min = Math.min;
+var $push = [].push;
+var $SPLIT = 'split';
+var LENGTH = 'length';
+var LAST_INDEX = 'lastIndex';
+var MAX_UINT32 = 0xffffffff;
 
+// babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
+var SUPPORTS_Y = !fails(function () { RegExp(MAX_UINT32, 'y'); });
 
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ClassSession_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (true) {
-  var api = __webpack_require__(/*! ./node_modules/vue-hot-reload-api/dist/index.js */ "./node_modules/vue-hot-reload-api/dist/index.js")
-  api.install(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js"))
-  if (api.compatible) {
-    module.hot.accept()
-    if (!api.isRecorded('0c6ebf2e')) {
-      api.createRecord('0c6ebf2e', component.options)
-    } else {
-      api.reload('0c6ebf2e', component.options)
-    }
-    module.hot.accept(/*! ./ClassSession.vue?vue&type=template&id=0c6ebf2e& */ "./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClassSession.vue?vue&type=template&id=0c6ebf2e& */ "./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e&");
-(function () {
-      api.rerender('0c6ebf2e', {
-        render: _ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__["render"],
-        staticRenderFns: _ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
-      })
-    })(__WEBPACK_OUTDATED_DEPENDENCIES__); }.bind(this))
+// @@split logic
+__webpack_require__(/*! ./_fix-re-wks */ "./node_modules/core-js/modules/_fix-re-wks.js")('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
+  var internalSplit;
+  if (
+    'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
+    'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 ||
+    'ab'[$SPLIT](/(?:ab)*/)[LENGTH] != 2 ||
+    '.'[$SPLIT](/(.?)(.?)/)[LENGTH] != 4 ||
+    '.'[$SPLIT](/()()/)[LENGTH] > 1 ||
+    ''[$SPLIT](/.?/)[LENGTH]
+  ) {
+    // based on es5-shim implementation, need to rework it
+    internalSplit = function (separator, limit) {
+      var string = String(this);
+      if (separator === undefined && limit === 0) return [];
+      // If `separator` is not a regex, use native split
+      if (!isRegExp(separator)) return $split.call(string, separator, limit);
+      var output = [];
+      var flags = (separator.ignoreCase ? 'i' : '') +
+                  (separator.multiline ? 'm' : '') +
+                  (separator.unicode ? 'u' : '') +
+                  (separator.sticky ? 'y' : '');
+      var lastLastIndex = 0;
+      var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
+      // Make `global` and avoid `lastIndex` issues by working with a copy
+      var separatorCopy = new RegExp(separator.source, flags + 'g');
+      var match, lastIndex, lastLength;
+      while (match = regexpExec.call(separatorCopy, string)) {
+        lastIndex = separatorCopy[LAST_INDEX];
+        if (lastIndex > lastLastIndex) {
+          output.push(string.slice(lastLastIndex, match.index));
+          if (match[LENGTH] > 1 && match.index < string[LENGTH]) $push.apply(output, match.slice(1));
+          lastLength = match[0][LENGTH];
+          lastLastIndex = lastIndex;
+          if (output[LENGTH] >= splitLimit) break;
+        }
+        if (separatorCopy[LAST_INDEX] === match.index) separatorCopy[LAST_INDEX]++; // Avoid an infinite loop
+      }
+      if (lastLastIndex === string[LENGTH]) {
+        if (lastLength || !separatorCopy.test('')) output.push('');
+      } else output.push(string.slice(lastLastIndex));
+      return output[LENGTH] > splitLimit ? output.slice(0, splitLimit) : output;
+    };
+  // Chakra, V8
+  } else if ('0'[$SPLIT](undefined, 0)[LENGTH]) {
+    internalSplit = function (separator, limit) {
+      return separator === undefined && limit === 0 ? [] : $split.call(this, separator, limit);
+    };
+  } else {
+    internalSplit = $split;
   }
-}
-component.options.__file = "src/components/ClassSession.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+  return [
+    // `String.prototype.split` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.split
+    function split(separator, limit) {
+      var O = defined(this);
+      var splitter = separator == undefined ? undefined : separator[SPLIT];
+      return splitter !== undefined
+        ? splitter.call(separator, O, limit)
+        : internalSplit.call(String(O), separator, limit);
+    },
+    // `RegExp.prototype[@@split]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@split
+    //
+    // NOTE: This cannot be properly polyfilled in engines that don't support
+    // the 'y' flag.
+    function (regexp, limit) {
+      var res = maybeCallNative(internalSplit, regexp, this, limit, internalSplit !== $split);
+      if (res.done) return res.value;
+
+      var rx = anObject(regexp);
+      var S = String(this);
+      var C = speciesConstructor(rx, RegExp);
+
+      var unicodeMatching = rx.unicode;
+      var flags = (rx.ignoreCase ? 'i' : '') +
+                  (rx.multiline ? 'm' : '') +
+                  (rx.unicode ? 'u' : '') +
+                  (SUPPORTS_Y ? 'y' : 'g');
+
+      // ^(? + rx + ) is needed, in combination with some S slicing, to
+      // simulate the 'y' flag.
+      var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
+      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
+      if (lim === 0) return [];
+      if (S.length === 0) return callRegExpExec(splitter, S) === null ? [S] : [];
+      var p = 0;
+      var q = 0;
+      var A = [];
+      while (q < S.length) {
+        splitter.lastIndex = SUPPORTS_Y ? q : 0;
+        var z = callRegExpExec(splitter, SUPPORTS_Y ? S : S.slice(q));
+        var e;
+        if (
+          z === null ||
+          (e = $min(toLength(splitter.lastIndex + (SUPPORTS_Y ? 0 : q)), S.length)) === p
+        ) {
+          q = advanceStringIndex(S, q, unicodeMatching);
+        } else {
+          A.push(S.slice(p, q));
+          if (A.length === lim) return A;
+          for (var i = 1; i <= z.length - 1; i++) {
+            A.push(z[i]);
+            if (A.length === lim) return A;
+          }
+          q = p = e;
+        }
+      }
+      A.push(S.slice(p));
+      return A;
+    }
+  ];
+});
+
 
 /***/ }),
 
-/***/ "./src/components/ClassSession.vue?vue&type=script&lang=js&":
-/*!******************************************************************!*\
-  !*** ./src/components/ClassSession.vue?vue&type=script&lang=js& ***!
-  \******************************************************************/
+/***/ "./node_modules/vue-json-excel/dist/vue-json-excel.esm.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/vue-json-excel/dist/vue-json-excel.esm.js ***!
+  \****************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassSession_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./ClassSession.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ClassSession.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassSession_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* WEBPACK VAR INJECTION */(function(global) {var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-/***/ }),
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
 
-/***/ "./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e&":
-/*!************************************************************************!*\
-  !*** ./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e& ***!
-  \************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+var download = createCommonjsModule(function (module, exports) {
+//download.js v4.2, by dandavis; 2008-2016. [MIT] see http://danml.com/download.html for tests/usage
+// v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
+// v2 added named files via a[download], msSaveBlob, IE (10+) support, and window.URL support for larger+faster saves than dataURLs
+// v3 added dataURL and Blob Input, bind-toggle arity, and legacy dataURL fallback was improved with force-download mime and base64 support. 3.1 improved safari handling.
+// v4 adds AMD/UMD, commonJS, and plain browser support
+// v4.1 adds url download capability via solo URL argument (same domain/CORS only)
+// v4.2 adds semantic variable names, long (over 2MB) dataURL support, and hidden by default temp anchors
+// https://github.com/rndme/download
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./ClassSession.vue?vue&type=template&id=0c6ebf2e& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/components/ClassSession.vue?vue&type=template&id=0c6ebf2e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+(function (root, factory) {
+	{
+		// Node. Does not work with strict CommonJS, but
+		// only CommonJS-like environments that support module.exports,
+		// like Node.
+		module.exports = factory();
+	}
+}(commonjsGlobal, function () {
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassSession_vue_vue_type_template_id_0c6ebf2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+	return function download(data, strFileName, strMimeType) {
+
+		var self = window, // this script is only for browsers anyway...
+			defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
+			mimeType = strMimeType || defaultMime,
+			payload = data,
+			url = !strFileName && !strMimeType && payload,
+			anchor = document.createElement("a"),
+			toString = function(a){return String(a);},
+			myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
+			fileName = strFileName || "download",
+			blob,
+			reader;
+			myBlob= myBlob.call ? myBlob.bind(self) : Blob ;
+	  
+		if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
+			payload=[payload, mimeType];
+			mimeType=payload[0];
+			payload=payload[1];
+		}
 
 
+		if(url && url.length< 2048){ // if no filename and no mime, assume a url was passed as the only argument
+			fileName = url.split("/").pop().split("?")[0];
+			anchor.href = url; // assign href prop to temp anchor
+		  	if(anchor.href.indexOf(url) !== -1){ // if the browser determines that it's a potentially valid url path:
+        		var ajax=new XMLHttpRequest();
+        		ajax.open( "GET", url, true);
+        		ajax.responseType = 'blob';
+        		ajax.onload= function(e){ 
+				  download(e.target.response, fileName, defaultMime);
+				};
+        		setTimeout(function(){ ajax.send();}, 0); // allows setting custom ajax headers using the return:
+			    return ajax;
+			} // end if valid url?
+		} // end if url?
+
+
+		//go ahead and download dataURLs right away
+		if(/^data:([\w+-]+\/[\w+.-]+)?[,;]/.test(payload)){
+		
+			if(payload.length > (1024*1024*1.999) && myBlob !== toString ){
+				payload=dataUrlToBlob(payload);
+				mimeType=payload.type || defaultMime;
+			}else {			
+				return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
+					navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
+					saver(payload) ; // everyone else can save dataURLs un-processed
+			}
+			
+		}else {//not data url, is it a string with special needs?
+			if(/([\x80-\xff])/.test(payload)){			  
+				var i=0, tempUiArr= new Uint8Array(payload.length), mx=tempUiArr.length;
+				for(i;i<mx;++i) tempUiArr[i]= payload.charCodeAt(i);
+			 	payload=new myBlob([tempUiArr], {type: mimeType});
+			}		  
+		}
+		blob = payload instanceof myBlob ?
+			payload :
+			new myBlob([payload], {type: mimeType}) ;
+
+
+		function dataUrlToBlob(strUrl) {
+			var parts= strUrl.split(/[:;,]/),
+			type= parts[1],
+			decoder= parts[2] == "base64" ? atob : decodeURIComponent,
+			binData= decoder( parts.pop() ),
+			mx= binData.length,
+			i= 0,
+			uiArr= new Uint8Array(mx);
+
+			for(i;i<mx;++i) uiArr[i]= binData.charCodeAt(i);
+
+			return new myBlob([uiArr], {type: type});
+		 }
+
+		function saver(url, winMode){
+
+			if ('download' in anchor) { //html5 A[download]
+				anchor.href = url;
+				anchor.setAttribute("download", fileName);
+				anchor.className = "download-js-link";
+				anchor.innerHTML = "downloading...";
+				anchor.style.display = "none";
+				document.body.appendChild(anchor);
+				setTimeout(function() {
+					anchor.click();
+					document.body.removeChild(anchor);
+					if(winMode===true){setTimeout(function(){ self.URL.revokeObjectURL(anchor.href);}, 250 );}
+				}, 66);
+				return true;
+			}
+
+			// handle non-a[download] safari as best we can:
+			if(/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
+				if(/^data:/.test(url))	url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+				if(!window.open(url)){ // popup blocked, offer direct download:
+					if(confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")){ location.href=url; }
+				}
+				return true;
+			}
+
+			//do iframe dataURL download (old ch+FF):
+			var f = document.createElement("iframe");
+			document.body.appendChild(f);
+
+			if(!winMode && /^data:/.test(url)){ // force a mime that will download:
+				url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+			}
+			f.src=url;
+			setTimeout(function(){ document.body.removeChild(f); }, 333);
+
+		}//end saver
+
+
+
+
+		if (navigator.msSaveBlob) { // IE10+ : (has Blob, but not a[download] or URL)
+			return navigator.msSaveBlob(blob, fileName);
+		}
+
+		if(self.URL){ // simple fast and modern way using Blob and URL:
+			saver(self.URL.createObjectURL(blob), true);
+		}else {
+			// handle non-Blob()+non-URL browsers:
+			if(typeof blob === "string" || blob.constructor===toString ){
+				try{
+					return saver( "data:" +  mimeType   + ";base64,"  +  self.btoa(blob)  );
+				}catch(y){
+					return saver( "data:" +  mimeType   + "," + encodeURIComponent(blob)  );
+				}
+			}
+
+			// Blob but not URL support:
+			reader=new FileReader();
+			reader.onload=function(e){
+				saver(this.result);
+			};
+			reader.readAsDataURL(blob);
+		}
+		return true;
+	}; /* end download() */
+}));
+});
+
+//
+
+var script = {
+  props: {
+    // mime type [xls, csv]
+    type: {
+      type: String,
+      default: "xls",
+    },
+    // Json to download
+    data: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    // fields inside the Json Object that you want to export
+    // if no given, all the properties in the Json are exported
+    fields: {
+      type: Object,
+      default: () => null,
+    },
+    // this prop is used to fix the problem with other components that use the
+    // variable fields, like vee-validate. exportFields works exactly like fields
+    exportFields: {
+      type: Object,
+      default: () => null,
+    },
+    // Use as fallback when the row has no field values
+    defaultValue: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    // Title(s) for the data, could be a string or an array of strings (multiple titles)
+    header: {
+      default: null,
+    },
+    // Footer(s) for the data, could be a string or an array of strings (multiple footers)
+    footer: {
+      default: null,
+    },
+    // filename to export
+    name: {
+      type: String,
+      default: "data.xls",
+    },
+    fetch: {
+      type: Function,
+    },
+    meta: {
+      type: Array,
+      default: () => [],
+    },
+    worksheet: {
+      type: String,
+      default: "Sheet1",
+    },
+    //event before generate was called
+    beforeGenerate: {
+      type: Function,
+    },
+    //event before download pops up
+    beforeFinish: {
+      type: Function,
+    },
+    // Determine if CSV Data should be escaped
+    escapeCsv: {
+      type: Boolean,
+      default: true,
+    },
+    // long number stringify
+    stringifyLongNum: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    // unique identifier
+    idName() {
+      var now = new Date().getTime();
+      return "export_" + now;
+    },
+
+    downloadFields() {
+      if (this.fields) return this.fields;
+
+      if (this.exportFields) return this.exportFields;
+    },
+  },
+  methods: {
+    async generate() {
+      if (typeof this.beforeGenerate === "function") {
+        await this.beforeGenerate();
+      }
+      let data = this.data;
+      if (typeof this.fetch === "function" || !data) data = await this.fetch();
+
+      if (!data || !data.length) {
+        return;
+      }
+
+      let json = this.getProcessedJson(data, this.downloadFields);
+      if (this.type === "html") {
+        // this is mainly for testing
+        return this.export(
+          this.jsonToXLS(json),
+          this.name.replace(".xls", ".html"),
+          "text/html"
+        );
+      } else if (this.type === "csv") {
+        return this.export(
+          this.jsonToCSV(json),
+          this.name.replace(".xls", ".csv"),
+          "application/csv"
+        );
+      }
+      return this.export(
+        this.jsonToXLS(json),
+        this.name,
+        "application/vnd.ms-excel"
+      );
+    },
+    /*
+		Use downloadjs to generate the download link
+		*/
+    export: async function (data, filename, mime) {
+      let blob = this.base64ToBlob(data, mime);
+      if (typeof this.beforeFinish === "function") await this.beforeFinish();
+      download(blob, filename, mime);
+    },
+    /*
+		jsonToXLS
+		---------------
+		Transform json data into an xml document with MS Excel format, sadly
+		it shows a prompt when it opens, that is a default behavior for
+		Microsoft office and cannot be avoided. It's recommended to use CSV format instead.
+		*/
+    jsonToXLS(data) {
+      let xlsTemp =
+        '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta name=ProgId content=Excel.Sheet> <meta name=Generator content="Microsoft Excel 11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>${worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><style>br {mso-data-placement: same-cell;}</style></head><body><table>${table}</table></body></html>';
+      let xlsData = "<thead>";
+      const colspan = Object.keys(data[0]).length;
+      let _self = this;
+
+      //Header
+      const header = this.header || this.$attrs.title;
+      if (header) {
+        xlsData += this.parseExtraData(
+          header,
+          '<tr><th colspan="' + colspan + '">${data}</th></tr>'
+        );
+      }
+
+      //Fields
+      xlsData += "<tr>";
+      for (let key in data[0]) {
+        xlsData += "<th>" + key + "</th>";
+      }
+      xlsData += "</tr>";
+      xlsData += "</thead>";
+
+      //Data
+      xlsData += "<tbody>";
+      data.map(function (item, index) {
+        xlsData += "<tr>";
+        for (let key in item) {
+          xlsData +=
+            "<td>" +
+            _self.preprocessLongNum(
+              _self.valueReformattedForMultilines(item[key])
+            ) +
+            "</td>";
+        }
+        xlsData += "</tr>";
+      });
+      xlsData += "</tbody>";
+
+      //Footer
+      if (this.footer != null) {
+        xlsData += "<tfoot>";
+        xlsData += this.parseExtraData(
+          this.footer,
+          '<tr><td colspan="' + colspan + '">${data}</td></tr>'
+        );
+        xlsData += "</tfoot>";
+      }
+
+      return xlsTemp
+        .replace("${table}", xlsData)
+        .replace("${worksheet}", this.worksheet);
+    },
+    /*
+		jsonToCSV
+		---------------
+		Transform json data into an CSV file.
+		*/
+    jsonToCSV(data) {
+      let _self = this;
+      var csvData = [];
+
+      //Header
+      const header = this.header || this.$attrs.title;
+      if (header) {
+        csvData.push(this.parseExtraData(header, "${data}\r\n"));
+      }
+
+      //Fields
+      for (let key in data[0]) {
+        csvData.push(key);
+        csvData.push(",");
+      }
+      csvData.pop();
+      csvData.push("\r\n");
+      //Data
+      data.map(function (item) {
+        for (let key in item) {
+          let escapedCSV = item[key] + "";
+          // Escaped CSV data to string to avoid problems with numbers or other types of values
+          // this is controlled by the prop escapeCsv
+          if (_self.escapeCsv) {
+            escapedCSV = '="' + escapedCSV + '"'; // cast Numbers to string
+            if (escapedCSV.match(/[,"\n]/)) {
+              escapedCSV = '"' + escapedCSV.replace(/\"/g, '""') + '"';
+            }
+          }
+          csvData.push(escapedCSV);
+          csvData.push(",");
+        }
+        csvData.pop();
+        csvData.push("\r\n");
+      });
+      //Footer
+      if (this.footer != null) {
+        csvData.push(this.parseExtraData(this.footer, "${data}\r\n"));
+      }
+      return csvData.join("");
+    },
+    /*
+		getProcessedJson
+		---------------
+		Get only the data to export, if no fields are set return all the data
+		*/
+    getProcessedJson(data, header) {
+      let keys = this.getKeys(data, header);
+      let newData = [];
+      let _self = this;
+      data.map(function (item, index) {
+        let newItem = {};
+        for (let label in keys) {
+          let property = keys[label];
+          newItem[label] = _self.getValue(property, item);
+        }
+        newData.push(newItem);
+      });
+
+      return newData;
+    },
+    getKeys(data, header) {
+      if (header) {
+        return header;
+      }
+
+      let keys = {};
+      for (let key in data[0]) {
+        keys[key] = key;
+      }
+      return keys;
+    },
+    /*
+		parseExtraData
+		---------------
+		Parse title and footer attribute to the csv format
+		*/
+    parseExtraData(extraData, format) {
+      let parseData = "";
+      if (Array.isArray(extraData)) {
+        for (var i = 0; i < extraData.length; i++) {
+          if (extraData[i])
+            parseData += format.replace("${data}", extraData[i]);
+        }
+      } else {
+        parseData += format.replace("${data}", extraData);
+      }
+      return parseData;
+    },
+
+    getValue(key, item) {
+      const field = typeof key !== "object" ? key : key.field;
+      let indexes = typeof field !== "string" ? [] : field.split(".");
+      let value = this.defaultValue;
+
+      if (!field) value = item;
+      else if (indexes.length > 1)
+        value = this.getValueFromNestedItem(item, indexes);
+      else value = this.parseValue(item[field]);
+
+      if (key.hasOwnProperty("callback"))
+        value = this.getValueFromCallback(value, key.callback);
+
+      return value;
+    },
+
+    /*
+    convert values with newline \n characters into <br/>
+    */
+    valueReformattedForMultilines(value) {
+      if (typeof value == "string") return value.replace(/\n/gi, "<br/>");
+      else return value;
+    },
+    preprocessLongNum(value) {
+      if (this.stringifyLongNum) {
+        if (String(value).startsWith("0x")) {
+          return value;
+        }
+        if (!isNaN(value) && value != "") {
+          if (value > 99999999999 || value < 0.0000000000001) {
+            return '="' + value + '"';
+          }
+        }
+      }
+      return value;
+    },
+    getValueFromNestedItem(item, indexes) {
+      let nestedItem = item;
+      for (let index of indexes) {
+        if (nestedItem) nestedItem = nestedItem[index];
+      }
+      return this.parseValue(nestedItem);
+    },
+
+    getValueFromCallback(item, callback) {
+      if (typeof callback !== "function") return this.defaultValue;
+      const value = callback(item);
+      return this.parseValue(value);
+    },
+    parseValue(value) {
+      return value || value === 0 || typeof value === "boolean"
+        ? value
+        : this.defaultValue;
+    },
+    base64ToBlob(data, mime) {
+      let base64 = window.btoa(window.unescape(encodeURIComponent(data)));
+      let bstr = atob(base64);
+      let n = bstr.length;
+      let u8arr = new Uint8ClampedArray(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    },
+  }, // end methods
+};
+
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
+/* server only */
+, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  if (typeof shadowMode !== 'boolean') {
+    createInjectorSSR = createInjector;
+    createInjector = shadowMode;
+    shadowMode = false;
+  } // Vue.extend constructor export interop.
+
+
+  var options = typeof script === 'function' ? script.options : script; // render functions
+
+  if (template && template.render) {
+    options.render = template.render;
+    options.staticRenderFns = template.staticRenderFns;
+    options._compiled = true; // functional template
+
+    if (isFunctionalTemplate) {
+      options.functional = true;
+    }
+  } // scopedId
+
+
+  if (scopeId) {
+    options._scopeId = scopeId;
+  }
+
+  var hook;
+
+  if (moduleIdentifier) {
+    // server build
+    hook = function hook(context) {
+      // 2.3 injection
+      context = context || // cached call
+      this.$vnode && this.$vnode.ssrContext || // stateful
+      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
+      // 2.2 with runInNewContext: true
+
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__;
+      } // inject component styles
+
+
+      if (style) {
+        style.call(this, createInjectorSSR(context));
+      } // register component module identifier for async chunk inference
+
+
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier);
+      }
+    }; // used by ssr in case component is cached and beforeCreate
+    // never gets called
+
+
+    options._ssrRegister = hook;
+  } else if (style) {
+    hook = shadowMode ? function () {
+      style.call(this, createInjectorShadow(this.$root.$options.shadowRoot));
+    } : function (context) {
+      style.call(this, createInjector(context));
+    };
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // register for functional component in vue file
+      var originalRender = options.render;
+
+      options.render = function renderWithStyleInjection(h, context) {
+        hook.call(context);
+        return originalRender(h, context);
+      };
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate;
+      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+    }
+  }
+
+  return script;
+}
+
+var normalizeComponent_1 = normalizeComponent;
+
+/* script */
+const __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { attrs: { id: _vm.idName }, on: { click: _vm.generate } },
+    [_vm._t("default", [_vm._v(" Download " + _vm._s(_vm.name) + " ")])],
+    2
+  )
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+
+  
+  var JsonExcel = normalizeComponent_1(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    undefined,
+    undefined
+  );
+
+/* harmony default export */ __webpack_exports__["default"] = (JsonExcel);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ })
 
