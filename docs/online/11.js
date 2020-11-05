@@ -107,6 +107,18 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 }).then(function (result) {
                   // console.log(`generateReport - result: ${JSON.stringify(result)}`);
                   console.log("generateReport - #result: ".concat(result.length));
+                  var lastTeamIndex = -1;
+
+                  for (var i = 0; i < result.length; i++) {
+                    var record = result[i];
+                    var index = parseInt(record["组别"]);
+
+                    if (index != lastTeamIndex) {
+                      record["组员"] = "\u7EC4\u957F".concat(record["组员"]);
+                      lastTeamIndex = index;
+                    }
+                  }
+
                   return result;
                 }).catch(function (e) {
                   console.log("error in generateReport: ".concat(e));

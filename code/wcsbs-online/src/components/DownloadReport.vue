@@ -68,6 +68,15 @@ export default {
         .then(result => {
           // console.log(`generateReport - result: ${JSON.stringify(result)}`);
           console.log(`generateReport - #result: ${result.length}`);
+          var lastTeamIndex = -1;
+          for (var i = 0; i < result.length; i++) {
+            const record = result[i];
+            const index = parseInt(record["组别"]);
+            if (index != lastTeamIndex) {
+              record["组员"] = `组长${record["组员"]}`;
+              lastTeamIndex = index;
+            }
+          }
           return result;
         })
         .catch(e => {
