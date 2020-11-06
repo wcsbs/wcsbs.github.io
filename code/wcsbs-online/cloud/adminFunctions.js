@@ -160,23 +160,34 @@ Parse.Cloud.define(
         parseClass.relation("students").add(parseUser);
       }
 
-      query = new Parse.Query("Team");
-      query.equalTo("classId", classId);
-      query.equalTo("index", index);
-      team = await query.first();
+      var teamIndex = teams.findIndex(e => e.get("index") == index);
+      if (teamIndex < 0) {
+        query = new Parse.Query("Team");
+        query.equalTo("classId", classId);
+        query.equalTo("index", index);
+        team = await query.first();
 
-      if (!team) {
-        team = new Parse.Object("Team");
-        team.set("classId", classId);
-        team.set("leaderId", parseUser.id);
-        team.set("index", index);
-        team.set("name", `第${index}组`);
-        team = await team.save(null, MASTER_KEY);
-        teams.push(team);
+        if (!team) {
+          team = new Parse.Object("Team");
+          team.set("classId", classId);
+          team.set("leaderId", parseUser.id);
+          team.set("index", index);
+          team.set("name", `第${index}组`);
+        }
+        team.set("membersOrder", parseUser.id);
+      } else {
+        team = teams[teamIndex];
+        team.set("membersOrder", `${team.get("membersOrder")},${parseUser.id}`);
       }
 
       team.relation("members").add(parseUser);
       team = await team.save(null, MASTER_KEY);
+
+      if (teamIndex < 0) {
+        teams.push(team);
+      } else {
+        teams[teamIndex] = team;
+      }
 
       var result = { user: parseUser, count: 0 };
       for (key in record) {
@@ -219,6 +230,6 @@ Parse.Cloud.define(
     }
     parseClass = await parseClass.save(null, MASTER_KEY);
 
-    return { mapDates, teams, users, results };
+    return { teams, users, results };
   }
 );

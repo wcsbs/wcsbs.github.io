@@ -635,7 +635,7 @@ const loadTeams = async function(
   userWithRoles,
   classId,
   forAdmin,
-  loadingStudentAssignedInTeams
+  loadingStudentsNotAssignedInTeams
 ) {
   requireAuth(user);
 
@@ -672,26 +672,35 @@ const loadTeams = async function(
     };
 
     const leaderId = parseTeam.get("leaderId");
-    query = parseTeam.relation("members").query();
-    const teamMembers = await query.limit(MAX_QUERY_COUNT).find();
+    var membersOrder = parseTeam.get("membersOrder");
+    if (membersOrder) {
+      membersOrder = membersOrder.split(",");
+    }
+    logger.info(`loadTeams - membersOrder: ${JSON.stringify(membersOrder)}`);
 
-    for (var j = 0; j < teamMembers.length; j++) {
-      const member = {
-        id: teamMembers[j].id,
-        name: teamMembers[j].get("name")
-      };
-      studentAssignedInTeams.push(member.id);
-      if (member.id == leaderId) {
-        team.leader = member;
-        team.members.splice(0, 0, member);
-      } else {
+    if (membersOrder) {
+      for (var j = 0; j < membersOrder.length; j++) {
+        query = new Parse.Query("User");
+        query.equalTo("objectId", membersOrder[j]);
+        const parseUser = await query.first();
+
+        const member = {
+          id: parseUser.id,
+          name: parseUser.get("name")
+        };
+        studentAssignedInTeams.push(member.id);
+
+        if (member.id == leaderId) {
+          team.leader = member;
+        }
+
         team.members.push(member);
       }
     }
     classInfo.classTeams.push(team);
   }
 
-  if (loadingStudentAssignedInTeams) {
+  if (loadingStudentsNotAssignedInTeams) {
     query = parseClass.relation("students").query();
     query.notContainedIn("objectId", studentAssignedInTeams);
     const classStudents = await query.limit(MAX_QUERY_COUNT).find();
@@ -819,6 +828,12 @@ Parse.Cloud.define(
         if (parseUser) {
           if (j == 0) {
             parseTeam.set("leaderId", parseUser.id);
+            parseTeam.set("membersOrder", parseUser.id);
+          } else {
+            parseTeam.set(
+              "membersOrder",
+              `${parseTeam.get("membersOrder")},${parseUser.id}`
+            );
           }
           relation.add(parseUser);
         }
