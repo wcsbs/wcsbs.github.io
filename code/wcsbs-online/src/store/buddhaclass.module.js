@@ -218,8 +218,8 @@ const actions = {
     })
       .then(classInfo => {
         console.log(
-          `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
-          // `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
+          // `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
+          `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_STUDENTS_END, classInfo);
       })
@@ -356,17 +356,19 @@ const mutations = {
       var first = true;
       for (var i = 0; i < state.classInfo.classAdminStudents.length; i++) {
         const user = state.classInfo.classAdminStudents[i];
-        var index = 2;
-        if (user.roles.some(role => role == "ClassAdminUser")) {
-          index = first ? 0 : 1;
-          first = false;
+        if (user) {
+          var index = 2;
+          if (user.roles.some(role => role == "ClassAdminUser")) {
+            index = first ? 0 : 1;
+            first = false;
+          }
+          state.classAdminUsers[index].id = user.id;
+          state.classAdminUsers[index].name = user.name;
+          state.classAdminUsers[index].roles = getDisplayRoles(user.roles);
+          state.classAdminUsers[index].displayName = `(${index + 1}) ${
+            user.name
+          } -- ${state.classAdminUsers[index].roles}`;
         }
-        state.classAdminUsers[index].id = user.id;
-        state.classAdminUsers[index].name = user.name;
-        state.classAdminUsers[index].roles = getDisplayRoles(user.roles);
-        state.classAdminUsers[index].displayName = `(${index + 1}) ${
-          user.name
-        } -- ${state.classAdminUsers[index].roles}`;
       }
       state.isLoadingStudents = false;
     }

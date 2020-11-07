@@ -878,13 +878,15 @@ Parse.Cloud.define(
         const roles = await loadUserRoles(parseUser);
 
         if (!roles.includes("TeacherUser")) {
+          var toRemove = true;
           for (var j = 0; j < classAdminUserIds.length; j++) {
             if (classAdminUserIds[j] == parseUser._getId()) {
               classAdminUserIds.splice(j, 1);
+              toRemove = false;
               break;
             }
           }
-          if (j == classAdminUserIds.length) {
+          if (toRemove) {
             relation.remove(parseUser);
           }
         }

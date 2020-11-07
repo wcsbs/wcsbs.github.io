@@ -56,7 +56,7 @@ export default {
       this.classAdminCandidates = [];
       for (var i = 0; i < this.classInfo.classAdminStudents.length; i++) {
         const user = this.classInfo.classAdminStudents[i];
-        if (user.roles.some(role => role == "ClassAdminUser")) {
+        if (user && user.roles.some(role => role == "ClassAdminUser")) {
           this.classAdminCandidates.push(user);
         }
       }

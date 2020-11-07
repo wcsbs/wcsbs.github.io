@@ -90,7 +90,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       for (var i = 0; i < this.classInfo.classAdminStudents.length; i++) {
         var user = this.classInfo.classAdminStudents[i];
 
-        if (user.roles.some(function (role) {
+        if (user && user.roles.some(function (role) {
           return role == "ClassAdminUser";
         })) {
           this.classAdminCandidates.push(user);
