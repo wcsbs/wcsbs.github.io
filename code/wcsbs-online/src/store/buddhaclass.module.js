@@ -218,8 +218,8 @@ const actions = {
     })
       .then(classInfo => {
         console.log(
-          // `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
-          `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
+          `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
+          // `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_STUDENTS_END, classInfo);
       })

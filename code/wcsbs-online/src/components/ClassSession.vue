@@ -378,13 +378,16 @@ export default {
         }
       }
 
-      for (i = 0; i < this.sessionDetails.submodules.length; i++) {
-        const submodule = this.sessionDetails.submodules[i];
-        if (submodule.id == session.submoduleId) {
-          selectedSubmodule = submodule;
-          break;
+      if (this.sessionDetails) {
+        for (i = 0; i < this.sessionDetails.submodules.length; i++) {
+          const submodule = this.sessionDetails.submodules[i];
+          if (submodule.id == session.submoduleId) {
+            selectedSubmodule = submodule;
+            break;
+          }
         }
       }
+
       if (!selectedSubmodule) {
         for (i = 0; i < selectedModule.newSubmodules.length; i++) {
           const submodule = selectedModule.newSubmodules[i];

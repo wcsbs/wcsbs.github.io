@@ -423,12 +423,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
 
-      for (i = 0; i < this.sessionDetails.submodules.length; i++) {
-        var submodule = this.sessionDetails.submodules[i];
+      if (this.sessionDetails) {
+        for (i = 0; i < this.sessionDetails.submodules.length; i++) {
+          var submodule = this.sessionDetails.submodules[i];
 
-        if (submodule.id == session.submoduleId) {
-          selectedSubmodule = submodule;
-          break;
+          if (submodule.id == session.submoduleId) {
+            selectedSubmodule = submodule;
+            break;
+          }
         }
       }
 
