@@ -37,8 +37,10 @@ const state = {
   isLoadingStats: false,
   classTeams: [],
   classTeamOptions: [],
+  classAdminUsers: [],
   removedStudents: [],
-  classTeamsChanged: false
+  classTeamsChanged: false,
+  initComponentKey: 0
 };
 
 const getters = {
@@ -75,12 +77,42 @@ const getters = {
   classTeamOptions(state) {
     return state.classTeamOptions;
   },
+  classAdminUsers(state) {
+    return state.classAdminUsers;
+  },
+  initComponentKey(state) {
+    return state.initComponentKey;
+  },
   removedStudents(state) {
     return state.removedStudents;
   },
   practiceInfo(state) {
     return state.practiceInfo;
   }
+};
+
+const getDisplayRoles = function(userRoles) {
+  const array = [
+    { name: "StudentUser", displayName: "学员" },
+    { name: "B4aAdminUser", displayName: "系统管理员" },
+    { name: "ClassAdminUser", displayName: "学修管理员" },
+    { name: "TeacherUser", displayName: "辅导员" },
+    { name: "TeachingAssistantUser", displayName: "学修助理" }
+  ];
+  var roles = "";
+  if (!userRoles) {
+    return array[0].displayName;
+  }
+  for (var i = 0; i < array.length; i++) {
+    if (userRoles.some(role => role == array[i].name)) {
+      if (roles.length > 0) {
+        roles = roles + "，";
+      }
+      roles = roles + array[i].displayName;
+    }
+  }
+
+  return roles;
 };
 
 const actions = {
@@ -186,8 +218,8 @@ const actions = {
     })
       .then(classInfo => {
         console.log(
-          // `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
-          `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
+          `${fetchTeams} - #classTeams: ${classInfo.classTeams.length}`
+          // `${fetchTeams} - classInfo: ${JSON.stringify(classInfo)}`
         );
         context.commit(FETCH_STUDENTS_END, classInfo);
       })
@@ -282,6 +314,8 @@ const mutations = {
     state.isLoadingStudents = true;
   },
   [FETCH_STUDENTS_END](state, classInfo) {
+    state.initComponentKey = Math.floor(Math.random() * 10000 + 1);
+
     if (classInfo.changed) {
       state.classTeamsChanged = true;
       state.classTeamOptions = state.classTeams.map(e => {
@@ -313,8 +347,30 @@ const mutations = {
         return { value: e.id ? e.id : null, text: e.name };
       });
 
+      state.classAdminUsers = [
+        { role: "中组长：", displayName: "待定" },
+        { role: "副组长：", displayName: "待定" },
+        { role: "统计员：", displayName: "待定" }
+      ];
+
+      var first = true;
+      for (var i = 0; i < state.classInfo.classAdminStudents.length; i++) {
+        const user = state.classInfo.classAdminStudents[i];
+        var index = 2;
+        if (user.roles.some(role => role == "ClassAdminUser")) {
+          index = first ? 0 : 1;
+          first = false;
+        }
+        state.classAdminUsers[index].id = user.id;
+        state.classAdminUsers[index].name = user.name;
+        state.classAdminUsers[index].roles = getDisplayRoles(user.roles);
+        state.classAdminUsers[index].displayName = `(${index + 1}) ${
+          user.name
+        } -- ${state.classAdminUsers[index].roles}`;
+      }
       state.isLoadingStudents = false;
     }
+    // console.log(`state: ${JSON.stringify(state)}`);
   },
   [FETCH_STATS_START](state) {
     state.isLoadingStats = true;

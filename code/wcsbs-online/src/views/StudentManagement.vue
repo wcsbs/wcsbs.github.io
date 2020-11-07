@@ -5,6 +5,8 @@
     </div>
     <div v-else>
       <h3>{{ classInfo.name }} -- 学员管理</h3>
+      <ClassAdmin :key="initComponentKey" :forStudentManagement="true" />
+      <hr />
       <div class="input-group mb-3">
         <input
           type="text"
@@ -52,6 +54,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ClassTeam from "@/components/ClassTeam";
+import ClassAdmin from "@/components/ClassAdmin";
 import { FETCH_STUDENTS, RESET_STUDENTS } from "../store/actions.type";
 import store from "@/store";
 import Parse from "parse";
@@ -59,7 +62,8 @@ import Parse from "parse";
 export default {
   name: "StudentManagement",
   components: {
-    ClassTeam
+    ClassTeam,
+    ClassAdmin
   },
   computed: {
     ...mapGetters([
@@ -69,7 +73,9 @@ export default {
       "isClassAdmin",
       "isSystemAdmin",
       "classTeamsChanged",
-      "removedStudents"
+      "removedStudents",
+      "initComponentKey",
+      "classAdminUsers"
     ])
   },
   beforeRouteEnter(to, from, next) {
@@ -148,6 +154,10 @@ export default {
       const classId = this.classInfo.id;
       const classTeams = this.classTeams.filter(e => e.id);
       const removedStudents = this.removedStudents;
+      const classAdminUserIds = this.classAdminUsers.map(e => e.id);
+      console.log(
+        `updateTeams - classAdminUserIds: ${JSON.stringify(classAdminUserIds)}`
+      );
 
       this.$dialog
         .confirm(message, options)
@@ -155,7 +165,8 @@ export default {
           Parse.Cloud.run("class:updateTeams", {
             classId,
             classTeams,
-            removedStudents
+            removedStudents,
+            classAdminUserIds
           })
             .then(result => {
               console.log(`updateTeams - result: ${JSON.stringify(result)}`);

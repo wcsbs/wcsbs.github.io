@@ -208,7 +208,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         params: {
           classId: this.buddhaClass.id,
           practiceId: practiceId,
-          forAdmin: this.buddhaClass.classSnapshot != undefined
+          forAdmin: this.buddhaClass.classSnapshot != undefined || this.buddhaClass.canDownloadReports == true
         }
       });
     }

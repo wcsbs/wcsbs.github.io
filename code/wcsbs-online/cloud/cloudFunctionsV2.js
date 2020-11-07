@@ -310,6 +310,7 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
   }
 
   var parseClasses = await query.find();
+
   const enrolledClassList = [];
 
   for (var i = 0; i < parseClasses.length; i++) {
@@ -330,12 +331,20 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
     classInfo.teachers = await loadClassTeachers(parseClass);
 
     if (!canDownloadReports) {
-      query = new Parse.Query("Team");
-      query.equalTo("leaderId", parseUser.id);
-      query.equalTo("classId", parseClass.id);
-      const team = await query.first();
-      if (team) {
-        classInfo.canDownloadReports = team.id;
+      var metaData = parseClass.get("metaData");
+      if (metaData) {
+        classInfo.canDownloadReports = metaData.adminStudentIds.includes(
+          parseUser.id
+        );
+      }
+      if (!classInfo.canDownloadReports) {
+        query = new Parse.Query("Team");
+        query.equalTo("leaderId", parseUser.id);
+        query.equalTo("classId", parseClass.id);
+        const team = await query.first();
+        if (team) {
+          classInfo.canDownloadReports = team.id;
+        }
       }
     }
 
@@ -630,12 +639,30 @@ Parse.Cloud.define(
   }
 );
 
+const getClassAdminStudents = async function(classAdminUsers) {
+  const classAdminStudents = [];
+  for (var i = 0; i < classAdminUsers.length; i++) {
+    const parseUser = classAdminUsers[i];
+    const roles = await loadUserRoles(parseUser);
+
+    if (!roles.includes("TeacherUser")) {
+      const member = {
+        id: parseUser.id,
+        name: parseUser.get("name"),
+        roles
+      };
+      classAdminStudents.push(member);
+    }
+  }
+  return classAdminStudents;
+};
+
 const loadTeams = async function(
   user,
   userWithRoles,
   classId,
   forAdmin,
-  loadingStudentsNotAssignedInTeams
+  loadingExtra
 ) {
   requireAuth(user);
 
@@ -650,6 +677,35 @@ const loadTeams = async function(
     classTeams: [{ members: [] }],
     forAdmin
   };
+
+  if (loadingExtra) {
+    query = parseClass.relation("classAdminUsers").query();
+    var classAdminUsers = await query.limit(MAX_QUERY_COUNT).find();
+    classInfo.classAdminStudents = await getClassAdminStudents(classAdminUsers);
+
+    var adminStudentIds;
+    var metaData = parseClass.get("metaData");
+    if (metaData) {
+      adminStudentIds = metaData.adminStudentIds;
+      const classAdminStudents = adminStudentIds.map(e => {
+        return classInfo.classAdminStudents.find(s => s.id == e);
+      });
+      classInfo.classAdminStudents = classAdminStudents;
+    } else {
+      adminStudentIds = classInfo.classAdminStudents.map(e => e.id);
+    }
+
+    query = new Parse.Query(Parse.Role);
+    query.equalTo("name", "ClassAdminUser");
+    const parseRole = await query.first();
+
+    query = parseRole.relation("users").query();
+    query.notContainedIn("objectId", adminStudentIds);
+    classAdminUsers = await query.limit(MAX_QUERY_COUNT).find();
+    classInfo.classAdminCandidates = await getClassAdminStudents(
+      classAdminUsers
+    );
+  }
 
   query = new Parse.Query("Team");
   query.equalTo("classId", classId);
@@ -676,7 +732,7 @@ const loadTeams = async function(
     if (membersOrder) {
       membersOrder = membersOrder.split(",");
     }
-    logger.info(`loadTeams - membersOrder: ${JSON.stringify(membersOrder)}`);
+    // logger.info(`loadTeams - membersOrder: ${JSON.stringify(membersOrder)}`);
 
     if (membersOrder) {
       for (var j = 0; j < membersOrder.length; j++) {
@@ -700,7 +756,7 @@ const loadTeams = async function(
     classInfo.classTeams.push(team);
   }
 
-  if (loadingStudentsNotAssignedInTeams) {
+  if (loadingExtra) {
     query = parseClass.relation("students").query();
     query.notContainedIn("objectId", studentAssignedInTeams);
     const classStudents = await query.limit(MAX_QUERY_COUNT).find();
@@ -781,15 +837,25 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "class:updateTeams",
-  async ({ user, params: { classId, classTeams, removedStudents } }) => {
+  async ({
+    user,
+    params: { classId, classTeams, removedStudents, classAdminUserIds }
+  }) => {
     requireAuth(user);
+
+    var query = new Parse.Query("Class");
+    query.equalTo("objectId", classId);
+    var parseClass = await query.first();
+    var metaData = parseClass.get("metaData");
+    if (!metaData) {
+      metaData = {};
+    }
+    metaData.adminStudentIds = [].concat(classAdminUserIds);
+    parseClass.set("metaData", metaData);
 
     var removedStudentParseUsers = [];
     if (removedStudents.length > 0) {
       const removedStudentIds = [removedStudents.map(e => e.id)];
-      var query = new Parse.Query("Class");
-      query.equalTo("objectId", classId);
-      var parseClass = await query.first();
       var relation = parseClass.relation("students");
 
       for (var i = 0; i < removedStudents.length; i++) {
@@ -799,6 +865,38 @@ Parse.Cloud.define(
         removedStudentParseUsers.push(parseUser);
         relation.remove(parseUser);
       }
+      parseClass = await parseClass.save(null, MASTER_KEY);
+    }
+
+    if (classAdminUserIds && classAdminUserIds.length > 0) {
+      relation = parseClass.relation("classAdminUsers");
+      query = relation.query();
+      const classAdminUsers = await query.limit(MAX_QUERY_COUNT).find();
+
+      for (i = 0; i < classAdminUsers.length; i++) {
+        const parseUser = classAdminUsers[i];
+        const roles = await loadUserRoles(parseUser);
+
+        if (!roles.includes("TeacherUser")) {
+          for (var j = 0; j < classAdminUserIds.length; j++) {
+            if (classAdminUserIds[j] == parseUser._getId()) {
+              classAdminUserIds.splice(j, 1);
+              break;
+            }
+          }
+          if (j == classAdminUserIds.length) {
+            relation.remove(parseUser);
+          }
+        }
+      }
+
+      for (i = 0; i < classAdminUserIds.length; i++) {
+        query = new Parse.Query("User");
+        query.equalTo("objectId", classAdminUserIds[i]);
+        const parseUser = await query.first();
+        relation.add(parseUser);
+      }
+
       parseClass = await parseClass.save(null, MASTER_KEY);
     }
 
@@ -844,7 +942,7 @@ Parse.Cloud.define(
     }
 
     return {
-      removedStudentParseUsers,
+      classAdminUserIds,
       teams
     };
   }

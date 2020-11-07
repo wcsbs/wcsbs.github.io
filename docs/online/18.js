@@ -1,8 +1,8 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonp"] = (typeof self !== 'undefined' ? self : this)["webpackJsonp"] || []).push([[18],{
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/StudentManagement.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/SessionManagement.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/StudentManagement.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/SessionManagement.vue?vue&type=script&lang=js& ***!
   \*********************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -19,7 +19,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _components_ClassTeam__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ClassTeam */ "./src/components/ClassTeam.vue");
+/* harmony import */ var _components_ClassSession__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ClassSession */ "./src/components/ClassSession.vue");
 /* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/store */ "./src/store/index.js");
 /* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
@@ -85,108 +85,77 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "StudentManagement",
+  name: "SessionManagement",
   components: {
-    ClassTeam: _components_ClassTeam__WEBPACK_IMPORTED_MODULE_6__["default"]
+    ClassSession: _components_ClassSession__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])(["isLoadingStudents", "classInfo", "classTeams", "isClassAdmin", "isSystemAdmin", "classTeamsChanged", "removedStudents"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])(["isLoadingSessions", "classInfo", "classSessions", "sessionDetails", "isClassAdmin", "isTeachingAssistant", "isStudent"])),
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FETCH_STUDENTS"], to.params).then(function () {
+    _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FETCH_SESSIONS"], to.params).then(function () {
       next();
     });
   },
   data: function data() {
     return {
-      newClassTeamName: "",
-      creatingClassTeam: false
+      filterText: "",
+      creatingSession: false,
+      newClassSession: {
+        dummy: true
+      },
+      newAttendance: {
+        dummy: true
+      }
     };
   },
   methods: {
-    dummyClassTeam: function dummyClassTeam() {
-      return {
-        id: "DUMMY_".concat(this.newClassTeamName, "_").concat(new Date().getTime()),
-        dummy: true,
-        name: "将删除学员",
-        members: this.removedStudents
-      };
+    filterSessions: function filterSessions(filterText) {
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FILTER_SESSIONS"], filterText);
     },
-    createClassTeam: function createClassTeam() {
-      var classTeam = {
-        id: "NEW_".concat(this.newClassTeamName, "_").concat(new Date().getTime()),
-        classId: this.classInfo.id,
-        name: this.newClassTeamName,
-        members: []
-      };
-      this.newClassTeamName = "";
-      this.classTeams.push(classTeam);
-      _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["RESET_STUDENTS"], {
-        changed: true
-      });
+    clearFilter: function clearFilter() {
+      this.filterText = "";
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FILTER_SESSIONS"], this.filterText);
     },
-    removeClass: function removeClass(index) {
-      this.classTeams[0].members = this.classTeams[0].members.concat(this.classTeams[index].members);
-      this.classTeams.splice(index, 1);
-      _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["RESET_STUDENTS"], {
-        changed: true
-      });
+    createSession: function createSession() {
+      this.creatingSession = !this.creatingSession;
     },
-    resetClassTeams: function resetClassTeams() {
-      var options = {
-        okText: "确认",
-        cancelText: "取消",
-        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
-
-      };
-      var message = {
-        title: this.classInfo.name,
-        body: "放弃所做修改?"
-      };
-      var thisComponent = this;
-      this.$dialog.confirm(message, options).then(function (dialog) {
-        thisComponent.newClassTeamName = "";
-        thisComponent.classInfo.changed = false;
-        _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["RESET_STUDENTS"], thisComponent.classInfo);
-        dialog.close();
-      }).catch(function (e) {
-        console.log("error: ".concat(e));
-      });
-    },
-    submitClassTeams: function submitClassTeams() {
-      var options = {
-        okText: "确认",
-        cancelText: "取消",
-        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
-
-      };
-      var message = {
-        title: this.classInfo.name,
-        body: "保存所做修改?"
-      };
-      var thisComponent = this;
+    applyClass: function applyClass() {
       var classId = this.classInfo.id;
-      var classTeams = this.classTeams.filter(function (e) {
-        return e.id;
-      });
-      var removedStudents = this.removedStudents;
-      this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("class:updateTeams", {
-          classId: classId,
-          classTeams: classTeams,
-          removedStudents: removedStudents
+      var options = {
+        okText: "确认",
+        cancelText: "取消"
+      };
+      var message = {
+        title: this.classInfo.name,
+        body: "\u9876\u793C\u4E0A\u5E08\u4E09\u5B9D\uFF01\u771F\u7684\u8981\u62A5\u540D\uFF1F"
+      };
+      var thisComponent = this;
+      console.log("applyClass - classId: ".concat(classId));
+      this.$dialog.confirm(message, options).then(function () {
+        parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("class:apply", {
+          classId: classId
         }).then(function (result) {
-          console.log("updateTeams - result: ".concat(JSON.stringify(result)));
-          window.location.reload();
-          dialog.close();
+          console.log("class:apply - result: ".concat(JSON.stringify(result)));
+          thisComponent.$router.push({
+            name: "home"
+          });
         }).catch(function (e) {
-          console.log("error in updateTeams: ".concat(e));
-          dialog.close();
-          thisComponent.$dialog.alert("error in updateTeams: ".concat(e));
+          console.log("error in class:apply: ".concat(e));
         });
       }).catch(function (e) {
         console.log("error: ".concat(e));
@@ -197,9 +166,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 /***/ }),
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/StudentManagement.vue?vue&type=template&id=8da599d8&":
+/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f&":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/StudentManagement.vue?vue&type=template&id=8da599d8& ***!
+  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f& ***!
   \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -213,99 +182,111 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.isLoadingStudents
-      ? _c("div", [_vm._v("\n    正在获取学员详情...\n  ")])
+    _vm.isLoadingSessions
+      ? _c("div", [_vm._v("\n    正在获取课程详情...\n  ")])
       : _c(
           "div",
           [
-            _c("h3", [_vm._v(_vm._s(_vm.classInfo.name) + " -- 学员管理")]),
-            _c(
-              "div",
-              { staticClass: "input-group mb-3" },
-              [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.newClassTeamName,
-                      expression: "newClassTeamName"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    type: "text",
-                    "aria-describedby": "basic-addon2",
-                    placeholder: "输入新组名称"
-                  },
-                  domProps: { value: _vm.newClassTeamName },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.newClassTeamName = $event.target.value
-                    }
-                  }
-                }),
-                _c(
-                  "b-button",
+            _c("h3", { domProps: { textContent: _vm._s(_vm.classInfo.name) } }),
+            _c("div", { staticClass: "input-group mb-3" }, [
+              _c("input", {
+                directives: [
                   {
-                    attrs: { variant: "info" },
-                    on: { click: _vm.createClassTeam }
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filterText,
+                    expression: "filterText"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  "aria-describedby": "basic-addon2",
+                  placeholder: "搜索"
+                },
+                domProps: { value: _vm.filterText },
+                on: {
+                  change: function($event) {
+                    return _vm.filterSessions(_vm.filterText)
                   },
-                  [_vm._v("创建新组")]
-                ),
-                _vm.classTeamsChanged
-                  ? _c(
-                      "b-button",
-                      {
-                        attrs: { variant: "success" },
-                        on: { click: _vm.submitClassTeams }
-                      },
-                      [_vm._v("保存修改")]
-                    )
-                  : _vm._e(),
-                _vm.classTeamsChanged
-                  ? _c(
-                      "b-button",
-                      {
-                        attrs: { variant: "warning" },
-                        on: { click: _vm.resetClassTeams }
-                      },
-                      [_vm._v("放弃修改")]
-                    )
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm.removedStudents.length > 0
-              ? _c("ClassTeam", { attrs: { classTeam: _vm.dummyClassTeam() } })
-              : _vm._e(),
-            _vm._l(_vm.classTeams, function(classTeam, index) {
-              return _c(
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.filterText = $event.target.value
+                  }
+                }
+              }),
+              _c(
                 "div",
-                { key: classTeam.id + classTeam.name + index },
+                { staticClass: "input-group-append" },
                 [
-                  _c("ClassTeam", { attrs: { classTeam: classTeam } }),
-                  index > 0
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-secondary",
+                      attrs: { type: "button" },
+                      on: { click: _vm.clearFilter }
+                    },
+                    [_vm._v("\n          清除\n        ")]
+                  ),
+                  _vm.classInfo.forApplication
                     ? _c(
                         "b-button",
                         {
-                          attrs: { block: "", variant: "warning" },
+                          attrs: { variant: "warning" },
                           on: {
                             click: function($event) {
-                              return _vm.removeClass(index)
+                              return _vm.applyClass()
                             }
                           }
                         },
-                        [_vm._v("删除本组")]
+                        [_vm._v("我要报名")]
                       )
                     : _vm._e(),
-                  _c("hr")
+                  !_vm.classInfo.forApplication &&
+                  (_vm.isClassAdmin || _vm.isTeachingAssistant)
+                    ? _c(
+                        "b-button",
+                        {
+                          attrs: { variant: "warning" },
+                          on: { click: _vm.createSession }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(
+                              _vm.creatingSession ? "取消创建" : "创建新课"
+                            )
+                          )
+                        ]
+                      )
+                    : _vm._e()
                 ],
                 1
               )
+            ]),
+            _vm.classSessions.length === 0
+              ? _c("div", [_vm._v("\n      没有找到上课记录！\n    ")])
+              : _vm._e(),
+            _vm.creatingSession
+              ? _c("ClassSession", {
+                  attrs: {
+                    classInfo: _vm.classInfo,
+                    classSession: _vm.newClassSession
+                  }
+                })
+              : _vm._e(),
+            _vm._l(_vm.classSessions, function(classSession, index) {
+              return _c("ClassSession", {
+                key: classSession.id + index,
+                attrs: {
+                  classInfo: _vm.classInfo,
+                  forApplication: _vm.classInfo.forApplication,
+                  forAdmin: _vm.classInfo.forAdmin,
+                  classSession: classSession,
+                  sessionDetails: _vm.sessionDetails[index]
+                }
+              })
             })
           ],
           2
@@ -319,17 +300,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./src/views/StudentManagement.vue":
+/***/ "./src/views/SessionManagement.vue":
 /*!*****************************************!*\
-  !*** ./src/views/StudentManagement.vue ***!
+  !*** ./src/views/SessionManagement.vue ***!
   \*****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./StudentManagement.vue?vue&type=template&id=8da599d8& */ "./src/views/StudentManagement.vue?vue&type=template&id=8da599d8&");
-/* harmony import */ var _StudentManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./StudentManagement.vue?vue&type=script&lang=js& */ "./src/views/StudentManagement.vue?vue&type=script&lang=js&");
+/* harmony import */ var _SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SessionManagement.vue?vue&type=template&id=18fdf82f& */ "./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f&");
+/* harmony import */ var _SessionManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SessionManagement.vue?vue&type=script&lang=js& */ "./src/views/SessionManagement.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -339,9 +320,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _StudentManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _SessionManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -355,52 +336,52 @@ if (true) {
   api.install(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js"))
   if (api.compatible) {
     module.hot.accept()
-    if (!api.isRecorded('8da599d8')) {
-      api.createRecord('8da599d8', component.options)
+    if (!api.isRecorded('18fdf82f')) {
+      api.createRecord('18fdf82f', component.options)
     } else {
-      api.reload('8da599d8', component.options)
+      api.reload('18fdf82f', component.options)
     }
-    module.hot.accept(/*! ./StudentManagement.vue?vue&type=template&id=8da599d8& */ "./src/views/StudentManagement.vue?vue&type=template&id=8da599d8&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./StudentManagement.vue?vue&type=template&id=8da599d8& */ "./src/views/StudentManagement.vue?vue&type=template&id=8da599d8&");
+    module.hot.accept(/*! ./SessionManagement.vue?vue&type=template&id=18fdf82f& */ "./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SessionManagement.vue?vue&type=template&id=18fdf82f& */ "./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f&");
 (function () {
-      api.rerender('8da599d8', {
-        render: _StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__["render"],
-        staticRenderFns: _StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
+      api.rerender('18fdf82f', {
+        render: _SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__["render"],
+        staticRenderFns: _SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
       })
     })(__WEBPACK_OUTDATED_DEPENDENCIES__); }.bind(this))
   }
 }
-component.options.__file = "src/views/StudentManagement.vue"
+component.options.__file = "src/views/SessionManagement.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./src/views/StudentManagement.vue?vue&type=script&lang=js&":
+/***/ "./src/views/SessionManagement.vue?vue&type=script&lang=js&":
 /*!******************************************************************!*\
-  !*** ./src/views/StudentManagement.vue?vue&type=script&lang=js& ***!
+  !*** ./src/views/SessionManagement.vue?vue&type=script&lang=js& ***!
   \******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./StudentManagement.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/StudentManagement.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SessionManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./SessionManagement.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/SessionManagement.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SessionManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./src/views/StudentManagement.vue?vue&type=template&id=8da599d8&":
+/***/ "./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f&":
 /*!************************************************************************!*\
-  !*** ./src/views/StudentManagement.vue?vue&type=template&id=8da599d8& ***!
+  !*** ./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f& ***!
   \************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./StudentManagement.vue?vue&type=template&id=8da599d8& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/StudentManagement.vue?vue&type=template&id=8da599d8&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./SessionManagement.vue?vue&type=template&id=18fdf82f& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/SessionManagement.vue?vue&type=template&id=18fdf82f&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentManagement_vue_vue_type_template_id_8da599d8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SessionManagement_vue_vue_type_template_id_18fdf82f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

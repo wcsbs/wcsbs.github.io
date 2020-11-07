@@ -145,7 +145,9 @@ export default {
         params: {
           classId: this.buddhaClass.id,
           practiceId,
-          forAdmin: this.buddhaClass.classSnapshot != undefined
+          forAdmin:
+            this.buddhaClass.classSnapshot != undefined ||
+            this.buddhaClass.canDownloadReports == true
         }
       });
     }
