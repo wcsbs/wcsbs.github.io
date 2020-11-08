@@ -221,7 +221,7 @@ var render = function() {
                 attrs: {
                   prepend:
                     _vm.classTeam.id == null || _vm.classTeam.dummy
-                      ? "学员"
+                      ? "学员："
                       : !_vm.classTeam.dummy && index == 0
                       ? "组长："
                       : "组员："

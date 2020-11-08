@@ -15,7 +15,7 @@
         :key="member.id + index"
         :prepend="
           classTeam.id == null || classTeam.dummy
-            ? '学员'
+            ? '学员：'
             : !classTeam.dummy && index == 0
             ? '组长：'
             : '组员：'
