@@ -364,10 +364,9 @@ const mutations = {
           }
           state.classAdminUsers[index].id = user.id;
           state.classAdminUsers[index].name = user.name;
-          state.classAdminUsers[index].roles = getDisplayRoles(user.roles);
           state.classAdminUsers[index].displayName = `(${index + 1}) ${
             user.name
-          } -- ${state.classAdminUsers[index].roles}`;
+          }`;
         }
       }
       state.isLoadingStudents = false;
@@ -390,5 +389,6 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
+  getDisplayRoles
 };

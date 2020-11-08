@@ -83,29 +83,6 @@ export default {
         }
       }
     },
-    getDisplayRoles(userRoles) {
-      const array = [
-        { name: "StudentUser", displayName: "学员" },
-        { name: "B4aAdminUser", displayName: "系统管理员" },
-        { name: "ClassAdminUser", displayName: "学修管理员" },
-        { name: "TeacherUser", displayName: "辅导员" },
-        { name: "TeachingAssistantUser", displayName: "学修助理" }
-      ];
-      var roles = "";
-      if (!userRoles) {
-        return array[0].displayName;
-      }
-      for (var i = 0; i < array.length; i++) {
-        if (userRoles.some(role => role == array[i].name)) {
-          if (roles.length > 0) {
-            roles = roles + "，";
-          }
-          roles = roles + array[i].displayName;
-        }
-      }
-
-      return roles;
-    },
     classAdminOptions(index) {
       if (index < 2) {
         return this.classAdminCandidates;
@@ -125,12 +102,9 @@ export default {
         if (option.value == value) {
           this.classAdminUsers[index].id = value;
           this.classAdminUsers[index].name = option.name;
-          this.classAdminUsers[index].roles = this.getDisplayRoles(
-            option.roles
-          );
           this.classAdminUsers[index].displayName = `(${index + 1}) ${
             option.text
-          } -- ${this.classAdminUsers[index].roles}`;
+          }`;
           break;
         }
       }

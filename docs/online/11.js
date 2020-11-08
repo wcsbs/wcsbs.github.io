@@ -129,43 +129,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
     },
-    getDisplayRoles: function getDisplayRoles(userRoles) {
-      var array = [{
-        name: "StudentUser",
-        displayName: "学员"
-      }, {
-        name: "B4aAdminUser",
-        displayName: "系统管理员"
-      }, {
-        name: "ClassAdminUser",
-        displayName: "学修管理员"
-      }, {
-        name: "TeacherUser",
-        displayName: "辅导员"
-      }, {
-        name: "TeachingAssistantUser",
-        displayName: "学修助理"
-      }];
-      var roles = "";
-
-      if (!userRoles) {
-        return array[0].displayName;
-      }
-
-      for (var i = 0; i < array.length; i++) {
-        if (userRoles.some(function (role) {
-          return role == array[i].name;
-        })) {
-          if (roles.length > 0) {
-            roles = roles + "，";
-          }
-
-          roles = roles + array[i].displayName;
-        }
-      }
-
-      return roles;
-    },
     classAdminOptions: function classAdminOptions(index) {
       if (index < 2) {
         return this.classAdminCandidates;
@@ -187,8 +150,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         if (option.value == value) {
           this.classAdminUsers[index].id = value;
           this.classAdminUsers[index].name = option.name;
-          this.classAdminUsers[index].roles = this.getDisplayRoles(option.roles);
-          this.classAdminUsers[index].displayName = "(".concat(index + 1, ") ").concat(option.text, " -- ").concat(this.classAdminUsers[index].roles);
+          this.classAdminUsers[index].displayName = "(".concat(index + 1, ") ").concat(option.text);
           break;
         }
       }
