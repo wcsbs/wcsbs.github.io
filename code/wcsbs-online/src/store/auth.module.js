@@ -178,6 +178,12 @@ const actions = {
 
     loggedInUser.set("name", currentUser.name);
     loggedInUser.set("phone", currentUser.phone);
+    loggedInUser.set("username", currentUser.username);
+    loggedInUser.set("email", currentUser.email);
+
+    console.log(
+      `${UPDATE_USER} - loggedInUser: ${JSON.stringify(loggedInUser)}`
+    );
 
     return new Promise((resolve, reject) => {
       if (password) {

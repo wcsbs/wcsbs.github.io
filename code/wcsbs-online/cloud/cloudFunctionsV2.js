@@ -471,6 +471,11 @@ Parse.Cloud.define(
     var query = new Parse.Query("Practice");
     query.equalTo("objectId", practiceId);
     const practice = await query.first();
+
+    query = new Parse.Query("Class");
+    query.equalTo("practices", practice);
+    const parseClass = await query.first();
+
     const result = {
       forAdmin: forAdmin,
       practice: practice,
@@ -492,7 +497,7 @@ Parse.Cloud.define(
 
     if (forAdmin) {
       for (var i = 0; i < parseCounts.length; i++) {
-        var userQuery = new Parse.Query(Parse.User);
+        var userQuery = parseClass.relation("students").query();
         userQuery.equalTo("objectId", parseCounts[i].get("userId"));
         const user = await userQuery.first();
 
