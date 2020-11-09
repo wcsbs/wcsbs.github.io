@@ -21,35 +21,35 @@ const state = {
 };
 
 const getters = {
-  currentUser(state) {
-    return state.user;
+  currentUser(authState) {
+    return authState.user;
   },
-  isAuthenticated(state) {
-    return state.isAuthenticated;
+  isAuthenticated(authState) {
+    return authState.isAuthenticated;
   },
-  isSystemAdmin(state) {
+  isSystemAdmin(authState) {
+    if (!authState.isAuthenticated) {
+      return false;
+    }
+    return authState.user.roles.some(role => role == "B4aAdminUser");
+  },
+  isClassAdmin(authState) {
     if (!state.isAuthenticated) {
       return false;
     }
-    return state.user.roles.some(role => role == "B4aAdminUser");
+    return authState.user.roles.some(role => role == "ClassAdminUser");
   },
-  isClassAdmin(state) {
-    if (!state.isAuthenticated) {
+  isTeachingAssistant(authState) {
+    if (!authState.isAuthenticated) {
       return false;
     }
-    return state.user.roles.some(role => role == "ClassAdminUser");
+    return authState.user.roles.some(role => role == "TeachingAssistantUser");
   },
-  isTeachingAssistant(state) {
-    if (!state.isAuthenticated) {
+  isStudent(authState) {
+    if (!authState.isAuthenticated) {
       return false;
     }
-    return state.user.roles.some(role => role == "TeachingAssistantUser");
-  },
-  isStudent(state) {
-    if (!state.isAuthenticated) {
-      return false;
-    }
-    return state.user.roles.some(role => role == "StudentUser");
+    return authState.user.roles.some(role => role == "StudentUser");
   }
 };
 
@@ -179,7 +179,10 @@ const actions = {
     loggedInUser.set("name", currentUser.name);
     loggedInUser.set("phone", currentUser.phone);
     loggedInUser.set("username", currentUser.username);
-    loggedInUser.set("email", currentUser.email);
+
+    if (loggedInUser.get("email") != currentUser.email) {
+      loggedInUser.set("email", currentUser.email);
+    }
 
     console.log(
       `${UPDATE_USER} - loggedInUser: ${JSON.stringify(loggedInUser)}`
@@ -205,9 +208,12 @@ const actions = {
         .save()
         .then(parseUser => {
           Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
-          currentUser.state = undefined;
+          currentUser.authState = undefined;
           currentUser.password = undefined;
           currentUser.confirmPassword = undefined;
+          if (password) {
+            state.user.state = undefined;
+          }
           resolve(parseUser);
         })
         .catch(e => {
@@ -221,21 +227,21 @@ const actions = {
 };
 
 const mutations = {
-  [SET_ERROR](state, error) {
+  [SET_ERROR](authState, error) {
     state.errors = error;
   },
-  [SET_AUTH](state, user) {
+  [SET_AUTH](authState, user) {
     console.log(SET_AUTH);
     updateMenu();
     state.isAuthenticated = true;
     state.user = user;
     state.errors = {};
   },
-  [PURGE_AUTH](state) {
+  [PURGE_AUTH](authState) {
     console.log(PURGE_AUTH);
-    state.isAuthenticated = false;
-    state.user = {};
-    state.errors = {};
+    authState.isAuthenticated = false;
+    authState.user = {};
+    authState.errors = {};
     if (Parse.User.current()) {
       Parse.User.logOut().then(() => {
         updateMenu();

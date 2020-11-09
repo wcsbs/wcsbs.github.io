@@ -61,13 +61,13 @@ Parse.Cloud.define(
     userQuery.ascending("name");
     const parseUsers = await userQuery.find(MASTER_KEY);
     const usersCount = parseUsers.length;
-    const users = parseUsers.map(user => {
+    const users = parseUsers.map(u => {
       return {
-        id: user.id,
-        name: user.get("name"),
-        username: user.get("username"),
-        phone: user.get("phone"),
-        email: user.get("email")
+        id: u.id,
+        name: u.get("name"),
+        username: u.get("username"),
+        phone: u.get("phone"),
+        email: u.get("email")
       };
     });
     for (var i = 0; i < parseUsers.length; i++) {
@@ -139,9 +139,6 @@ Parse.Cloud.define(
         parseUser.set("password", userToUpdate.password);
         userToUpdate.state = "needToChangePassword"; // user needs to update password in next login
       }
-      if (!parseUser.get("emailVerified")) {
-        parseUser.set("emailVerified", true); // re-enable user form login
-      }
     }
 
     if (userToUpdate.state) {
@@ -150,15 +147,20 @@ Parse.Cloud.define(
       parseUser.unset("state");
     }
 
-    userToUpdate = await parseUser.save(null, MASTER_KEY);
+    parseUser = await parseUser.save(null, MASTER_KEY);
+
+    if (userToUpdate.state !== "blocked") {
+      parseUser.set("emailVerified", true);
+      parseUser = await parseUser.save(null, MASTER_KEY);
+    }
 
     var userRoleQuery = new Parse.Query(Parse.Role);
-    userRoleQuery.equalTo("users", userToUpdate);
+    userRoleQuery.equalTo("users", parseUser);
     var roles = await userRoleQuery.find(MASTER_KEY);
     var roleNames = [];
 
-    for (n = 0; n < array.length; n++) {
-      i = array[n];
+    for (var n = 0; n < array.length; n++) {
+      const i = array[n];
       if (i.enabled) {
         roleNames.push(i.roleName);
       }
@@ -171,21 +173,22 @@ Parse.Cloud.define(
         const relation = role.relation("users");
 
         if (i.enabled) {
-          relation.add(userToUpdate);
+          relation.add(parseUser);
         } else {
-          relation.remove(userToUpdate);
+          relation.remove(parseUser);
         }
         await role.save(null, MASTER_KEY);
       }
     }
 
     return {
-      id: userToUpdate.id,
-      name: userToUpdate.get("name"),
-      username: userToUpdate.get("username"),
-      phone: userToUpdate.get("phone"),
-      email: userToUpdate.get("email"),
-      state: userToUpdate.get("state"),
+      id: parseUser.id,
+      name: parseUser.get("name"),
+      username: parseUser.get("username"),
+      phone: parseUser.get("phone"),
+      email: parseUser.get("email"),
+      emailVerified: parseUser.get("emailVerified"),
+      state: parseUser.get("state"),
       roles: roleNames
     };
   }
@@ -331,7 +334,7 @@ const generatePracticeSnapshotJson = async function(parsePractice) {
   logger.info(`generatePracticeSnapshotJson - classId: ${parsePractice.id}`);
 
   const relation = parsePractice.relation("counts");
-  query = relation.query();
+  var query = relation.query();
   // query.notEqualTo("reportedAt", undefined);
 
   // total will be a newly created field to hold the sum of score field
@@ -635,7 +638,7 @@ const loadUserStudyRecord = async function(userId, submoduleId) {
   );
 
   var result = {};
-  query = new Parse.Query("UserStudyRecord");
+  var query = new Parse.Query("UserStudyRecord");
   query.equalTo("userId", userId);
   query.equalTo("submoduleId", submoduleId);
   var record = await query.first();
@@ -718,7 +721,7 @@ Parse.Cloud.define(
   }) => {
     requireAuth(user);
 
-    userId = user.id;
+    var userId = user.id;
     logger.info(
       `home:reportPracticeCount - userId: ${userId} practiceId: ${practiceId} practiceSessionId: ${practiceSessionId} reportedAt: ${reportedAt} count: ${count}`
     );
@@ -790,7 +793,7 @@ Parse.Cloud.define(
   async ({ user, params: { practiceId, forAdmin } }) => {
     requireAuth(user);
 
-    userId = user.id;
+    var userId = user.id;
     logger.info(
       `home:fetchPracticeCounts - userId: ${userId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
     );
@@ -820,8 +823,8 @@ Parse.Cloud.define(
       for (var i = 0; i < result.counts.length; i++) {
         var userQuery = new Parse.Query(Parse.User);
         userQuery.equalTo("objectId", result.counts[i].get("userId"));
-        const user = await userQuery.first();
-        result.users.push(user.get("name"));
+        const parseUser = await userQuery.first();
+        result.users.push(parseUser.get("name"));
       }
     } else {
       relation = practice.relation("sessions");

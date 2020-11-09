@@ -51,17 +51,17 @@ const getDisplayRoles = function(userRoles) {
 };
 
 const getters = {
-  user(state) {
-    return state.user;
+  user(userState) {
+    return userState.user;
   },
-  usersCount(state) {
-    return state.usersCount;
+  usersCount(userState) {
+    return userState.usersCount;
   },
-  users(state) {
-    return state.users;
+  users(userState) {
+    return userState.users;
   },
-  isLoadingUsers(state) {
-    return state.isLoadingUsers;
+  isLoadingUsers(userState) {
+    return userState.isLoadingUsers;
   }
 };
 
@@ -98,20 +98,17 @@ const actions = {
     const adminFetchUser = "user:adminFetchUser";
     return new Promise((resolve, reject) => {
       Parse.Cloud.run(adminFetchUser, { user, userSlug })
-        .then(user => {
-          console.log(`${ADMIN_FETCH_USER} - user: ${JSON.stringify(user)}`);
+        .then(u => {
+          console.log(`${ADMIN_FETCH_USER} - user: ${JSON.stringify(u)}`);
 
           // default user role is StudentUser
-          user.isStudent =
-            user.roles.length == 0 || user.roles.includes("StudentUser");
-          user.isTeachingAssistant = user.roles.includes(
-            "TeachingAssistantUser"
-          );
-          user.isClassAdmin = user.roles.includes("ClassAdminUser");
-          user.isSystemAdmin = user.roles.includes("B4aAdminUser");
-          user.isTeacher = user.roles.includes("TeacherUser");
+          u.isStudent = u.roles.length == 0 || u.roles.includes("StudentUser");
+          u.isTeachingAssistant = u.roles.includes("TeachingAssistantUser");
+          u.isClassAdmin = u.roles.includes("ClassAdminUser");
+          u.isSystemAdmin = u.roles.includes("B4aAdminUser");
+          u.isTeacher = u.roles.includes("TeacherUser");
 
-          context.commit(SET_USER, user);
+          context.commit(SET_USER, u);
           resolve();
         })
         .catch(e => {
@@ -152,8 +149,8 @@ const actions = {
         return;
       }
       Parse.Cloud.run(adminUpdateUser, { user, userToUpdate })
-        .then(user => {
-          context.commit(UPDATE_USER_IN_LIST, user);
+        .then(u => {
+          context.commit(UPDATE_USER_IN_LIST, u);
           Vue.toasted.show("更新成功！", { icon: "check", duration: 5000 });
           resolve();
         })
@@ -168,45 +165,45 @@ const actions = {
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const mutations = {
-  [SET_USER](state, user) {
-    state.user = user;
+  [SET_USER](userState, user) {
+    userState.user = user;
   },
-  [FETCH_USERS_START](state) {
-    state.isLoadingUsers = true;
+  [FETCH_USERS_START](userState) {
+    userState.isLoadingUsers = true;
   },
-  [FETCH_USERS_END](state, { users, usersCount }) {
-    state.users = users;
-    state.allUsers = users;
-    state.usersCount = usersCount;
-    state.isLoadingUsers = false;
+  [FETCH_USERS_END](userState, { users, usersCount }) {
+    userState.users = users;
+    userState.allUsers = users;
+    userState.usersCount = usersCount;
+    userState.isLoadingUsers = false;
   },
-  [UPDATE_USER_IN_LIST](state, user) {
+  [UPDATE_USER_IN_LIST](userState, user) {
     var found = false;
     var place = 0;
-    for (var i = 0; i < state.allUsers.length; i++) {
-      if (state.allUsers[i].id == user.id) {
+    for (var i = 0; i < userState.allUsers.length; i++) {
+      if (userState.allUsers[i].id == user.id) {
         found = true;
         if (!user.email) {
-          user.email = state.allUsers[i].email;
+          user.email = userState.allUsers[i].email;
         }
-        state.allUsers[i] = user;
+        userState.allUsers[i] = user;
         break;
       }
-      if (user.name > state.allUsers[i].name) {
+      if (user.name > userState.allUsers[i].name) {
         place = i + 1;
       }
     }
     if (!found) {
-      state.allUsers.splice(place, 0, user);
+      userState.allUsers.splice(place, 0, user);
     }
 
-    state.users = state.allUsers;
+    userState.users = userState.allUsers;
   },
-  [FILTER_USERS_IN_LIST](state, filterText) {
+  [FILTER_USERS_IN_LIST](userState, filterText) {
     if (!filterText || filterText == "") {
-      state.users = state.allUsers;
+      userState.users = userState.allUsers;
     } else {
-      state.users = state.allUsers.filter(user => {
+      userState.users = userState.allUsers.filter(user => {
         const roles = getDisplayRoles(user.roles);
         const text = `${user.name}\t${user.username}\t${user.email}\t${user.phone}\t${roles}`;
         return text.toLowerCase().includes(filterText.toLowerCase());

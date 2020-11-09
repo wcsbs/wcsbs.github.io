@@ -183,7 +183,7 @@ export default {
               const submoduleId = e.get("submoduleId");
               var sessionName = undefined;
               if (submoduleId) {
-                sessionName = practiceSubmodules.find(e => e.id == submoduleId)
+                sessionName = practiceSubmodules.find(s => s.id == submoduleId)
                   .name;
               }
               return {

@@ -238,8 +238,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
             var sessionName = undefined;
 
             if (submoduleId) {
-              sessionName = practiceSubmodules.find(function (e) {
-                return e.id == submoduleId;
+              sessionName = practiceSubmodules.find(function (s) {
+                return s.id == submoduleId;
               }).name;
             }
 
