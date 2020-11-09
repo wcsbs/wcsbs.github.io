@@ -91,30 +91,6 @@ const getters = {
   }
 };
 
-const getDisplayRoles = function(userRoles) {
-  const array = [
-    { name: "StudentUser", displayName: "学员" },
-    { name: "B4aAdminUser", displayName: "系统管理员" },
-    { name: "ClassAdminUser", displayName: "学修管理员" },
-    { name: "TeacherUser", displayName: "辅导员" },
-    { name: "TeachingAssistantUser", displayName: "学修助理" }
-  ];
-  var roles = "";
-  if (!userRoles) {
-    return array[0].displayName;
-  }
-  for (var i = 0; i < array.length; i++) {
-    if (userRoles.some(role => role == array[i].name)) {
-      if (roles.length > 0) {
-        roles = roles + "，";
-      }
-      roles = roles + array[i].displayName;
-    }
-  }
-
-  return roles;
-};
-
 const actions = {
   [FETCH_SESSIONS](context, params) {
     const classId = params["classId"];
@@ -389,6 +365,5 @@ export default {
   state,
   getters,
   actions,
-  mutations,
-  getDisplayRoles
+  mutations
 };

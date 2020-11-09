@@ -112,23 +112,22 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
-/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store_user_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store/user.module */ "./src/store/user.module.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "UserPreview",
   components: {},
@@ -150,37 +149,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     displayRoles: function displayRoles() {
-      var array = [{
-        name: "B4aAdminUser",
-        displayName: "系统管理员"
-      }, {
-        name: "ClassAdminUser",
-        displayName: "学修管理员"
-      }, {
-        name: "TeacherUser",
-        displayName: "辅导员"
-      }, {
-        name: "TeachingAssistantUser",
-        displayName: "学修助理"
-      }, {
-        name: "StudentUser",
-        displayName: "学员"
-      }];
-      var roles = "";
-
-      for (var i = 0; i < array.length; i++) {
-        if (this.user.roles.some(function (role) {
-          return role == array[i].name;
-        })) {
-          if (roles.length > 0) {
-            roles = roles + "，";
-          }
-
-          roles = roles + array[i].displayName;
-        }
-      }
-
-      return roles;
+      return _store_user_module__WEBPACK_IMPORTED_MODULE_0__["default"].getDisplayRoles(this.user.roles);
     }
   }
 });

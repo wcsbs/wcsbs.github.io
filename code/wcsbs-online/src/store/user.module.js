@@ -26,6 +26,30 @@ const state = {
   usersCount: 0
 };
 
+const getDisplayRoles = function(userRoles) {
+  const array = [
+    { name: "StudentUser", displayName: "学员" },
+    { name: "TeacherUser", displayName: "辅导员" },
+    { name: "TeachingAssistantUser", displayName: "学修助理" },
+    { name: "ClassAdminUser", displayName: "学修管理员" },
+    { name: "B4aAdminUser", displayName: "系统管理员" }
+  ];
+  var roles = "";
+  if (!userRoles) {
+    return array[0].displayName;
+  }
+  for (var i = 0; i < array.length; i++) {
+    if (userRoles.some(role => role == array[i].name)) {
+      if (roles.length > 0) {
+        roles = roles + "，";
+      }
+      roles = roles + array[i].displayName;
+    }
+  }
+
+  return roles;
+};
+
 const getters = {
   user(state) {
     return state.user;
@@ -183,22 +207,7 @@ const mutations = {
       state.users = state.allUsers;
     } else {
       state.users = state.allUsers.filter(user => {
-        const array = [
-          { name: "B4aAdminUser", displayName: "系统管理员" },
-          { name: "ClassAdminUser", displayName: "学修管理员" },
-          { name: "TeacherUser", displayName: "辅导员" },
-          { name: "TeachingAssistantUser", displayName: "学修助理" },
-          { name: "StudentUser", displayName: "学员" }
-        ];
-        var roles = "";
-        for (var i = 0; i < array.length; i++) {
-          if (user.roles.some(role => role == array[i].name)) {
-            if (roles.length > 0) {
-              roles = roles + "，";
-            }
-            roles = roles + array[i].displayName;
-          }
-        }
+        const roles = getDisplayRoles(user.roles);
         const text = `${user.name}\t${user.username}\t${user.email}\t${user.phone}\t${roles}`;
         return text.toLowerCase().includes(filterText.toLowerCase());
       });
@@ -210,5 +219,6 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
+  getDisplayRoles
 };
