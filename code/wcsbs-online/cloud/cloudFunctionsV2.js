@@ -925,7 +925,7 @@ Parse.Cloud.define(
       parseTeam = await parseTeam.save(null, MASTER_KEY);
 
       relation = parseTeam.relation("members");
-      for (var j = 0; j < team.members.length; j++) {
+      for (j = 0; j < team.members.length; j++) {
         query = new Parse.Query(Parse.User);
         query.equalTo("objectId", team.members[j].id);
 
