@@ -94,7 +94,7 @@ Parse.Cloud.define(
           query = new Parse.Query("Submodule");
           query.equalTo("index", index);
           query.equalTo("moduleId", "ZwfTADbqUK");
-          submodule = await query.first();
+          const submodule = await query.first();
           content.submodules[1] = submodule.id;
         }
         session.set("content", content);
@@ -112,7 +112,7 @@ Parse.Cloud.define(
   "admin:importCsv",
   async ({
     user,
-    params: { user: userWithRoles, classId, practiceId, csv }
+    params: { user: userWithRoles, classId, practiceId, csv, createDummyUser }
   }) => {
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");
@@ -149,9 +149,20 @@ Parse.Cloud.define(
 
       var parseUser = await query.first();
       if (!parseUser) {
+        if (!createDummyUser) {
+          continue;
+        }
         parseUser = new Parse.User();
         parseUser.set("name", name);
-        parseUser.set("username", `${classId}_T${index}_U${i}`);
+        if (!Date.now) {
+          Date.now = function() {
+            return new Date().getTime();
+          };
+        }
+        parseUser.set(
+          "username",
+          `${classId}_T${index}_U${Math.floor(Date.now() / 1000)}`
+        );
         parseUser.set("password", "wcsbs2020");
         parseUser.set("emailVerified", true);
         parseUser = await parseUser.save(null, MASTER_KEY);
@@ -160,6 +171,7 @@ Parse.Cloud.define(
         parseClass.relation("students").add(parseUser);
       }
 
+      var team;
       var teamIndex = teams.findIndex(e => e.get("index") == index);
       if (teamIndex < 0) {
         query = new Parse.Query("Team");
@@ -228,7 +240,7 @@ Parse.Cloud.define(
       }
       results.push(result);
     }
-    parseClass = await parseClass.save(null, MASTER_KEY);
+    await parseClass.save(null, MASTER_KEY);
 
     return { teams, users, results };
   }
