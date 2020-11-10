@@ -206,33 +206,34 @@ Parse.Cloud.define(
         const date = mapDates[key];
         if (date) {
           const countStr = record[key].split(/[,.]/).join("");
-          const count =
-            countStr && countStr.length > 0 ? parseInt(countStr) : 0;
-          if (practiceId) {
-            if (count > 0) {
-              result.count = await commonFunctions.reportPracticeCountV2(
-                parseUser,
-                practiceId,
-                undefined,
-                date,
-                count
-              );
-            }
-          } else {
-            query = parseClass.relation("sessionsV2").query();
-            query.equalTo("scheduledAt", date);
-            const classSession = await query.first();
+          if (countStr && countStr.length > 0) {
+            const count = parseInt(countStr);
+            if (practiceId) {
+              if (count > 0) {
+                result.count = await commonFunctions.reportPracticeCountV2(
+                  parseUser,
+                  practiceId,
+                  undefined,
+                  date,
+                  count
+                );
+              }
+            } else {
+              query = parseClass.relation("sessionsV2").query();
+              query.equalTo("scheduledAt", date);
+              const classSession = await query.first();
 
-            if (classSession) {
-              var attendance = { attendance: count > 0 };
-              attendance = await commonFunctions.updateAttendanceV2(
-                parseUser,
-                classId,
-                classSession.id,
-                attendance
-              );
-              if (attendance.attendance) {
-                result.count += 1;
+              if (classSession) {
+                var attendance = { attendance: count > 0 };
+                attendance = await commonFunctions.updateAttendanceV2(
+                  parseUser,
+                  classId,
+                  classSession.id,
+                  attendance
+                );
+                if (attendance.attendance) {
+                  result.count += 1;
+                }
               }
             }
           }
