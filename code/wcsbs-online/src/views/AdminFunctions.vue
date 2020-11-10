@@ -43,9 +43,12 @@
       </b-input-group>
     </b-form>
     <div v-for="(buttonName, index) in buttonNames" :key="buttonName + index">
-      <b-button block variant="info" @click="importData(index)">{{
-        buttonName
-      }}</b-button>
+      <b-button
+        block
+        :variant="selectedIndex == index ? 'warning' : 'info'"
+        @click="importData(index)"
+        >{{ buttonName }}</b-button
+      >
       <hr />
     </div>
     <JsonExcel
@@ -90,11 +93,13 @@ export default {
         "导入一组共修",
         "导入二组心咒",
         "导入二组共修"
-      ]
+      ],
+      selectedIndex: undefined
     };
   },
   methods: {
     importData(index) {
+      this.selectedIndex = index;
       console.log(`importData - index: ${index}`);
 
       this.parseCsv = importdata.parseCsvList[index];

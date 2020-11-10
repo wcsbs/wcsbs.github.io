@@ -136,6 +136,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -157,11 +160,13 @@ vue__WEBPACK_IMPORTED_MODULE_5__["default"].component("JsonExcel", vue_json_exce
       result: "",
       parseCsv: undefined,
       fields: undefined,
-      buttonNames: ["导入一组心咒", "导入一组共修", "导入二组心咒", "导入二组共修"]
+      buttonNames: ["导入一组心咒", "导入一组共修", "导入二组心咒", "导入二组共修"],
+      selectedIndex: undefined
     };
   },
   methods: {
     importData: function importData(index) {
+      this.selectedIndex = index;
       console.log("importData - index: ".concat(index));
       this.parseCsv = _store_importdata_module__WEBPACK_IMPORTED_MODULE_6__["default"].parseCsvList[index]; // console.log(`importData - parseCsv: ${JSON.stringify(this.parseCsv)}`);
 
@@ -366,7 +371,10 @@ var render = function() {
             _c(
               "b-button",
               {
-                attrs: { block: "", variant: "info" },
+                attrs: {
+                  block: "",
+                  variant: _vm.selectedIndex == index ? "warning" : "info"
+                },
                 on: {
                   click: function($event) {
                     return _vm.importData(index)
