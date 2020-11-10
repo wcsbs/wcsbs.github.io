@@ -24,14 +24,6 @@
         max-rows="20"
         readonly
       ></b-form-textarea>
-      <JsonExcel
-        class="btn btn-info btn-block"
-        :data="parseCsv"
-        worksheet="My Worksheet"
-        name="filename.xls"
-      >
-        Download Excel
-      </JsonExcel>
       <b-form-textarea
         v-model="params"
         placeholder="Enter parameters"
@@ -50,6 +42,21 @@
         </b-input-group-append>
       </b-input-group>
     </b-form>
+    <div v-for="(buttonName, index) in buttonNames" :key="buttonName + index">
+      <b-button block variant="info" @click="importData(index)">{{
+        buttonName
+      }}</b-button>
+      <hr />
+    </div>
+    <JsonExcel
+      class="btn btn-info btn-block"
+      :data="parseCsv"
+      worksheet="My Worksheet"
+      name="filename.xls"
+    >
+      下载报表
+    </JsonExcel>
+    <hr />
     <div class="multiline">Result: {{ result }}</div>
   </div>
 </template>
@@ -60,6 +67,8 @@ import TextReader from "../components/TextReader";
 import { VueCsvImport } from "vue-csv-import";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
+import importdata from "../store/importdata.module";
+
 Vue.component("JsonExcel", JsonExcel);
 
 export default {
@@ -75,10 +84,25 @@ export default {
       params: "",
       result: "",
       parseCsv: undefined,
-      fields: undefined
+      fields: undefined,
+      buttonNames: [
+        "导入一组心咒",
+        "导入一组共修",
+        "导入二组心咒",
+        "导入二组共修"
+      ]
     };
   },
   methods: {
+    importData(index) {
+      console.log(`importData - index: ${index}`);
+
+      this.parseCsv = importdata.parseCsvList[index];
+      // console.log(`importData - parseCsv: ${JSON.stringify(this.parseCsv)}`);
+      console.log(`importData - #records: ${this.parseCsv.length}`);
+
+      this.params = importdata.paramsList[index % 2];
+    },
     onReset(evt) {
       evt.preventDefault();
       window.location.reload();
