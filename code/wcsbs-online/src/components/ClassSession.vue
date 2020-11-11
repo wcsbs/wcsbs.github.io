@@ -171,7 +171,7 @@
         </div>
         <b-input-group
           v-if="!session.forApplication"
-          prepend="上课出勤："
+          prepend="共修出席："
           class="mt-3"
         >
           <b-form-input
@@ -466,7 +466,7 @@ export default {
           return `${sessionDetails.attendance.attendance}人已上课`;
         }
         if (sessionDetails.attendance.onLeave) {
-          return "已请假";
+          return "请假";
         }
         if (sessionDetails.attendance.attendance == true) {
           return "已上课";
@@ -479,7 +479,7 @@ export default {
         }
       }
 
-      return "未报考勤";
+      return "未报出席";
     },
     toPrestudyStateString(sessionDetails, index) {
       if (this.forApplication) {
@@ -512,9 +512,9 @@ export default {
         return "我要请假";
       } else {
         if (this.sessionDetails.attendance.attendance != undefined) {
-          return "我要改考勤";
+          return "我要改出席";
         }
-        return "我要报考勤";
+        return "我要报出席";
       }
     },
     updateAttendance() {

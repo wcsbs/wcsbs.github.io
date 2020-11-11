@@ -514,7 +514,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
 
         if (sessionDetails.attendance.onLeave) {
-          return "已请假";
+          return "请假";
         }
 
         if (sessionDetails.attendance.attendance == true) {
@@ -526,7 +526,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
 
-      return "未报考勤";
+      return "未报出席";
     },
     toPrestudyStateString: function toPrestudyStateString(sessionDetails, index) {
       if (this.forApplication) {
@@ -565,10 +565,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         return "我要请假";
       } else {
         if (this.sessionDetails.attendance.attendance != undefined) {
-          return "我要改考勤";
+          return "我要改出席";
         }
 
-        return "我要报考勤";
+        return "我要报出席";
       }
     },
     updateAttendance: function updateAttendance() {
@@ -1168,7 +1168,7 @@ var render = function() {
                         "b-input-group",
                         {
                           staticClass: "mt-3",
-                          attrs: { prepend: "上课出勤：" }
+                          attrs: { prepend: "共修出席：" }
                         },
                         [
                           _c("b-form-input", {
