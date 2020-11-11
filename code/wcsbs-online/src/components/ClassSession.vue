@@ -122,15 +122,6 @@
               v-on:click="editSession"
               >修改</b-button
             >
-            <!--
-            <b-button
-              variant="info"
-              :href="addToGoogleCalendarUrl()"
-              target="_blank"
-            >
-              <b-icon icon="calendar-plus"></b-icon>
-            </b-button>
-            -->
           </b-input-group-append>
         </b-input-group>
         <b-input-group
@@ -301,19 +292,18 @@ export default {
       for (var i = 0; i < this.classInfo.modules.length; i++) {
         selectedModule = this.classInfo.modules[i];
         if (!session.moduleId || session.moduleId == selectedModule.id) {
+          if (!session.moduleId) {
+            session.moduleId = selectedModule.id;
+          }
+          this.submoduleDropdownOptions = this.submoduleDropdownOptions.concat(
+            selectedModule.newSubmodules
+          );
+          console.log(`refreshUI - selectedModule: ${selectedModule.name}`);
           break;
         }
       }
-      if (!session.moduleId) {
-        session.moduleId = selectedModule.id;
-      }
-      console.log(`refreshUI - selectedModule: ${selectedModule.name}`);
 
-      this.submoduleDropdownOptions = this.submoduleDropdownOptions.concat(
-        selectedModule.newSubmodules
-      );
-
-      if (!this.classSession.dummy) {
+      if (!this.classSession.dummy && selectedModule) {
         for (i = 0; i < this.sessionDetails.submodules.length; i++) {
           const submodule = this.sessionDetails.submodules[i];
           if (submodule.moduleId == selectedModule.id) {
@@ -323,7 +313,7 @@ export default {
         }
       }
 
-      if (!this.classInfo.singleSubmodule) {
+      if (!this.classInfo.singleSubmodule && selectedModule) {
         for (i = 0; i < this.session.submodules.length; i++) {
           const submodule = this.session.submodules[i];
           if (submodule.moduleId == selectedModule.id) {
@@ -374,6 +364,7 @@ export default {
       for (var i = 0; i < this.classInfo.modules.length; i++) {
         selectedModule = this.classInfo.modules[i];
         if (!session.moduleId || session.moduleId == selectedModule.id) {
+          console.log(`addSubmodule - selectedModule: ${selectedModule.name}`);
           break;
         }
       }
@@ -388,24 +379,25 @@ export default {
         }
       }
 
-      if (!selectedSubmodule) {
+      if (!selectedSubmodule && selectedModule) {
         for (i = 0; i < selectedModule.newSubmodules.length; i++) {
           const submodule = selectedModule.newSubmodules[i];
           if (submodule.id == session.submoduleId) {
             selectedSubmodule = submodule;
+            session.submodules.push(selectedSubmodule);
+            if (!session.name || this.classInfo.singleSubmodule) {
+              session.name = selectedSubmodule.name;
+            }
             break;
           }
         }
       }
-      session.submodules.push(selectedSubmodule);
-      if (!session.name || this.classInfo.singleSubmodule) {
-        session.name = selectedSubmodule.name;
-      }
       if (!this.classInfo.singleSubmodule) {
         this.refreshUI();
-      } else {
+      }
+      if (selectedSubmodule) {
         console.log(
-          `addSubmodule - selectedModule: ${selectedModule.name} selectedSubmodule: ${selectedSubmodule.name}`
+          `addSubmodule - selectedSubmodule: ${selectedSubmodule.name}`
         );
       }
     },
