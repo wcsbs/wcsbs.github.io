@@ -256,7 +256,7 @@ var render = function() {
                             : member.lastWeek
                                 .toString()
                                 .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")) +
-                          "\t总计报数：" +
+                          "\t总计：" +
                           member.count
                             .toString()
                             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
@@ -273,7 +273,7 @@ var render = function() {
                           member.name +
                           "\t上周：" +
                           member.lastWeek +
-                          "\t总计出席：" +
+                          "\t总计：" +
                           member.count +
                           "\n          "
                       }
