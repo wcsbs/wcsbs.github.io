@@ -260,15 +260,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -350,18 +341,17 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         selectedModule = this.classInfo.modules[i];
 
         if (!session.moduleId || session.moduleId == selectedModule.id) {
+          if (!session.moduleId) {
+            session.moduleId = selectedModule.id;
+          }
+
+          this.submoduleDropdownOptions = this.submoduleDropdownOptions.concat(selectedModule.newSubmodules);
+          console.log("refreshUI - selectedModule: ".concat(selectedModule.name));
           break;
         }
       }
 
-      if (!session.moduleId) {
-        session.moduleId = selectedModule.id;
-      }
-
-      console.log("refreshUI - selectedModule: ".concat(selectedModule.name));
-      this.submoduleDropdownOptions = this.submoduleDropdownOptions.concat(selectedModule.newSubmodules);
-
-      if (!this.classSession.dummy) {
+      if (!this.classSession.dummy && selectedModule) {
         for (i = 0; i < this.sessionDetails.submodules.length; i++) {
           var submodule = this.sessionDetails.submodules[i];
 
@@ -372,7 +362,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
 
-      if (!this.classInfo.singleSubmodule) {
+      if (!this.classInfo.singleSubmodule && selectedModule) {
         var _loop = function _loop() {
           var submodule = _this.session.submodules[i];
 
@@ -419,6 +409,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         selectedModule = this.classInfo.modules[i];
 
         if (!session.moduleId || session.moduleId == selectedModule.id) {
+          console.log("addSubmodule - selectedModule: ".concat(selectedModule.name));
           break;
         }
       }
@@ -434,27 +425,29 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
 
-      if (!selectedSubmodule) {
+      if (!selectedSubmodule && selectedModule) {
         for (i = 0; i < selectedModule.newSubmodules.length; i++) {
           var _submodule = selectedModule.newSubmodules[i];
 
           if (_submodule.id == session.submoduleId) {
             selectedSubmodule = _submodule;
+            session.submodules.push(selectedSubmodule);
+
+            if (!session.name || this.classInfo.singleSubmodule) {
+              session.name = selectedSubmodule.name;
+            }
+
             break;
           }
         }
       }
 
-      session.submodules.push(selectedSubmodule);
-
-      if (!session.name || this.classInfo.singleSubmodule) {
-        session.name = selectedSubmodule.name;
-      }
-
       if (!this.classInfo.singleSubmodule) {
         this.refreshUI();
-      } else {
-        console.log("addSubmodule - selectedModule: ".concat(selectedModule.name, " selectedSubmodule: ").concat(selectedSubmodule.name));
+      }
+
+      if (selectedSubmodule) {
+        console.log("addSubmodule - selectedSubmodule: ".concat(selectedSubmodule.name));
       }
     },
     removeSubmodule: function removeSubmodule(index) {

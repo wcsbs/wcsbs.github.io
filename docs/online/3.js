@@ -100,6 +100,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -244,9 +250,13 @@ var render = function() {
                           (index + 1) +
                           ") " +
                           member.name +
-                          " -- 总计" +
-                          _vm.classInfo.practiceName +
-                          "：" +
+                          "\t上周：" +
+                          (member.lastWeek == undefined
+                            ? "未报数"
+                            : member.lastWeek
+                                .toString()
+                                .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")) +
+                          "\t总计报数：" +
                           member.count
                             .toString()
                             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +
@@ -261,7 +271,9 @@ var render = function() {
                           (index + 1) +
                           ") " +
                           member.name +
-                          " -- 总计出席：" +
+                          "\t上周：" +
+                          member.lastWeek +
+                          "\t总计出席：" +
                           member.count +
                           "\n          "
                       }

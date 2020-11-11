@@ -788,7 +788,7 @@ Parse.Cloud.define(
   "class:fetchStats",
   async ({
     user,
-    params: { user: userWithRoles, classId, practiceId, forAdmin }
+    params: { user: userWithRoles, classId, practiceId, forAdmin, lastWeek }
   }) => {
     const classInfo = await loadTeams(
       user,
@@ -817,9 +817,21 @@ Parse.Cloud.define(
           query = relation.query();
           query.equalTo("reportedAt", undefined);
           query.equalTo("userId", member.id);
-          const parseCount = await query.limit(MAX_QUERY_COUNT).first();
+          const parseCount = await query.first();
           if (parseCount) {
             member.count += parseCount.get("count");
+          }
+
+          query = relation.query();
+          query.equalTo("userId", member.id);
+          query.greaterThanOrEqualTo("reportedAt", lastWeek.monday);
+          query.lessThanOrEqualTo("reportedAt", lastWeek.sunday);
+          const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
+          if (parseCounts.length) {
+            member.lastWeek = 0;
+            for (var k = 0; k < parseCounts.length; k++) {
+              member.lastWeek += parseCounts[k].get("count");
+            }
           }
         } else {
           query = new Parse.Query("UserActivityStats");
@@ -832,6 +844,39 @@ Parse.Cloud.define(
           const stats = await query.first();
           if (stats) {
             member.count += stats.get("count");
+          }
+
+          query = new Parse.Query("Class");
+          query.equalTo("objectId", classId);
+          const parseClass = await query.first();
+
+          query = parseClass.relation("sessionsV2").query();
+          query.greaterThanOrEqualTo("scheduledAt", lastWeek.monday);
+          query.lessThanOrEqualTo("scheduledAt", lastWeek.sunday);
+          const lastSession = await query.first();
+          if (!lastSession) {
+            member.lastWeek = "放假";
+          } else {
+            const attendance = await loadStudentAttendanceV2(
+              user.id,
+              lastSession
+            );
+            if (attendance) {
+              if (attendance.onLeave) {
+                member.lastWeek = "请假";
+              }
+              if (attendance.attendance == true) {
+                member.lastWeek = "已上课";
+              }
+              if (
+                attendance.attendance == false &&
+                attendance.onLeave == undefined
+              ) {
+                member.lastWeek = "未上课";
+              }
+            } else {
+              member.lastWeek = "未报出席";
+            }
           }
         }
       }

@@ -31,9 +31,13 @@
           v-else-if="classInfo.practiceId"
           readonly
           :value="
-            `(${index + 1}) ${member.name} -- 总计${
-              classInfo.practiceName
-            }：${member.count
+            `(${index + 1}) ${member.name}\t上周：${
+              member.lastWeek == undefined
+                ? '未报数'
+                : member.lastWeek
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            }\t总计报数：${member.count
               .toString()
               .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
             `
@@ -43,7 +47,9 @@
           v-else
           readonly
           :value="
-            `(${index + 1}) ${member.name} -- 总计出席：${member.count}
+            `(${index + 1}) ${member.name}\t上周：${
+              member.lastWeek
+            }\t总计出席：${member.count}
             `
           "
         ></b-form-input>
