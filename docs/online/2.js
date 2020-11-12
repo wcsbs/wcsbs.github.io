@@ -420,6 +420,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
           if (submodule.id == session.submoduleId) {
             selectedSubmodule = submodule;
+            session.submodules.push(selectedSubmodule);
+            console.log("addSubmodule - selectedSubmodule: ".concat(selectedSubmodule.name));
             break;
           }
         }
@@ -432,6 +434,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
           if (_submodule.id == session.submoduleId) {
             selectedSubmodule = _submodule;
             session.submodules.push(selectedSubmodule);
+            console.log("addSubmodule - selectedSubmodule: ".concat(selectedSubmodule.name));
 
             if (!session.name || this.classInfo.singleSubmodule) {
               session.name = selectedSubmodule.name;
@@ -444,10 +447,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       if (!this.classInfo.singleSubmodule) {
         this.refreshUI();
-      }
-
-      if (selectedSubmodule) {
-        console.log("addSubmodule - selectedSubmodule: ".concat(selectedSubmodule.name));
       }
     },
     removeSubmodule: function removeSubmodule(index) {

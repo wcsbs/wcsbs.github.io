@@ -374,6 +374,10 @@ export default {
           const submodule = this.sessionDetails.submodules[i];
           if (submodule.id == session.submoduleId) {
             selectedSubmodule = submodule;
+            session.submodules.push(selectedSubmodule);
+            console.log(
+              `addSubmodule - selectedSubmodule: ${selectedSubmodule.name}`
+            );
             break;
           }
         }
@@ -385,6 +389,9 @@ export default {
           if (submodule.id == session.submoduleId) {
             selectedSubmodule = submodule;
             session.submodules.push(selectedSubmodule);
+            console.log(
+              `addSubmodule - selectedSubmodule: ${selectedSubmodule.name}`
+            );
             if (!session.name || this.classInfo.singleSubmodule) {
               session.name = selectedSubmodule.name;
             }
@@ -394,11 +401,6 @@ export default {
       }
       if (!this.classInfo.singleSubmodule) {
         this.refreshUI();
-      }
-      if (selectedSubmodule) {
-        console.log(
-          `addSubmodule - selectedSubmodule: ${selectedSubmodule.name}`
-        );
       }
     },
     removeSubmodule(index) {
