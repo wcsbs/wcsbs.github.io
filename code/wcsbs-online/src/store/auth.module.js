@@ -107,6 +107,7 @@ const actions = {
   [REGISTER](context, credentials) {
     const name = credentials.name;
     const email = credentials.email;
+    const username = email.toLowerCase();
     const password = credentials.password;
     const confirmPassword = credentials.confirmPassword;
     const phone = credentials.phone;
@@ -124,6 +125,7 @@ const actions = {
 
       Parse.Cloud.run("user:signup", {
         name,
+        username,
         email,
         password,
         phone

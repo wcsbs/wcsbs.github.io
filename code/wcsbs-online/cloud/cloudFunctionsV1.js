@@ -20,12 +20,12 @@ const requireRole = (userWithRoles, role) => {
 
 Parse.Cloud.define(
   "user:signup",
-  async ({ params: { name, email, password, phone } }) => {
+  async ({ params: { name, username, email, password, phone } }) => {
     return new Parse.User({
       name,
       email,
       password,
-      username: email,
+      username,
       phone
     }).save(MASTER_KEY);
   }
