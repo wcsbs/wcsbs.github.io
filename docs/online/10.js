@@ -112,7 +112,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _store_user_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store/user.module */ "./src/store/user.module.js");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store_user_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store/user.module */ "./src/store/user.module.js");
+
 //
 //
 //
@@ -148,8 +151,25 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    displayName: function displayName() {
+      if (!this.user.state && this.user.emailVerified) {
+        return this.user.name;
+      }
+
+      var state;
+
+      if (this.user.state == "blocked") {
+        state = "账号已禁用";
+      } else if (!this.user.emailVerified) {
+        state = "电邮地址待验证";
+      } else {
+        state = "密码需更改";
+      }
+
+      return "".concat(this.user.name, " (").concat(state, ")");
+    },
     displayRoles: function displayRoles() {
-      return _store_user_module__WEBPACK_IMPORTED_MODULE_0__["default"].getDisplayRoles(this.user.roles);
+      return _store_user_module__WEBPACK_IMPORTED_MODULE_1__["default"].getDisplayRoles(this.user.roles);
     }
   }
 });
@@ -321,7 +341,7 @@ var render = function() {
         "router-link",
         { staticClass: "preview-link", attrs: { to: _vm.userLink } },
         [
-          _c("h3", { domProps: { textContent: _vm._s(_vm.user.name) } }),
+          _c("h3", { domProps: { textContent: _vm._s(_vm.displayName()) } }),
           _c("ul", { staticStyle: { "list-style-type": "none" } }, [
             _c("li", [_vm._v("用户名：" + _vm._s(_vm.user.username))]),
             _c("li", [_vm._v("用户角色：" + _vm._s(_vm.displayRoles()))]),

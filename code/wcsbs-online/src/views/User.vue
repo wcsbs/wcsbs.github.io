@@ -167,7 +167,7 @@ export default {
       userStates: [
         { value: "正常", key: undefined },
         { value: "密码需更改", key: "needToChangePassword" },
-        { value: "被屏蔽", key: "blocked" }
+        { value: "账号已禁用", key: "blocked" }
       ]
     };
   },

@@ -38,17 +38,22 @@ const loadUserRoles = async function(parseUser) {
   return roles.length > 0 ? roles.map(r => r.get("name")) : ["StudentUser"];
 };
 
-Parse.Cloud.define("user:getRoles", async ({ user }) => {
-  const rolesToReturn = await loadUserRoles(user);
+const loadUserDetails = async function(parseUser) {
+  const rolesToReturn = await loadUserRoles(parseUser);
   return {
-    id: user.id,
-    name: user.get("name"),
-    username: user.get("username"),
-    phone: user.get("phone"),
-    email: user.get("email"),
-    state: user.get("state"),
+    id: parseUser.id,
+    name: parseUser.get("name"),
+    username: parseUser.get("username"),
+    phone: parseUser.get("phone"),
+    email: parseUser.get("email"),
+    emailVerified: parseUser.get("emailVerified"),
+    state: parseUser.get("state"),
     roles: rolesToReturn
   };
+};
+
+Parse.Cloud.define("user:getRoles", async ({ user }) => {
+  return await loadUserDetails(user);
 });
 
 Parse.Cloud.define(
@@ -59,19 +64,11 @@ Parse.Cloud.define(
 
     var userQuery = new Parse.Query(Parse.User);
     userQuery.ascending("name");
-    const parseUsers = await userQuery.find(MASTER_KEY);
+    const parseUsers = await userQuery.limit(MAX_QUERY_COUNT).find(MASTER_KEY);
     const usersCount = parseUsers.length;
-    const users = parseUsers.map(u => {
-      return {
-        id: u.id,
-        name: u.get("name"),
-        username: u.get("username"),
-        phone: u.get("phone"),
-        email: u.get("email")
-      };
-    });
-    for (var i = 0; i < parseUsers.length; i++) {
-      users[i].roles = await loadUserRoles(parseUsers[i]);
+    const users = [];
+    for (var i = 0; i < usersCount; i++) {
+      users.push(await loadUserDetails(parseUsers[i]));
     }
     return { users, usersCount };
   }
@@ -87,17 +84,7 @@ Parse.Cloud.define(
     userQuery.equalTo("objectId", userSlug);
     var parseUser = await userQuery.first(MASTER_KEY);
 
-    const roles = await loadUserRoles(parseUser);
-
-    return {
-      id: parseUser.id,
-      name: parseUser.get("name"),
-      username: parseUser.get("username"),
-      phone: parseUser.get("phone"),
-      email: parseUser.get("email"),
-      state: parseUser.get("state"),
-      roles: roles
-    };
+    return await loadUserDetails(parseUser);
   }
 );
 
@@ -181,16 +168,7 @@ Parse.Cloud.define(
       }
     }
 
-    return {
-      id: parseUser.id,
-      name: parseUser.get("name"),
-      username: parseUser.get("username"),
-      phone: parseUser.get("phone"),
-      email: parseUser.get("email"),
-      emailVerified: parseUser.get("emailVerified"),
-      state: parseUser.get("state"),
-      roles: roleNames
-    };
+    return await loadUserDetails(parseUser);
   }
 );
 

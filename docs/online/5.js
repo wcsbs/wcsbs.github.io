@@ -199,7 +199,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         value: "密码需更改",
         key: "needToChangePassword"
       }, {
-        value: "被屏蔽",
+        value: "账号已禁用",
         key: "blocked"
       }]
     };
