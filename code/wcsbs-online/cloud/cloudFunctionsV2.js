@@ -861,17 +861,15 @@ Parse.Cloud.define(
               member.id,
               lastSession
             );
+            member.lastWeek = "未报出席";
             if (attendance) {
               if (attendance.onLeave) {
                 member.lastWeek = "请假";
-              }
-              if (attendance.attendance == true) {
+              } else if (attendance.attendance == true) {
                 member.lastWeek = "已上课";
-              } else {
+              } else if (attendance.attendance == false) {
                 member.lastWeek = "未上课";
               }
-            } else {
-              member.lastWeek = "未报出席";
             }
           }
         }
