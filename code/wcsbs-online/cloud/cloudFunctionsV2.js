@@ -858,7 +858,7 @@ Parse.Cloud.define(
             member.lastWeek = "放假";
           } else {
             const attendance = await loadStudentAttendanceV2(
-              user.id,
+              member.id,
               lastSession
             );
             if (attendance) {
@@ -867,11 +867,7 @@ Parse.Cloud.define(
               }
               if (attendance.attendance == true) {
                 member.lastWeek = "已上课";
-              }
-              if (
-                attendance.attendance == false &&
-                attendance.onLeave == undefined
-              ) {
+              } else {
                 member.lastWeek = "未上课";
               }
             } else {

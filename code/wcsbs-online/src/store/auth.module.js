@@ -165,7 +165,7 @@ const actions = {
           })
           .catch(e => {
             console.log(`error loading user details: ${e.message}`);
-            context.commit(SET_ERROR, e.errors);
+            context.commit(PURGE_AUTH);
           });
       });
     }
