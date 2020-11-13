@@ -21,13 +21,14 @@ const reportPracticeCountV2 = async function(
   practiceId,
   practiceSubmoduleId,
   reportedAt,
-  count
+  count,
+  duration
 ) {
   requireAuth(user);
 
-  userId = user.id;
+  const userId = user.id;
   logger.info(
-    `reportPracticeCountV2 - userId: ${userId} practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count}`
+    `reportPracticeCountV2 - userId: ${userId} practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count} duration: ${duration}`
   );
 
   var query = new Parse.Query("Practice");
@@ -54,6 +55,7 @@ const reportPracticeCountV2 = async function(
   }
 
   currentPracticeCount.set("count", count);
+  currentPracticeCount.set("duration", duration);
   currentPracticeCount = await currentPracticeCount.save(null, MASTER_KEY);
 
   query = relation.query();

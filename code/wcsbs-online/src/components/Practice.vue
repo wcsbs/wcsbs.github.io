@@ -65,6 +65,20 @@
               >
             </select>
           </b-input-group>
+          <b-input-group
+            v-if="practiceObj.requireDuration"
+            prepend="输入时长："
+            class="mt-3"
+          >
+            <b-form-input
+              id="input-count"
+              v-model="practiceObj.newDuration"
+              type="number"
+              step="0.01"
+              required
+              placeholder="输入时长"
+            ></b-form-input>
+          </b-input-group>
           <b-input-group prepend="输入报数：" class="mt-3">
             <b-form-input
               id="input-count"
@@ -121,6 +135,7 @@ export default {
       practiceObj: {
         name: this.practice.get("name"),
         description: this.practice.get("description"),
+        requireDuration: this.practice.get("requireDuration"),
         showDescription: false,
         showReportingCount: false,
         newCountReportedAt: "",
@@ -157,6 +172,13 @@ export default {
           sortable: true
         });
       }
+      if (this.practice.get("requireDuration")) {
+        fields.push({
+          key: "duration",
+          label: "时长",
+          sortable: true
+        });
+      }
       return fields;
     },
     formatCount(count) {
@@ -189,7 +211,8 @@ export default {
               return {
                 sessionName: sessionName,
                 reportedAt: this.toLocalDateString(e.get("reportedAt")),
-                count: this.formatCount(e.get("count"))
+                count: this.formatCount(e.get("count")),
+                duration: this.formatCount(e.get("duration"))
               };
             });
         }
@@ -258,6 +281,7 @@ export default {
         .showReportingCount;
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
+      this.practiceObj.newDuration = undefined;
       this.practiceObj.submoduleId = undefined;
     },
     onSubmit(evt) {
@@ -290,10 +314,14 @@ export default {
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
 
       const count = parseInt(this.practiceObj.newCount);
+      var duration = this.practiceObj.newDuration;
+      if (duration) {
+        duration = parseFloat(parseFloat(duration).toFixed(2));
+      }
       const thisComponent = this;
 
       console.log(
-        `home:reportPracticeCount - practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count}`
+        `home:reportPracticeCount - practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count} duration: ${duration}`
       );
 
       this.$dialog
@@ -303,7 +331,8 @@ export default {
             practiceId,
             practiceSubmoduleId,
             reportedAt,
-            count
+            count,
+            duration
           })
             .then(result => {
               console.log(
