@@ -555,6 +555,7 @@ export default {
           msg += "没有上课";
         } else {
           attendance.attendance = true;
+          attendance.onLeave = false;
           msg += "已上课";
         }
       }

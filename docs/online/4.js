@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.regexp.replace */ "./node_modules/core-js/modules/es6.regexp.replace.js");
 /* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_staging_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! v-calendar/lib/components/date-picker.umd */ "./node_modules/v-calendar/lib/components/date-picker.umd.js");
 /* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
@@ -40,8 +40,21 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_staging_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -176,6 +189,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       practiceObj: {
         name: this.practice.get("name"),
         description: this.practice.get("description"),
+        requireDuration: this.practice.get("requireDuration"),
         showDescription: false,
         showReportingCount: false,
         newCountReportedAt: "",
@@ -207,6 +221,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         });
       }
 
+      if (this.practice.get("requireDuration")) {
+        fields.push({
+          key: "durations",
+          label: "时长",
+          sortable: true
+        });
+      }
+
       return fields;
     },
     formatCount: function formatCount(count) {
@@ -216,8 +238,20 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       return "";
     },
-    buildPracticeCountItems: function buildPracticeCountItems() {
+    formatCountList: function formatCountList(list) {
       var _this = this;
+
+      if (list) {
+        list = list.map(function (e) {
+          return _this.formatCount(e);
+        });
+        return list.join(",");
+      }
+
+      return "";
+    },
+    buildPracticeCountItems: function buildPracticeCountItems() {
+      var _this2 = this;
 
       var items = [];
 
@@ -245,8 +279,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
             return {
               sessionName: sessionName,
-              reportedAt: _this.toLocalDateString(e.get("reportedAt")),
-              count: _this.formatCount(e.get("count"))
+              reportedAt: _this2.toLocalDateString(e.get("reportedAt")),
+              count: _this2.formatCount(e.get("count")),
+              durations: _this2.formatCountList(e.get("durations"))
             };
           });
         }
@@ -295,6 +330,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       this.practiceObj.showReportingCount = !this.practiceObj.showReportingCount;
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
+      this.practiceObj.newDuration = undefined;
       this.practiceObj.submoduleId = undefined;
     },
     onSubmit: function onSubmit(evt) {
@@ -324,14 +360,22 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       reportedAt.setUTCMonth(this.practiceObj.newCountReportedAt.getMonth());
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
       var count = parseInt(this.practiceObj.newCount);
+      var durations;
+      var duration = this.practiceObj.newDuration;
+
+      if (duration) {
+        durations = [parseInt(duration)];
+      }
+
       var thisComponent = this;
-      console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " practiceSubmoduleId: ").concat(practiceSubmoduleId, " reportedAt: ").concat(reportedAt, " count: ").concat(count));
+      console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " practiceSubmoduleId: ").concat(practiceSubmoduleId, " reportedAt: ").concat(reportedAt, " count: ").concat(count, " durations: ").concat(durations));
       this.$dialog.confirm(message, options).then(function (dialog) {
         parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("home:reportPracticeCountV2", {
           practiceId: practiceId,
           practiceSubmoduleId: practiceSubmoduleId,
           reportedAt: reportedAt,
-          count: count
+          count: count,
+          durations: durations
         }).then(function (result) {
           console.log("reportPracticeCount - result: ".concat(JSON.stringify(result)));
           thisComponent.practiceCountObj = thisComponent.buildPracticeCountObj(result);
@@ -560,6 +604,37 @@ var render = function() {
                                 0
                               )
                             ]
+                          )
+                        : _vm._e(),
+                      _vm.practiceObj.requireDuration
+                        ? _c(
+                            "b-input-group",
+                            {
+                              staticClass: "mt-3",
+                              attrs: { prepend: "输入时长：" }
+                            },
+                            [
+                              _c("b-form-input", {
+                                attrs: {
+                                  id: "input-count",
+                                  type: "number",
+                                  required: "",
+                                  placeholder: "输入时长"
+                                },
+                                model: {
+                                  value: _vm.practiceObj.newDuration,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.practiceObj,
+                                      "newDuration",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "practiceObj.newDuration"
+                                }
+                              })
+                            ],
+                            1
                           )
                         : _vm._e(),
                       _c(

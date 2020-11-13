@@ -74,7 +74,6 @@
               id="input-count"
               v-model="practiceObj.newDuration"
               type="number"
-              step="0.01"
               required
               placeholder="输入时长"
             ></b-form-input>
@@ -174,7 +173,7 @@ export default {
       }
       if (this.practice.get("requireDuration")) {
         fields.push({
-          key: "duration",
+          key: "durations",
           label: "时长",
           sortable: true
         });
@@ -184,6 +183,15 @@ export default {
     formatCount(count) {
       if (count) {
         return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+      }
+      return "";
+    },
+    formatCountList(list) {
+      if (list) {
+        list = list.map(e => {
+          return this.formatCount(e);
+        });
+        return list.join(",");
       }
       return "";
     },
@@ -212,7 +220,7 @@ export default {
                 sessionName: sessionName,
                 reportedAt: this.toLocalDateString(e.get("reportedAt")),
                 count: this.formatCount(e.get("count")),
-                duration: this.formatCount(e.get("duration"))
+                durations: this.formatCountList(e.get("durations"))
               };
             });
         }
@@ -314,14 +322,15 @@ export default {
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
 
       const count = parseInt(this.practiceObj.newCount);
+      var durations;
       var duration = this.practiceObj.newDuration;
       if (duration) {
-        duration = parseFloat(parseFloat(duration).toFixed(2));
+        durations = [parseInt(duration)];
       }
       const thisComponent = this;
 
       console.log(
-        `home:reportPracticeCount - practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count} duration: ${duration}`
+        `home:reportPracticeCount - practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count} durations: ${durations}`
       );
 
       this.$dialog
@@ -332,7 +341,7 @@ export default {
             practiceSubmoduleId,
             reportedAt,
             count,
-            duration
+            durations
           })
             .then(result => {
               console.log(

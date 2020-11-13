@@ -446,7 +446,7 @@ Parse.Cloud.define(
   "home:reportPracticeCountV2",
   async ({
     user,
-    params: { practiceId, practiceSubmoduleId, reportedAt, count, duration }
+    params: { practiceId, practiceSubmoduleId, reportedAt, count, durations }
   }) => {
     return await commonFunctions.reportPracticeCountV2(
       user,
@@ -454,7 +454,7 @@ Parse.Cloud.define(
       practiceSubmoduleId,
       reportedAt,
       count,
-      duration
+      durations
     );
   }
 );
