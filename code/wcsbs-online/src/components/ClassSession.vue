@@ -171,10 +171,18 @@
           ></b-form-input>
           <b-input-group-append>
             <b-button
-              variant="warning"
+              variant="success"
               v-if="needToShowAttendanceButton()"
-              v-on:click="updateAttendance()"
-              >{{ attendanceButtonName() }}</b-button
+              v-on:click="updateAttendance(false)"
+              >{{ attendanceButtonName(false) }}</b-button
+            >
+            <b-button
+              variant="warning"
+              v-if="
+                needToShowAttendanceButton() && session.needTwoAttendanceButtons
+              "
+              v-on:click="updateAttendance(true)"
+              >{{ attendanceButtonName(true) }}</b-button
             >
             <b-button
               variant="info"
@@ -269,6 +277,7 @@ export default {
         ),
         showMoreDetails: false,
         attendanceState: this.toAttendanceStateString(this.sessionDetails),
+        needTwoAttendanceButtons: this.checkIfTwoAttendanceButtonsNeeded(),
         prestudyState: this.toPrestudyStateString(this.sessionDetails, 0)
       };
     },
@@ -454,6 +463,19 @@ export default {
       // }
       // return false;
     },
+    checkIfTwoAttendanceButtonsNeeded() {
+      var result = false;
+      const d = new Date();
+      if (d >= this.classSession.get("scheduledAt")) {
+        if (
+          this.sessionDetails.attendance.attendance == undefined &&
+          this.sessionDetails.attendance.onLeave == undefined
+        ) {
+          result = true;
+        }
+      }
+      return result;
+    },
     toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
         if (typeof sessionDetails.attendance.attendance == "number") {
@@ -497,7 +519,10 @@ export default {
 
       return `${chuanCheng}/${faBen}`;
     },
-    attendanceButtonName() {
+    attendanceButtonName(secondButton) {
+      if (secondButton) {
+        return "未上课";
+      }
       const d = new Date();
       if (d < this.classSession.get("scheduledAt")) {
         if (this.sessionDetails.attendance.onLeave) {
@@ -508,10 +533,10 @@ export default {
         if (this.sessionDetails.attendance.attendance != undefined) {
           return "我要改出席";
         }
-        return "我要报出席";
+        return "已上课";
       }
     },
-    updateAttendance() {
+    updateAttendance(secondButton) {
       const d = new Date();
       var msg = "确认";
       var attendance = this.sessionDetails.attendance;
@@ -525,7 +550,7 @@ export default {
           msg += "请假";
         }
       } else {
-        if (attendance.attendance) {
+        if (secondButton || attendance.attendance) {
           attendance.attendance = false;
           msg += "没有上课";
         } else {
@@ -570,6 +595,7 @@ export default {
               thisComponent.session.attendanceState = thisComponent.toAttendanceStateString(
                 thisComponent.sessionDetails
               );
+              thisComponent.session.needTwoAttendanceButtons = false;
               dialog.close();
             })
             .catch(e => {

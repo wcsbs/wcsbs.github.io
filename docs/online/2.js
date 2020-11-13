@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
 /* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_staging_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
 /* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
@@ -38,8 +38,16 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_staging_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -315,6 +323,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         scheduledAtLocalDateTimeString: this.toLocalDateTimeString(this.classSession.get("scheduledAt")),
         showMoreDetails: false,
         attendanceState: this.toAttendanceStateString(this.sessionDetails),
+        needTwoAttendanceButtons: this.checkIfTwoAttendanceButtonsNeeded(),
         prestudyState: this.toPrestudyStateString(this.sessionDetails, 0)
       };
     },
@@ -499,6 +508,18 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       // }
       // return false;
     },
+    checkIfTwoAttendanceButtonsNeeded: function checkIfTwoAttendanceButtonsNeeded() {
+      var result = false;
+      var d = new Date();
+
+      if (d >= this.classSession.get("scheduledAt")) {
+        if (this.sessionDetails.attendance.attendance == undefined && this.sessionDetails.attendance.onLeave == undefined) {
+          result = true;
+        }
+      }
+
+      return result;
+    },
     toAttendanceStateString: function toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
         if (typeof sessionDetails.attendance.attendance == "number") {
@@ -546,7 +567,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       return "".concat(chuanCheng, "/").concat(faBen);
     },
-    attendanceButtonName: function attendanceButtonName() {
+    attendanceButtonName: function attendanceButtonName(secondButton) {
+      if (secondButton) {
+        return "未上课";
+      }
+
       var d = new Date();
 
       if (d < this.classSession.get("scheduledAt")) {
@@ -560,10 +585,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
           return "我要改出席";
         }
 
-        return "我要报出席";
+        return "已上课";
       }
     },
-    updateAttendance: function updateAttendance() {
+    updateAttendance: function updateAttendance(secondButton) {
       var d = new Date();
       var msg = "确认";
       var attendance = this.sessionDetails.attendance;
@@ -578,7 +603,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
           msg += "请假";
         }
       } else {
-        if (attendance.attendance) {
+        if (secondButton || attendance.attendance) {
           attendance.attendance = false;
           msg += "没有上课";
         } else {
@@ -617,6 +642,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
           }
 
           thisComponent.session.attendanceState = thisComponent.toAttendanceStateString(thisComponent.sessionDetails);
+          thisComponent.session.needTwoAttendanceButtons = false;
           dialog.close();
         }).catch(function (e) {
           console.log("error in updateAttendanceV2: ".concat(e));
@@ -1180,14 +1206,37 @@ var render = function() {
                                 ? _c(
                                     "b-button",
                                     {
-                                      attrs: { variant: "warning" },
+                                      attrs: { variant: "success" },
                                       on: {
                                         click: function($event) {
-                                          return _vm.updateAttendance()
+                                          return _vm.updateAttendance(false)
                                         }
                                       }
                                     },
-                                    [_vm._v(_vm._s(_vm.attendanceButtonName()))]
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.attendanceButtonName(false))
+                                      )
+                                    ]
+                                  )
+                                : _vm._e(),
+                              _vm.needToShowAttendanceButton() &&
+                              _vm.session.needTwoAttendanceButtons
+                                ? _c(
+                                    "b-button",
+                                    {
+                                      attrs: { variant: "warning" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.updateAttendance(true)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.attendanceButtonName(true))
+                                      )
+                                    ]
                                   )
                                 : _vm._e(),
                               _c(
