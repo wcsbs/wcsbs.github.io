@@ -464,17 +464,27 @@ export default {
       // return false;
     },
     checkIfTwoAttendanceButtonsNeeded() {
-      var result = false;
       const d = new Date();
-      if (d >= this.classSession.get("scheduledAt")) {
+      if (d < this.classSession.get("scheduledAt")) {
+        return false;
+      }
+      const sessionDetails = this.sessionDetails;
+      if (sessionDetails) {
+        if (sessionDetails.attendance.onLeave) {
+          return false;
+        }
+        if (sessionDetails.attendance.attendance == true) {
+          return false;
+        }
         if (
-          this.sessionDetails.attendance.attendance == undefined &&
-          this.sessionDetails.attendance.onLeave == undefined
+          sessionDetails.attendance.attendance == false &&
+          sessionDetails.attendance.onLeave == undefined
         ) {
-          result = true;
+          return false;
         }
       }
-      return result;
+
+      return true;
     },
     toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
@@ -530,10 +540,10 @@ export default {
         }
         return "我要请假";
       } else {
-        if (this.sessionDetails.attendance.attendance != undefined) {
-          return "我要改出席";
+        if (this.session.needTwoAttendanceButtons) {
+          return "已上课";
         }
-        return "已上课";
+        return "我要改出席";
       }
     },
     updateAttendance(secondButton) {
