@@ -465,26 +465,15 @@ export default {
     },
     checkIfTwoAttendanceButtonsNeeded() {
       const d = new Date();
-      if (d < this.classSession.get("scheduledAt")) {
-        return false;
-      }
       const sessionDetails = this.sessionDetails;
-      if (sessionDetails) {
+      if (sessionDetails && d >= this.classSession.get("scheduledAt")) {
         if (sessionDetails.attendance.onLeave) {
           return false;
         }
-        if (sessionDetails.attendance.attendance == true) {
-          return false;
-        }
-        if (
-          sessionDetails.attendance.attendance == false &&
-          sessionDetails.attendance.onLeave == undefined
-        ) {
-          return false;
-        }
+        return sessionDetails.attendance.attendance == undefined;
       }
 
-      return true;
+      return false;
     },
     toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
@@ -497,10 +486,7 @@ export default {
         if (sessionDetails.attendance.attendance == true) {
           return "已上课";
         }
-        if (
-          sessionDetails.attendance.attendance == false &&
-          sessionDetails.attendance.onLeave == undefined
-        ) {
+        if (sessionDetails.attendance.attendance == false) {
           return "未上课";
         }
       }

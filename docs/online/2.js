@@ -510,28 +510,17 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     },
     checkIfTwoAttendanceButtonsNeeded: function checkIfTwoAttendanceButtonsNeeded() {
       var d = new Date();
-
-      if (d < this.classSession.get("scheduledAt")) {
-        return false;
-      }
-
       var sessionDetails = this.sessionDetails;
 
-      if (sessionDetails) {
+      if (sessionDetails && d >= this.classSession.get("scheduledAt")) {
         if (sessionDetails.attendance.onLeave) {
           return false;
         }
 
-        if (sessionDetails.attendance.attendance == true) {
-          return false;
-        }
-
-        if (sessionDetails.attendance.attendance == false && sessionDetails.attendance.onLeave == undefined) {
-          return false;
-        }
+        return sessionDetails.attendance.attendance == undefined;
       }
 
-      return true;
+      return false;
     },
     toAttendanceStateString: function toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
@@ -547,7 +536,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
           return "已上课";
         }
 
-        if (sessionDetails.attendance.attendance == false && sessionDetails.attendance.onLeave == undefined) {
+        if (sessionDetails.attendance.attendance == false) {
           return "未上课";
         }
       }
