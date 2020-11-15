@@ -406,6 +406,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       this.practiceObj.newDurationHours = undefined;
       this.practiceObj.newDurationMinutes = undefined;
       this.practiceObj.submoduleId = undefined;
+      this.practiceObj.sessions = [];
     },
     addPracticeSession: function addPracticeSession() {
       var id = this.practiceObj.submoduleId;

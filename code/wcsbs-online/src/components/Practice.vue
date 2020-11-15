@@ -352,6 +352,7 @@ export default {
       this.practiceObj.newDurationHours = undefined;
       this.practiceObj.newDurationMinutes = undefined;
       this.practiceObj.submoduleId = undefined;
+      this.practiceObj.sessions = [];
     },
     addPracticeSession() {
       const id = this.practiceObj.submoduleId;
