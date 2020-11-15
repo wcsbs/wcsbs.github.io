@@ -122,6 +122,16 @@
               v-on:click="editSession"
               >修改</b-button
             >
+            <b-button
+              variant="info"
+              v-on:click="session.showMoreDetails = !session.showMoreDetails"
+            >
+              <b-icon
+                v-if="session.showMoreDetails"
+                icon="chevron-double-up"
+              ></b-icon>
+              <b-icon v-else icon="chevron-double-down"></b-icon>
+            </b-button>
           </b-input-group-append>
         </b-input-group>
         <b-input-group
@@ -184,16 +194,6 @@
               v-on:click="updateAttendance(true)"
               >{{ attendanceButtonName(true) }}</b-button
             >
-            <b-button
-              variant="info"
-              v-on:click="session.showMoreDetails = !session.showMoreDetails"
-            >
-              <b-icon
-                v-if="session.showMoreDetails"
-                icon="chevron-double-up"
-              ></b-icon>
-              <b-icon v-else icon="chevron-double-down"></b-icon>
-            </b-button>
           </b-input-group-append>
         </b-input-group>
         <div v-if="session.showMoreDetails">

@@ -10,6 +10,20 @@
             readonly
             v-model="practiceCountObj.latestCount"
           ></b-form-input>
+          <b-input-group-append>
+            <b-button
+              variant="info"
+              v-on:click="
+                practiceObj.showDescription = !practiceObj.showDescription
+              "
+            >
+              <b-icon
+                v-if="practiceObj.showDescription"
+                icon="chevron-double-up"
+              ></b-icon>
+              <b-icon v-else icon="chevron-double-down"></b-icon>
+            </b-button>
+          </b-input-group-append>
         </b-input-group>
         <b-input-group prepend="总计报数：" class="mt-3">
           <b-form-input
@@ -25,18 +39,6 @@
                 practiceObj.showReportingCount ? "完成报数" : "我要报数"
               }}</b-button
             >
-            <b-button
-              variant="info"
-              v-on:click="
-                practiceObj.showDescription = !practiceObj.showDescription
-              "
-            >
-              <b-icon
-                v-if="practiceObj.showDescription"
-                icon="chevron-double-up"
-              ></b-icon>
-              <b-icon v-else icon="chevron-double-down"></b-icon>
-            </b-button>
           </b-input-group-append>
         </b-input-group>
         <b-form @submit="onSubmit" v-if="practiceObj.showReportingCount">
