@@ -510,6 +510,17 @@ Parse.Cloud.define(
       const moduleId = practice.get("moduleId");
       result.practiceSubmodules = await loadPracticeSubmodules(moduleId);
       result.counts = parseCounts;
+
+      if (moduleId) {
+        result.practiceSessions = [];
+        for (var i = 0; i < parseCounts.length; i++) {
+          relation = parseCounts[i].relation("practiceSessions");
+          query = relation.query();
+          query.ascending("index");
+          var parsePracticeSessions = await query.limit(MAX_QUERY_COUNT).find();
+          result.practiceSessions.push(parsePracticeSessions);
+        }
+      }
     }
 
     return result;

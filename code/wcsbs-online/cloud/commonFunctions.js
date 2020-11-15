@@ -127,7 +127,7 @@ const reportPracticeCountV2 = async function(
     count: currentPracticeCount.get("count"),
     reportedAt: currentPracticeCount.get("reportedAt"),
     accumulatedCount: accumulatedCount.get("count"),
-    resultPracticeSessions
+    sessions: resultPracticeSessions ? resultPracticeSessions.length : 0
   };
 };
 

@@ -23,7 +23,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.regexp.replace */ "./node_modules/core-js/modules/es6.regexp.replace.js");
 /* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_staging_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! v-calendar/lib/components/date-picker.umd */ "./node_modules/v-calendar/lib/components/date-picker.umd.js");
 /* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
@@ -40,8 +40,37 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_staging_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -175,6 +204,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       type: Array,
       required: false
     },
+    practiceSessions: {
+      type: Array,
+      required: false
+    },
     practiceCounts: {
       type: Array,
       required: false
@@ -191,12 +224,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       practiceObj: {
         name: this.practice.get("name"),
         description: this.practice.get("description"),
-        requireDuration: this.practice.get("requireDuration"),
         showDescription: false,
         showReportingCount: false,
         newCountReportedAt: "",
         newCount: "",
-        submoduleId: undefined
+        submoduleId: undefined,
+        sessions: []
       },
       practiceCountObj: this.buildPracticeCountObj(this.latestPracticeCount),
       fields: this.buildPracticeCountFields(),
@@ -216,16 +249,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       }];
 
       if (!this.forAdmin && this.practiceSubmodules && this.practiceSubmodules.length > 0) {
-        fields.splice(0, 0, {
+        fields[1] = {
           key: "sessionName",
           label: "修法",
           sortable: true
-        });
-      }
-
-      if (this.practice.get("requireDuration")) {
+        };
         fields.push({
-          key: "durations",
+          key: "duration",
           label: "时长",
           sortable: true
         });
@@ -252,6 +282,25 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       return "";
     },
+    formatDuration: function formatDuration(duration) {
+      var hours = Math.floor(duration / 60);
+
+      if (hours) {
+        hours = "".concat(hours, "\u5C0F\u65F6");
+      } else {
+        hours = "";
+      }
+
+      var minutes = duration % 60;
+
+      if (minutes) {
+        minutes = "".concat(minutes, "\u5206\u949F");
+      } else {
+        minutes = "";
+      }
+
+      return "".concat(hours).concat(minutes);
+    },
     buildPracticeCountItems: function buildPracticeCountItems() {
       var _this2 = this;
 
@@ -267,25 +316,47 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
           }
         } else {
           var practiceSubmodules = this.practiceSubmodules;
-          items = this.practiceCounts.filter(function (x) {
-            return x.get("reportedAt");
-          }).map(function (e) {
-            var submoduleId = e.get("submoduleId");
-            var sessionName = undefined;
 
-            if (submoduleId) {
-              sessionName = practiceSubmodules.find(function (s) {
-                return s.id == submoduleId;
-              }).name;
+          for (i = 0; i < this.practiceCounts.length; i++) {
+            var e = this.practiceCounts[i];
+
+            if (!e.get("reportedAt")) {
+              continue;
             }
 
-            return {
-              sessionName: sessionName,
-              reportedAt: _this2.toLocalDateString(e.get("reportedAt")),
-              count: _this2.formatCount(e.get("count")),
-              durations: _this2.formatCountList(e.get("durations"))
-            };
-          });
+            var practiceSessions = this.practiceSessions[i];
+
+            if (practiceSessions) {
+              var _loop = function _loop() {
+                var submoduleId = practiceSessions[j].get("submoduleId");
+                sessionName = undefined;
+
+                if (submoduleId) {
+                  sessionName = practiceSubmodules.find(function (s) {
+                    return s.id == submoduleId;
+                  }).name;
+                }
+
+                var duration = practiceSessions[j].get("duration");
+                items.push({
+                  reportedAt: _this2.toLocalDateString(e.get("reportedAt")),
+                  sessionName: sessionName,
+                  duration: _this2.formatDuration(duration)
+                });
+              };
+
+              for (var j = 0; j < practiceSessions.length; j++) {
+                var sessionName;
+
+                _loop();
+              }
+            } else {
+              items.push({
+                reportedAt: this.toLocalDateString(e.get("reportedAt")),
+                count: this.formatCount(e.get("count"))
+              });
+            }
+          }
         }
       }
 
@@ -332,8 +403,33 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       this.practiceObj.showReportingCount = !this.practiceObj.showReportingCount;
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
-      this.practiceObj.newDuration = undefined;
+      this.practiceObj.newDurationHours = undefined;
+      this.practiceObj.newDurationMinutes = undefined;
       this.practiceObj.submoduleId = undefined;
+    },
+    addPracticeSession: function addPracticeSession() {
+      var id = this.practiceObj.submoduleId;
+      var name = this.practiceSubmodules.find(function (e) {
+        return e.id == id;
+      }).name;
+      var duration = 0;
+
+      if (this.practiceObj.newDurationHours) {
+        duration += parseInt(this.practiceObj.newDurationHours) * 60;
+      }
+
+      if (this.practiceObj.newDurationMinutes) {
+        duration += parseInt(this.practiceObj.newDurationMinutes);
+      }
+
+      this.practiceObj.sessions.push({
+        id: id,
+        name: name,
+        duration: duration
+      });
+    },
+    removePracticeSession: function removePracticeSession(index) {
+      this.practiceObj.sessions.splice(index, 1);
     },
     onSubmit: function onSubmit(evt) {
       evt.preventDefault();
@@ -343,18 +439,20 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
 
       };
-      var practiceSubmoduleId = this.practiceObj.submoduleId;
-      var sessionName = "";
+      var practiceSessions = this.practiceSubmodules.length == 0 ? undefined : this.practiceObj.sessions.map(function (e) {
+        return {
+          submoduleId: e.id,
+          duration: e.duration
+        };
+      });
 
-      if (practiceSubmoduleId) {
-        sessionName = this.practiceSubmodules.find(function (e) {
-          return e.id == practiceSubmoduleId;
-        }).name;
+      if (this.practiceSubmodules.length > 0) {
+        this.practiceObj.newCount = this.practiceObj.sessions.length.toString();
       }
 
       var message = {
         title: this.practiceObj.name,
-        body: "\u65B0\u589E".concat(sessionName, "\u62A5\u6570").concat(this.practiceObj.newCount, " @ ").concat(this.toLocalDateString(this.practiceObj.newCountReportedAt), "\uFF1F")
+        body: "\u65B0\u589E\u62A5\u6570".concat(this.practiceObj.newCount, " @ ").concat(this.toLocalDateString(this.practiceObj.newCountReportedAt), "\uFF1F")
       };
       var practiceId = this.practice.id;
       var reportedAt = new Date(0);
@@ -362,22 +460,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       reportedAt.setUTCMonth(this.practiceObj.newCountReportedAt.getMonth());
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
       var count = parseInt(this.practiceObj.newCount);
-      var durations;
-      var duration = this.practiceObj.newDuration;
-
-      if (duration) {
-        durations = [parseInt(duration)];
-      }
-
       var thisComponent = this;
-      console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " practiceSubmoduleId: ").concat(practiceSubmoduleId, " reportedAt: ").concat(reportedAt, " count: ").concat(count, " durations: ").concat(durations));
+      console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " reportedAt: ").concat(reportedAt, " count: ").concat(count, " practiceSessions: ").concat(JSON.stringify(practiceSessions)));
       this.$dialog.confirm(message, options).then(function (dialog) {
         parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("home:reportPracticeCountV2", {
           practiceId: practiceId,
-          practiceSubmoduleId: practiceSubmoduleId,
           reportedAt: reportedAt,
           count: count,
-          durations: durations
+          practiceSessions: practiceSessions
         }).then(function (result) {
           console.log("reportPracticeCount - result: ".concat(JSON.stringify(result)));
           thisComponent.practiceCountObj = thisComponent.buildPracticeCountObj(result);
@@ -551,75 +641,222 @@ var render = function() {
                               },
                               expression: "practiceObj.newCountReportedAt"
                             }
-                          })
+                          }),
+                          _vm.practiceSubmodules.length > 0
+                            ? _c(
+                                "b-input-group-append",
+                                [
+                                  _c(
+                                    "b-button",
+                                    {
+                                      attrs: {
+                                        type: "submit",
+                                        variant: "primary"
+                                      }
+                                    },
+                                    [_vm._v("提交")]
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e()
                         ],
                         1
                       ),
                       _vm.practiceSubmodules.length > 0
                         ? _c(
-                            "b-input-group",
-                            {
-                              staticClass: "mt-3",
-                              attrs: { prepend: "选择修法：" }
-                            },
+                            "div",
                             [
                               _c(
-                                "select",
+                                "b-input-group",
                                 {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.practiceObj.submoduleId,
-                                      expression: "practiceObj.submoduleId"
-                                    }
-                                  ],
-                                  on: {
-                                    change: function($event) {
-                                      var $$selectedVal = Array.prototype.filter
-                                        .call($event.target.options, function(
-                                          o
-                                        ) {
-                                          return o.selected
-                                        })
-                                        .map(function(o) {
-                                          var val =
-                                            "_value" in o ? o._value : o.value
-                                          return val
-                                        })
-                                      _vm.$set(
-                                        _vm.practiceObj,
-                                        "submoduleId",
-                                        $event.target.multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      )
-                                    }
-                                  }
+                                  staticClass: "mt-3",
+                                  attrs: { prepend: "输入时长：" }
                                 },
-                                _vm._l(_vm.practiceSubmodules, function(
-                                  session
-                                ) {
-                                  return _c(
-                                    "option",
-                                    {
-                                      key: session.id,
-                                      domProps: { value: session.id }
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      id: "input-hours",
+                                      type: "number",
+                                      placeholder: "多少小时？"
                                     },
-                                    [_vm._v(_vm._s(session.name))]
+                                    model: {
+                                      value: _vm.practiceObj.newDurationHours,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.practiceObj,
+                                          "newDurationHours",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "practiceObj.newDurationHours"
+                                    }
+                                  }),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c("b-form-input", {
+                                        attrs: {
+                                          id: "input-minutes",
+                                          type: "number",
+                                          placeholder: "多少分钟？"
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.practiceObj.newDurationMinutes,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.practiceObj,
+                                              "newDurationMinutes",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "practiceObj.newDurationMinutes"
+                                        }
+                                      })
+                                    ],
+                                    1
                                   )
-                                }),
-                                0
-                              )
-                            ]
+                                ],
+                                1
+                              ),
+                              _c(
+                                "b-input-group",
+                                {
+                                  staticClass: "mt-3",
+                                  attrs: { prepend: "选择修法：" }
+                                },
+                                [
+                                  _c(
+                                    "select",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.practiceObj.submoduleId,
+                                          expression: "practiceObj.submoduleId"
+                                        }
+                                      ],
+                                      on: {
+                                        change: function($event) {
+                                          var $$selectedVal = Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function(o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function(o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                          _vm.$set(
+                                            _vm.practiceObj,
+                                            "submoduleId",
+                                            $event.target.multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          )
+                                        }
+                                      }
+                                    },
+                                    _vm._l(_vm.practiceSubmodules, function(
+                                      session
+                                    ) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: session.id,
+                                          domProps: { value: session.id }
+                                        },
+                                        [_vm._v(_vm._s(session.name))]
+                                      )
+                                    }),
+                                    0
+                                  ),
+                                  _c(
+                                    "b-input-group-append",
+                                    [
+                                      _c(
+                                        "b-button",
+                                        {
+                                          attrs: { variant: "success" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.addPracticeSession()
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("增加")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._l(_vm.practiceObj.sessions, function(
+                                session,
+                                index
+                              ) {
+                                return _c(
+                                  "b-input-group",
+                                  {
+                                    key: session.id + index,
+                                    staticClass: "mt-3",
+                                    attrs: { prepend: "实修座次：" }
+                                  },
+                                  [
+                                    _c("b-form-input", {
+                                      attrs: {
+                                        readonly: "",
+                                        value:
+                                          "(" +
+                                          (index + 1) +
+                                          ") " +
+                                          session.name +
+                                          "：" +
+                                          session.duration +
+                                          "分钟"
+                                      }
+                                    }),
+                                    _c(
+                                      "b-input-group-append",
+                                      [
+                                        _c(
+                                          "b-button",
+                                          {
+                                            attrs: { variant: "warning" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.removePracticeSession(
+                                                  index
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("删除")]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              })
+                            ],
+                            2
                           )
-                        : _vm._e(),
-                      _vm.practiceObj.requireDuration
-                        ? _c(
+                        : _c(
                             "b-input-group",
                             {
                               staticClass: "mt-3",
-                              attrs: { prepend: "输入时长：" }
+                              attrs: { prepend: "输入报数：" }
                             },
                             [
                               _c("b-form-input", {
@@ -627,62 +864,35 @@ var render = function() {
                                   id: "input-count",
                                   type: "number",
                                   required: "",
-                                  placeholder: "输入时长"
+                                  placeholder: "输入报数"
                                 },
                                 model: {
-                                  value: _vm.practiceObj.newDuration,
+                                  value: _vm.practiceObj.newCount,
                                   callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.practiceObj,
-                                      "newDuration",
-                                      $$v
-                                    )
+                                    _vm.$set(_vm.practiceObj, "newCount", $$v)
                                   },
-                                  expression: "practiceObj.newDuration"
+                                  expression: "practiceObj.newCount"
                                 }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _c(
-                        "b-input-group",
-                        {
-                          staticClass: "mt-3",
-                          attrs: { prepend: "输入报数：" }
-                        },
-                        [
-                          _c("b-form-input", {
-                            attrs: {
-                              id: "input-count",
-                              type: "number",
-                              required: "",
-                              placeholder: "输入报数"
-                            },
-                            model: {
-                              value: _vm.practiceObj.newCount,
-                              callback: function($$v) {
-                                _vm.$set(_vm.practiceObj, "newCount", $$v)
-                              },
-                              expression: "practiceObj.newCount"
-                            }
-                          }),
-                          _c(
-                            "b-input-group-append",
-                            [
+                              }),
                               _c(
-                                "b-button",
-                                {
-                                  attrs: { type: "submit", variant: "primary" }
-                                },
-                                [_vm._v("提交")]
+                                "b-input-group-append",
+                                [
+                                  _c(
+                                    "b-button",
+                                    {
+                                      attrs: {
+                                        type: "submit",
+                                        variant: "primary"
+                                      }
+                                    },
+                                    [_vm._v("提交")]
+                                  )
+                                ],
+                                1
                               )
                             ],
                             1
                           )
-                        ],
-                        1
-                      )
                     ],
                     1
                   )

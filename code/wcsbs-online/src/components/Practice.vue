@@ -91,7 +91,7 @@
             <b-input-group
               v-for="(session, index) in practiceObj.sessions"
               :key="session.id + index"
-              prepend="修法座次："
+              prepend="实修座次："
               class="mt-3"
             >
               <b-form-input
@@ -153,6 +153,7 @@ export default {
     practice: { type: Object, required: true },
     latestPracticeCount: { type: Object, required: false },
     practiceSubmodules: { type: Array, required: false },
+    practiceSessions: { type: Array, required: false },
     practiceCounts: { type: Array, required: false },
     users: { type: Array, required: false },
     forAdmin: Boolean
@@ -196,15 +197,13 @@ export default {
         this.practiceSubmodules &&
         this.practiceSubmodules.length > 0
       ) {
-        fields.splice(0, 0, {
+        fields[1] = {
           key: "sessionName",
           label: "修法",
           sortable: true
-        });
-      }
-      if (this.practice.get("requireDuration")) {
+        };
         fields.push({
-          key: "durations",
+          key: "duration",
           label: "时长",
           sortable: true
         });
@@ -226,6 +225,21 @@ export default {
       }
       return "";
     },
+    formatDuration(duration) {
+      var hours = Math.floor(duration / 60);
+      if (hours) {
+        hours = `${hours}小时`;
+      } else {
+        hours = "";
+      }
+      var minutes = duration % 60;
+      if (minutes) {
+        minutes = `${minutes}分钟`;
+      } else {
+        minutes = "";
+      }
+      return `${hours}${minutes}`;
+    },
     buildPracticeCountItems() {
       var items = [];
       if (this.practiceCounts) {
@@ -238,22 +252,37 @@ export default {
           }
         } else {
           const practiceSubmodules = this.practiceSubmodules;
-          items = this.practiceCounts
-            .filter(x => x.get("reportedAt"))
-            .map(e => {
-              const submoduleId = e.get("submoduleId");
-              var sessionName = undefined;
-              if (submoduleId) {
-                sessionName = practiceSubmodules.find(s => s.id == submoduleId)
-                  .name;
+          for (i = 0; i < this.practiceCounts.length; i++) {
+            const e = this.practiceCounts[i];
+            if (!e.get("reportedAt")) {
+              continue;
+            }
+
+            const practiceSessions = this.practiceSessions[i];
+            if (practiceSessions) {
+              for (var j = 0; j < practiceSessions.length; j++) {
+                const submoduleId = practiceSessions[j].get("submoduleId");
+                var sessionName = undefined;
+                if (submoduleId) {
+                  sessionName = practiceSubmodules.find(
+                    s => s.id == submoduleId
+                  ).name;
+                }
+                const duration = practiceSessions[j].get("duration");
+
+                items.push({
+                  reportedAt: this.toLocalDateString(e.get("reportedAt")),
+                  sessionName,
+                  duration: this.formatDuration(duration)
+                });
               }
-              return {
-                sessionName: sessionName,
+            } else {
+              items.push({
                 reportedAt: this.toLocalDateString(e.get("reportedAt")),
-                count: this.formatCount(e.get("count")),
-                durations: this.formatCountList(e.get("durations"))
-              };
-            });
+                count: this.formatCount(e.get("count"))
+              });
+            }
+          }
         }
       }
       return items;

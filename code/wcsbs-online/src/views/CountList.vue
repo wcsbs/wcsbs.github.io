@@ -8,6 +8,7 @@
       :latestPracticeCount="buildLatestPracticeCount()"
       :practiceCounts="practiceInfo.counts"
       :practiceSubmodules="practiceInfo.practiceSubmodules"
+      :practiceSessions="practiceInfo.practiceSessions"
       :users="practiceInfo.users"
       :forAdmin="practiceInfo.forAdmin"
     />
