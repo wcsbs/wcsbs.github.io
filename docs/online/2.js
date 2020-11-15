@@ -1072,7 +1072,29 @@ var render = function() {
                                 },
                                 [_vm._v("修改")]
                               )
-                            : _vm._e()
+                            : _vm._e(),
+                          _c(
+                            "b-button",
+                            {
+                              attrs: { variant: "info" },
+                              on: {
+                                click: function($event) {
+                                  _vm.session.showMoreDetails = !_vm.session
+                                    .showMoreDetails
+                                }
+                              }
+                            },
+                            [
+                              _vm.session.showMoreDetails
+                                ? _c("b-icon", {
+                                    attrs: { icon: "chevron-double-up" }
+                                  })
+                                : _c("b-icon", {
+                                    attrs: { icon: "chevron-double-down" }
+                                  })
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
@@ -1241,29 +1263,7 @@ var render = function() {
                                       )
                                     ]
                                   )
-                                : _vm._e(),
-                              _c(
-                                "b-button",
-                                {
-                                  attrs: { variant: "info" },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.session.showMoreDetails = !_vm.session
-                                        .showMoreDetails
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm.session.showMoreDetails
-                                    ? _c("b-icon", {
-                                        attrs: { icon: "chevron-double-up" }
-                                      })
-                                    : _c("b-icon", {
-                                        attrs: { icon: "chevron-double-down" }
-                                      })
-                                ],
-                                1
-                              )
+                                : _vm._e()
                             ],
                             1
                           )
