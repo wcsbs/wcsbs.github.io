@@ -94,6 +94,11 @@ const getters = {
 const getLastWeek = function() {
   var curr = new Date();
   var sunday = curr.getDate() - curr.getDay(); // Sunday is the day of the month - the day of the week
+  if (curr.getDay() == 0) {
+    // today is Sunday; we need last Sunday
+    sunday -= 7;
+  }
+
   var monday = sunday - 6;
 
   sunday = new Date(curr.setDate(sunday));
