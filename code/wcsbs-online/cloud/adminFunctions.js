@@ -213,7 +213,6 @@ Parse.Cloud.define(
                 result.count = await commonFunctions.reportPracticeCountV2(
                   parseUser,
                   practiceId,
-                  undefined,
                   date,
                   count
                 );

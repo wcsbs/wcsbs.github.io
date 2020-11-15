@@ -19,28 +19,28 @@ const requireRole = (userWithRoles, role) => {
 const reportPracticeCountV2 = async function(
   user,
   practiceId,
-  practiceSubmoduleId,
   reportedAt,
   count,
-  durations
+  practiceSessions
 ) {
   requireAuth(user);
 
   const userId = user.id;
   logger.info(
-    `reportPracticeCountV2 - userId: ${userId} practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count} durations: ${durations}`
+    `reportPracticeCountV2 - userId: ${userId} practiceId: ${practiceId} reportedAt: ${reportedAt} count: ${count} practiceSessions: ${JSON.stringify(
+      practiceSessions
+    )}`
   );
 
   var query = new Parse.Query("Practice");
   query.equalTo("objectId", practiceId);
   const practice = await query.first();
-  const relation = practice.relation("counts");
+  var relation = practice.relation("counts");
   var newCount = false;
   var delta = count;
 
   query = relation.query();
   query.equalTo("userId", userId);
-  query.equalTo("submoduleId", practiceSubmoduleId);
   query.equalTo("reportedAt", reportedAt);
   var currentPracticeCount = await query.first();
 
@@ -48,14 +48,12 @@ const reportPracticeCountV2 = async function(
     currentPracticeCount = new Parse.Object("UserPracticeCount");
     currentPracticeCount.set("userId", userId);
     currentPracticeCount.set("reportedAt", reportedAt);
-    currentPracticeCount.set("submoduleId", practiceSubmoduleId);
     newCount = true;
   } else {
     delta -= currentPracticeCount.get("count");
   }
 
   currentPracticeCount.set("count", count);
-  currentPracticeCount.set("durations", durations);
   currentPracticeCount = await currentPracticeCount.save(null, MASTER_KEY);
 
   query = relation.query();
@@ -81,11 +79,55 @@ const reportPracticeCountV2 = async function(
     await practice.save(null, MASTER_KEY);
   }
 
+  var resultPracticeSessions = [];
+  if (practiceSessions) {
+    relation = currentPracticeCount.relation("practiceSessions");
+    query = relation.query();
+    query.ascending("index");
+    var parsePracticeSessions = await query.limit(MAX_QUERY_COUNT).find();
+
+    const length =
+      parsePracticeSessions.length > practiceSessions.length
+        ? parsePracticeSessions.length
+        : practiceSessions.length;
+    for (var i = 0; i < length; i++) {
+      var parsePracticeSession = undefined;
+      if (i < parsePracticeSessions.length) {
+        parsePracticeSession = parsePracticeSessions[i];
+      } else {
+        parsePracticeSession = new Parse.Object("UserPracticeSession");
+      }
+      resultPracticeSessions.push(parsePracticeSession);
+
+      if (i < practiceSessions.length) {
+        parsePracticeSession.set("index", i + 1);
+        parsePracticeSession.set(
+          "submoduleId",
+          practiceSessions[i].submoduleId
+        );
+        parsePracticeSession.set("duration", practiceSessions[i].duration);
+        parsePracticeSession = await parsePracticeSession.save(
+          null,
+          MASTER_KEY
+        );
+
+        if (i >= parsePracticeSessions.length) {
+          relation.add(parsePracticeSession);
+        }
+      } else {
+        relation.remove(parsePracticeSession);
+        await parsePracticeSession.destroy();
+      }
+    }
+    currentPracticeCount = await currentPracticeCount.save(null, MASTER_KEY);
+  }
+
   return {
     id: currentPracticeCount._getId(),
     count: currentPracticeCount.get("count"),
     reportedAt: currentPracticeCount.get("reportedAt"),
-    accumulatedCount: accumulatedCount.get("count")
+    accumulatedCount: accumulatedCount.get("count"),
+    resultPracticeSessions
   };
 };
 

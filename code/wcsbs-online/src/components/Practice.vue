@@ -52,35 +52,64 @@
                 readonly: true
               }"
             />
+            <b-input-group-append v-if="practiceSubmodules.length > 0">
+              <b-button type="submit" variant="primary">提交</b-button>
+            </b-input-group-append>
           </b-input-group>
-          <b-input-group
-            v-if="practiceSubmodules.length > 0"
-            prepend="选择修法："
-            class="mt-3"
-          >
-            <select v-model="practiceObj.submoduleId">
-              <option
-                v-for="session in practiceSubmodules"
-                v-bind:key="session.id"
-                v-bind:value="session.id"
-                >{{ session.name }}</option
-              >
-            </select>
-          </b-input-group>
-          <b-input-group
-            v-if="practiceObj.requireDuration"
-            prepend="输入时长："
-            class="mt-3"
-          >
-            <b-form-input
-              id="input-count"
-              v-model="practiceObj.newDuration"
-              type="number"
-              required
-              placeholder="输入时长"
-            ></b-form-input>
-          </b-input-group>
-          <b-input-group prepend="输入报数：" class="mt-3">
+          <div v-if="practiceSubmodules.length > 0">
+            <b-input-group prepend="输入时长：" class="mt-3">
+              <b-form-input
+                id="input-hours"
+                v-model="practiceObj.newDurationHours"
+                type="number"
+                placeholder="多少小时？"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-input
+                  id="input-minutes"
+                  v-model="practiceObj.newDurationMinutes"
+                  type="number"
+                  placeholder="多少分钟？"
+                ></b-form-input>
+              </b-input-group-append>
+            </b-input-group>
+            <b-input-group prepend="选择修法：" class="mt-3">
+              <select v-model="practiceObj.submoduleId">
+                <option
+                  v-for="session in practiceSubmodules"
+                  v-bind:key="session.id"
+                  v-bind:value="session.id"
+                  >{{ session.name }}</option
+                >
+              </select>
+              <b-input-group-append>
+                <b-button variant="success" v-on:click="addPracticeSession()"
+                  >增加</b-button
+                >
+              </b-input-group-append>
+            </b-input-group>
+            <b-input-group
+              v-for="(session, index) in practiceObj.sessions"
+              :key="session.id + index"
+              prepend="修法座次："
+              class="mt-3"
+            >
+              <b-form-input
+                readonly
+                :value="
+                  `(${index + 1}) ${session.name}：${session.duration}分钟`
+                "
+              ></b-form-input>
+              <b-input-group-append>
+                <b-button
+                  variant="warning"
+                  v-on:click="removePracticeSession(index)"
+                  >删除</b-button
+                >
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+          <b-input-group v-else prepend="输入报数：" class="mt-3">
             <b-form-input
               id="input-count"
               v-model="practiceObj.newCount"
@@ -136,12 +165,12 @@ export default {
       practiceObj: {
         name: this.practice.get("name"),
         description: this.practice.get("description"),
-        requireDuration: this.practice.get("requireDuration"),
         showDescription: false,
         showReportingCount: false,
         newCountReportedAt: "",
         newCount: "",
-        submoduleId: undefined
+        submoduleId: undefined,
+        sessions: []
       },
       practiceCountObj: this.buildPracticeCountObj(this.latestPracticeCount),
       fields: this.buildPracticeCountFields(),
@@ -291,8 +320,24 @@ export default {
         .showReportingCount;
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
-      this.practiceObj.newDuration = undefined;
+      this.practiceObj.newDurationHours = undefined;
+      this.practiceObj.newDurationMinutes = undefined;
       this.practiceObj.submoduleId = undefined;
+    },
+    addPracticeSession() {
+      const id = this.practiceObj.submoduleId;
+      const name = this.practiceSubmodules.find(e => e.id == id).name;
+      var duration = 0;
+      if (this.practiceObj.newDurationHours) {
+        duration += parseInt(this.practiceObj.newDurationHours) * 60;
+      }
+      if (this.practiceObj.newDurationMinutes) {
+        duration += parseInt(this.practiceObj.newDurationMinutes);
+      }
+      this.practiceObj.sessions.push({ id, name, duration });
+    },
+    removePracticeSession(index) {
+      this.practiceObj.sessions.splice(index, 1);
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -301,18 +346,22 @@ export default {
         cancelText: "取消",
         loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
       };
-      const practiceSubmoduleId = this.practiceObj.submoduleId;
-      var sessionName = "";
-      if (practiceSubmoduleId) {
-        sessionName = this.practiceSubmodules.find(
-          e => e.id == practiceSubmoduleId
-        ).name;
+
+      const practiceSessions =
+        this.practiceSubmodules.length == 0
+          ? undefined
+          : this.practiceObj.sessions.map(e => {
+              return { submoduleId: e.id, duration: e.duration };
+            });
+      if (this.practiceSubmodules.length > 0) {
+        this.practiceObj.newCount = this.practiceObj.sessions.length.toString();
       }
+
       const message = {
         title: this.practiceObj.name,
-        body: `新增${sessionName}报数${
-          this.practiceObj.newCount
-        } @ ${this.toLocalDateString(this.practiceObj.newCountReportedAt)}？`
+        body: `新增报数${this.practiceObj.newCount} @ ${this.toLocalDateString(
+          this.practiceObj.newCountReportedAt
+        )}？`
       };
       const practiceId = this.practice.id;
 
@@ -324,15 +373,12 @@ export default {
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
 
       const count = parseInt(this.practiceObj.newCount);
-      var durations;
-      var duration = this.practiceObj.newDuration;
-      if (duration) {
-        durations = [parseInt(duration)];
-      }
       const thisComponent = this;
 
       console.log(
-        `home:reportPracticeCount - practiceId: ${practiceId} practiceSubmoduleId: ${practiceSubmoduleId} reportedAt: ${reportedAt} count: ${count} durations: ${durations}`
+        `home:reportPracticeCount - practiceId: ${practiceId} reportedAt: ${reportedAt} count: ${count} practiceSessions: ${JSON.stringify(
+          practiceSessions
+        )}`
       );
 
       this.$dialog
@@ -340,10 +386,9 @@ export default {
         .then(function(dialog) {
           Parse.Cloud.run("home:reportPracticeCountV2", {
             practiceId,
-            practiceSubmoduleId,
             reportedAt,
             count,
-            durations
+            practiceSessions
           })
             .then(result => {
               console.log(
