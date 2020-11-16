@@ -89,7 +89,7 @@ export default {
               }
             }
           }
-          if (result.length == 0) {
+          if (!result || result.length == 0) {
             result = [{ 错误: "您不是正式学员，不能下载统计报表！" }];
           }
           return result;
@@ -97,7 +97,7 @@ export default {
         .catch(e => {
           console.log(`error in generateReport: ${e}`);
           thisComponent.$dialog.alert(`error in generateReport: ${e}`);
-          return e;
+          return [{ 错误: `下载失败：${JSON.stringify(e)}` }];
         });
     },
     startDownload() {

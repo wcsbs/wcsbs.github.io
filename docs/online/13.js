@@ -126,7 +126,7 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                     }
                   }
 
-                  if (result.length == 0) {
+                  if (!result || result.length == 0) {
                     result = [{
                       错误: "您不是正式学员，不能下载统计报表！"
                     }];
@@ -136,7 +136,9 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 }).catch(function (e) {
                   console.log("error in generateReport: ".concat(e));
                   thisComponent.$dialog.alert("error in generateReport: ".concat(e));
-                  return e;
+                  return [{
+                    错误: "\u4E0B\u8F7D\u5931\u8D25\uFF1A".concat(JSON.stringify(e))
+                  }];
                 });
 
               case 10:
