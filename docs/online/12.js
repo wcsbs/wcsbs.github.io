@@ -126,6 +126,12 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                     }
                   }
 
+                  if (result.length == 0) {
+                    result = [{
+                      错误: "您不是正式学员，不能下载统计报表！"
+                    }];
+                  }
+
                   return result;
                 }).catch(function (e) {
                   console.log("error in generateReport: ".concat(e));
