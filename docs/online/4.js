@@ -190,6 +190,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
 
 
 
@@ -928,14 +930,22 @@ var render = function() {
                 ? _c(
                     "div",
                     [
-                      _c("hr"),
-                      _c("DownloadReport", {
-                        attrs: {
-                          forSelf: true,
-                          practiceId: _vm.practice._getId(),
-                          worksheet: _vm.practice.get("name") + "统计"
-                        }
-                      }),
+                      !_vm.forAdmin
+                        ? _c(
+                            "div",
+                            [
+                              _c("hr"),
+                              _c("DownloadReport", {
+                                attrs: {
+                                  forSelf: true,
+                                  practiceId: _vm.practice._getId(),
+                                  worksheet: _vm.practice.get("name") + "统计"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
                       _c("h5", [
                         _vm._v(
                           "总计有 " + _vm._s(_vm.items.length) + " 条报数记录"

@@ -131,12 +131,14 @@
           readonly
         ></b-form-textarea>
         <div v-if="practiceCounts">
-          <hr />
-          <DownloadReport
-            :forSelf="true"
-            :practiceId="practice._getId()"
-            :worksheet="`${practice.get('name')}统计`"
-          />
+          <div v-if="!forAdmin">
+            <hr />
+            <DownloadReport
+              :forSelf="true"
+              :practiceId="practice._getId()"
+              :worksheet="`${practice.get('name')}统计`"
+            />
+          </div>
           <h5>总计有 {{ items.length }} 条报数记录</h5>
           <b-table striped hover :items="items" :fields="fields"></b-table>
         </div>

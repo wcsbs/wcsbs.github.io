@@ -98,6 +98,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
 
 
 
@@ -193,10 +195,18 @@ var render = function() {
           "div",
           [
             _c("h3", { domProps: { textContent: _vm._s(_vm.classInfo.name) } }),
-            _c("DownloadReport", {
-              attrs: { forSelf: true, worksheet: "出席统计" }
-            }),
-            _c("hr"),
+            !_vm.classInfo.forAdmin
+              ? _c(
+                  "div",
+                  [
+                    _c("DownloadReport", {
+                      attrs: { forSelf: true, worksheet: "出席统计" }
+                    }),
+                    _c("hr")
+                  ],
+                  1
+                )
+              : _vm._e(),
             _c("div", { staticClass: "input-group mb-3" }, [
               _c("input", {
                 directives: [

@@ -5,8 +5,10 @@
     </div>
     <div v-else>
       <h3 v-text="classInfo.name" />
-      <DownloadReport :forSelf="true" worksheet="出席统计" />
-      <hr />
+      <div v-if="!classInfo.forAdmin">
+        <DownloadReport :forSelf="true" worksheet="出席统计" />
+        <hr />
+      </div>
       <div class="input-group mb-3">
         <input
           type="text"
