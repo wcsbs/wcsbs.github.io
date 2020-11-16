@@ -63,6 +63,7 @@ const loadStudentPracticeDetailsV2 = async function(
       if (accumulatedCount) {
         query = relation.query();
         query.equalTo("userId", userId);
+        query.greaterThan("count", 0);
         query.descending("reportedAt");
         const latestCount = await query.first();
 
@@ -514,7 +515,7 @@ Parse.Cloud.define(
 
       if (moduleId) {
         result.practiceSessions = [];
-        for (var i = 0; i < parseCounts.length; i++) {
+        for (i = 0; i < parseCounts.length; i++) {
           relation = parseCounts[i].relation("practiceSessions");
           query = relation.query();
           query.ascending("index");

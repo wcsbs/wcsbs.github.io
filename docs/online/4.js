@@ -191,7 +191,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
-//
 
 
 
@@ -374,11 +373,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       return items;
     },
     buildPracticeCountObj: function buildPracticeCountObj(latestPracticeCount) {
-      // console.log(
-      //   `buildPracticeCountObj - this.forAdmin: ${
-      //     this.forAdmin
-      //   } ${JSON.stringify(latestPracticeCount)}`
-      // );
       return this.forAdmin ? {
         latestCount: latestPracticeCount && latestPracticeCount.reportedAt ? "".concat(this.toLocalDateString(new Date(latestPracticeCount.reportedAt))) : "未报数",
         accumulatedCount: latestPracticeCount && latestPracticeCount.accumulatedCount ? this.formatCount(latestPracticeCount.accumulatedCount) : "未报数"
@@ -421,9 +415,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     },
     addPracticeSession: function addPracticeSession() {
       var id = this.practiceObj.submoduleId;
-      var name = this.practiceSubmodules.find(function (e) {
-        return e.id == id;
-      }).name;
       var duration = 0;
 
       if (this.practiceObj.newDurationHours) {
@@ -434,11 +425,28 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         duration += parseInt(this.practiceObj.newDurationMinutes);
       }
 
-      this.practiceObj.sessions.push({
-        id: id,
-        name: name,
-        duration: duration
-      });
+      var errorMessage = "";
+
+      if (duration < 30) {
+        errorMessage = "".concat(errorMessage, "\u6BCF\u5EA7\u65F6\u957F\u4E0D\u80FD\u5C11\u4E8E30\u5206\u949F\uFF01");
+      }
+
+      if (!id) {
+        errorMessage = "".concat(errorMessage, "\u8BF7\u9009\u62E9\u4FEE\u6CD5\uFF01");
+      }
+
+      if (errorMessage.length) {
+        this.$dialog.alert(errorMessage);
+      } else {
+        var name = this.practiceSubmodules.find(function (e) {
+          return e.id == id;
+        }).name;
+        this.practiceObj.sessions.push({
+          id: id,
+          name: name,
+          duration: duration
+        });
+      }
     },
     removePracticeSession: function removePracticeSession(index) {
       this.practiceObj.sessions.splice(index, 1);
@@ -462,9 +470,29 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         this.practiceObj.newCount = this.practiceObj.sessions.length.toString();
       }
 
+      if (this.practiceObj.newCount) {
+        this.practiceObj.newCount = this.practiceObj.newCount.trim();
+      }
+
+      var errorMessage = "";
+
+      if (!this.practiceObj.newCountReportedAt) {
+        errorMessage = "".concat(errorMessage, "\u8BF7\u9009\u62E9\u65E5\u671F\uFF01");
+      }
+
+      if (!this.practiceObj.newCount || !this.practiceObj.newCount.length) {
+        errorMessage = "".concat(errorMessage, "\u8BF7\u8F93\u5165\u62A5\u6570\uFF01");
+      }
+
+      if (errorMessage.length) {
+        this.$dialog.alert(errorMessage);
+        return;
+      }
+
+      var prepend = this.practiceObj.newCount === "0" ? "\u5220\u9664\u62A5\u6570" : "\u65B0\u589E\u62A5\u6570".concat(this.practiceObj.newCount);
       var message = {
         title: this.practiceObj.name,
-        body: "\u65B0\u589E\u62A5\u6570".concat(this.practiceObj.newCount, " @ ").concat(this.toLocalDateString(this.practiceObj.newCountReportedAt), "\uFF1F")
+        body: "".concat(prepend, " @ ").concat(this.toLocalDateString(this.practiceObj.newCountReportedAt), "\uFF1F")
       };
       var practiceId = this.practice.id;
       var reportedAt = new Date(0);
@@ -875,7 +903,6 @@ var render = function() {
                                 attrs: {
                                   id: "input-count",
                                   type: "number",
-                                  required: "",
                                   placeholder: "输入报数"
                                 },
                                 model: {

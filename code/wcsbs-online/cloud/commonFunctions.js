@@ -122,6 +122,12 @@ const reportPracticeCountV2 = async function(
     currentPracticeCount = await currentPracticeCount.save(null, MASTER_KEY);
   }
 
+  query = relation.query();
+  query.equalTo("userId", userId);
+  query.greaterThan("count", 0);
+  query.descending("reportedAt");
+  currentPracticeCount = await query.first();
+
   return {
     id: currentPracticeCount._getId(),
     count: currentPracticeCount.get("count"),

@@ -114,7 +114,6 @@
               id="input-count"
               v-model="practiceObj.newCount"
               type="number"
-              required
               placeholder="输入报数"
             ></b-form-input>
             <b-input-group-append>
@@ -298,11 +297,6 @@ export default {
       return items;
     },
     buildPracticeCountObj(latestPracticeCount) {
-      // console.log(
-      //   `buildPracticeCountObj - this.forAdmin: ${
-      //     this.forAdmin
-      //   } ${JSON.stringify(latestPracticeCount)}`
-      // );
       return this.forAdmin
         ? {
             latestCount:
@@ -366,7 +360,6 @@ export default {
     },
     addPracticeSession() {
       const id = this.practiceObj.submoduleId;
-      const name = this.practiceSubmodules.find(e => e.id == id).name;
       var duration = 0;
       if (this.practiceObj.newDurationHours) {
         duration += parseInt(this.practiceObj.newDurationHours) * 60;
@@ -374,7 +367,20 @@ export default {
       if (this.practiceObj.newDurationMinutes) {
         duration += parseInt(this.practiceObj.newDurationMinutes);
       }
-      this.practiceObj.sessions.push({ id, name, duration });
+
+      var errorMessage = "";
+      if (duration < 30) {
+        errorMessage = `${errorMessage}每座时长不能少于30分钟！`;
+      }
+      if (!id) {
+        errorMessage = `${errorMessage}请选择修法！`;
+      }
+      if (errorMessage.length) {
+        this.$dialog.alert(errorMessage);
+      } else {
+        const name = this.practiceSubmodules.find(e => e.id == id).name;
+        this.practiceObj.sessions.push({ id, name, duration });
+      }
     },
     removePracticeSession(index) {
       this.practiceObj.sessions.splice(index, 1);
@@ -397,9 +403,30 @@ export default {
         this.practiceObj.newCount = this.practiceObj.sessions.length.toString();
       }
 
+      if (this.practiceObj.newCount) {
+        this.practiceObj.newCount = this.practiceObj.newCount.trim();
+      }
+
+      var errorMessage = "";
+      if (!this.practiceObj.newCountReportedAt) {
+        errorMessage = `${errorMessage}请选择日期！`;
+      }
+      if (!this.practiceObj.newCount || !this.practiceObj.newCount.length) {
+        errorMessage = `${errorMessage}请输入报数！`;
+      }
+
+      if (errorMessage.length) {
+        this.$dialog.alert(errorMessage);
+        return;
+      }
+
+      const prepend =
+        this.practiceObj.newCount === "0"
+          ? `删除报数`
+          : `新增报数${this.practiceObj.newCount}`;
       const message = {
         title: this.practiceObj.name,
-        body: `新增报数${this.practiceObj.newCount} @ ${this.toLocalDateString(
+        body: `${prepend} @ ${this.toLocalDateString(
           this.practiceObj.newCountReportedAt
         )}？`
       };
