@@ -131,6 +131,12 @@
           readonly
         ></b-form-textarea>
         <div v-if="practiceCounts">
+          <hr />
+          <DownloadReport
+            :forSelf="true"
+            :practiceId="practice._getId()"
+            :worksheet="`${practice.get('name')}统计`"
+          />
           <h5>总计有 {{ items.length }} 条报数记录</h5>
           <b-table striped hover :items="items" :fields="fields"></b-table>
         </div>
@@ -141,13 +147,15 @@
 
 <script>
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
+import DownloadReport from "@/components/DownloadReport";
 import Parse from "parse";
 import { mapGetters } from "vuex";
 
 export default {
   name: "Practice",
   components: {
-    DatePicker
+    DatePicker,
+    DownloadReport
   },
   props: {
     practice: { type: Object, required: true },
@@ -288,11 +296,11 @@ export default {
       return items;
     },
     buildPracticeCountObj(latestPracticeCount) {
-      console.log(
-        `buildPracticeCountObj - this.forAdmin: ${
-          this.forAdmin
-        } ${JSON.stringify(latestPracticeCount)}`
-      );
+      // console.log(
+      //   `buildPracticeCountObj - this.forAdmin: ${
+      //     this.forAdmin
+      //   } ${JSON.stringify(latestPracticeCount)}`
+      // );
       return this.forAdmin
         ? {
             latestCount:

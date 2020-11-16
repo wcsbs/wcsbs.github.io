@@ -72,7 +72,9 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
       type: Object,
       required: false
     },
-    worksheet: String
+    worksheet: String,
+    practiceId: String,
+    forSelf: Boolean
   },
   data: function data() {
     return {
@@ -87,7 +89,7 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
     },
     fetchData: function () {
       var _fetchData = Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var thisComponent, classTeam, classId, practiceId, classTeams, monthlyTotalOnly;
+        var thisComponent, classTeam, classId, practiceId, forSelf, classTeams, monthlyTotalOnly;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -95,10 +97,12 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 thisComponent = this;
                 classTeam = this.classTeam;
                 classId = this.classInfo.id;
-                practiceId = this.classInfo.practiceId;
-                classTeams = classTeam ? [classTeam] : this.classTeams;
-                monthlyTotalOnly = !classTeam;
-                _context.next = 8;
+                practiceId = this.forSelf ? this.practiceId : this.classInfo.practiceId;
+                forSelf = this.forSelf;
+                classTeams = forSelf ? undefined : classTeam ? [classTeam] : this.classTeams;
+                monthlyTotalOnly = !classTeam && !this.forSelf;
+                console.log("generateReport - forSelf: ".concat(forSelf));
+                _context.next = 10;
                 return parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("class:generateReport", {
                   classId: classId,
                   classTeams: classTeams,
@@ -107,15 +111,18 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 }).then(function (result) {
                   // console.log(`generateReport - result: ${JSON.stringify(result)}`);
                   console.log("generateReport - #result: ".concat(result.length));
-                  var lastTeamIndex = -1;
 
-                  for (var i = 0; i < result.length; i++) {
-                    var record = result[i];
-                    var index = parseInt(record["组别"]);
+                  if (!forSelf) {
+                    var lastTeamIndex = -1;
 
-                    if (index != lastTeamIndex) {
-                      record["组员"] = "\u7EC4\u957F".concat(record["组员"]);
-                      lastTeamIndex = index;
+                    for (var i = 0; i < result.length; i++) {
+                      var record = result[i];
+                      var index = parseInt(record["组别"]);
+
+                      if (index != lastTeamIndex) {
+                        record["组员"] = "\u7EC4\u957F".concat(record["组员"]);
+                        lastTeamIndex = index;
+                      }
                     }
                   }
 
@@ -126,10 +133,10 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                   return e;
                 });
 
-              case 8:
+              case 10:
                 return _context.abrupt("return", _context.sent);
 
-              case 9:
+              case 11:
               case "end":
                 return _context.stop();
             }
@@ -154,10 +161,10 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
 
 /***/ }),
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/ReportManagement.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/ReportManagement.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/CountList.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/CountList.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -170,11 +177,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es6.object.keys */ "./node_modules/core-js/modules/es6.object.keys.js");
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _components_ClassTeam__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/ClassTeam */ "./src/components/ClassTeam.vue");
-/* harmony import */ var _components_DownloadReport__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/DownloadReport */ "./src/components/DownloadReport.vue");
-/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/store */ "./src/store/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/store */ "./src/store/index.js");
+/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_Practice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/Practice */ "./src/components/Practice.vue");
 
 
 
@@ -201,48 +207,49 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "ReportManagement",
+  name: "CountList",
   components: {
-    ClassTeam: _components_ClassTeam__WEBPACK_IMPORTED_MODULE_5__["default"],
-    DownloadReport: _components_DownloadReport__WEBPACK_IMPORTED_MODULE_6__["default"]
+    Practice: _components_Practice__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(["isLoadingStats", "classInfo", "classTeams", "isClassAdmin", "isSystemAdmin"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_6__["mapGetters"])(["isLoadingPracticeCounts", "practiceInfo"])),
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FETCH_STATS"], to.params).then(function () {
+    var practiceId = to.params.practiceId;
+    var forAdmin = to.params.forAdmin;
+    console.log("forAdmin: ".concat(forAdmin, " practiceId: ").concat(practiceId));
+    _store__WEBPACK_IMPORTED_MODULE_4__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["FETCH_PRACTICE_COUNTS"], to.params).then(function () {
       next();
     });
+  },
+  methods: {
+    buildLatestPracticeCount: function buildLatestPracticeCount() {
+      var latestPracticeCount = {};
+
+      if (this.practiceInfo.counts[0]) {
+        if (this.practiceInfo.forAdmin) {
+          latestPracticeCount.reportedAt = new Date();
+          latestPracticeCount.accumulatedCount = 0;
+
+          for (var i = 0; i < this.practiceInfo.counts.length; i++) {
+            latestPracticeCount.accumulatedCount += this.practiceInfo.counts[i].get("count");
+          }
+        } else {
+          latestPracticeCount = {
+            count: this.practiceInfo.counts[0].get("count"),
+            reportedAt: this.practiceInfo.counts[0].get("reportedAt"),
+            accumulatedCount: this.practiceInfo.counts[this.practiceInfo.counts.length - 1].get("count")
+          };
+        }
+      }
+
+      return latestPracticeCount;
+    }
+  },
+  mounted: function mounted() {//this.$forceUpdate();
   }
 });
 
@@ -301,10 +308,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/ReportManagement.vue?vue&type=template&id=0bf06551&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/ReportManagement.vue?vue&type=template&id=0bf06551& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/CountList.vue?vue&type=template&id=663f2f03&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/views/CountList.vue?vue&type=template&id=663f2f03& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -316,70 +323,27 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.isLoadingStats
-      ? _c("div", [_vm._v("正在获取统计信息...")])
-      : _c(
-          "div",
-          [
-            _c("h3", [
-              _vm._v(
-                "\n      " +
-                  _vm._s(_vm.classInfo.name) +
-                  " --\n      " +
-                  _vm._s(
-                    !_vm.classInfo.practiceId
-                      ? "出席统计"
-                      : _vm.classInfo.practiceName + "实修统计"
-                  ) +
-                  "\n    "
-              )
-            ]),
-            _vm.classInfo.canDownloadClassReport
-              ? _c(
-                  "div",
-                  [
-                    _c("DownloadReport", {
-                      attrs: {
-                        worksheet: !_vm.classInfo.practiceId
-                          ? "中组出席统计"
-                          : "中组" + _vm.classInfo.practiceName + "统计"
-                      }
-                    }),
-                    _c("hr")
-                  ],
-                  1
-                )
-              : _vm._e(),
-            _vm._l(_vm.classTeams, function(classTeam, index) {
-              return _c("div", { key: classTeam.id + classTeam.name + index }, [
-                index > 0 && classTeam.members.length > 0
-                  ? _c(
-                      "div",
-                      [
-                        _c("ClassTeam", { attrs: { classTeam: classTeam } }),
-                        _c("DownloadReport", {
-                          attrs: {
-                            classTeam: classTeam,
-                            worksheet: !_vm.classInfo.practiceId
-                              ? classTeam.name + "出席统计"
-                              : "" +
-                                classTeam.name +
-                                _vm.classInfo.practiceName +
-                                "统计"
-                          }
-                        }),
-                        _c("hr")
-                      ],
-                      1
-                    )
-                  : _vm._e()
-              ])
-            })
-          ],
-          2
-        )
-  ])
+  return _vm.isLoadingPracticeCounts
+    ? _c("div", { staticClass: "classSession-preview" }, [
+        _vm._v("\n  正在获取报数记录...\n")
+      ])
+    : _c(
+        "div",
+        [
+          _c("Practice", {
+            attrs: {
+              practice: _vm.practiceInfo.practice,
+              latestPracticeCount: _vm.buildLatestPracticeCount(),
+              practiceCounts: _vm.practiceInfo.counts,
+              practiceSubmodules: _vm.practiceInfo.practiceSubmodules,
+              practiceSessions: _vm.practiceInfo.practiceSessions,
+              users: _vm.practiceInfo.users,
+              forAdmin: _vm.practiceInfo.forAdmin
+            }
+          })
+        ],
+        1
+      )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -475,17 +439,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/views/ReportManagement.vue":
-/*!****************************************!*\
-  !*** ./src/views/ReportManagement.vue ***!
-  \****************************************/
+/***/ "./src/views/CountList.vue":
+/*!*********************************!*\
+  !*** ./src/views/CountList.vue ***!
+  \*********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ReportManagement.vue?vue&type=template&id=0bf06551& */ "./src/views/ReportManagement.vue?vue&type=template&id=0bf06551&");
-/* harmony import */ var _ReportManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ReportManagement.vue?vue&type=script&lang=js& */ "./src/views/ReportManagement.vue?vue&type=script&lang=js&");
+/* harmony import */ var _CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CountList.vue?vue&type=template&id=663f2f03& */ "./src/views/CountList.vue?vue&type=template&id=663f2f03&");
+/* harmony import */ var _CountList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CountList.vue?vue&type=script&lang=js& */ "./src/views/CountList.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -495,9 +459,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ReportManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _CountList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -511,52 +475,52 @@ if (true) {
   api.install(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js"))
   if (api.compatible) {
     module.hot.accept()
-    if (!api.isRecorded('0bf06551')) {
-      api.createRecord('0bf06551', component.options)
+    if (!api.isRecorded('663f2f03')) {
+      api.createRecord('663f2f03', component.options)
     } else {
-      api.reload('0bf06551', component.options)
+      api.reload('663f2f03', component.options)
     }
-    module.hot.accept(/*! ./ReportManagement.vue?vue&type=template&id=0bf06551& */ "./src/views/ReportManagement.vue?vue&type=template&id=0bf06551&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ReportManagement.vue?vue&type=template&id=0bf06551& */ "./src/views/ReportManagement.vue?vue&type=template&id=0bf06551&");
+    module.hot.accept(/*! ./CountList.vue?vue&type=template&id=663f2f03& */ "./src/views/CountList.vue?vue&type=template&id=663f2f03&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CountList.vue?vue&type=template&id=663f2f03& */ "./src/views/CountList.vue?vue&type=template&id=663f2f03&");
 (function () {
-      api.rerender('0bf06551', {
-        render: _ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__["render"],
-        staticRenderFns: _ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
+      api.rerender('663f2f03', {
+        render: _CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__["render"],
+        staticRenderFns: _CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
       })
     })(__WEBPACK_OUTDATED_DEPENDENCIES__); }.bind(this))
   }
 }
-component.options.__file = "src/views/ReportManagement.vue"
+component.options.__file = "src/views/CountList.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./src/views/ReportManagement.vue?vue&type=script&lang=js&":
-/*!*****************************************************************!*\
-  !*** ./src/views/ReportManagement.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************/
+/***/ "./src/views/CountList.vue?vue&type=script&lang=js&":
+/*!**********************************************************!*\
+  !*** ./src/views/CountList.vue?vue&type=script&lang=js& ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./ReportManagement.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/ReportManagement.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportManagement_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CountList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js??ref--12-0!../../node_modules/babel-loader/lib!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./CountList.vue?vue&type=script&lang=js& */ "./node_modules/cache-loader/dist/cjs.js?!./node_modules/babel-loader/lib/index.js!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/CountList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_cache_loader_dist_cjs_js_ref_12_0_node_modules_babel_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CountList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./src/views/ReportManagement.vue?vue&type=template&id=0bf06551&":
-/*!***********************************************************************!*\
-  !*** ./src/views/ReportManagement.vue?vue&type=template&id=0bf06551& ***!
-  \***********************************************************************/
+/***/ "./src/views/CountList.vue?vue&type=template&id=663f2f03&":
+/*!****************************************************************!*\
+  !*** ./src/views/CountList.vue?vue&type=template&id=663f2f03& ***!
+  \****************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./ReportManagement.vue?vue&type=template&id=0bf06551& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/ReportManagement.vue?vue&type=template&id=0bf06551&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1d050412-vue-loader-template"}!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/cache-loader/dist/cjs.js??ref--0-0!../../node_modules/vue-loader/lib??vue-loader-options!./CountList.vue?vue&type=template&id=663f2f03& */ "./node_modules/cache-loader/dist/cjs.js?{\"cacheDirectory\":\"node_modules/.cache/vue-loader\",\"cacheIdentifier\":\"1d050412-vue-loader-template\"}!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/cache-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./src/views/CountList.vue?vue&type=template&id=663f2f03&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReportManagement_vue_vue_type_template_id_0bf06551___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_cache_loader_dist_cjs_js_cacheDirectory_node_modules_cache_vue_loader_cacheIdentifier_1d050412_vue_loader_template_node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CountList_vue_vue_type_template_id_663f2f03___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

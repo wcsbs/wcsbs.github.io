@@ -13,11 +13,11 @@ const state = {
 };
 
 const getters = {
-  home(state) {
-    return state.home;
+  home(homeState) {
+    return homeState.home;
   },
-  isLoadingDashboards(state) {
-    return state.isLoadingDashboards;
+  isLoadingDashboards(homeState) {
+    return homeState.isLoadingDashboards;
   }
 };
 
@@ -30,8 +30,8 @@ const actions = {
       Parse.Cloud.run("home:loadDashboardsV2", { user })
         .then(result => {
           console.log(
-            // `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
-            `${FETCH_DASHBOARDS} - result: ${result}`
+            `${FETCH_DASHBOARDS} - result: ${JSON.stringify(result)}`
+            // `${FETCH_DASHBOARDS} - result: ${result}`
           );
           commit(FETCH_DASHBOARDS_END, result);
           resolve();
@@ -49,12 +49,12 @@ const actions = {
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 const mutations = {
-  [FETCH_DASHBOARDS_START](state) {
-    state.isLoadingDashboards = true;
+  [FETCH_DASHBOARDS_START](homeState) {
+    homeState.isLoadingDashboards = true;
   },
-  [FETCH_DASHBOARDS_END](state, result) {
-    state.home = result;
-    state.isLoadingDashboards = false;
+  [FETCH_DASHBOARDS_END](homeState, result) {
+    homeState.home = result;
+    homeState.isLoadingDashboards = false;
   }
 };
 

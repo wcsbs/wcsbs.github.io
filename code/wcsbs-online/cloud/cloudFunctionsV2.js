@@ -492,6 +492,7 @@ Parse.Cloud.define(
     } else {
       query.equalTo("userId", userId);
       query.descending("reportedAt");
+      query.greaterThan("count", 0);
     }
     const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
 
@@ -1037,6 +1038,7 @@ const loadDataForUser = async function(
             lastDate = new Date(date.getFullYear(), 0, 1);
           }
           query.greaterThanOrEqualTo("reportedAt", lastDate);
+          query.greaterThan("count", 0);
 
           const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
           if (parseCounts) {
@@ -1094,15 +1096,24 @@ Parse.Cloud.define(
   }) => {
     requireAuth(user);
 
-    var query = new Parse.Query("Class");
-    query.equalTo("objectId", classId);
-    var parseClass = await query.first();
+    var classQuery = new Parse.Query("Class");
+    if (classId) {
+      classQuery.equalTo("objectId", classId);
+    }
 
-    var parsePractice;
+    var query, parsePractice;
     if (practiceId) {
       query = new Parse.Query("Practice");
       query.equalTo("objectId", practiceId);
       parsePractice = await query.first();
+      if (!classId) {
+        classQuery.equalTo("practices", parsePractice);
+      }
+    }
+
+    var parseClass = await classQuery.first();
+    if (!classId) {
+      classId = parseClass.id;
     }
 
     const { csvHeader, mapDates } = commonFunctions.prepareReportGeneration(
@@ -1111,13 +1122,45 @@ Parse.Cloud.define(
       2020
     );
 
-    var results = [];
-
-    for (var i = 0; i < classTeams.length; i++) {
-      const team = classTeams[i];
+    var i,
+      parseTeam,
+      results = [];
+    if (!classTeams) {
+      //loading report for self
+      classTeams = [];
       query = new Parse.Query("Team");
-      query.equalTo("objectId", team.id);
-      const parseTeam = await query.first();
+      query.equalTo("classId", classId);
+      var parseTeams = await query.limit(MAX_QUERY_COUNT).find();
+      for (i = 0; i < parseTeams.length; i++) {
+        var membersOrder = parseTeams[i].get("membersOrder");
+        if (membersOrder) {
+          membersOrder = membersOrder.split(",");
+          logger.info(
+            `generateReport - membersOrder: ${JSON.stringify(membersOrder)}`
+          );
+
+          if (membersOrder.includes(user.id)) {
+            parseTeam = parseTeams[i];
+            classTeams.push({
+              members: [{ id: user.id }]
+            });
+            break;
+          }
+        }
+      }
+    }
+
+    logger.info(`generateReport - classTeams: ${JSON.stringify(classTeams)}`);
+    logger.info(`generateReport - parseTeam: ${JSON.stringify(parseTeam)}`);
+
+    for (i = 0; i < classTeams.length; i++) {
+      const team = classTeams[i];
+      if (i == 0 && !parseTeam) {
+        //parseTeam is loaded above if loading report for self
+        query = new Parse.Query("Team");
+        query.equalTo("objectId", team.id);
+        parseTeam = await query.first();
+      }
 
       for (var j = 0; j < team.members.length; j++) {
         query = new Parse.Query(Parse.User);

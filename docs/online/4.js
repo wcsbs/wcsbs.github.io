@@ -26,9 +26,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! v-calendar/lib/components/date-picker.umd */ "./node_modules/v-calendar/lib/components/date-picker.umd.js");
 /* harmony import */ var v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_DownloadReport__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/components/DownloadReport */ "./src/components/DownloadReport.vue");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
 
@@ -183,13 +184,21 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Practice",
   components: {
-    DatePicker: v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default.a
+    DatePicker: v_calendar_lib_components_date_picker_umd__WEBPACK_IMPORTED_MODULE_8___default.a,
+    DownloadReport: _components_DownloadReport__WEBPACK_IMPORTED_MODULE_9__["default"]
   },
   props: {
     practice: {
@@ -218,7 +227,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     },
     forAdmin: Boolean
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_10__["mapGetters"])(["isStudent"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_11__["mapGetters"])(["isStudent"])),
   data: function data() {
     return {
       practiceObj: {
@@ -363,7 +372,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       return items;
     },
     buildPracticeCountObj: function buildPracticeCountObj(latestPracticeCount) {
-      console.log("buildPracticeCountObj - this.forAdmin: ".concat(this.forAdmin, " ").concat(JSON.stringify(latestPracticeCount)));
+      // console.log(
+      //   `buildPracticeCountObj - this.forAdmin: ${
+      //     this.forAdmin
+      //   } ${JSON.stringify(latestPracticeCount)}`
+      // );
       return this.forAdmin ? {
         latestCount: latestPracticeCount && latestPracticeCount.reportedAt ? "".concat(this.toLocalDateString(new Date(latestPracticeCount.reportedAt))) : "未报数",
         accumulatedCount: latestPracticeCount && latestPracticeCount.accumulatedCount ? this.formatCount(latestPracticeCount.accumulatedCount) : "未报数"
@@ -460,7 +473,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       var thisComponent = this;
       console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " reportedAt: ").concat(reportedAt, " count: ").concat(count, " practiceSessions: ").concat(JSON.stringify(practiceSessions)));
       this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("home:reportPracticeCountV2", {
+        parse__WEBPACK_IMPORTED_MODULE_10___default.a.Cloud.run("home:reportPracticeCountV2", {
           practiceId: practiceId,
           reportedAt: reportedAt,
           count: count,
@@ -915,6 +928,14 @@ var render = function() {
                 ? _c(
                     "div",
                     [
+                      _c("hr"),
+                      _c("DownloadReport", {
+                        attrs: {
+                          forSelf: true,
+                          practiceId: _vm.practice._getId(),
+                          worksheet: _vm.practice.get("name") + "统计"
+                        }
+                      }),
                       _c("h5", [
                         _vm._v(
                           "总计有 " + _vm._s(_vm.items.length) + " 条报数记录"

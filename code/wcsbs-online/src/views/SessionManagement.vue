@@ -5,6 +5,8 @@
     </div>
     <div v-else>
       <h3 v-text="classInfo.name" />
+      <DownloadReport :forSelf="true" worksheet="出席统计" />
+      <hr />
       <div class="input-group mb-3">
         <input
           type="text"
@@ -62,6 +64,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ClassSession from "@/components/ClassSession";
+import DownloadReport from "@/components/DownloadReport";
 import { FETCH_SESSIONS, FILTER_SESSIONS } from "../store/actions.type";
 import store from "@/store";
 import Parse from "parse";
@@ -69,7 +72,8 @@ import Parse from "parse";
 export default {
   name: "SessionManagement",
   components: {
-    ClassSession
+    ClassSession,
+    DownloadReport
   },
   computed: {
     ...mapGetters([

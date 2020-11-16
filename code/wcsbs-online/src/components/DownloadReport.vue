@@ -36,7 +36,9 @@ export default {
   },
   props: {
     classTeam: { type: Object, required: false },
-    worksheet: String
+    worksheet: String,
+    practiceId: String,
+    forSelf: Boolean
   },
   data: function() {
     return {
@@ -55,9 +57,17 @@ export default {
       const thisComponent = this;
       const classTeam = this.classTeam;
       const classId = this.classInfo.id;
-      const practiceId = this.classInfo.practiceId;
-      const classTeams = classTeam ? [classTeam] : this.classTeams;
-      const monthlyTotalOnly = !classTeam;
+      const practiceId = this.forSelf
+        ? this.practiceId
+        : this.classInfo.practiceId;
+      const forSelf = this.forSelf;
+      const classTeams = forSelf
+        ? undefined
+        : classTeam
+        ? [classTeam]
+        : this.classTeams;
+      const monthlyTotalOnly = !classTeam && !this.forSelf;
+      console.log(`generateReport - forSelf: ${forSelf}`);
 
       return await Parse.Cloud.run("class:generateReport", {
         classId,
@@ -68,13 +78,15 @@ export default {
         .then(result => {
           // console.log(`generateReport - result: ${JSON.stringify(result)}`);
           console.log(`generateReport - #result: ${result.length}`);
-          var lastTeamIndex = -1;
-          for (var i = 0; i < result.length; i++) {
-            const record = result[i];
-            const index = parseInt(record["组别"]);
-            if (index != lastTeamIndex) {
-              record["组员"] = `组长${record["组员"]}`;
-              lastTeamIndex = index;
+          if (!forSelf) {
+            var lastTeamIndex = -1;
+            for (var i = 0; i < result.length; i++) {
+              const record = result[i];
+              const index = parseInt(record["组别"]);
+              if (index != lastTeamIndex) {
+                record["组员"] = `组长${record["组员"]}`;
+                lastTeamIndex = index;
+              }
             }
           }
           return result;

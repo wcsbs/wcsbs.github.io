@@ -20,10 +20,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _components_ClassSession__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/ClassSession */ "./src/components/ClassSession.vue");
-/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/store */ "./src/store/index.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _components_DownloadReport__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/components/DownloadReport */ "./src/components/DownloadReport.vue");
+/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/store */ "./src/store/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_10__);
 
 
 
@@ -95,6 +96,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+
 
 
 
@@ -103,11 +107,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SessionManagement",
   components: {
-    ClassSession: _components_ClassSession__WEBPACK_IMPORTED_MODULE_6__["default"]
+    ClassSession: _components_ClassSession__WEBPACK_IMPORTED_MODULE_6__["default"],
+    DownloadReport: _components_DownloadReport__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])(["isLoadingSessions", "classInfo", "classSessions", "sessionDetails", "isClassAdmin", "isTeachingAssistant", "isStudent"])),
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    _store__WEBPACK_IMPORTED_MODULE_8__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FETCH_SESSIONS"], to.params).then(function () {
+    _store__WEBPACK_IMPORTED_MODULE_9__["default"].dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_8__["FETCH_SESSIONS"], to.params).then(function () {
       next();
     });
   },
@@ -125,11 +130,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
   },
   methods: {
     filterSessions: function filterSessions(filterText) {
-      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FILTER_SESSIONS"], filterText);
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_8__["FILTER_SESSIONS"], filterText);
     },
     clearFilter: function clearFilter() {
       this.filterText = "";
-      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["FILTER_SESSIONS"], this.filterText);
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_8__["FILTER_SESSIONS"], this.filterText);
     },
     createSession: function createSession() {
       this.creatingSession = !this.creatingSession;
@@ -147,7 +152,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       var thisComponent = this;
       console.log("applyClass - classId: ".concat(classId));
       this.$dialog.confirm(message, options).then(function () {
-        parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("class:apply", {
+        parse__WEBPACK_IMPORTED_MODULE_10___default.a.Cloud.run("class:apply", {
           classId: classId
         }).then(function (result) {
           console.log("class:apply - result: ".concat(JSON.stringify(result)));
@@ -188,6 +193,10 @@ var render = function() {
           "div",
           [
             _c("h3", { domProps: { textContent: _vm._s(_vm.classInfo.name) } }),
+            _c("DownloadReport", {
+              attrs: { forSelf: true, worksheet: "出席统计" }
+            }),
+            _c("hr"),
             _c("div", { staticClass: "input-group mb-3" }, [
               _c("input", {
                 directives: [
