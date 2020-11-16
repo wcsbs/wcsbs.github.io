@@ -324,9 +324,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
               continue;
             }
 
-            var practiceSessions = this.practiceSessions[i];
+            if (this.practiceSessions && this.practiceSessions[i]) {
+              var practiceSessions = this.practiceSessions[i];
 
-            if (practiceSessions) {
               var _loop = function _loop() {
                 var submoduleId = practiceSessions[j].get("submoduleId");
                 sessionName = undefined;
@@ -363,11 +363,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       return items;
     },
     buildPracticeCountObj: function buildPracticeCountObj(latestPracticeCount) {
-      // console.log(
-      //   `buildPracticeCountObj - this.forAdmin: ${
-      //     this.forAdmin
-      //   } ${JSON.stringify(latestPracticeCount)}`
-      // );
+      console.log("buildPracticeCountObj - this.forAdmin: ".concat(this.forAdmin, " ").concat(JSON.stringify(latestPracticeCount)));
       return this.forAdmin ? {
         latestCount: latestPracticeCount && latestPracticeCount.reportedAt ? "".concat(this.toLocalDateString(new Date(latestPracticeCount.reportedAt))) : "未报数",
         accumulatedCount: latestPracticeCount && latestPracticeCount.accumulatedCount ? this.formatCount(latestPracticeCount.accumulatedCount) : "未报数"

@@ -258,8 +258,8 @@ export default {
               continue;
             }
 
-            const practiceSessions = this.practiceSessions[i];
-            if (practiceSessions) {
+            if (this.practiceSessions && this.practiceSessions[i]) {
+              const practiceSessions = this.practiceSessions[i];
               for (var j = 0; j < practiceSessions.length; j++) {
                 const submoduleId = practiceSessions[j].get("submoduleId");
                 var sessionName = undefined;
@@ -288,11 +288,11 @@ export default {
       return items;
     },
     buildPracticeCountObj(latestPracticeCount) {
-      // console.log(
-      //   `buildPracticeCountObj - this.forAdmin: ${
-      //     this.forAdmin
-      //   } ${JSON.stringify(latestPracticeCount)}`
-      // );
+      console.log(
+        `buildPracticeCountObj - this.forAdmin: ${
+          this.forAdmin
+        } ${JSON.stringify(latestPracticeCount)}`
+      );
       return this.forAdmin
         ? {
             latestCount:
