@@ -142,6 +142,12 @@
           <b-form-input readonly v-model="session.prestudyState"></b-form-input>
           <b-input-group-append>
             <b-button
+              variant="success"
+              v-if="needToShowPrestudyButton(0)"
+              v-on:click="updatePrestudyState(0)"
+              >圆满</b-button
+            >
+            <b-button
               variant="info"
               :href="sessionDetails.submodules[0].url"
               target="_blank"
@@ -164,6 +170,12 @@
               :value="toPrestudyStateString(sessionDetails, index)"
             ></b-form-input>
             <b-input-group-append>
+              <b-button
+                variant="success"
+                v-if="needToShowPrestudyButton(index)"
+                v-on:click="updatePrestudyState(index)"
+                >圆满</b-button
+              >
               <b-button variant="info" :href="submodule.url" target="_blank">
                 <b-icon icon="book"></b-icon>
               </b-button>
@@ -514,6 +526,67 @@ export default {
       }
 
       return `${chuanCheng}/${faBen}`;
+    },
+    needToShowPrestudyButton(index) {
+      if (this.forApplication || this.forAdmin) {
+        return false;
+      }
+      const sessionDetails = this.sessionDetails;
+      if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
+        const studyRecord = sessionDetails.submodules[index].studyRecord;
+        return !studyRecord.lineage || !studyRecord.textbook;
+      }
+      return false;
+    },
+    updatePrestudyState(index) {
+      console.log(`updatePrestudyState - ${index}`);
+
+      var msg = "确认已圆满传承和法本?";
+      const sessionDetails = this.sessionDetails;
+
+      const options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+      };
+      const message = {
+        title: sessionDetails.submodules[index].name,
+        body: msg
+      };
+      const thisComponent = this;
+      const userStudyRecord = { lineage: true, textbook: true };
+
+      this.$dialog
+        .confirm(message, options)
+        .then(function(dialog) {
+          Parse.Cloud.run("home:updateUserStudyRecord", {
+            pathname: sessionDetails.submodules[index].url,
+            userStudyRecord
+          })
+            .then(result => {
+              console.log(
+                `updateUserStudyRecord - result: ${JSON.stringify(result)}`
+              );
+              sessionDetails.submodules[index].studyRecord = result;
+              if (index == 0) {
+                thisComponent.session.prestudyState = thisComponent.toPrestudyStateString(
+                  sessionDetails,
+                  0
+                );
+              }
+              dialog.close();
+            })
+            .catch(e => {
+              console.log(`error in updateUserStudyRecord: ${e}`);
+              dialog.close();
+              thisComponent.$dialog.alert(
+                `error in updateUserStudyRecord: ${e}`
+              );
+            });
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
     },
     attendanceButtonName(secondButton) {
       if (secondButton) {

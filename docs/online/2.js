@@ -268,6 +268,18 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -568,6 +580,61 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       }
 
       return "".concat(chuanCheng, "/").concat(faBen);
+    },
+    needToShowPrestudyButton: function needToShowPrestudyButton(index) {
+      if (this.forApplication || this.forAdmin) {
+        return false;
+      }
+
+      var sessionDetails = this.sessionDetails;
+
+      if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
+        var studyRecord = sessionDetails.submodules[index].studyRecord;
+        return !studyRecord.lineage || !studyRecord.textbook;
+      }
+
+      return false;
+    },
+    updatePrestudyState: function updatePrestudyState(index) {
+      console.log("updatePrestudyState - ".concat(index));
+      var msg = "确认已圆满传承和法本?";
+      var sessionDetails = this.sessionDetails;
+      var options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+
+      };
+      var message = {
+        title: sessionDetails.submodules[index].name,
+        body: msg
+      };
+      var thisComponent = this;
+      var userStudyRecord = {
+        lineage: true,
+        textbook: true
+      };
+      this.$dialog.confirm(message, options).then(function (dialog) {
+        parse__WEBPACK_IMPORTED_MODULE_8___default.a.Cloud.run("home:updateUserStudyRecord", {
+          pathname: sessionDetails.submodules[index].url,
+          userStudyRecord: userStudyRecord
+        }).then(function (result) {
+          console.log("updateUserStudyRecord - result: ".concat(JSON.stringify(result)));
+          sessionDetails.submodules[index].studyRecord = result;
+
+          if (index == 0) {
+            thisComponent.session.prestudyState = thisComponent.toPrestudyStateString(sessionDetails, 0);
+          }
+
+          dialog.close();
+        }).catch(function (e) {
+          console.log("error in updateUserStudyRecord: ".concat(e));
+          dialog.close();
+          thisComponent.$dialog.alert("error in updateUserStudyRecord: ".concat(e));
+        });
+      }).catch(function (e) {
+        console.log("error: ".concat(e));
+      });
     },
     attendanceButtonName: function attendanceButtonName(secondButton) {
       if (secondButton) {
@@ -1291,6 +1358,20 @@ var render = function() {
                           _c(
                             "b-input-group-append",
                             [
+                              _vm.needToShowPrestudyButton(0)
+                                ? _c(
+                                    "b-button",
+                                    {
+                                      attrs: { variant: "success" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.updatePrestudyState(0)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("圆满")]
+                                  )
+                                : _vm._e(),
                               _c(
                                 "b-button",
                                 {
@@ -1349,6 +1430,22 @@ var render = function() {
                                 _c(
                                   "b-input-group-append",
                                   [
+                                    _vm.needToShowPrestudyButton(index)
+                                      ? _c(
+                                          "b-button",
+                                          {
+                                            attrs: { variant: "success" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.updatePrestudyState(
+                                                  index
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("圆满")]
+                                        )
+                                      : _vm._e(),
                                     _c(
                                       "b-button",
                                       {
