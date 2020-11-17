@@ -376,7 +376,9 @@ export default {
         errorMessage = `${errorMessage}请选择修法！`;
       }
       if (errorMessage.length) {
-        this.$dialog.alert(errorMessage);
+        this.$dialog.alert(errorMessage, {
+          okText: "知道了"
+        });
       } else {
         const name = this.practiceSubmodules.find(e => e.id == id).name;
         this.practiceObj.sessions.push({ id, name, duration });
@@ -416,7 +418,9 @@ export default {
       }
 
       if (errorMessage.length) {
-        this.$dialog.alert(errorMessage);
+        this.$dialog.alert(errorMessage, {
+          okText: "知道了"
+        });
         return;
       }
 

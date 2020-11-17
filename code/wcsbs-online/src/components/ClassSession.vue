@@ -701,7 +701,9 @@ export default {
       console.log(`session.submodules: ${JSON.stringify(session.submodules)}`);
 
       if (!session.scheduledAt || session.submodules.length < 1) {
-        this.$dialog.alert("请输入上课时间和内容！");
+        this.$dialog.alert("请输入上课时间和内容！", {
+          okText: "知道了"
+        });
         return;
       }
 

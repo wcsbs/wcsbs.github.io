@@ -436,7 +436,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       }
 
       if (errorMessage.length) {
-        this.$dialog.alert(errorMessage);
+        this.$dialog.alert(errorMessage, {
+          okText: "知道了"
+        });
       } else {
         var name = this.practiceSubmodules.find(function (e) {
           return e.id == id;
@@ -485,7 +487,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       }
 
       if (errorMessage.length) {
-        this.$dialog.alert(errorMessage);
+        this.$dialog.alert(errorMessage, {
+          okText: "知道了"
+        });
         return;
       }
 
