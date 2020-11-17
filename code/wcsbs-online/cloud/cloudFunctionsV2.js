@@ -1151,12 +1151,12 @@ Parse.Cloud.define(
       }
     }
 
-    logger.info(`generateReport - classTeams: ${JSON.stringify(classTeams)}`);
-    logger.info(`generateReport - parseTeam: ${JSON.stringify(parseTeam)}`);
+    // logger.info(`generateReport - classTeams: ${JSON.stringify(classTeams)}`);
+    // logger.info(`generateReport - parseTeam: ${JSON.stringify(parseTeam)}`);
 
     for (i = 0; i < classTeams.length; i++) {
       const team = classTeams[i];
-      if (i == 0 && !parseTeam) {
+      if (i > 0 || !parseTeam) {
         //parseTeam is loaded above if loading report for self
         query = new Parse.Query("Team");
         query.equalTo("objectId", team.id);
