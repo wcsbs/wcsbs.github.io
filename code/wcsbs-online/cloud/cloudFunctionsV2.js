@@ -1011,7 +1011,7 @@ const loadDataForUser = async function(
   mapDates,
   monthlyTotalOnly
 ) {
-  var monthlyTotal = 0;
+  var monthlyTotal = undefined;
   var yearlyTotal = 0;
   const userId = parseUser.id;
   const result = {};
@@ -1025,7 +1025,7 @@ const loadDataForUser = async function(
     } else {
       const date = mapDates[key];
       if (date) {
-        var count;
+        var count = undefined;
         if (parsePractice) {
           var relation = parsePractice.relation("counts");
 
@@ -1042,7 +1042,7 @@ const loadDataForUser = async function(
           // query.greaterThan("count", 0);
 
           const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
-          if (parseCounts) {
+          if (parseCounts && parseCounts.length) {
             count = 0;
             for (var j = 0; j < parseCounts.length; j++) {
               count += parseCounts[j].get("count");
@@ -1066,19 +1066,19 @@ const loadDataForUser = async function(
         if (!monthlyTotalOnly) {
           result[key] = commonFunctions.formatCount(count);
         }
-        if (count) {
-          monthlyTotal += count;
+        if (count != undefined) {
+          monthlyTotal = (monthlyTotal ? monthlyTotal : 0) + count;
         }
       } else {
         if (i < csvHeader.length - 1) {
-          yearlyTotal += monthlyTotal;
+          yearlyTotal += monthlyTotal ? monthlyTotal : 0;
           monthlyTotal = commonFunctions.formatCount(monthlyTotal);
           if (monthlyTotalOnly) {
             result[key.substring(0, 3)] = monthlyTotal;
           } else {
             result[key] = monthlyTotal;
           }
-          monthlyTotal = 0;
+          monthlyTotal = undefined;
         } else {
           result[key] = commonFunctions.formatCount(yearlyTotal);
         }

@@ -356,7 +356,7 @@ const prepareReportGeneration = function(isRxl, isPractice, year) {
 };
 
 const formatCount = function(count) {
-  if (count) {
+  if (count != undefined) {
     return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
   return "";
