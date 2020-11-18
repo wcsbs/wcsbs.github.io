@@ -1106,6 +1106,7 @@ Parse.Cloud.define(
         return parseReport.get("records");
       }
     }
+    const requestedAt = new Date();
 
     var classQuery = new Parse.Query("Class");
     if (classId) {
@@ -1196,6 +1197,7 @@ Parse.Cloud.define(
     if (reportUuid) {
       parseReport = new Parse.Object("Report");
       parseReport.set("uuid", reportUuid);
+      parseReport.set("requestedAt", requestedAt);
       parseReport.set("records", results);
       await parseReport.save(null, MASTER_KEY);
     }

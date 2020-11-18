@@ -884,7 +884,7 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
     },
     fetchData: function () {
       var _fetchData = Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var thisComponent, classTeam, classId, practiceId, forSelf, classTeams, monthlyTotalOnly, reportUuid, response, retry;
+        var thisComponent, classTeam, classId, practiceId, forSelf, classTeams, monthlyTotalOnly, reportUuid, delay, response, retry;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -898,15 +898,22 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 monthlyTotalOnly = !classTeam && !this.forSelf;
                 reportUuid = Object(uuid__WEBPACK_IMPORTED_MODULE_12__["v4"])();
                 console.log("generateReport - forSelf: ".concat(forSelf, " reportUuid: ").concat(reportUuid));
+
+                delay = function delay(seconds) {
+                  return new Promise(function (res) {
+                    return setTimeout(res, seconds * 1000);
+                  });
+                };
+
                 retry = 3;
 
-              case 10:
+              case 11:
                 if (!(retry > 0)) {
-                  _context.next = 23;
+                  _context.next = 27;
                   break;
                 }
 
-                _context.next = 13;
+                _context.next = 14;
                 return parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("class:generateReport", {
                   classId: classId,
                   classTeams: classTeams,
@@ -943,19 +950,21 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                   return e;
                 });
 
-              case 13:
+              case 14:
                 response = _context.sent;
 
                 if (!Array.isArray(response)) {
-                  _context.next = 16;
+                  _context.next = 17;
                   break;
                 }
 
-                return _context.abrupt("break", 23);
+                return _context.abrupt("break", 27);
 
-              case 16:
-                if (!(response.code != 100)) {
-                  _context.next = 20;
+              case 17:
+                retry--; //{"message":"XMLHttpRequest failed: \"Unable to connect to the Parse API\"","code":100}
+
+                if (!(retry == 0 || response.code != 100)) {
+                  _context.next = 22;
                   break;
                 }
 
@@ -963,17 +972,21 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 response = [{
                   错误: "\u4E0B\u8F7D\u5931\u8D25\uFF1A".concat(JSON.stringify(response))
                 }];
-                return _context.abrupt("break", 23);
+                return _context.abrupt("break", 27);
 
-              case 20:
-                retry--;
-                _context.next = 10;
-                break;
-
-              case 23:
-                return _context.abrupt("return", response);
+              case 22:
+                _context.next = 24;
+                return delay(60);
 
               case 24:
+                console.log("Waited 60s");
+                _context.next = 11;
+                break;
+
+              case 27:
+                return _context.abrupt("return", response);
+
+              case 28:
               case "end":
                 return _context.stop();
             }

@@ -72,6 +72,8 @@ export default {
       console.log(
         `generateReport - forSelf: ${forSelf} reportUuid: ${reportUuid}`
       );
+      const delay = seconds =>
+        new Promise(res => setTimeout(res, seconds * 1000));
 
       var response,
         retry = 3;
@@ -111,14 +113,17 @@ export default {
           break;
         }
 
+        retry--;
+
         //{"message":"XMLHttpRequest failed: \"Unable to connect to the Parse API\"","code":100}
-        if (response.code != 100) {
+        if (retry == 0 || response.code != 100) {
           thisComponent.$dialog.alert(`error in generateReport: ${response}`);
           response = [{ 错误: `下载失败：${JSON.stringify(response)}` }];
           break;
         }
 
-        retry--;
+        await delay(60);
+        console.log("Waited 60s");
       }
 
       return response;
