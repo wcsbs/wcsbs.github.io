@@ -18,6 +18,7 @@ import { mapGetters } from "vuex";
 import Parse from "parse";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
+import { v4 as uuidv4 } from "uuid";
 Vue.component("JsonExcel", JsonExcel);
 
 export default {
@@ -67,38 +68,60 @@ export default {
         ? [classTeam]
         : this.classTeams;
       const monthlyTotalOnly = !classTeam && !this.forSelf;
-      console.log(`generateReport - forSelf: ${forSelf}`);
+      const reportUuid = uuidv4();
+      console.log(
+        `generateReport - forSelf: ${forSelf} reportUuid: ${reportUuid}`
+      );
 
-      return await Parse.Cloud.run("class:generateReport", {
-        classId,
-        classTeams,
-        practiceId,
-        monthlyTotalOnly
-      })
-        .then(result => {
-          // console.log(`generateReport - result: ${JSON.stringify(result)}`);
-          console.log(`generateReport - #result: ${result.length}`);
-          if (!forSelf) {
-            var lastTeamIndex = -1;
-            for (var i = 0; i < result.length; i++) {
-              const record = result[i];
-              const index = parseInt(record["组别"]);
-              if (index != lastTeamIndex) {
-                record["组员"] = `组长${record["组员"]}`;
-                lastTeamIndex = index;
+      var response,
+        retry = 3;
+      while (retry > 0) {
+        response = await Parse.Cloud.run("class:generateReport", {
+          classId,
+          classTeams,
+          practiceId,
+          monthlyTotalOnly,
+          reportUuid
+        })
+          .then(result => {
+            // console.log(`generateReport - result: ${JSON.stringify(result)}`);
+            console.log(`generateReport - #result: ${result.length}`);
+            if (!forSelf) {
+              var lastTeamIndex = -1;
+              for (var i = 0; i < result.length; i++) {
+                const record = result[i];
+                const index = parseInt(record["组别"]);
+                if (index != lastTeamIndex) {
+                  record["组员"] = `组长${record["组员"]}`;
+                  lastTeamIndex = index;
+                }
               }
             }
-          }
-          if (!result || result.length == 0) {
-            result = [{ 错误: "您不是正式学员，不能下载统计报表！" }];
-          }
-          return result;
-        })
-        .catch(e => {
-          console.log(`error in generateReport: ${e}`);
-          thisComponent.$dialog.alert(`error in generateReport: ${e}`);
-          return [{ 错误: `下载失败：${JSON.stringify(e)}` }];
-        });
+            if (!result || result.length == 0) {
+              result = [{ 错误: "您不是正式学员，不能下载统计报表！" }];
+            }
+            return result;
+          })
+          .catch(e => {
+            console.log(`error in generateReport: ${e}`);
+            return e;
+          });
+
+        if (Array.isArray(response)) {
+          break;
+        }
+
+        //{"message":"XMLHttpRequest failed: \"Unable to connect to the Parse API\"","code":100}
+        if (response.code != 100) {
+          thisComponent.$dialog.alert(`error in generateReport: ${response}`);
+          response = [{ 错误: `下载失败：${JSON.stringify(response)}` }];
+          break;
+        }
+
+        retry--;
+      }
+
+      return response;
     },
     startDownload() {
       this.downloading = true;

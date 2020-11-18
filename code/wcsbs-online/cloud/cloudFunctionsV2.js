@@ -1093,9 +1093,19 @@ Parse.Cloud.define(
   "class:generateReport",
   async ({
     user,
-    params: { classId, classTeams, practiceId, monthlyTotalOnly }
+    params: { classId, classTeams, practiceId, monthlyTotalOnly, reportUuid }
   }) => {
     requireAuth(user);
+
+    var parseReport;
+    if (reportUuid) {
+      var reportQuery = new Parse.Query("Report");
+      reportQuery.equalTo("uuid", reportUuid);
+      parseReport = await reportQuery.first();
+      if (parseReport) {
+        return parseReport.get("records");
+      }
+    }
 
     var classQuery = new Parse.Query("Class");
     if (classId) {
@@ -1181,6 +1191,13 @@ Parse.Cloud.define(
           results.push(result);
         }
       }
+    }
+
+    if (reportUuid) {
+      parseReport = new Parse.Object("Report");
+      parseReport.set("uuid", reportUuid);
+      parseReport.set("records", results);
+      await parseReport.save(null, MASTER_KEY);
     }
 
     return results;
