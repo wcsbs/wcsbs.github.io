@@ -274,7 +274,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       return fields;
     },
     formatCount: function formatCount(count) {
-      if (count) {
+      if (count != undefined) {
         return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
       }
 
@@ -482,10 +482,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         errorMessage = "".concat(errorMessage, "\u8BF7\u9009\u62E9\u65E5\u671F\uFF01");
       }
 
-      if (!this.practiceObj.newCount || !this.practiceObj.newCount.length) {
-        errorMessage = "".concat(errorMessage, "\u8BF7\u8F93\u5165\u62A5\u6570\uFF01");
-      }
-
       if (errorMessage.length) {
         this.$dialog.alert(errorMessage, {
           okText: "知道了"
@@ -493,7 +489,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         return;
       }
 
-      var prepend = this.practiceObj.newCount === "0" ? "\u5220\u9664\u62A5\u6570" : "\u65B0\u589E\u62A5\u6570".concat(this.practiceObj.newCount);
+      var prepend = !this.practiceObj.newCount || !this.practiceObj.newCount.length ? "\u5220\u9664\u62A5\u6570" : "\u65B0\u589E\u62A5\u6570".concat(this.practiceObj.newCount);
       var message = {
         title: this.practiceObj.name,
         body: "".concat(prepend, " @ ").concat(this.toLocalDateString(this.practiceObj.newCountReportedAt), "\uFF1F")
@@ -503,7 +499,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       reportedAt.setUTCFullYear(this.practiceObj.newCountReportedAt.getFullYear());
       reportedAt.setUTCMonth(this.practiceObj.newCountReportedAt.getMonth());
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
-      var count = parseInt(this.practiceObj.newCount);
+      var count = !this.practiceObj.newCount || !this.practiceObj.newCount.length ? undefined : parseInt(this.practiceObj.newCount);
       var thisComponent = this;
       console.log("home:reportPracticeCount - practiceId: ".concat(practiceId, " reportedAt: ").concat(reportedAt, " count: ").concat(count, " practiceSessions: ").concat(JSON.stringify(practiceSessions)));
       this.$dialog.confirm(message, options).then(function (dialog) {

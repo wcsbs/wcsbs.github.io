@@ -493,7 +493,7 @@ Parse.Cloud.define(
     } else {
       query.equalTo("userId", userId);
       query.descending("reportedAt");
-      // query.greaterThan("count", 0);
+      query.notEqualTo("count", null);
     }
     const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
 

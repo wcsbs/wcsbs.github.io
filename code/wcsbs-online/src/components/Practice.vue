@@ -220,7 +220,7 @@ export default {
       return fields;
     },
     formatCount(count) {
-      if (count) {
+      if (count != undefined) {
         return count.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
       }
       return "";
@@ -413,9 +413,6 @@ export default {
       if (!this.practiceObj.newCountReportedAt) {
         errorMessage = `${errorMessage}请选择日期！`;
       }
-      if (!this.practiceObj.newCount || !this.practiceObj.newCount.length) {
-        errorMessage = `${errorMessage}请输入报数！`;
-      }
 
       if (errorMessage.length) {
         this.$dialog.alert(errorMessage, {
@@ -425,7 +422,7 @@ export default {
       }
 
       const prepend =
-        this.practiceObj.newCount === "0"
+        !this.practiceObj.newCount || !this.practiceObj.newCount.length
           ? `删除报数`
           : `新增报数${this.practiceObj.newCount}`;
       const message = {
@@ -443,7 +440,10 @@ export default {
       reportedAt.setUTCMonth(this.practiceObj.newCountReportedAt.getMonth());
       reportedAt.setUTCDate(this.practiceObj.newCountReportedAt.getDate());
 
-      const count = parseInt(this.practiceObj.newCount);
+      const count =
+        !this.practiceObj.newCount || !this.practiceObj.newCount.length
+          ? undefined
+          : parseInt(this.practiceObj.newCount);
       const thisComponent = this;
 
       console.log(
