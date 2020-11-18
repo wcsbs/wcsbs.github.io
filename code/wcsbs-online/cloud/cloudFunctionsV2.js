@@ -1099,6 +1099,7 @@ Parse.Cloud.define(
 
     var parseReport;
     if (reportUuid) {
+      logger.info(`generateReport - reportUuid: ${reportUuid}`);
       var reportQuery = new Parse.Query("Report");
       reportQuery.equalTo("uuid", reportUuid);
       parseReport = await reportQuery.first();
@@ -1195,11 +1196,17 @@ Parse.Cloud.define(
     }
 
     if (reportUuid) {
-      parseReport = new Parse.Object("Report");
-      parseReport.set("uuid", reportUuid);
-      parseReport.set("requestedAt", requestedAt);
+      query = new Parse.Query("Report");
+      query.equalTo("uuid", reportUuid);
+      parseReport = await query.first();
+      if (!parseReport) {
+        parseReport = new Parse.Object("Report");
+        parseReport.set("uuid", reportUuid);
+        parseReport.set("requestedAt", requestedAt);
+      }
       parseReport.set("records", results);
-      await parseReport.save(null, MASTER_KEY);
+      parseReport = await parseReport.save(null, MASTER_KEY);
+      logger.info(`generateReport - saved parseReport: ${parseReport.id}`);
     }
 
     return results;
