@@ -63,7 +63,7 @@ const loadStudentPracticeDetailsV2 = async function(
       if (accumulatedCount) {
         query = relation.query();
         query.equalTo("userId", userId);
-        query.greaterThan("count", 0);
+        // query.greaterThan("count", 0);
         query.descending("reportedAt");
         const latestCount = await query.first();
 
@@ -493,7 +493,7 @@ Parse.Cloud.define(
     } else {
       query.equalTo("userId", userId);
       query.descending("reportedAt");
-      query.greaterThan("count", 0);
+      // query.greaterThan("count", 0);
     }
     const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
 
@@ -1039,7 +1039,7 @@ const loadDataForUser = async function(
             lastDate = new Date(date.getFullYear(), 0, 1);
           }
           query.greaterThanOrEqualTo("reportedAt", lastDate);
-          query.greaterThan("count", 0);
+          // query.greaterThan("count", 0);
 
           const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
           if (parseCounts) {
