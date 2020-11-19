@@ -52,7 +52,10 @@ export default {
       const timestamp = new Date(date.toString().split("GMT")[0] + " UTC")
         .toISOString()
         .split(".")[0];
-      return `${this.worksheet}_${timestamp}.xls`;
+      const smartPhone = require("detect-mobile-browser")(false);
+      const fileExt = smartPhone.isAny() ? "htm" : "xls";
+      // console.log(`smart phone? ${smartPhone.isAny()} fileExt: ${fileExt}`);
+      return `${this.worksheet}_${timestamp}.${fileExt}`;
     },
     async fetchData() {
       const thisComponent = this;
