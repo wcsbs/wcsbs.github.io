@@ -208,14 +208,12 @@ Parse.Cloud.define(
           if (countStr && countStr.length > 0) {
             const count = parseInt(countStr);
             if (practiceId) {
-              if (count > 0) {
-                result.count = await commonFunctions.reportPracticeCountV2(
-                  parseUser,
-                  practiceId,
-                  date,
-                  count
-                );
-              }
+              result.count = await commonFunctions.reportPracticeCountV2(
+                parseUser,
+                practiceId,
+                date,
+                count
+              );
             } else {
               query = parseClass.relation("sessionsV2").query();
               query.equalTo("scheduledAt", date);

@@ -1013,6 +1013,7 @@ const loadDataForUser = async function(
 ) {
   var monthlyTotal = undefined;
   var yearlyTotal = 0;
+  var grandTotal = 0;
   const userId = parseUser.id;
   const result = {};
   var lastDate;
@@ -1059,7 +1060,10 @@ const loadDataForUser = async function(
             userId,
             classSession
           );
-          if (attendance) {
+          if (
+            attendance.attendance != undefined ||
+            attendance.onLeave != undefined
+          ) {
             count = attendance.attendance ? 1 : 0;
           }
         }
@@ -1070,8 +1074,15 @@ const loadDataForUser = async function(
           monthlyTotal = (monthlyTotal ? monthlyTotal : 0) + count;
         }
       } else {
-        if (i < csvHeader.length - 1) {
-          yearlyTotal += monthlyTotal ? monthlyTotal : 0;
+        if (key === "TOTAL") {
+          result[key] = commonFunctions.formatCount(grandTotal);
+        } else if (key.startsWith("20") && key.endsWith("TOTAL")) {
+          result[key] = commonFunctions.formatCount(yearlyTotal);
+          yearlyTotal = 0;
+        } else {
+          const delta = monthlyTotal ? monthlyTotal : 0;
+          yearlyTotal += delta;
+          grandTotal += delta;
           monthlyTotal = commonFunctions.formatCount(monthlyTotal);
           if (monthlyTotalOnly) {
             result[key.substring(0, 3)] = monthlyTotal;
@@ -1079,8 +1090,6 @@ const loadDataForUser = async function(
             result[key] = monthlyTotal;
           }
           monthlyTotal = undefined;
-        } else {
-          result[key] = commonFunctions.formatCount(yearlyTotal);
         }
       }
     }

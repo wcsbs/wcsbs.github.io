@@ -245,11 +245,22 @@ const prepareReportGeneration = function(isRxl, isPractice) {
     [
       "组别",
       "组员",
+      "7-Dec",
+      "14-Dec",
+      "21-Dec",
+      "28-Dec",
+      "DEC2019 TOTAL",
+      "2019 TOTAL",
+      "4-Jan",
+      "11-Jan",
+      "18-Jan",
+      "25-Jan",
+      "JAN2020 TOTAL",
       "8-Feb",
       "15-Feb",
       "22-Feb",
       "29-Feb",
-      "FEB2020TOTAL",
+      "FEB2020 TOTAL",
       "7-Mar",
       "14-Mar",
       "21-Mar",
@@ -303,13 +314,14 @@ const prepareReportGeneration = function(isRxl, isPractice) {
       "19-Dec",
       "26-Dec",
       "DEC2020 TOTAL",
-      "2020 TOTAL"
+      "2020 TOTAL",
+      "TOTAL"
     ],
     [
       "组别",
       "组员",
       "24FEB-01MAR",
-      "FEB2020TOTAL",
+      "FEB2020 TOTAL",
       "2-8MAR",
       "9-15MAR",
       "16-22MAR",
@@ -367,7 +379,7 @@ const prepareReportGeneration = function(isRxl, isPractice) {
     ]
   ];
 
-  const csvHeader = csvHeaders[(year - 2020) * 2 + (isPractice ? 1 : 0)];
+  const csvHeader = csvHeaders[isPractice ? 1 : 0];
   const mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
   return { csvHeader, mapDates };
 };
