@@ -128,8 +128,7 @@ Parse.Cloud.define(
     var mapDates = commonFunctions.getDatesFromCsvHeader(
       csvHeader,
       parseClass.get("url").includes("rpsxl"),
-      practiceId,
-      2020
+      practiceId
     );
 
     var teams = [];
@@ -242,6 +241,6 @@ Parse.Cloud.define(
     }
     await parseClass.save(null, MASTER_KEY);
 
-    return { teams, users, results };
+    return { mapDates, teams, users, results };
   }
 );

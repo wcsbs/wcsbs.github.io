@@ -201,10 +201,27 @@ const updateAttendanceV2 = async function(
   return result;
 };
 
-const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice, year) {
-  var mapDates = {};
+const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice) {
+  var key,
+    year,
+    yearStr,
+    mapDates = {};
   for (var i = 0; i < csvHeader.length; i++) {
-    const key = csvHeader[i];
+    key = csvHeader[i];
+    if (key.startsWith("20") && key.endsWith("TOTAL")) {
+      yearStr = key.substring(0, 4);
+      year = parseInt(yearStr);
+      break;
+    }
+  }
+
+  for (i = 0; i < csvHeader.length; i++) {
+    key = csvHeader[i];
+    if (key.startsWith(yearStr) && key.endsWith("TOTAL")) {
+      year += 1;
+      yearStr = year.toString();
+      continue;
+    }
     const start = key.indexOf("-");
     if (start > 0) {
       var value = key;
@@ -223,7 +240,7 @@ const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice, year) {
   return mapDates;
 };
 
-const prepareReportGeneration = function(isRxl, isPractice, year) {
+const prepareReportGeneration = function(isRxl, isPractice) {
   const csvHeaders = [
     [
       "组别",
@@ -351,7 +368,7 @@ const prepareReportGeneration = function(isRxl, isPractice, year) {
   ];
 
   const csvHeader = csvHeaders[(year - 2020) * 2 + (isPractice ? 1 : 0)];
-  const mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice, year);
+  const mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
   return { csvHeader, mapDates };
 };
 

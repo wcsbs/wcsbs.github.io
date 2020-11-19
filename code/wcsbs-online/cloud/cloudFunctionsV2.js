@@ -1131,8 +1131,7 @@ Parse.Cloud.define(
 
     const { csvHeader, mapDates } = commonFunctions.prepareReportGeneration(
       parseClass.get("url").includes("rpsxl"),
-      practiceId,
-      2020
+      practiceId
     );
 
     var i,

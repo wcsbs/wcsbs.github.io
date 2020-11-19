@@ -17,7 +17,7 @@
         :autoMatchFields="true"
       ></VueCsvImport>
       <b-form-textarea
-        v-if="fields"
+        v-if="parseCsv"
         :value="JSON.stringify(parseCsv, null, 4)"
         placeholder="JSON converted from CSV file content will appear here"
         rows="8"
@@ -92,7 +92,9 @@ export default {
         "导入一组心咒",
         "导入一组共修",
         "导入二组心咒",
-        "导入二组共修"
+        "导入二组共修",
+        "导入旁听组心咒",
+        "导入旁听组共修"
       ],
       selectedIndex: undefined
     };
