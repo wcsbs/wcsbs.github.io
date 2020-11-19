@@ -7,6 +7,7 @@
       :before-generate="startDownload"
       :before-finish="finishDownload"
       :name="getFilename()"
+      :type="isSmartPhone ? 'csv' : 'xls'"
     >
       {{ downloading ? `${worksheet}下载中...` : `下载${worksheet}` }}
     </JsonExcel>
@@ -43,7 +44,8 @@ export default {
   },
   data: function() {
     return {
-      downloading: false
+      downloading: false,
+      isSmartPhone: require("detect-mobile-browser")(false).isAny()
     };
   },
   methods: {
@@ -52,9 +54,7 @@ export default {
       const timestamp = new Date(date.toString().split("GMT")[0] + " UTC")
         .toISOString()
         .split(".")[0];
-      const smartPhone = require("detect-mobile-browser")(false);
-      const fileExt = smartPhone.isAny() ? "htm" : "xls";
-      // console.log(`smart phone? ${smartPhone.isAny()} fileExt: ${fileExt}`);
+      const fileExt = this.isSmartPhone ? "csv" : "xls";
       return `${this.worksheet}_${timestamp}.${fileExt}`;
     },
     async fetchData() {

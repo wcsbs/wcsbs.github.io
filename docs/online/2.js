@@ -57,6 +57,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
 
 
 
@@ -80,18 +81,15 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
   },
   data: function data() {
     return {
-      downloading: false
+      downloading: false,
+      isSmartPhone: __webpack_require__(/*! detect-mobile-browser */ "./node_modules/detect-mobile-browser/detect-browser.js")(false).isAny()
     };
   },
   methods: {
     getFilename: function getFilename() {
       var date = new Date();
       var timestamp = new Date(date.toString().split("GMT")[0] + " UTC").toISOString().split(".")[0];
-
-      var smartPhone = __webpack_require__(/*! detect-mobile-browser */ "./node_modules/detect-mobile-browser/detect-browser.js")(false);
-
-      var fileExt = smartPhone.isAny() ? "htm" : "xls"; // console.log(`smart phone? ${smartPhone.isAny()} fileExt: ${fileExt}`);
-
+      var fileExt = this.isSmartPhone ? "csv" : "xls";
       return "".concat(this.worksheet, "_").concat(timestamp, ".").concat(fileExt);
     },
     fetchData: function () {
@@ -250,7 +248,8 @@ var render = function() {
             fetch: _vm.fetchData,
             "before-generate": _vm.startDownload,
             "before-finish": _vm.finishDownload,
-            name: _vm.getFilename()
+            name: _vm.getFilename(),
+            type: _vm.isSmartPhone ? "csv" : "xls"
           }
         },
         [
