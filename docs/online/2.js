@@ -129,7 +129,7 @@ vue__WEBPACK_IMPORTED_MODULE_16__["default"].component("JsonExcel", vue_json_exc
                   monthlyTotalOnly: false
                 };
                 params.reportHash = Object(js_sha256__WEBPACK_IMPORTED_MODULE_17__["sha256"])(JSON.stringify(params));
-                console.log("generateReport - forSelf: ".concat(forSelf, " monthlyTotalOnly: ").concat(monthlyTotalOnly, " params: ").concat(JSON.stringify(params)));
+                console.log("generateReport - forSelf: ".concat(forSelf, " monthlyTotalOnly: ").concat(monthlyTotalOnly, " reportHash: ").concat(params.reportHash));
 
                 delay = function delay(seconds) {
                   return new Promise(function (res) {

@@ -80,9 +80,7 @@ export default {
 
       params.reportHash = sha256(JSON.stringify(params));
       console.log(
-        `generateReport - forSelf: ${forSelf} monthlyTotalOnly: ${monthlyTotalOnly} params: ${JSON.stringify(
-          params
-        )}`
+        `generateReport - forSelf: ${forSelf} monthlyTotalOnly: ${monthlyTotalOnly} reportHash: ${params.reportHash}`
       );
       const delay = seconds =>
         new Promise(res => setTimeout(res, seconds * 1000));
