@@ -15,20 +15,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es6.object.keys */ "./node_modules/core-js/modules/es6.object.keys.js");
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js");
-/* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es6.regexp.to-string */ "./node_modules/core-js/modules/es6.regexp.to-string.js");
-/* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es6_regexp_split__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.regexp.split */ "./node_modules/core-js/modules/es6.regexp.split.js");
-/* harmony import */ var core_js_modules_es6_regexp_split__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_split__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var vue_json_excel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue-json-excel */ "./node_modules/vue-json-excel/dist/vue-json-excel.esm.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+/* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es6.regexp.replace */ "./node_modules/core-js/modules/es6.regexp.replace.js");
+/* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es6_string_ends_with__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.string.ends-with */ "./node_modules/core-js/modules/es6.string.ends-with.js");
+/* harmony import */ var core_js_modules_es6_string_ends_with__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_ends_with__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es6_string_starts_with__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es6.string.starts-with */ "./node_modules/core-js/modules/es6.string.starts-with.js");
+/* harmony import */ var core_js_modules_es6_string_starts_with__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_starts_with__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js");
+/* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es6.regexp.to-string */ "./node_modules/core-js/modules/es6.regexp.to-string.js");
+/* harmony import */ var core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_to_string__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es6_regexp_split__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es6.regexp.split */ "./node_modules/core-js/modules/es6.regexp.split.js");
+/* harmony import */ var core_js_modules_es6_regexp_split__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_split__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var vue_json_excel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vue-json-excel */ "./node_modules/vue-json-excel/dist/vue-json-excel.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/index.js");
+
+
+
 
 
 
@@ -40,7 +49,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_10__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 //
 //
@@ -63,13 +72,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_excel__WEBPACK_IMPORTED_MODULE_10__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_14__["default"].component("JsonExcel", vue_json_excel__WEBPACK_IMPORTED_MODULE_13__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "DownloadReport",
   components: {
-    JsonExcel: vue_json_excel__WEBPACK_IMPORTED_MODULE_10__["default"]
+    JsonExcel: vue_json_excel__WEBPACK_IMPORTED_MODULE_13__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_8__["mapGetters"])(["isLoadingStats", "classInfo", "classTeams", "isClassAdmin", "isSystemAdmin"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_11__["mapGetters"])(["isLoadingStats", "classInfo", "classTeams", "isClassAdmin", "isSystemAdmin"])),
   props: {
     classTeam: {
       type: Object,
@@ -93,7 +102,7 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
       return "".concat(this.worksheet, "_").concat(timestamp, ".").concat(fileExt);
     },
     fetchData: function () {
-      var _fetchData = Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_4__["default"])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var _fetchData = Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_7__["default"])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
         var thisComponent, classTeam, classId, practiceId, forSelf, classTeams, monthlyTotalOnly, reportUuid, delay, response, retry;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -106,8 +115,8 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 forSelf = this.forSelf;
                 classTeams = forSelf ? undefined : classTeam ? [classTeam] : this.classTeams;
                 monthlyTotalOnly = !classTeam && !this.forSelf;
-                reportUuid = Object(uuid__WEBPACK_IMPORTED_MODULE_12__["v4"])();
-                console.log("generateReport - forSelf: ".concat(forSelf, " reportUuid: ").concat(reportUuid));
+                reportUuid = Object(uuid__WEBPACK_IMPORTED_MODULE_15__["v4"])();
+                console.log("generateReport - forSelf: ".concat(forSelf, " reportUuid: ").concat(reportUuid, " monthlyTotalOnly: ").concat(monthlyTotalOnly));
 
                 delay = function delay(seconds) {
                   return new Promise(function (res) {
@@ -124,29 +133,15 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                 }
 
                 _context.next = 14;
-                return parse__WEBPACK_IMPORTED_MODULE_9___default.a.Cloud.run("class:generateReport", {
+                return parse__WEBPACK_IMPORTED_MODULE_12___default.a.Cloud.run("class:generateReport", {
                   classId: classId,
                   classTeams: classTeams,
                   practiceId: practiceId,
-                  monthlyTotalOnly: monthlyTotalOnly,
+                  monthlyTotalOnly: false,
                   reportUuid: reportUuid
                 }).then(function (result) {
                   // console.log(`generateReport - result: ${JSON.stringify(result)}`);
                   console.log("generateReport - #result: ".concat(result.length));
-
-                  if (!forSelf) {
-                    var lastTeamIndex = -1;
-
-                    for (var i = 0; i < result.length; i++) {
-                      var record = result[i];
-                      var index = parseInt(record["组别"]);
-
-                      if (index != lastTeamIndex) {
-                        record["组员"] = "\u7EC4\u957F".concat(record["组员"]);
-                        lastTeamIndex = index;
-                      }
-                    }
-                  }
 
                   if (!result || result.length == 0) {
                     result = [{
@@ -154,7 +149,48 @@ vue__WEBPACK_IMPORTED_MODULE_11__["default"].component("JsonExcel", vue_json_exc
                     }];
                   }
 
-                  return result;
+                  if (forSelf) {
+                    return result;
+                  }
+
+                  var reportLines = [];
+                  var lastTeamIndex = -1;
+
+                  for (var i = 0; i < result.length; i++) {
+                    var record = result[i];
+                    var index = parseInt(record["组别"]);
+
+                    if (index != lastTeamIndex) {
+                      record["组员"] = "\u7EC4\u957F".concat(record["组员"]);
+                      lastTeamIndex = index;
+                    }
+
+                    if (monthlyTotalOnly) {
+                      var newRecord = {};
+
+                      for (var key in record) {
+                        var value = record[key];
+
+                        if (key.startsWith("组")) {
+                          newRecord[key] = value;
+                        } else {
+                          if (key.endsWith("TOTAL")) {
+                            if (!key.startsWith("20")) {
+                              key = key.replace(" TOTAL", "");
+                            }
+
+                            newRecord[key] = value;
+                          }
+                        }
+                      }
+
+                      reportLines.push(newRecord);
+                    } else {
+                      reportLines.push(record);
+                    }
+                  }
+
+                  return reportLines;
                 }).catch(function (e) {
                   console.log("error in generateReport: ".concat(e));
                   return e;

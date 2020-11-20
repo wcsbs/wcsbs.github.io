@@ -73,7 +73,7 @@ export default {
       const monthlyTotalOnly = !classTeam && !this.forSelf;
       const reportUuid = uuidv4();
       console.log(
-        `generateReport - forSelf: ${forSelf} reportUuid: ${reportUuid}`
+        `generateReport - forSelf: ${forSelf} reportUuid: ${reportUuid} monthlyTotalOnly: ${monthlyTotalOnly}`
       );
       const delay = seconds =>
         new Promise(res => setTimeout(res, seconds * 1000));
@@ -85,27 +85,51 @@ export default {
           classId,
           classTeams,
           practiceId,
-          monthlyTotalOnly,
+          monthlyTotalOnly: false,
           reportUuid
         })
           .then(result => {
             // console.log(`generateReport - result: ${JSON.stringify(result)}`);
             console.log(`generateReport - #result: ${result.length}`);
-            if (!forSelf) {
-              var lastTeamIndex = -1;
-              for (var i = 0; i < result.length; i++) {
-                const record = result[i];
-                const index = parseInt(record["组别"]);
-                if (index != lastTeamIndex) {
-                  record["组员"] = `组长${record["组员"]}`;
-                  lastTeamIndex = index;
-                }
-              }
-            }
             if (!result || result.length == 0) {
               result = [{ 错误: "您不是正式学员，不能下载统计报表！" }];
             }
-            return result;
+            if (forSelf) {
+              return result;
+            }
+
+            const reportLines = [];
+            var lastTeamIndex = -1;
+            for (var i = 0; i < result.length; i++) {
+              const record = result[i];
+              const index = parseInt(record["组别"]);
+              if (index != lastTeamIndex) {
+                record["组员"] = `组长${record["组员"]}`;
+                lastTeamIndex = index;
+              }
+
+              if (monthlyTotalOnly) {
+                const newRecord = {};
+                for (var key in record) {
+                  const value = record[key];
+                  if (key.startsWith("组")) {
+                    newRecord[key] = value;
+                  } else {
+                    if (key.endsWith("TOTAL")) {
+                      if (!key.startsWith("20")) {
+                        key = key.replace(" TOTAL", "");
+                      }
+                      newRecord[key] = value;
+                    }
+                  }
+                }
+                reportLines.push(newRecord);
+              } else {
+                reportLines.push(record);
+              }
+            }
+
+            return reportLines;
           })
           .catch(e => {
             console.log(`error in generateReport: ${e}`);
