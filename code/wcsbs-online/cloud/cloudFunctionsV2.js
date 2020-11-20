@@ -1102,21 +1102,26 @@ Parse.Cloud.define(
   "class:generateReport",
   async ({
     user,
-    params: { classId, classTeams, practiceId, monthlyTotalOnly, reportUuid }
+    params: { classId, classTeams, practiceId, monthlyTotalOnly, reportHash }
   }) => {
     requireAuth(user);
 
+    const requestedAt = new Date();
     var parseReport;
-    if (reportUuid) {
-      logger.info(`generateReport - reportUuid: ${reportUuid}`);
+    if (reportHash) {
+      logger.info(`generateReport - reportHash: ${reportHash}`);
       var reportQuery = new Parse.Query("Report");
-      reportQuery.equalTo("uuid", reportUuid);
+      reportQuery.equalTo("hash", reportHash);
       parseReport = await reportQuery.first();
       if (parseReport) {
-        return parseReport.get("records");
+        if (
+          requestedAt.getTime() <
+          parseReport.updatedAt.getTime() + (1 * 60 * 60 * 1000) / 2
+        ) {
+          return parseReport.get("records");
+        }
       }
     }
-    const requestedAt = new Date();
 
     var classQuery = new Parse.Query("Class");
     if (classId) {
@@ -1203,15 +1208,18 @@ Parse.Cloud.define(
       }
     }
 
-    if (reportUuid) {
-      query = new Parse.Query("Report");
-      query.equalTo("uuid", reportUuid);
-      parseReport = await query.first();
+    if (reportHash) {
       if (!parseReport) {
-        parseReport = new Parse.Object("Report");
-        parseReport.set("uuid", reportUuid);
-        parseReport.set("requestedAt", requestedAt);
+        query = new Parse.Query("Report");
+        query.equalTo("hash", reportHash);
+        parseReport = await query.first();
+
+        if (!parseReport) {
+          parseReport = new Parse.Object("Report");
+          parseReport.set("hash", reportHash);
+        }
       }
+      parseReport.set("requestedAt", requestedAt);
       parseReport.set("records", results);
       parseReport = await parseReport.save(null, MASTER_KEY);
       logger.info(`generateReport - saved parseReport: ${parseReport.id}`);

@@ -19,7 +19,7 @@ import { mapGetters } from "vuex";
 import Parse from "parse";
 import JsonExcel from "vue-json-excel";
 import Vue from "vue";
-import { v4 as uuidv4 } from "uuid";
+import { sha256 } from "js-sha256";
 Vue.component("JsonExcel", JsonExcel);
 
 export default {
@@ -71,9 +71,18 @@ export default {
         ? [classTeam]
         : this.classTeams;
       const monthlyTotalOnly = !classTeam && !this.forSelf;
-      const reportUuid = uuidv4();
+      const params = {
+        classId,
+        classTeams,
+        practiceId,
+        monthlyTotalOnly: false
+      };
+
+      params.reportHash = sha256(JSON.stringify(params));
       console.log(
-        `generateReport - forSelf: ${forSelf} reportUuid: ${reportUuid} monthlyTotalOnly: ${monthlyTotalOnly}`
+        `generateReport - forSelf: ${forSelf} monthlyTotalOnly: ${monthlyTotalOnly} params: ${JSON.stringify(
+          params
+        )}`
       );
       const delay = seconds =>
         new Promise(res => setTimeout(res, seconds * 1000));
@@ -81,13 +90,7 @@ export default {
       var response,
         retry = 3;
       while (retry > 0) {
-        response = await Parse.Cloud.run("class:generateReport", {
-          classId,
-          classTeams,
-          practiceId,
-          monthlyTotalOnly: false,
-          reportUuid
-        })
+        response = await Parse.Cloud.run("class:generateReport", params)
           .then(result => {
             // console.log(`generateReport - result: ${JSON.stringify(result)}`);
             console.log(`generateReport - #result: ${result.length}`);
@@ -112,16 +115,13 @@ export default {
                 const newRecord = {};
                 for (var key in record) {
                   const value = record[key];
-                  if (key.startsWith("组")) {
-                    newRecord[key] = value;
-                  } else {
-                    if (key.endsWith("TOTAL")) {
-                      if (!key.startsWith("20")) {
-                        key = key.replace(" TOTAL", "");
-                      }
-                      newRecord[key] = value;
-                    }
+                  if (key.includes("-")) {
+                    continue;
                   }
+                  if (key.endsWith("TOTAL") && !key.startsWith("20")) {
+                    key = key.replace(" TOTAL", "");
+                  }
+                  newRecord[key] = value;
                 }
                 reportLines.push(newRecord);
               } else {
