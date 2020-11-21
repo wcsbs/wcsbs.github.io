@@ -64,10 +64,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -238,77 +234,81 @@ var render = function() {
       ? _c("div", { staticClass: "user-preview" }, [
           _vm._v("正在获取用户列表...")
         ])
-      : _c(
-          "div",
-          [
-            _c("div", { staticClass: "input-group mb-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.filterText,
-                    expression: "filterText"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  "aria-label": "Recipient's username",
-                  "aria-describedby": "basic-addon2",
-                  placeholder: "搜索用户"
-                },
-                domProps: { value: _vm.filterText },
-                on: {
-                  change: function($event) {
-                    return _vm.filterUsers(_vm.filterText)
-                  },
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.filterText = $event.target.value
-                  }
-                }
-              }),
-              _c(
+      : _c("div", [
+          _c("h3", [
+            _vm._v("总计有 " + _vm._s(_vm.users.length) + " 个注册用户")
+          ]),
+          _c("hr"),
+          _vm.users.length > 0
+            ? _c(
                 "div",
-                { staticClass: "input-group-append" },
                 [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-outline-secondary",
-                      attrs: { type: "button" },
-                      on: { click: _vm.clearFilter }
-                    },
-                    [_vm._v("\n          清除\n        ")]
-                  ),
-                  _c(
-                    "b-button",
-                    {
-                      attrs: { variant: "warning", type: "button" },
-                      on: { click: _vm.createUser }
-                    },
-                    [_vm._v("\n          创建新用户\n        ")]
-                  )
-                ],
-                1
-              )
-            ]),
-            _vm.users.length === 0
-              ? _c("div", { staticClass: "user-preview" }, [
-                  _vm._v("\n      没有找到用户！\n    ")
-                ])
-              : _vm._l(_vm.users, function(user, index) {
-                  return _c("UserPreview", {
-                    key: index,
-                    attrs: { user: user }
+                  _c("div", { staticClass: "input-group mb-3" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filterText,
+                          expression: "filterText"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        "aria-label": "Recipient's username",
+                        "aria-describedby": "basic-addon2",
+                        placeholder: "搜索用户"
+                      },
+                      domProps: { value: _vm.filterText },
+                      on: {
+                        change: function($event) {
+                          return _vm.filterUsers(_vm.filterText)
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.filterText = $event.target.value
+                        }
+                      }
+                    }),
+                    _c(
+                      "div",
+                      { staticClass: "input-group-append" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-outline-secondary",
+                            attrs: { type: "button" },
+                            on: { click: _vm.clearFilter }
+                          },
+                          [_vm._v("\n            清除\n          ")]
+                        ),
+                        _c(
+                          "b-button",
+                          {
+                            attrs: { variant: "warning", type: "button" },
+                            on: { click: _vm.createUser }
+                          },
+                          [_vm._v("\n            创建新用户\n          ")]
+                        )
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._l(_vm.users, function(user, index) {
+                    return _c("UserPreview", {
+                      key: index,
+                      attrs: { user: user }
+                    })
                   })
-                })
-          ],
-          2
-        )
+                ],
+                2
+              )
+            : _vm._e()
+        ])
   ])
 }
 var staticRenderFns = []
