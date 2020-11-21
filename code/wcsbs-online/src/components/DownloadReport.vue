@@ -1,31 +1,25 @@
 <template>
   <div>
-    <JsonExcel
+    <JsonExcelWrapper
+      v-for="(reportName, index) in reportNames"
+      :key="componentKeys[index]"
       class="btn btn-info btn-block"
-      :worksheet="worksheet"
-      :fetch="fetchData"
-      :before-generate="startDownload"
-      :before-finish="finishDownload"
-      :name="getFilename()"
-      :type="isSmartPhone ? 'csv' : 'xls'"
-    >
-      {{ downloading ? `${worksheet}下载中...` : `下载${worksheet}` }}
-    </JsonExcel>
+      :worksheet="worksheet + reportName"
+      :doFetchData="index ? fetchDetails : fetchSummary"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import Parse from "parse";
-import JsonExcel from "vue-json-excel";
-import Vue from "vue";
+import JsonExcelWrapper from "@/components/JsonExcelWrapper";
 import { sha256 } from "js-sha256";
-Vue.component("JsonExcel", JsonExcel);
 
 export default {
   name: "DownloadReport",
   components: {
-    JsonExcel
+    JsonExcelWrapper
   },
   computed: {
     ...mapGetters([
@@ -40,24 +34,31 @@ export default {
     classTeam: { type: Object, required: false },
     worksheet: String,
     practiceId: String,
-    forSelf: Boolean
+    forSelf: Boolean,
+    hasSubmodules: Boolean
   },
   data: function() {
     return {
-      downloading: false,
-      isSmartPhone: require("detect-mobile-browser")(false).isAny()
+      reportNames: [""],
+      buttonNames: ["", ""],
+      componentKeys: [0, 10000]
     };
   },
+  mounted() {
+    if (this.hasSubmodules || this.classInfo.practiceModuleId) {
+      this.reportNames = ["概要", "详情"];
+    }
+  },
   methods: {
-    getFilename() {
-      const date = new Date();
-      const timestamp = new Date(date.toString().split("GMT")[0] + " UTC")
-        .toISOString()
-        .split(".")[0];
-      const fileExt = this.isSmartPhone ? "csv" : "xls";
-      return `${this.worksheet}_${timestamp}.${fileExt}`;
+    async fetchSummary() {
+      console.log("fetchSummary");
+      return this.fetchData(false);
     },
-    async fetchData() {
+    async fetchDetails() {
+      console.log("fetchDetails");
+      return this.fetchData(true);
+    },
+    async fetchData(loadingDetails) {
       const thisComponent = this;
       const classTeam = this.classTeam;
       const classId = this.classInfo.id;
@@ -75,7 +76,8 @@ export default {
         classId,
         classTeams,
         practiceId,
-        monthlyTotalOnly: false
+        monthlyTotalOnly: false,
+        loadingDetails
       };
       const loggedInUser = Parse.User.current();
       // console.log(`generateReport - loggedInUser.id: ${loggedInUser.id}`);
@@ -156,12 +158,6 @@ export default {
       }
 
       return response;
-    },
-    startDownload() {
-      this.downloading = true;
-    },
-    finishDownload() {
-      this.downloading = false;
     }
   }
 };

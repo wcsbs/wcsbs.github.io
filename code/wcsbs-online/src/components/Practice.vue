@@ -135,6 +135,9 @@
             <DownloadReport
               :forSelf="true"
               :practiceId="practice._getId()"
+              :hasSubmodules="
+                practiceSubmodules && practiceSubmodules.length > 0
+              "
               :worksheet="`${practice.get('name')}统计`"
             />
           </div>

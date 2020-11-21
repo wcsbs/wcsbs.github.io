@@ -816,9 +816,10 @@ Parse.Cloud.define(
       query = new Parse.Query("Practice");
       query.equalTo("objectId", practiceId);
       const practice = await query.first();
-      classInfo.practiceName = practice.get("name");
-      relation = practice.relation("counts");
       classInfo.practiceId = practiceId;
+      classInfo.practiceName = practice.get("name");
+      classInfo.practiceModuleId = practice.get("moduleId");
+      relation = practice.relation("counts");
     }
 
     for (var i = 0; i < classInfo.classTeams.length; i++) {
@@ -1102,14 +1103,23 @@ Parse.Cloud.define(
   "class:generateReport",
   async ({
     user,
-    params: { classId, classTeams, practiceId, monthlyTotalOnly, reportHash }
+    params: {
+      classId,
+      classTeams,
+      practiceId,
+      monthlyTotalOnly,
+      loadingDetails,
+      reportHash
+    }
   }) => {
     requireAuth(user);
 
+    logger.info(
+      `generateReport - reportHash: ${reportHash} loadingDetails: ${loadingDetails}`
+    );
     const requestedAt = new Date();
     var parseReport;
     if (reportHash) {
-      logger.info(`generateReport - reportHash: ${reportHash}`);
       var reportQuery = new Parse.Query("Report");
       reportQuery.equalTo("hash", reportHash);
       parseReport = await reportQuery.first();

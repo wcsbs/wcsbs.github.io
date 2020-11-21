@@ -191,6 +191,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
 
 
 
@@ -966,6 +969,9 @@ var render = function() {
                                 attrs: {
                                   forSelf: true,
                                   practiceId: _vm.practice._getId(),
+                                  hasSubmodules:
+                                    _vm.practiceSubmodules &&
+                                    _vm.practiceSubmodules.length > 0,
                                   worksheet: _vm.practice.get("name") + "统计"
                                 }
                               })
