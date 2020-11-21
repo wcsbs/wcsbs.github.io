@@ -76,7 +76,6 @@ export default {
         classId,
         classTeams,
         practiceId,
-        monthlyTotalOnly: false,
         loadingDetails
       };
       const loggedInUser = Parse.User.current();

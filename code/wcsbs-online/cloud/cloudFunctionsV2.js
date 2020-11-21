@@ -1010,7 +1010,7 @@ const loadDataForUser = async function(
   parseTeam,
   csvHeader,
   mapDates,
-  monthlyTotalOnly
+  parseCountList
 ) {
   var monthlyTotal = undefined;
   var yearlyTotal = 0;
@@ -1041,7 +1041,6 @@ const loadDataForUser = async function(
             lastDate = new Date(date.getFullYear(), 0, 1);
           }
           query.greaterThanOrEqualTo("reportedAt", lastDate);
-          // query.greaterThan("count", 0);
 
           const parseCounts = await query.limit(MAX_QUERY_COUNT).find();
           if (parseCounts && parseCounts.length) {
@@ -1049,6 +1048,9 @@ const loadDataForUser = async function(
             for (var j = 0; j < parseCounts.length; j++) {
               count += parseCounts[j].get("count");
             }
+            parseCountList.concat(parseCounts);
+          } else {
+            parseCountList.push(undefined);
           }
 
           lastDate = reportedAt;
@@ -1068,9 +1070,7 @@ const loadDataForUser = async function(
             count = attendance.attendance ? 1 : 0;
           }
         }
-        if (!monthlyTotalOnly) {
-          result[key] = commonFunctions.formatCount(count);
-        }
+        result[key] = commonFunctions.formatCount(count);
         if (count != undefined) {
           monthlyTotal = (monthlyTotal ? monthlyTotal : 0) + count;
         }
@@ -1084,12 +1084,7 @@ const loadDataForUser = async function(
           const delta = monthlyTotal ? monthlyTotal : 0;
           yearlyTotal += delta;
           grandTotal += delta;
-          monthlyTotal = commonFunctions.formatCount(monthlyTotal);
-          if (monthlyTotalOnly) {
-            result[key.substring(0, 3)] = monthlyTotal;
-          } else {
-            result[key] = monthlyTotal;
-          }
+          result[key] = commonFunctions.formatCount(monthlyTotal);
           monthlyTotal = undefined;
         }
       }
@@ -1099,18 +1094,24 @@ const loadDataForUser = async function(
   return result;
 };
 
+const loadDetailedDataForUser = async function(
+  mapDates,
+  parsePractice,
+  parseCountList,
+  result
+) {
+  logger.info(
+    `loadDetailedDataForUser - parsePractice: ${JSON.stringify(parsePractice)}`
+  );
+
+  return result;
+};
+
 Parse.Cloud.define(
   "class:generateReport",
   async ({
     user,
-    params: {
-      classId,
-      classTeams,
-      practiceId,
-      monthlyTotalOnly,
-      loadingDetails,
-      reportHash
-    }
+    params: { classId, classTeams, practiceId, loadingDetails, reportHash }
   }) => {
     requireAuth(user);
 
@@ -1208,6 +1209,7 @@ Parse.Cloud.define(
         query.equalTo("objectId", team.members[j].id);
 
         var parseUser = await query.first();
+        const parseCountList = [];
         if (parseUser) {
           var result = await loadDataForUser(
             parseClass,
@@ -1216,8 +1218,16 @@ Parse.Cloud.define(
             parseTeam,
             csvHeader,
             mapDates,
-            monthlyTotalOnly
+            parseCountList
           );
+          if (loadingDetails) {
+            result = await loadDetailedDataForUser(
+              mapDates,
+              parsePractice,
+              parseCountList,
+              result
+            );
+          }
           results.push(result);
         }
       }

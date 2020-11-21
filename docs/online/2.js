@@ -160,7 +160,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
                   classId: classId,
                   classTeams: classTeams,
                   practiceId: practiceId,
-                  monthlyTotalOnly: false,
                   loadingDetails: loadingDetails
                 };
                 loggedInUser = parse__WEBPACK_IMPORTED_MODULE_12___default.a.User.current(); // console.log(`generateReport - loggedInUser.id: ${loggedInUser.id}`);

@@ -447,7 +447,7 @@ export default {
         hour: "numeric",
         minute: "numeric"
       };
-      return date.toLocaleDateString("zh-CN", options);
+      return date.toLocaleDateString("zh-CN", options).substring(2);
     },
     toLocalDateString(date) {
       const options = {
@@ -455,7 +455,7 @@ export default {
         month: "short",
         day: "numeric"
       };
-      return date.toLocaleDateString("zh-CN", options);
+      return date.toLocaleDateString("zh-CN", options).substring(2);
     },
     needToShowAttendanceButton() {
       // console.log(

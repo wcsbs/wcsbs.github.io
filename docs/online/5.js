@@ -397,7 +397,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         hour: "numeric",
         minute: "numeric"
       };
-      return date.toLocaleDateString("zh-CN", options);
+      return date.toLocaleDateString("zh-CN", options).substring(2);
     },
     toLocalDateString: function toLocalDateString(date) {
       var options = {
@@ -405,7 +405,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         month: "short",
         day: "numeric"
       };
-      return date.toLocaleDateString("zh-CN", options);
+      return date.toLocaleDateString("zh-CN", options).substring(2);
     },
     toggleReportingCount: function toggleReportingCount() {
       this.practiceObj.showReportingCount = !this.practiceObj.showReportingCount;
