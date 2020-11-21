@@ -1153,7 +1153,11 @@ Parse.Cloud.define(
       results = [];
     if (!classTeams) {
       //loading report for self
-      classTeams = [];
+      classTeams = [
+        {
+          members: [{ id: user.id }]
+        }
+      ];
       query = new Parse.Query("Team");
       query.equalTo("classId", classId);
       var parseTeams = await query.limit(MAX_QUERY_COUNT).find();
@@ -1167,17 +1171,18 @@ Parse.Cloud.define(
 
           if (membersOrder.includes(user.id)) {
             parseTeam = parseTeams[i];
-            classTeams.push({
-              members: [{ id: user.id }]
-            });
             break;
           }
         }
       }
+      if (!parseTeam) {
+        parseTeam = new Parse.Object("Team");
+        parseTeam.set("index", "未分组");
+      }
     }
 
-    // logger.info(`generateReport - classTeams: ${JSON.stringify(classTeams)}`);
-    // logger.info(`generateReport - parseTeam: ${JSON.stringify(parseTeam)}`);
+    logger.info(`generateReport - classTeams: ${JSON.stringify(classTeams)}`);
+    logger.info(`generateReport - parseTeam: ${JSON.stringify(parseTeam)}`);
 
     for (i = 0; i < classTeams.length; i++) {
       const team = classTeams[i];

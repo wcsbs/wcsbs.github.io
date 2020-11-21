@@ -77,8 +77,12 @@ export default {
         practiceId,
         monthlyTotalOnly: false
       };
+      const loggedInUser = Parse.User.current();
+      // console.log(`generateReport - loggedInUser.id: ${loggedInUser.id}`);
 
-      params.reportHash = sha256(JSON.stringify(params));
+      params.reportHash = sha256(
+        `${forSelf ? loggedInUser.id : ""}${JSON.stringify(params)}`
+      );
       console.log(
         `generateReport - forSelf: ${forSelf} monthlyTotalOnly: ${monthlyTotalOnly} reportHash: ${params.reportHash}`
       );
