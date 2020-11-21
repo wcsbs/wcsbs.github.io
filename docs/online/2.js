@@ -110,7 +110,7 @@ vue__WEBPACK_IMPORTED_MODULE_16__["default"].component("JsonExcel", vue_json_exc
     },
     fetchData: function () {
       var _fetchData = Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_9__["default"])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var thisComponent, classTeam, classId, practiceId, forSelf, classTeams, monthlyTotalOnly, params, delay, response, retry;
+        var thisComponent, classTeam, classId, practiceId, forSelf, classTeams, monthlyTotalOnly, params, loggedInUser, delay, response, retry;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -128,7 +128,9 @@ vue__WEBPACK_IMPORTED_MODULE_16__["default"].component("JsonExcel", vue_json_exc
                   practiceId: practiceId,
                   monthlyTotalOnly: false
                 };
-                params.reportHash = Object(js_sha256__WEBPACK_IMPORTED_MODULE_17__["sha256"])(JSON.stringify(params));
+                loggedInUser = parse__WEBPACK_IMPORTED_MODULE_14___default.a.User.current(); // console.log(`generateReport - loggedInUser.id: ${loggedInUser.id}`);
+
+                params.reportHash = Object(js_sha256__WEBPACK_IMPORTED_MODULE_17__["sha256"])("".concat(forSelf ? loggedInUser.id : "").concat(JSON.stringify(params)));
                 console.log("generateReport - forSelf: ".concat(forSelf, " monthlyTotalOnly: ").concat(monthlyTotalOnly, " reportHash: ").concat(params.reportHash));
 
                 delay = function delay(seconds) {
@@ -139,13 +141,13 @@ vue__WEBPACK_IMPORTED_MODULE_16__["default"].component("JsonExcel", vue_json_exc
 
                 retry = 3;
 
-              case 12:
+              case 13:
                 if (!(retry > 0)) {
-                  _context.next = 28;
+                  _context.next = 29;
                   break;
                 }
 
-                _context.next = 15;
+                _context.next = 16;
                 return parse__WEBPACK_IMPORTED_MODULE_14___default.a.Cloud.run("class:generateReport", params).then(function (result) {
                   // console.log(`generateReport - result: ${JSON.stringify(result)}`);
                   console.log("generateReport - #result: ".concat(result.length));
@@ -201,21 +203,21 @@ vue__WEBPACK_IMPORTED_MODULE_16__["default"].component("JsonExcel", vue_json_exc
                   return e;
                 });
 
-              case 15:
+              case 16:
                 response = _context.sent;
 
                 if (!Array.isArray(response)) {
-                  _context.next = 18;
+                  _context.next = 19;
                   break;
                 }
 
-                return _context.abrupt("break", 28);
+                return _context.abrupt("break", 29);
 
-              case 18:
+              case 19:
                 retry--; //{"message":"XMLHttpRequest failed: \"Unable to connect to the Parse API\"","code":100}
 
                 if (!(retry == 0 || response.code != 100)) {
-                  _context.next = 23;
+                  _context.next = 24;
                   break;
                 }
 
@@ -223,21 +225,21 @@ vue__WEBPACK_IMPORTED_MODULE_16__["default"].component("JsonExcel", vue_json_exc
                 response = [{
                   错误: "\u4E0B\u8F7D\u5931\u8D25\uFF1A".concat(JSON.stringify(response))
                 }];
-                return _context.abrupt("break", 28);
+                return _context.abrupt("break", 29);
 
-              case 23:
-                _context.next = 25;
+              case 24:
+                _context.next = 26;
                 return delay(60);
 
-              case 25:
+              case 26:
                 console.log("Waited 60s");
-                _context.next = 12;
+                _context.next = 13;
                 break;
 
-              case 28:
+              case 29:
                 return _context.abrupt("return", response);
 
-              case 29:
+              case 30:
               case "end":
                 return _context.stop();
             }
