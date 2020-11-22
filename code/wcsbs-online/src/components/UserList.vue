@@ -2,9 +2,10 @@
   <div>
     <div v-if="isLoadingUsers" class="user-preview">正在获取用户列表...</div>
     <div v-else>
-      <h3>总计有 {{ users.length }} 个注册用户</h3>
+      <h3 v-if="searching">共有 {{ users.length }} 个符合搜索条件的用户</h3>
+      <h3 v-else>总计有 {{ users.length }} 个注册用户</h3>
       <hr />
-      <div v-if="users.length > 0">
+      <div v-if="users.length > 0 || searching">
         <div class="input-group mb-3">
           <input
             type="text"
@@ -52,16 +53,19 @@ export default {
   },
   data: function() {
     return {
-      filterText: ""
+      filterText: "",
+      searching: false
     };
   },
   methods: {
     filterUsers(filterText) {
       this.$store.dispatch(FILTER_USERS, filterText);
+      this.searching = true;
     },
     clearFilter() {
       this.filterText = "";
       this.$store.dispatch(FILTER_USERS, this.filterText);
+      this.searching = false;
     },
     createUser() {
       this.$router.push({ name: "userCreate" });

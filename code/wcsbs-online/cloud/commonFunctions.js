@@ -391,6 +391,14 @@ const formatCount = function(count) {
   return "";
 };
 
+const formatMinutes = function(minutes) {
+  if (minutes != undefined) {
+    minutes = (minutes / 60).toFixed(2);
+    return minutes.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+  return "";
+};
+
 module.exports = {
   requireAuth,
   requireRole,
@@ -398,5 +406,6 @@ module.exports = {
   updateAttendanceV2,
   getDatesFromCsvHeader,
   prepareReportGeneration,
-  formatCount
+  formatCount,
+  formatMinutes
 };

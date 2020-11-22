@@ -1048,9 +1048,7 @@ const loadDataForUser = async function(
             for (var j = 0; j < parseCounts.length; j++) {
               count += parseCounts[j].get("count");
             }
-            parseCountList.concat(parseCounts);
-          } else {
-            parseCountList.push(undefined);
+            parseCountList.push(...parseCounts);
           }
 
           lastDate = reportedAt;
@@ -1098,13 +1096,148 @@ const loadDetailedDataForUser = async function(
   mapDates,
   parsePractice,
   parseCountList,
-  result
+  summaryRecord
 ) {
+  var query, i, j, k, m, key;
+  const parsePracticeSessionsList = [];
+  const practicedSubmoduleIds = [];
+
+  for (i = 0; i < parseCountList.length; i++) {
+    query = parseCountList[i].relation("practiceSessions").query();
+    query.ascending("index");
+    const practiceSessions = await query.limit(MAX_QUERY_COUNT).find();
+    for (j = 0; j < practiceSessions.length; j++) {
+      const submoduleId = practiceSessions[j].get("submoduleId");
+      if (!practicedSubmoduleIds.includes(submoduleId)) {
+        practicedSubmoduleIds.push(submoduleId);
+      }
+    }
+    parsePracticeSessionsList.push(practiceSessions);
+  }
+
+  const moduleId = parsePractice.get("moduleId");
+  const allSubmodules = await loadPracticeSubmodules(moduleId);
+  const practicedSubmodules = allSubmodules.filter(e => {
+    return practicedSubmoduleIds.includes(e.id);
+  });
+
   logger.info(
-    `loadDetailedDataForUser - parsePractice: ${JSON.stringify(parsePractice)}`
+    `loadDetailedDataForUser - practicedSubmodules: ${JSON.stringify(
+      practicedSubmodules
+    )}`
   );
 
-  return result;
+  var submoduleRecords = [];
+
+  for (j = 0; j < practicedSubmodules.length; j++) {
+    var monthlyTotalCount = undefined;
+    var monthlyTotalMinutes = undefined;
+    var yearlyTotalCount = 0;
+    var yearlyTotalMinutes = 0;
+    var grandTotalCount = 0;
+    var grandTotalMinutes = 0;
+    const perSubmoduleRecords = [{}, {}, {}];
+    k = 0;
+    var cursorInCountList = 0;
+    for (key in summaryRecord) {
+      if (k < 2) {
+        for (m = 0; m < perSubmoduleRecords.length; m++) {
+          perSubmoduleRecords[m][key] = summaryRecord[key];
+        }
+      } else {
+        if (k == 2) {
+          for (m = 0; m < perSubmoduleRecords.length; m++) {
+            perSubmoduleRecords[m]["观修方法"] = practicedSubmodules[j].name;
+          }
+          perSubmoduleRecords[0]["统计项目"] = "观修座数";
+          perSubmoduleRecords[1]["统计项目"] = "观修时长(分钟)";
+          perSubmoduleRecords[2]["统计项目"] = "观修时长(小时)";
+        }
+
+        const date = mapDates[key];
+        if (date) {
+          var count = undefined;
+          var minutes = undefined;
+          for (m = cursorInCountList; m < parseCountList.length; m++) {
+            const parseCount = parseCountList[m];
+            const reportedAt = parseCount.get("reportedAt");
+            if (reportedAt <= date) {
+              const parsePracticeSessions = parsePracticeSessionsList[m];
+              for (i = 0; i < parsePracticeSessions.length; i++) {
+                const parsePracticeSession = parsePracticeSessions[i];
+                if (
+                  parsePracticeSession.get("submoduleId") ==
+                  practicedSubmodules[j].id
+                ) {
+                  count = (count ? count : 0) + 1;
+                  minutes =
+                    (minutes ? minutes : 0) +
+                    parsePracticeSession.get("duration");
+                }
+              }
+            } else {
+              cursorInCountList = m;
+              break;
+            }
+          }
+          if (count != undefined) {
+            monthlyTotalCount =
+              (monthlyTotalCount ? monthlyTotalCount : 0) + count;
+            monthlyTotalMinutes =
+              (monthlyTotalMinutes ? monthlyTotalMinutes : 0) + minutes;
+          }
+          perSubmoduleRecords[0][key] = commonFunctions.formatCount(count);
+          perSubmoduleRecords[1][key] = commonFunctions.formatCount(minutes);
+          perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(minutes);
+        } else {
+          if (key === "TOTAL") {
+            perSubmoduleRecords[0][key] = commonFunctions.formatCount(
+              grandTotalCount
+            );
+            perSubmoduleRecords[1][key] = commonFunctions.formatCount(
+              grandTotalMinutes
+            );
+            perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(
+              grandTotalMinutes
+            );
+          } else if (key.startsWith("20") && key.endsWith("TOTAL")) {
+            perSubmoduleRecords[0][key] = commonFunctions.formatCount(
+              yearlyTotalCount
+            );
+            perSubmoduleRecords[1][key] = commonFunctions.formatCount(
+              yearlyTotalMinutes
+            );
+            perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(
+              yearlyTotalMinutes
+            );
+          } else {
+            var delta = monthlyTotalCount ? monthlyTotalCount : 0;
+            yearlyTotalCount += delta;
+            grandTotalMinutes += delta;
+            perSubmoduleRecords[0][key] = commonFunctions.formatCount(
+              monthlyTotalCount
+            );
+            monthlyTotalCount = undefined;
+
+            delta = monthlyTotalMinutes ? monthlyTotalMinutes : 0;
+            yearlyTotalMinutes += delta;
+            grandTotalMinutes += delta;
+            perSubmoduleRecords[1][key] = commonFunctions.formatCount(
+              monthlyTotalMinutes
+            );
+            perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(
+              monthlyTotalMinutes
+            );
+            monthlyTotalMinutes = undefined;
+          }
+        }
+      }
+      k++;
+    }
+    submoduleRecords = submoduleRecords.concat(perSubmoduleRecords);
+  }
+
+  return submoduleRecords;
 };
 
 Parse.Cloud.define(
@@ -1221,14 +1354,16 @@ Parse.Cloud.define(
             parseCountList
           );
           if (loadingDetails) {
-            result = await loadDetailedDataForUser(
+            const details = await loadDetailedDataForUser(
               mapDates,
               parsePractice,
               parseCountList,
               result
             );
+            results = results.concat(details);
+          } else {
+            results.push(result);
           }
-          results.push(result);
         }
       }
     }

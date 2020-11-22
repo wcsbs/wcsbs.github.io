@@ -64,6 +64,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
 
 
 
@@ -78,16 +79,19 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
   },
   data: function data() {
     return {
-      filterText: ""
+      filterText: "",
+      searching: false
     };
   },
   methods: {
     filterUsers: function filterUsers(filterText) {
       this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_6__["FILTER_USERS"], filterText);
+      this.searching = true;
     },
     clearFilter: function clearFilter() {
       this.filterText = "";
       this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_6__["FILTER_USERS"], this.filterText);
+      this.searching = false;
     },
     createUser: function createUser() {
       this.$router.push({
@@ -235,11 +239,17 @@ var render = function() {
           _vm._v("正在获取用户列表...")
         ])
       : _c("div", [
-          _c("h3", [
-            _vm._v("总计有 " + _vm._s(_vm.users.length) + " 个注册用户")
-          ]),
+          _vm.searching
+            ? _c("h3", [
+                _vm._v(
+                  "共有 " + _vm._s(_vm.users.length) + " 个符合搜索条件的用户"
+                )
+              ])
+            : _c("h3", [
+                _vm._v("总计有 " + _vm._s(_vm.users.length) + " 个注册用户")
+              ]),
           _c("hr"),
-          _vm.users.length > 0
+          _vm.users.length > 0 || _vm.searching
             ? _c(
                 "div",
                 [

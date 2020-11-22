@@ -188,7 +188,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
                   if (!result || result.length == 0) {
                     result = [{
-                      错误: "您不是正式学员，不能下载统计报表！"
+                      错误: "没有找到任何记录！"
                     }];
                   }
 
