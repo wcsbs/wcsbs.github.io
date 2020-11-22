@@ -106,13 +106,18 @@ export default {
 
             const reportLines = [];
             var lastTeamIndex = -1;
+            var leaderName;
             for (var i = 0; i < result.length; i++) {
               const record = result[i];
               const index = parseInt(record["组别"]);
               if (index != lastTeamIndex) {
-                record["组员"] = `组长${record["组员"]}`;
+                leaderName = record["组员"];
                 lastTeamIndex = index;
               }
+              record["组员"] = record["组员"].replace(
+                leaderName,
+                `组长${leaderName}`
+              );
 
               if (monthlyTotalOnly) {
                 const newRecord = {};

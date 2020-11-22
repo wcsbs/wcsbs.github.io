@@ -1176,16 +1176,18 @@ const loadDetailedDataForUser = async function(
                 }
               }
             } else {
-              cursorInCountList = m;
               break;
             }
           }
+          cursorInCountList = m;
+
           if (count != undefined) {
             monthlyTotalCount =
               (monthlyTotalCount ? monthlyTotalCount : 0) + count;
             monthlyTotalMinutes =
               (monthlyTotalMinutes ? monthlyTotalMinutes : 0) + minutes;
           }
+
           perSubmoduleRecords[0][key] = commonFunctions.formatCount(count);
           perSubmoduleRecords[1][key] = commonFunctions.formatCount(minutes);
           perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(minutes);
