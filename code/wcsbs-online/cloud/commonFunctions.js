@@ -399,6 +399,30 @@ const formatMinutes = function(minutes) {
   return "";
 };
 
+const sendEmail = function(toEmail, subject, body) {
+  const sgMail = require("@sendgrid/mail");
+
+  // Import SendGrid module and call with your SendGrid API Key
+  sgMail.setApiKey(
+    "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"
+  );
+
+  const msg = {
+    to: toEmail,
+    replyTo: "wcsbs7@gmail.com",
+    from: "wcsbs7@gmail.com",
+    subject: subject,
+    text: body
+  };
+
+  try {
+    sgMail.send(msg);
+    return "OK";
+  } catch (e) {
+    return `Error: ${e.message}`;
+  }
+};
+
 module.exports = {
   requireAuth,
   requireRole,
@@ -407,5 +431,6 @@ module.exports = {
   getDatesFromCsvHeader,
   prepareReportGeneration,
   formatCount,
-  formatMinutes
+  formatMinutes,
+  sendEmail
 };
