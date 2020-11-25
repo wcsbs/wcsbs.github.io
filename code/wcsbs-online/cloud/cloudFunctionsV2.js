@@ -4,32 +4,9 @@ const MASTER_KEY = { useMasterKey: true };
 const MAX_QUERY_COUNT = 3000;
 const logger = require("parse-server").logger;
 const commonFunctions = require("./commonFunctions.js");
-
+const loadStudentAttendanceV2 = commonFunctions.loadStudentAttendanceV2;
 const requireAuth = commonFunctions.requireAuth;
 const requireRole = commonFunctions.requireRole;
-
-const loadStudentAttendanceV2 = async function(userId, classSession) {
-  logger.info(
-    `loadStudentAttendanceV2 - userId: ${userId} classSession: ${classSession}`
-  );
-
-  var result = {};
-  if (classSession) {
-    var query = new Parse.Query("UserSessionAttendance");
-    query.equalTo("userId", userId);
-    query.equalTo("sessionId", classSession._getId());
-    const parseUserSessionAttendance = await query.first();
-
-    if (parseUserSessionAttendance) {
-      result.attendance = parseUserSessionAttendance.get("attendance");
-      result.onLeave = parseUserSessionAttendance.get("onLeave");
-    }
-  }
-
-  logger.info(`loadStudentAttendanceV2 - result: ${JSON.stringify(result)}`);
-
-  return result;
-};
 
 const loadPracticeSubmodules = async function(moduleId) {
   if (moduleId) {

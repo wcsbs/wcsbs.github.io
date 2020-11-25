@@ -399,13 +399,20 @@ const formatMinutes = function(minutes) {
   return "";
 };
 
+const toLocalDateString = function(date) {
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  };
+  return date.toLocaleDateString("en-UK", options);
+};
+
 const sendEmail = function(toEmail, subject, body) {
   const sgMail = require("@sendgrid/mail");
 
   // Import SendGrid module and call with your SendGrid API Key
-  sgMail.setApiKey(
-    "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"
-  );
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
     to: toEmail,
@@ -423,6 +430,183 @@ const sendEmail = function(toEmail, subject, body) {
   }
 };
 
+const getLastWeek = function(addGmt8Offset) {
+  var curr = new Date();
+  var sunday = curr.getDate() - curr.getDay(); // Sunday is the day of the month - the day of the week
+  if (curr.getDay() == 0) {
+    // today is Sunday; we need last Sunday
+    sunday -= 7;
+  }
+
+  var monday = sunday - 6;
+
+  sunday = new Date(curr.setDate(sunday));
+  sunday.setHours(23, 59, 59, 0);
+
+  monday = new Date(curr.setDate(monday));
+  monday.setHours(0, 0, 0, 0);
+
+  if (addGmt8Offset) {
+    const gmt8Offset = 8 * 60 * 60 * 1000; //8 hours in ms
+    monday.setTime(monday.getTime() + gmt8Offset);
+    sunday.setTime(sunday.getTime() + gmt8Offset);
+  }
+
+  return { monday, sunday };
+};
+
+const loadClassWithTeams = async function(classId) {
+  var query = new Parse.Query("Class");
+  query.equalTo("objectId", classId);
+  const parseClass = await query.first();
+
+  const classInfo = {
+    parseClass,
+    classTeams: []
+  };
+
+  query = new Parse.Query("Team");
+  query.equalTo("classId", classId);
+  query.ascending("index");
+  const parseTeams = await query.limit(MAX_QUERY_COUNT).find();
+
+  for (var i = 0; i < parseTeams.length; i++) {
+    const parseTeam = parseTeams[i];
+    const team = {
+      parseTeam,
+      members: []
+    };
+
+    var membersOrder = parseTeam.get("membersOrder");
+    if (membersOrder) {
+      membersOrder = membersOrder.split(",");
+      for (var j = 0; j < membersOrder.length; j++) {
+        query = new Parse.Query("User");
+        query.equalTo("objectId", membersOrder[j]);
+        const parseUser = await query.find(MASTER_KEY);
+        team.members.push(parseUser[0]);
+      }
+    }
+    classInfo.classTeams.push(team);
+  }
+
+  return classInfo;
+};
+
+const loadStudentAttendanceV2 = async function(userId, classSession) {
+  var result = {};
+  if (classSession) {
+    var query = new Parse.Query("UserSessionAttendance");
+    query.equalTo("userId", userId);
+    query.equalTo("sessionId", classSession._getId());
+    const parseUserSessionAttendance = await query.first();
+
+    if (parseUserSessionAttendance) {
+      result.attendance = parseUserSessionAttendance.get("attendance");
+      result.onLeave = parseUserSessionAttendance.get("onLeave");
+    }
+  }
+
+  logger.info(
+    `loadStudentAttendanceV2 - userId: ${userId} sessionId: ${
+      classSession ? classSession._getId() : undefined
+    } result: ${JSON.stringify(result)}`
+  );
+
+  return result;
+};
+
+const loadUserMissedReportingStates = async function(
+  parseUser,
+  parseClass,
+  lastSession,
+  lastWeek
+) {
+  const results = [];
+  const userId = parseUser._getId();
+  logger.info(`loadUserMissedReportingStates - userId: ${userId}`);
+
+  if (lastSession) {
+    const attendance = await loadStudentAttendanceV2(userId, lastSession);
+    var reported =
+      attendance && (attendance.onLeave || attendance.attendance != undefined);
+    if (!reported) {
+      results.push("共修出席");
+    }
+  }
+
+  var query = parseClass.relation("practices").query();
+  query.ascending("index");
+  const parsePractices = await query.find();
+
+  for (var i = 0; i < parsePractices.length; i++) {
+    const parsePractice = parsePractices[i];
+    query = parsePractice.relation("counts").query();
+    query.equalTo("userId", userId);
+    query.greaterThanOrEqualTo("reportedAt", lastWeek.monday);
+    query.lessThanOrEqualTo("reportedAt", lastWeek.sunday);
+    const parseCounts = await query.find();
+    if (!parseCounts.length) {
+      results.push(parsePractice.get("name"));
+    }
+  }
+
+  return results;
+};
+
+const remindClassReporting = async function(classId) {
+  const lastWeek = getLastWeek(true);
+  const lastWeekForEmail = getLastWeek(false);
+  logger.info(
+    `remindClassReporting - classId: ${classId} lastWeek: ${JSON.stringify(
+      lastWeek
+    )}`
+  );
+
+  const emailsSent = [];
+  const classInfo = await loadClassWithTeams(classId);
+  const parseClass = classInfo.parseClass;
+  const subject = `${parseClass.get("name")}学修报数提醒`;
+
+  var query = parseClass.relation("sessionsV2").query();
+  query.greaterThanOrEqualTo("scheduledAt", lastWeek.monday);
+  query.lessThanOrEqualTo("scheduledAt", lastWeek.sunday);
+  const lastSession = await query.first();
+
+  for (var i = 0; i < classInfo.classTeams.length; i++) {
+    const team = classInfo.classTeams[i];
+    for (var j = 0; j < team.members.length; j++) {
+      const parseUser = team.members[j];
+      const email = parseUser.get("email");
+      if (email) {
+        const states = await loadUserMissedReportingStates(
+          parseUser,
+          parseClass,
+          lastSession,
+          lastWeek
+        );
+        logger.info(`email: ${email} states: ${JSON.stringify(states)}`);
+
+        if (states.length) {
+          const statesStr = states.join("，");
+          const body = `${parseUser.get(
+            "name"
+          )}师兄，\n\n顶礼上师三宝！温馨提醒：您还没有完成上周（${toLocalDateString(
+            lastWeekForEmail.monday
+          )} - ${toLocalDateString(
+            lastWeekForEmail.sunday
+          )}）以下项目的报数：${statesStr}。请点以下链接，登录网站并完成报数：\n\nhttps://wcsbs.herokuapp.com/online/ \n\n新加坡智悲佛学会\nWCSBS`;
+
+          const result = sendEmail(email, subject, body);
+          logger.info(`sent email to ${email} result: ${result}`);
+          emailsSent.push({ email, result });
+        }
+      }
+    }
+  }
+  return { lastWeek, lastWeekForEmail, emailsSent };
+};
+
 module.exports = {
   requireAuth,
   requireRole,
@@ -432,5 +616,8 @@ module.exports = {
   prepareReportGeneration,
   formatCount,
   formatMinutes,
-  sendEmail
+  sendEmail,
+  remindClassReporting,
+  toLocalDateString,
+  loadStudentAttendanceV2
 };

@@ -100,9 +100,6 @@ export default {
       "removedStudents"
     ])
   },
-  mounted() {
-    this.refreshUI();
-  },
   methods: {
     assignTeam(value, index) {
       console.log(`selected: ${value} index: ${index}`);
@@ -137,8 +134,7 @@ export default {
       this.classTeam.members.splice(0, 0, member);
 
       this.$store.dispatch(RESET_STUDENTS, { changed: true });
-    },
-    refreshUI() {}
+    }
   }
 };
 </script>

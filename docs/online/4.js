@@ -122,9 +122,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(["classInfo", "classTeams", "classTeamsChanged", "classTeamOptions", "removedStudents"])),
-  mounted: function mounted() {
-    this.refreshUI();
-  },
   methods: {
     assignTeam: function assignTeam(value, index) {
       console.log("selected: ".concat(value, " index: ").concat(index));
@@ -166,8 +163,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["RESET_STUDENTS"], {
         changed: true
       });
-    },
-    refreshUI: function refreshUI() {}
+    }
   }
 });
 

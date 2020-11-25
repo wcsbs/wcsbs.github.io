@@ -242,3 +242,25 @@ Parse.Cloud.define(
     return { mapDates, teams, users, results };
   }
 );
+
+Parse.Cloud.define(
+  "admin:remindClassReporting",
+  async ({ user, params: { user: userWithRoles, classId } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
+    var date = new Date();
+
+    logger.info(
+      `admin:remindClassReporting started at ${date} - classId: ${classId}`
+    );
+
+    var result;
+    if (classId) {
+      result = await commonFunctions.remindClassReporting(classId);
+    }
+
+    logger.info("admin:remindClassReporting finished at " + new Date());
+    return result;
+  }
+);

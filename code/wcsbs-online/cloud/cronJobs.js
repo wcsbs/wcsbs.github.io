@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 
-const sendEmail = require("./commonFunctions.js").sendEmail;
+const commonFunctions = require("./commonFunctions.js");
 const logger = require("parse-server").logger;
 
 Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
@@ -35,7 +35,11 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
             "name"
           )}师兄，\n\n顶礼上师三宝！因为您没有在一周以内完成电邮地址验证，您用${email}注册的账号已经被注销。如果您还想访问学修平台，请点击以下链接重新注册用户账户：\n\nhttps://wcsbs.herokuapp.com/online/#/register \n\n新加坡智悲佛学会\nWCSBS`;
 
-          const sendEmailResult = sendEmail(email, subject, body);
+          const sendEmailResult = commonFunctions.sendEmail(
+            email,
+            subject,
+            body
+          );
           logger.info(`sent email to ${email} result: ${sendEmailResult}`);
         }
       }
@@ -56,4 +60,80 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
   }
 
   logger.info("Job removeInvalidLogin finished at " + new Date());
+});
+
+const loadUserMissedReportingStates = async function(
+  parseUser,
+  parseClass,
+  lastSession,
+  lastWeek
+) {
+  const results = [];
+  const userId = parseUser._getId();
+  logger.info(`loadUserMissedReportingStates - userId: ${userId}`);
+
+  if (lastSession) {
+    const attendance = await commonFunctions.loadStudentAttendanceV2(
+      userId,
+      lastSession
+    );
+    var reported =
+      attendance && (attendance.onLeave || attendance.attendance != undefined);
+    if (!reported) {
+      results.push("共修出席");
+    }
+  }
+
+  logger.info(
+    `loadUserMissedReportingStates - results: ${JSON.stringify(results)}`
+  );
+
+  var query = parseClass.relation("practices").query();
+  logger.info(
+    `loadUserMissedReportingStates - query: ${JSON.stringify(query)}`
+  );
+  query.ascending("index");
+  const parsePractices = await query.find();
+  logger.info(
+    `loadUserMissedReportingStates - parsePractices: ${JSON.stringify(
+      parsePractices
+    )}`
+  );
+
+  for (var i = 0; i < parsePractices.length; i++) {
+    const parsePractice = parsePractices[i];
+    query = parsePractice.relation("counts").query();
+    query.equalTo("userId", userId);
+    query.greaterThanOrEqualTo("reportedAt", lastWeek.monday);
+    query.lessThanOrEqualTo("reportedAt", lastWeek.sunday);
+    const parseCounts = await query.find();
+    if (!parseCounts.length) {
+      results.push(parsePractice.get("name"));
+    }
+  }
+
+  return results;
+};
+
+Parse.Cloud.job("remindClassReporting", async function(request, status) {
+  var date = new Date();
+  //only remind between Tue & Sat (both inclusive)
+  if (date.getDay() > 1) {
+    logger.info(
+      `Job remindClassReporting started at ${date} - params: ${JSON.stringify(
+        request.params
+      )}`
+    );
+    try {
+      const classId = request.params.classId;
+      if (classId) {
+        await commonFunctions.remindClassReporting(classId);
+      }
+    } catch (e) {
+      logger.info("remindClassReporting - exception: " + JSON.stringify(e));
+      return e;
+    }
+
+    logger.info("Job remindClassReporting finished at " + new Date());
+  }
 });
