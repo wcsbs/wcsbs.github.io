@@ -98,7 +98,7 @@ export default {
             // console.log(`generateReport - result: ${JSON.stringify(result)}`);
             console.log(`generateReport - #result: ${result.length}`);
             if (!result || result.length == 0) {
-              result = [{ 错误: "没有找到任何记录！" }];
+              return [{ 错误: "没有找到任何记录！" }];
             }
             if (forSelf) {
               return result;

@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <h3 v-text="classInfo.name" />
-      <div v-if="!classInfo.forAdmin">
+      <div v-if="!classInfo.forAdmin && !classInfo.forApplication">
         <DownloadReport :forSelf="true" worksheet="出席统计" />
         <hr />
       </div>

@@ -195,7 +195,7 @@ var render = function() {
           "div",
           [
             _c("h3", { domProps: { textContent: _vm._s(_vm.classInfo.name) } }),
-            !_vm.classInfo.forAdmin
+            !_vm.classInfo.forAdmin && !_vm.classInfo.forApplication
               ? _c(
                   "div",
                   [

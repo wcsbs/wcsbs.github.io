@@ -264,3 +264,13 @@ Parse.Cloud.define(
     return result;
   }
 );
+
+Parse.Cloud.define(
+  "admin:prepareReportGeneration",
+  async ({ user, params: { user: userWithRoles, isRxl, isPractice } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
+    return commonFunctions.prepareReportGeneration(isRxl, isPractice);
+  }
+);

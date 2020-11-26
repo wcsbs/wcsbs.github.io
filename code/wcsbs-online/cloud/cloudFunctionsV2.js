@@ -1113,7 +1113,7 @@ const loadDetailedDataForUser = async function(
     var yearlyTotalMinutes = 0;
     var grandTotalCount = 0;
     var grandTotalMinutes = 0;
-    const perSubmoduleRecords = [{}, {}, {}];
+    const perSubmoduleRecords = [{}, {}];
     k = 0;
     var cursorInCountList = 0;
     for (key in summaryRecord) {
@@ -1127,8 +1127,8 @@ const loadDetailedDataForUser = async function(
             perSubmoduleRecords[m]["观修方法"] = practicedSubmodules[j].name;
           }
           perSubmoduleRecords[0]["统计项目"] = "观修座数";
-          perSubmoduleRecords[1]["统计项目"] = "观修时长(分钟)";
-          perSubmoduleRecords[2]["统计项目"] = "观修时长(小时)";
+          perSubmoduleRecords[1]["统计项目"] = "观修时数";
+          // perSubmoduleRecords[2]["统计项目"] = "观修时长(分钟)";
         }
 
         const date = mapDates[key];
@@ -1166,29 +1166,29 @@ const loadDetailedDataForUser = async function(
           }
 
           perSubmoduleRecords[0][key] = commonFunctions.formatCount(count);
-          perSubmoduleRecords[1][key] = commonFunctions.formatCount(minutes);
-          perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(minutes);
+          perSubmoduleRecords[1][key] = commonFunctions.formatMinutes(minutes);
+          // perSubmoduleRecords[2][key] = commonFunctions.formatCount(minutes);
         } else {
           if (key === "TOTAL") {
             perSubmoduleRecords[0][key] = commonFunctions.formatCount(
               grandTotalCount
             );
-            perSubmoduleRecords[1][key] = commonFunctions.formatCount(
+            perSubmoduleRecords[1][key] = commonFunctions.formatMinutes(
               grandTotalMinutes
             );
-            perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(
-              grandTotalMinutes
-            );
+            // perSubmoduleRecords[2][key] = commonFunctions.formatCount(
+            //   grandTotalMinutes
+            // );
           } else if (key.startsWith("20") && key.endsWith("TOTAL")) {
             perSubmoduleRecords[0][key] = commonFunctions.formatCount(
               yearlyTotalCount
             );
-            perSubmoduleRecords[1][key] = commonFunctions.formatCount(
+            perSubmoduleRecords[1][key] = commonFunctions.formatMinutes(
               yearlyTotalMinutes
             );
-            perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(
-              yearlyTotalMinutes
-            );
+            // perSubmoduleRecords[2][key] = commonFunctions.formatCount(
+            //   yearlyTotalMinutes
+            // );
           } else {
             var delta = monthlyTotalCount ? monthlyTotalCount : 0;
             yearlyTotalCount += delta;
@@ -1201,12 +1201,12 @@ const loadDetailedDataForUser = async function(
             delta = monthlyTotalMinutes ? monthlyTotalMinutes : 0;
             yearlyTotalMinutes += delta;
             grandTotalMinutes += delta;
-            perSubmoduleRecords[1][key] = commonFunctions.formatCount(
+            perSubmoduleRecords[1][key] = commonFunctions.formatMinutes(
               monthlyTotalMinutes
             );
-            perSubmoduleRecords[2][key] = commonFunctions.formatMinutes(
-              monthlyTotalMinutes
-            );
+            // perSubmoduleRecords[2][key] = commonFunctions.formatCount(
+            //   monthlyTotalMinutes
+            // );
             monthlyTotalMinutes = undefined;
           }
         }

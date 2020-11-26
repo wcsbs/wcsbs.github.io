@@ -380,7 +380,62 @@ const prepareReportGeneration = function(isRxl, isPractice) {
   ];
 
   const csvHeader = csvHeaders[isPractice ? 1 : 0];
-  const mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
+  var mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
+
+  // JiaXing practices started on 30/6/19
+  if (!isRxl && isPractice) {
+    var endDate = mapDates["24FEB-01MAR"];
+    var sunday = new Date("30 JUN 2019");
+    var insertAt = 2;
+
+    logger.info(
+      `prepareReportGeneration - sunday: ${sunday} endDate: ${endDate}`
+    );
+
+    var lastMonth, lastYear;
+    const DAY_IN_MS = 24 * 60 * 60 * 1000;
+    while (sunday < endDate) {
+      var saturday = new Date(sunday.getTime() - DAY_IN_MS);
+      var monday = new Date(sunday.getTime() - 6 * DAY_IN_MS);
+
+      const re = /[\s,]+/;
+      const monElements = toLocalDateString(monday).split(re);
+      const satElements = toLocalDateString(saturday).split(re);
+      const sunElements = toLocalDateString(sunday).split(re);
+      const newCsvHeader = `${monElements[1]}${
+        monElements[0] != sunElements[0] ? monElements[0].toUpperCase() : ""
+      }-${sunElements[1]}${sunElements[0].toUpperCase()}`;
+
+      if (!lastMonth) {
+        lastMonth = satElements[0];
+        lastYear = satElements[2];
+      } else {
+        if (lastMonth != satElements[0]) {
+          csvHeader.splice(
+            insertAt,
+            0,
+            `${lastMonth.toUpperCase()}${lastYear} TOTAL`
+          );
+          insertAt += 1;
+          lastMonth = satElements[0];
+
+          if (lastYear != satElements[2]) {
+            csvHeader.splice(insertAt, 0, `${lastYear} TOTAL`);
+            insertAt += 1;
+            lastYear = satElements[2];
+          }
+        }
+      }
+
+      csvHeader.splice(insertAt, 0, newCsvHeader);
+      insertAt += 1;
+
+      sunday = new Date(sunday.getTime() + 7 * DAY_IN_MS);
+    }
+
+    mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
+  }
+
   return { csvHeader, mapDates };
 };
 

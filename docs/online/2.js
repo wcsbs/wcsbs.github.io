@@ -187,7 +187,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
                   console.log("generateReport - #result: ".concat(result.length));
 
                   if (!result || result.length == 0) {
-                    result = [{
+                    return [{
                       错误: "没有找到任何记录！"
                     }];
                   }
