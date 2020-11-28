@@ -49,6 +49,22 @@ const getDisplayRoles = function(userRoles) {
 
   return roles;
 };
+const getDisplayName = function(user) {
+  if (!user.state && user.emailVerified) {
+    return user.name;
+  }
+
+  var userState;
+  if (user.state == "blocked") {
+    userState = "账号已禁用";
+  } else if (!user.emailVerified) {
+    userState = "电邮地址待验证";
+  } else {
+    userState = "密码需更改";
+  }
+
+  return `${user.name} (${userState})`;
+};
 
 const getters = {
   user(userState) {
@@ -204,8 +220,9 @@ const mutations = {
       userState.users = userState.allUsers;
     } else {
       userState.users = userState.allUsers.filter(user => {
+        const name = getDisplayName(user);
         const roles = getDisplayRoles(user.roles);
-        const text = `${user.name}\t${user.username}\t${user.email}\t${user.phone}\t${roles}`;
+        const text = `${name}\t${user.username}\t${user.email}\t${user.phone}\t${roles}`;
         return text.toLowerCase().includes(filterText.toLowerCase());
       });
     }
@@ -217,5 +234,6 @@ export default {
   getters,
   actions,
   mutations,
-  getDisplayRoles
+  getDisplayRoles,
+  getDisplayName
 };

@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@sendgrid/mail": "*"
+    "@sendgrid/mail": "*",
+    "nodemailer": "^6.4.16"
   }
 }

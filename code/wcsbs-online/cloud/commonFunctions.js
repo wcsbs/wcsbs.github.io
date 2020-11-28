@@ -463,7 +463,7 @@ const toLocalDateString = function(date) {
   return date.toLocaleDateString("en-UK", options);
 };
 
-const sendEmail = function(toEmail, subject, body) {
+const sendEmailViaSendGrid = function(toEmail, subject, body) {
   const sgMail = require("@sendgrid/mail");
 
   // Import SendGrid module and call with your SendGrid API Key
@@ -483,6 +483,34 @@ const sendEmail = function(toEmail, subject, body) {
   } catch (e) {
     return `Error: ${e.message}`;
   }
+};
+
+const sendEmail = function(toEmail, subject, body) {
+  var nodemailer = require("nodemailer");
+  var mail = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "wcsbs7@gmail.com",
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+
+  var mailOptions = {
+    from: "wcsbs7@gmail.com",
+    to: toEmail,
+    subject: subject,
+    text: body
+  };
+
+  logger.info(`sending email to ${toEmail}`);
+  mail.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      logger.info(`error: ${error})`);
+    } else {
+      logger.info("Email sent: " + info.response);
+    }
+  });
+  return `sent email to ${toEmail} ${JSON.stringify(mail)}`;
 };
 
 const getLastWeek = function(addGmt8Offset) {

@@ -274,3 +274,13 @@ Parse.Cloud.define(
     return commonFunctions.prepareReportGeneration(isRxl, isPractice);
   }
 );
+
+Parse.Cloud.define(
+  "admin:testGmail",
+  async ({ user, params: { user: userWithRoles, to, subject, body } }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
+    return commonFunctions.sendEmail(to, subject, body);
+  }
+);

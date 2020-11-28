@@ -33,18 +33,7 @@ export default {
   },
   methods: {
     displayName() {
-      if (!this.user.state && this.user.emailVerified) {
-        return this.user.name;
-      }
-      var state;
-      if (this.user.state == "blocked") {
-        state = "账号已禁用";
-      } else if (!this.user.emailVerified) {
-        state = "电邮地址待验证";
-      } else {
-        state = "密码需更改";
-      }
-      return `${this.user.name} (${state})`;
+      return user.getDisplayName(this.user);
     },
     displayRoles() {
       return user.getDisplayRoles(this.user.roles);
