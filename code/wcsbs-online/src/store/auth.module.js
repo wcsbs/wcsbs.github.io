@@ -68,6 +68,10 @@ var updateMenu = function() {
   }
 };
 
+const emailIsValid = function(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
 const actions = {
   [LOGIN](context, credentials) {
     console.log(LOGIN);
@@ -105,14 +109,42 @@ const actions = {
     context.commit(PURGE_AUTH);
   },
   [REGISTER](context, credentials) {
-    const name = credentials.name;
-    const email = credentials.email;
-    const username = email.toLowerCase();
+    var name = credentials.name;
+    var email = credentials.email;
     const password = credentials.password;
     const confirmPassword = credentials.confirmPassword;
-    const phone = credentials.phone;
+    var phone = credentials.phone;
 
     return new Promise((resolve, reject) => {
+      if (!name) {
+        Vue.toasted.error("请输入姓名！", { duration: 5000 });
+        reject();
+        return;
+      }
+      name = name.trim();
+
+      if (!email) {
+        Vue.toasted.error("请输入电邮地址！", { duration: 5000 });
+        reject();
+        return;
+      } else {
+        email = email.trim();
+        if (!emailIsValid(email)) {
+          Vue.toasted.error("电邮地址格式错误，请重新输入！", {
+            duration: 5000
+          });
+          reject();
+          return;
+        }
+      }
+
+      if (!phone) {
+        Vue.toasted.error("请输入电话号码！", { duration: 5000 });
+        reject();
+        return;
+      }
+      phone = phone.trim();
+
       if (!password || password.length < 6) {
         Vue.toasted.error("密码不可以少于6位！", { duration: 5000 });
         reject();
@@ -123,6 +155,7 @@ const actions = {
         return;
       }
 
+      const username = email.toLowerCase();
       Parse.Cloud.run("user:signup", {
         name,
         username,

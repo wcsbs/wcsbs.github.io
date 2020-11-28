@@ -924,9 +924,11 @@ Parse.Cloud.define(
       }
 
       for (i = 0; i < classAdminUserIds.length; i++) {
-        query = new Parse.Query("User");
-        query.equalTo("objectId", classAdminUserIds[i]);
-        relation.add(await query.first());
+        if (classAdminUserIds[i]) {
+          query = new Parse.Query("User");
+          query.equalTo("objectId", classAdminUserIds[i]);
+          relation.add(await query.first());
+        }
       }
 
       await parseClass.save(null, MASTER_KEY);
@@ -973,10 +975,7 @@ Parse.Cloud.define(
       teams.push(parseTeam);
     }
 
-    return {
-      classAdminUserIds,
-      teams
-    };
+    return teams;
   }
 );
 
