@@ -810,7 +810,8 @@ Parse.Cloud.define(
           query.equalTo("userId", member.id);
           const parseCount = await query.first();
           if (parseCount) {
-            member.count += parseCount.get("count");
+            member.count = parseCount.get("count");
+            member.completed = parseCount.get("completed");
           }
 
           query = relation.query();
@@ -1364,5 +1365,32 @@ Parse.Cloud.define(
     }
 
     return results;
+  }
+);
+
+Parse.Cloud.define(
+  "admin:markUserPracticeCompleted",
+  async ({ user, params: { userId, practiceId } }) => {
+    const result = {};
+
+    var query = new Parse.Query("Practice");
+    query.equalTo("objectId", practiceId);
+    const practice = await query.first();
+    if (practice) {
+      const relation = practice.relation("counts");
+      query = relation.query();
+      query.equalTo("reportedAt", undefined);
+      query.equalTo("userId", userId);
+      var parseCount = await query.first();
+
+      if (parseCount) {
+        parseCount.set("completed", true);
+        parseCount = await parseCount.save(null, MASTER_KEY);
+        result.completed = parseCount.get("completed");
+        result.count = parseCount.get("count");
+      }
+    }
+
+    return result;
   }
 );

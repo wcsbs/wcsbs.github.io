@@ -463,54 +463,24 @@ const toLocalDateString = function(date) {
   return date.toLocaleDateString("en-UK", options);
 };
 
-const sendEmailViaSendGrid = function(toEmail, subject, body) {
-  const sgMail = require("@sendgrid/mail");
-
-  // Import SendGrid module and call with your SendGrid API Key
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-  const msg = {
-    to: toEmail,
-    replyTo: "wcsbs7@gmail.com",
-    from: "wcsbs7@gmail.com",
-    subject: subject,
-    text: body
-  };
-
-  try {
-    sgMail.send(msg);
-    return "OK";
-  } catch (e) {
-    return `Error: ${e.message}`;
-  }
-};
-
 const sendEmail = function(toEmail, subject, body) {
-  var nodemailer = require("nodemailer");
-  var mail = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "wcsbs7@gmail.com",
-      pass: process.env.GMAIL_PASSWORD
-    }
-  });
+  logger.info(`sending email to ${toEmail}`);
 
-  var mailOptions = {
-    from: "wcsbs7@gmail.com",
+  const mail = require("nodejs-nodemailer-outlook");
+  mail.sendEmail({
+    auth: {
+      user: process.env.OUTLOOK_USER,
+      pass: process.env.OUTLOOK_PASS
+    },
+    from: process.env.OUTLOOK_USER,
     to: toEmail,
     subject: subject,
-    text: body
-  };
-
-  logger.info(`sending email to ${toEmail}`);
-  mail.sendMail(mailOptions, function(error, info) {
-    if (error) {
-      logger.info(`error: ${error})`);
-    } else {
-      logger.info("Email sent: " + info.response);
-    }
+    text: body,
+    onError: e => logger.info(`Error - ${e}`),
+    onSuccess: i => logger.info(`Success - ${JSON.stringify(i)}`)
   });
-  return `sent email to ${toEmail} ${JSON.stringify(mail)}`;
+
+  return `sent email to ${toEmail}`;
 };
 
 const getLastWeek = function(addGmt8Offset) {

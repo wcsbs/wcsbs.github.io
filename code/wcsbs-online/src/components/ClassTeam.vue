@@ -53,6 +53,13 @@
             `
           "
         ></b-form-input>
+        <b-button
+          v-if="isClassAdmin"
+          variant="success"
+          v-on:click="setCompleted(index)"
+          :disabled="member.completed"
+          >{{ member.completed ? "已圆满" : "圆满" }}</b-button
+        >
         <b-input-group-append>
           <div v-if="classInfo.forAdmin">
             <b-form-select
@@ -78,6 +85,7 @@
 </template>
 
 <script>
+import Parse from "parse";
 import { mapGetters } from "vuex";
 import { RESET_STUDENTS } from "../store/actions.type";
 
@@ -93,6 +101,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      "isClassAdmin",
       "classInfo",
       "classTeams",
       "classTeamsChanged",
@@ -134,6 +143,51 @@ export default {
       this.classTeam.members.splice(0, 0, member);
 
       this.$store.dispatch(RESET_STUDENTS, { changed: true });
+    },
+    setCompleted(index) {
+      const member = this.classTeam.members[index];
+
+      console.log(`setCompleted - ${JSON.stringify(member)}`);
+
+      var msg = `确认${member.name}已圆满${this.classInfo.practiceName}实修?`;
+
+      const options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+      };
+      const message = {
+        title: this.classInfo.practiceName,
+        body: msg
+      };
+      const thisComponent = this;
+
+      this.$dialog
+        .confirm(message, options)
+        .then(function(dialog) {
+          Parse.Cloud.run("admin:markUserPracticeCompleted", {
+            userId: member.id,
+            practiceId: thisComponent.classInfo.practiceId
+          })
+            .then(result => {
+              console.log(
+                `markUserPracticeCompleted - result: ${JSON.stringify(result)}`
+              );
+              member.completed = result.completed;
+              dialog.close();
+              window.location.reload();
+            })
+            .catch(e => {
+              console.log(`error in updateUserStudyRecord: ${e}`);
+              dialog.close();
+              thisComponent.$dialog.alert(
+                `error in updateUserStudyRecord: ${e}`
+              );
+            });
+        })
+        .catch(e => {
+          console.log(`error: ${e}`);
+        });
     }
   }
 };

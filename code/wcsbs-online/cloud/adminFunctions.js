@@ -276,7 +276,7 @@ Parse.Cloud.define(
 );
 
 Parse.Cloud.define(
-  "admin:testGmail",
+  "admin:testSendEmail",
   async ({ user, params: { user: userWithRoles, to, subject, body } }) => {
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");

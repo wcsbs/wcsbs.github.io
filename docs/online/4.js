@@ -15,9 +15,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es6.object.keys */ "./node_modules/core-js/modules/es6.object.keys.js");
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _store_actions_type__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/actions.type */ "./src/store/actions.type.js");
+
 
 
 
@@ -25,7 +30,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_3__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_4__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 //
 //
@@ -106,6 +111,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -121,7 +134,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       canAddSubmodule: false
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(["classInfo", "classTeams", "classTeamsChanged", "classTeamOptions", "removedStudents"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_6__["mapGetters"])(["isClassAdmin", "classInfo", "classTeams", "classTeamsChanged", "classTeamOptions", "removedStudents"])),
   methods: {
     assignTeam: function assignTeam(value, index) {
       console.log("selected: ".concat(value, " index: ").concat(index));
@@ -138,7 +151,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
 
-      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["RESET_STUDENTS"], {
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["RESET_STUDENTS"], {
         changed: true
       });
     },
@@ -152,7 +165,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         this.removedStudents.push(member);
       }
 
-      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["RESET_STUDENTS"], {
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["RESET_STUDENTS"], {
         changed: true
       });
     },
@@ -160,8 +173,41 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       var member = this.classTeam.members[index];
       this.classTeam.members.splice(index, 1);
       this.classTeam.members.splice(0, 0, member);
-      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_5__["RESET_STUDENTS"], {
+      this.$store.dispatch(_store_actions_type__WEBPACK_IMPORTED_MODULE_7__["RESET_STUDENTS"], {
         changed: true
+      });
+    },
+    setCompleted: function setCompleted(index) {
+      var member = this.classTeam.members[index];
+      console.log("setCompleted - ".concat(JSON.stringify(member)));
+      var msg = "\u786E\u8BA4".concat(member.name, "\u5DF2\u5706\u6EE1").concat(this.classInfo.practiceName, "\u5B9E\u4FEE?");
+      var options = {
+        okText: "确认",
+        cancelText: "取消",
+        loader: true // default: false - when set to true, the proceed button shows a loader when clicked; and a dialog object will be passed to the then() callback
+
+      };
+      var message = {
+        title: this.classInfo.practiceName,
+        body: msg
+      };
+      var thisComponent = this;
+      this.$dialog.confirm(message, options).then(function (dialog) {
+        parse__WEBPACK_IMPORTED_MODULE_5___default.a.Cloud.run("admin:markUserPracticeCompleted", {
+          userId: member.id,
+          practiceId: thisComponent.classInfo.practiceId
+        }).then(function (result) {
+          console.log("markUserPracticeCompleted - result: ".concat(JSON.stringify(result)));
+          member.completed = result.completed;
+          dialog.close();
+          window.location.reload();
+        }).catch(function (e) {
+          console.log("error in updateUserStudyRecord: ".concat(e));
+          dialog.close();
+          thisComponent.$dialog.alert("error in updateUserStudyRecord: ".concat(e));
+        });
+      }).catch(function (e) {
+        console.log("error: ".concat(e));
       });
     }
   }
@@ -274,6 +320,23 @@ var render = function() {
                           "\n          "
                       }
                     }),
+                _vm.isClassAdmin
+                  ? _c(
+                      "b-button",
+                      {
+                        attrs: {
+                          variant: "success",
+                          disabled: member.completed
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.setCompleted(index)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(member.completed ? "已圆满" : "圆满"))]
+                    )
+                  : _vm._e(),
                 _c("b-input-group-append", [
                   _vm.classInfo.forAdmin
                     ? _c(
