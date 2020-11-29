@@ -320,7 +320,7 @@ var render = function() {
                           "\n          "
                       }
                     }),
-                _vm.isClassAdmin
+                _vm.isClassAdmin && !_vm.classInfo.forAdmin
                   ? _c(
                       "b-button",
                       {
