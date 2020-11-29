@@ -54,7 +54,7 @@
           "
         ></b-form-input>
         <b-button
-          v-if="isClassAdmin && !classInfo.forAdmin"
+          v-if="isClassAdmin && !classInfo.forAdmin && classInfo.practiceId"
           variant="success"
           v-on:click="setCompleted(index)"
           :disabled="member.completed"

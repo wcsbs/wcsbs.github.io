@@ -336,6 +336,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
 
 
 
@@ -677,7 +679,8 @@ var render = function() {
                       1
                     )
                   : _vm._e(),
-                _vm.home.classAdminDashboard
+                _vm.home.classAdminDashboard &&
+                _vm.home.classAdminDashboard.classes.length
                   ? _c(
                       "b-tab",
                       {

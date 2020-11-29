@@ -14,7 +14,9 @@
           <StudentDashboard :dashboard="home.studentDashboard" />
         </b-tab>
         <b-tab
-          v-if="home.classAdminDashboard"
+          v-if="
+            home.classAdminDashboard && home.classAdminDashboard.classes.length
+          "
           :title="classAdminDashboardTitle()"
           title-item-class="mytab"
           acitve

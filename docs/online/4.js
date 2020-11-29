@@ -320,7 +320,9 @@ var render = function() {
                           "\n          "
                       }
                     }),
-                _vm.isClassAdmin && !_vm.classInfo.forAdmin
+                _vm.isClassAdmin &&
+                !_vm.classInfo.forAdmin &&
+                _vm.classInfo.practiceId
                   ? _c(
                       "b-button",
                       {
