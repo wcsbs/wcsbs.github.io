@@ -600,7 +600,13 @@ const loadUserMissedReportingStates = async function(
     query.lessThanOrEqualTo("reportedAt", lastWeek.sunday);
     const parseCounts = await query.find();
     if (!parseCounts.length) {
-      results.push(parsePractice.get("name"));
+      query = parsePractice.relation("counts").query();
+      query.equalTo("userId", userId);
+      query.equalTo("reportedAt", undefined);
+      const parseCount = await query.first();
+      if (!parseCount || !parseCount.get("completed")) {
+        results.push(parsePractice.get("name"));
+      }
     }
   }
 
