@@ -471,8 +471,8 @@ const sendEmailViaSendGrid = async function(toEmail, ccEmail, subject, body) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
-    from: process.env.GMAIL_USER,
-    replyTo: process.env.GMAIL_USER,
+    from: process.env.OUTLOOK_USER,
+    replyTo: process.env.OUTLOOK_USER,
     to: toEmail,
     cc: ccEmail != toEmail ? ccEmail : undefined,
     subject: subject,
