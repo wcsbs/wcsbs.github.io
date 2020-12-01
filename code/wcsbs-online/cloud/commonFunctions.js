@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 const MASTER_KEY = { useMasterKey: true };
 const MAX_QUERY_COUNT = 3000;
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
 const logger = require("parse-server").logger;
 
 const requireAuth = user => {
@@ -393,7 +394,6 @@ const prepareReportGeneration = function(isRxl, isPractice) {
     );
 
     var lastMonth, lastYear;
-    const DAY_IN_MS = 24 * 60 * 60 * 1000;
     while (sunday < endDate) {
       var saturday = new Date(sunday.getTime() - DAY_IN_MS);
       var monday = new Date(sunday.getTime() - 6 * DAY_IN_MS);
@@ -463,7 +463,7 @@ const toLocalDateString = function(date) {
   return date.toLocaleDateString("en-UK", options);
 };
 
-const sendEmail = function(toEmail, subject, body) {
+const sendEmail = function(toEmail, ccEmail, subject, body) {
   logger.info(`sending email to ${toEmail}`);
 
   const mail = require("nodejs-nodemailer-outlook");
@@ -474,6 +474,7 @@ const sendEmail = function(toEmail, subject, body) {
     },
     from: process.env.OUTLOOK_USER,
     to: toEmail,
+    cc: ccEmail,
     subject: subject,
     text: body,
     onError: e => logger.info(`Error - ${e}`),
@@ -491,12 +492,11 @@ const getLastWeek = function(addGmt8Offset) {
     sunday -= 7;
   }
 
-  var monday = sunday - 6;
-
-  sunday = new Date(curr.setDate(sunday));
+  curr.setDate(sunday);
+  sunday = curr;
   sunday.setHours(23, 59, 59, 0);
 
-  monday = new Date(curr.setDate(monday));
+  const monday = new Date(sunday.getTime() - 7 * DAY_IN_MS);
   monday.setHours(0, 0, 0, 0);
 
   if (addGmt8Offset) {
@@ -632,11 +632,15 @@ const remindClassReporting = async function(classId) {
   query.lessThanOrEqualTo("scheduledAt", lastWeek.sunday);
   const lastSession = await query.first();
 
+  var leaderEmail;
   for (var i = 0; i < classInfo.classTeams.length; i++) {
     const team = classInfo.classTeams[i];
     for (var j = 0; j < team.members.length; j++) {
       const parseUser = team.members[j];
       const email = parseUser.get("email");
+      if (j == 0) {
+        leaderEmail = email;
+      }
       if (email) {
         const states = await loadUserMissedReportingStates(
           parseUser,
@@ -644,8 +648,6 @@ const remindClassReporting = async function(classId) {
           lastSession,
           lastWeek
         );
-        logger.info(`email: ${email} states: ${JSON.stringify(states)}`);
-
         if (states.length) {
           const statesStr = states.join("，");
           const body = `${parseUser.get(
@@ -656,8 +658,10 @@ const remindClassReporting = async function(classId) {
             lastWeekForEmail.sunday
           )}）以下项目的报数：${statesStr}。请点以下链接，登录网站并完成报数：\n\nhttps://wcsbs.herokuapp.com/online/ \n\n新加坡智悲佛学会\nWCSBS`;
 
-          const result = sendEmail(email, subject, body);
-          logger.info(`sent email to ${email} result: ${result}`);
+          const result = sendEmail(email, leaderEmail, subject, body);
+          logger.info(
+            `sent email to ${email} cc ${leaderEmail} result: ${result}`
+          );
           emailsSent.push({ email, result });
         }
       }
@@ -678,5 +682,6 @@ module.exports = {
   sendEmail,
   remindClassReporting,
   toLocalDateString,
+  getLastWeek,
   loadStudentAttendanceV2
 };

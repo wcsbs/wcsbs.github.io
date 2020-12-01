@@ -788,6 +788,11 @@ Parse.Cloud.define(
       false
     );
 
+    if (!lastWeek) {
+      lastWeek = commonFunctions.getLastWeek(true);
+      classInfo.lastWeek = lastWeek;
+    }
+
     var query, relation;
     if (practiceId) {
       query = new Parse.Query("Practice");

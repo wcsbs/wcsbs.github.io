@@ -277,10 +277,10 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "admin:testSendEmail",
-  async ({ user, params: { user: userWithRoles, to, subject, body } }) => {
+  async ({ user, params: { user: userWithRoles, to, cc, subject, body } }) => {
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");
 
-    return commonFunctions.sendEmail(to, subject, body);
+    return commonFunctions.sendEmail(to, cc, subject, body);
   }
 );

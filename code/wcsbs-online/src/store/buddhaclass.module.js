@@ -91,25 +91,6 @@ const getters = {
   }
 };
 
-const getLastWeek = function() {
-  var curr = new Date();
-  var sunday = curr.getDate() - curr.getDay(); // Sunday is the day of the month - the day of the week
-  if (curr.getDay() == 0) {
-    // today is Sunday; we need last Sunday
-    sunday -= 7;
-  }
-
-  var monday = sunday - 6;
-
-  sunday = new Date(curr.setDate(sunday));
-  sunday.setHours(23, 59, 59, 0);
-
-  monday = new Date(curr.setDate(monday));
-  monday.setHours(0, 0, 0, 0);
-
-  return { monday, sunday };
-};
-
 const actions = {
   [FETCH_SESSIONS](context, params) {
     const classId = params["classId"];
@@ -243,19 +224,18 @@ const actions = {
     context.commit(FETCH_STATS_START);
 
     const fetchStats = "class:fetchStats";
-    const lastWeek = getLastWeek();
-    console.log(`${fetchStats} - lastWeek: ${JSON.stringify(lastWeek)}`);
 
     Parse.Cloud.run(fetchStats, {
       user,
       classId,
       practiceId,
-      forAdmin,
-      lastWeek
+      forAdmin
     })
       .then(classInfo => {
         console.log(
-          `${fetchStats} - #classTeam: ${classInfo.classTeams.length}`
+          `${fetchStats} - #classTeam: ${
+            classInfo.classTeams.length
+          } lastWeek: ${JSON.stringify(classInfo.lastWeek)}`
         );
         // console.log(`${fetchStats} - classInfo: ${JSON.stringify(classInfo)}`);
         context.commit(FETCH_STATS_END, classInfo);

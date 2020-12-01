@@ -37,6 +37,7 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
 
           const sendEmailResult = commonFunctions.sendEmail(
             email,
+            undefined,
             subject,
             body
           );
