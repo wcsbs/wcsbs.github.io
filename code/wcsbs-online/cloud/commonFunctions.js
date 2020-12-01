@@ -510,6 +510,9 @@ const sendEmailViaOutlook = async function(toEmail, ccEmail, subject, body) {
 
 const sendEmail = async function(toEmail, ccEmail, subject, body) {
   toEmail = toEmail.toLowerCase();
+  if (ccEmail) {
+    ccEmail = ccEmail.toLowerCase();
+  }
   if (toEmail.includes("outlook") || toEmail.includes("hotmail")) {
     return await sendEmailViaOutlook(toEmail, ccEmail, subject, body);
   }
