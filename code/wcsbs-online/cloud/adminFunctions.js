@@ -281,6 +281,6 @@ Parse.Cloud.define(
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");
 
-    return commonFunctions.sendEmail(to, cc, subject, body);
+    return await commonFunctions.sendEmail(to, cc, subject, body);
   }
 );

@@ -26,7 +26,8 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
 
     const results = await query.find({ useMasterKey: true });
 
-    results.forEach(user => {
+    for (var i = 0; i < results.length; i++) {
+      const user = results[i];
       if (user.get("state") != "blocked") {
         const email = user.get("email");
         if (email) {
@@ -35,7 +36,7 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
             "name"
           )}师兄，\n\n顶礼上师三宝！因为您没有在一周以内完成电邮地址验证，您用${email}注册的账号已经被注销。如果您还想访问学修平台，请点击以下链接重新注册用户账户：\n\nhttps://wcsbs.herokuapp.com/online/#/register \n\n新加坡智悲佛学会\nWCSBS`;
 
-          const sendEmailResult = commonFunctions.sendEmail(
+          const sendEmailResult = await commonFunctions.sendEmail(
             email,
             undefined,
             subject,
@@ -55,7 +56,7 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
         .catch(error => {
           logger.info("Error: " + error.code + " - " + error.message);
         });
-    });
+    }
   } catch (e) {
     logger.info("Exception: " + JSON.stringify(e));
   }

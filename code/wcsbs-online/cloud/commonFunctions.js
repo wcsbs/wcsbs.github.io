@@ -463,11 +463,35 @@ const toLocalDateString = function(date) {
   return date.toLocaleDateString("en-UK", options);
 };
 
-const sendEmail = function(toEmail, ccEmail, subject, body) {
-  logger.info(`sending email to ${toEmail}`);
+const sendEmailViaSendGrid = async function(toEmail, ccEmail, subject, body) {
+  logger.info(`sending email to: ${toEmail} cc: ${ccEmail} using SendGrid`);
+  const sgMail = require("@sendgrid/mail");
+
+  // Import SendGrid module and call with your SendGrid API Key
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    from: process.env.GMAIL_USER,
+    replyTo: process.env.GMAIL_USER,
+    to: toEmail,
+    cc: ccEmail != toEmail ? ccEmail : undefined,
+    subject: subject,
+    text: body
+  };
+
+  try {
+    await sgMail.send(msg);
+    return "OK";
+  } catch (e) {
+    return `Error: ${JSON.stringify(e)}`;
+  }
+};
+
+const sendEmailViaOutlook = async function(toEmail, ccEmail, subject, body) {
+  logger.info(`sending email to: ${toEmail} cc: ${ccEmail} using Outlook`);
 
   const mail = require("nodejs-nodemailer-outlook");
-  mail.sendEmail({
+  await mail.sendEmail({
     auth: {
       user: process.env.OUTLOOK_USER,
       pass: process.env.OUTLOOK_PASS
@@ -482,6 +506,14 @@ const sendEmail = function(toEmail, ccEmail, subject, body) {
   });
 
   return `sent email to ${toEmail}`;
+};
+
+const sendEmail = async function(toEmail, ccEmail, subject, body) {
+  toEmail = toEmail.toLowerCase();
+  if (toEmail.includes("outlook") || toEmail.includes("hotmail")) {
+    return await sendEmailViaOutlook(toEmail, ccEmail, subject, body);
+  }
+  return await sendEmailViaSendGrid(toEmail, ccEmail, subject, body);
 };
 
 const getLastWeek = function(addGmt8Offset) {
@@ -658,7 +690,7 @@ const remindClassReporting = async function(classId) {
             lastWeekForEmail.sunday
           )}）以下项目的报数：${statesStr}。请点以下链接，登录网站并完成报数：\n\nhttps://wcsbs.herokuapp.com/online/ \n\n新加坡智悲佛学会\nWCSBS`;
 
-          const result = sendEmail(email, leaderEmail, subject, body);
+          const result = await sendEmail(email, leaderEmail, subject, body);
           logger.info(
             `sent email to ${email} cc ${leaderEmail} result: ${result}`
           );
