@@ -10,7 +10,7 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
 
   logger.info("Job removeInvalidLogin started at " + date);
   try {
-    var intervalOfTime = 7 * 24 * 60 * 60 * 1000; // the time set is 7 days in milliseconds
+    var intervalOfTime = 7 * commonFunctions.DAY_IN_MS; // the time set is 7 days in milliseconds
     var timeThen = timeNow - intervalOfTime;
 
     // Limit date
@@ -20,9 +20,8 @@ Parse.Cloud.job("removeInvalidLogin", async function(request, status) {
     // The query object
     var query = new Parse.Query(Parse.User);
 
-    // Query the logins that still unverified after 7 days
     query.equalTo("emailVerified", false);
-    query.lessThanOrEqualTo("createdAt", queryDate);
+    query.lessThanOrEqualTo("updatedAt", queryDate);
 
     const results = await query.find({ useMasterKey: true });
 

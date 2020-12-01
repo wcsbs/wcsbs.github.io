@@ -718,5 +718,6 @@ module.exports = {
   remindClassReporting,
   toLocalDateString,
   getLastWeek,
-  loadStudentAttendanceV2
+  loadStudentAttendanceV2,
+  DAY_IN_MS
 };
