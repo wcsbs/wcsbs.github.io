@@ -629,6 +629,10 @@ const loadUserMissedReportingStates = async function(
 
   for (var i = 0; i < parsePractices.length; i++) {
     const parsePractice = parsePractices[i];
+    const startDate = parsePractice.get("startDate");
+    if (startDate && startDate > lastWeek.sunday) {
+      continue;
+    }
     query = parsePractice.relation("counts").query();
     query.equalTo("userId", userId);
     query.greaterThanOrEqualTo("reportedAt", lastWeek.monday);
