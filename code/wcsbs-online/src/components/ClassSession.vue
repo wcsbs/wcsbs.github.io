@@ -105,7 +105,7 @@
     </b-form>
     <b-card v-else class="text-center" :header="session.name">
       <b-card-text>
-        <b-input-group prepend="上课时间：" class="mt-3">
+        <b-input-group prepend="上课时间：" class="mt-3" v-if="!selfStudy">
           <b-form-input
             readonly
             v-model="session.scheduledAtLocalDateTimeString"
@@ -164,7 +164,10 @@
           <b-link :href="submodule.url" target="_blank">{{
             `(${index + 1}) ${submodule.name}`
           }}</b-link>
-          <b-input-group prepend="课前学习：" class="mt-3">
+          <b-input-group
+            :prepend="selfStudy ? '学修进度：' : '课前学习：'"
+            class="mt-3"
+          >
             <b-form-input
               readonly
               :value="toPrestudyStateString(sessionDetails, index)"
@@ -183,7 +186,7 @@
           </b-input-group>
         </div>
         <b-input-group
-          v-if="!session.forApplication"
+          v-if="!session.forApplication && !selfStudy"
           prepend="共修出席："
           class="mt-3"
         >
@@ -251,6 +254,7 @@ export default {
     newSessions: { type: Array, required: false },
     forApplication: Boolean,
     forAdmin: Boolean,
+    selfStudy: Boolean,
     classId: String
   },
   data: function() {
@@ -507,12 +511,15 @@ export default {
     },
     toPrestudyStateString(sessionDetails, index) {
       if (this.forApplication) {
-        return "请在课前看完传承/法本";
+        return this.selfStudy ? "请自行安排时间学习" : "请在课前看完传承/法本";
       }
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
       if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
         const studyRecord = sessionDetails.submodules[index].studyRecord;
+        if (this.selfStudy && studyRecord.lineage) {
+          return "已圆满";
+        }
         if (typeof studyRecord.lineage == "number") {
           chuanCheng = `${studyRecord.lineage}人已看传承`;
         } else if (studyRecord.lineage) {
@@ -525,7 +532,7 @@ export default {
         }
       }
 
-      return `${chuanCheng}/${faBen}`;
+      return this.selfStudy ? "未圆满" : `${chuanCheng}/${faBen}`;
     },
     needToShowPrestudyButton(index) {
       if (this.forApplication || this.forAdmin) {

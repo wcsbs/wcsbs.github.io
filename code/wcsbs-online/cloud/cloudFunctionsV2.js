@@ -190,6 +190,46 @@ const loadUserStudyRecord = async function(userId, submoduleId) {
   return result;
 };
 
+const getClassSessionDetails = async function(
+  userId,
+  classSession,
+  forStudent
+) {
+  var attendance;
+  if (forStudent) {
+    attendance = await loadStudentAttendanceV2(userId, classSession);
+  } else {
+    attendance = await loadSnapshotV2(
+      classSession,
+      generateSessionSnapshotJsonV2
+    );
+  }
+
+  const submodules = [];
+  const content = classSession.get("content");
+  for (var i = 0; i < content.submodules.length; i++) {
+    const submoduleId = content.submodules[i];
+    const submodule = {};
+    var query = new Parse.Query("Submodule");
+    query.equalTo("objectId", submoduleId);
+    const parseSubmodule = await query.first();
+
+    if (parseSubmodule) {
+      submodule.id = submoduleId;
+      submodule.index = parseSubmodule.get("index");
+      submodule.name = parseSubmodule.get("name");
+      submodule.url = parseSubmodule.get("url");
+      submodule.moduleId = parseSubmodule.get("moduleId");
+      submodule.studyRecord = forStudent
+        ? await loadUserStudyRecord(userId, submoduleId)
+        : attendance.studyRecords[i];
+      submodules.push(submodule);
+    }
+  }
+
+  return { attendance, submodules };
+};
+
 const loadClassSessionDetails = async function(
   userId,
   classInfo,
@@ -198,45 +238,12 @@ const loadClassSessionDetails = async function(
 ) {
   if (classSession) {
     classInfo.classSessions.push(classSession);
-    var attendance;
-    if (forStudent) {
-      attendance = await loadStudentAttendanceV2(userId, classSession);
-    } else {
-      attendance = await loadSnapshotV2(
-        classSession,
-        generateSessionSnapshotJsonV2
-      );
-    }
-    logger.info(
-      `loadSessionDetails - attendance: ${JSON.stringify(attendance)}`
+    const sessionDetails = await getClassSessionDetails(
+      userId,
+      classSession,
+      forStudent
     );
-
-    const submodules = [];
-    const content = classSession.get("content");
-    for (var i = 0; i < content.submodules.length; i++) {
-      const submoduleId = content.submodules[i];
-      const submodule = {};
-      var query = new Parse.Query("Submodule");
-      query.equalTo("objectId", submoduleId);
-      const parseSubmodule = await query.first();
-
-      if (parseSubmodule) {
-        submodule.id = submoduleId;
-        submodule.index = parseSubmodule.get("index");
-        submodule.name = parseSubmodule.get("name");
-        submodule.url = parseSubmodule.get("url");
-        submodule.moduleId = parseSubmodule.get("moduleId");
-        submodule.studyRecord = forStudent
-          ? await loadUserStudyRecord(userId, submoduleId)
-          : attendance.studyRecords[i];
-        submodules.push(submodule);
-      }
-    }
-    logger.info(
-      `loadSessionDetails - submodules: ${JSON.stringify(submodules)}`
-    );
-
-    classInfo.sessionDetails.push({ attendance, submodules });
+    classInfo.sessionDetails.push(sessionDetails);
   }
 };
 
@@ -562,7 +569,9 @@ Parse.Cloud.define(
       forApplication: forApplication,
       forAdmin: forAdmin,
       classSessions: [],
-      sessionDetails: []
+      sessionDetails: [],
+      selfStudySessions: [],
+      selfStudySessionDetails: []
     };
 
     query = parseClass.relation("sessionsV2").query();
@@ -580,6 +589,20 @@ Parse.Cloud.define(
 
     if (loadingNewSessions) {
       await loadNewSessions(parseClass, classInfo);
+    }
+
+    query = parseClass.relation("selfStudySessions").query();
+    query.descending("scheduledAt");
+    classInfo.selfStudySessions = await query.limit(MAX_QUERY_COUNT).find();
+
+    for (i = 0; i < classInfo.selfStudySessions.length; i++) {
+      classInfo.selfStudySessionDetails.push(
+        await getClassSessionDetails(
+          user.id,
+          classInfo.selfStudySessions[i],
+          !forAdmin
+        )
+      );
     }
 
     return classInfo;
