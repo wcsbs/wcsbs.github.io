@@ -160,7 +160,8 @@ Parse.Cloud.define(
         }
         parseUser.set(
           "username",
-          `${classId}_T${index}_U${Math.floor(Date.now() / 1000)}`
+          name
+          // `${name}_${classId}_T${index}_U${Math.floor(Date.now() / 1000)}`
         );
         parseUser.set("password", "wcsbs2020");
         parseUser.set("emailVerified", true);
