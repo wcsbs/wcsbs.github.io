@@ -84,6 +84,12 @@ export default new Router({
       path: "/adminFunctions",
       meta: { requiresAuth: true },
       component: () => import("@/views/AdminFunctions")
+    },
+    {
+      name: "importData",
+      path: "/importData",
+      meta: { requiresAuth: true },
+      component: () => import("@/views/ImportData")
     }
   ]
 });

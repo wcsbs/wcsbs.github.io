@@ -205,9 +205,16 @@ Parse.Cloud.define(
       for (key in record) {
         const date = mapDates[key];
         if (date) {
-          const countStr = record[key].split(/[,.]/).join("");
+          var countStr = record[key].split(/[,.]/).join("");
+          countStr = countStr
+            .split("-")
+            .join("")
+            .trim();
           if (countStr && countStr.length > 0) {
             const count = parseInt(countStr);
+            if (isNaN(count)) {
+              continue;
+            }
             if (practiceId) {
               result.count = await commonFunctions.reportPracticeCountV2(
                 parseUser,
