@@ -111,29 +111,33 @@ export default {
       this.$dialog
         .confirm(message, options)
         .then(async function(dialog) {
-          var i = 1;
-          while (i > 0) {
+          var i = 0;
+          while (i < 5) {
+            i += 1;
             params.csv = thisComponent.parseCsv.filter(e => {
               const index = e["组别"];
               return index == i.toString();
             });
             if (params.csv.length == 0) {
-              dialog.close();
-              break;
+              continue;
             }
             console.log(
               `importing data for team: ${i} #records: ${params.csv.length}`
             );
-            i += 1;
-            thisComponent.text += JSON.stringify(params, null, 4);
+            thisComponent.text += `${i} - ${JSON.stringify(params, null, 4)}`;
             await Parse.Cloud.run(thisComponent.name, params)
               .then(result => {
-                thisComponent.result += JSON.stringify(result, null, 4);
+                thisComponent.result += `${i} - ${JSON.stringify(
+                  result,
+                  null,
+                  4
+                )}`;
               })
               .catch(e => {
-                thisComponent.result += JSON.stringify(e, null, 4);
+                thisComponent.result += `${i} - ${JSON.stringify(e, null, 4)}`;
               });
           }
+          dialog.close();
         })
         .catch(e => {
           console.log(`error: ${e}`);
