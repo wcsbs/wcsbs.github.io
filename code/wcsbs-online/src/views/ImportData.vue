@@ -131,7 +131,7 @@ export default {
                 thisComponent.result += JSON.stringify(result, null, 4);
               })
               .catch(e => {
-                thisComponent.result = JSON.stringify(e, null, 4);
+                thisComponent.result += JSON.stringify(e, null, 4);
               });
           }
         })
