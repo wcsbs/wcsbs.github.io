@@ -275,11 +275,22 @@ Parse.Cloud.define(
 
 Parse.Cloud.define(
   "admin:prepareReportGeneration",
-  async ({ user, params: { user: userWithRoles, isRxl, isPractice } }) => {
+  async ({
+    user,
+    params: { user: userWithRoles, classId, isPractice, selfStudy }
+  }) => {
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");
 
-    return commonFunctions.prepareReportGeneration(isRxl, isPractice);
+    var query = new Parse.Query("Class");
+    query.equalTo("objectId", classId);
+    var parseClass = await query.first();
+
+    return commonFunctions.prepareReportGeneration(
+      parseClass,
+      isPractice,
+      selfStudy
+    );
   }
 );
 

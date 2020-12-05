@@ -149,7 +149,7 @@
             >
             <b-button
               variant="info"
-              :href="sessionDetails.submodules[0].url"
+              :href="getFullUrl(sessionDetails.submodules[0].url)"
               target="_blank"
             >
               <b-icon icon="book"></b-icon>
@@ -161,11 +161,11 @@
           v-for="(submodule, index) in sessionDetails.submodules"
           :key="submodule.id + index"
         >
-          <b-link :href="submodule.url" target="_blank">{{
+          <b-link :href="getFullUrl(submodule.url)" target="_blank">{{
             `(${index + 1}) ${submodule.name}`
           }}</b-link>
           <b-input-group
-            :prepend="selfStudy ? '学修进度：' : '课前学习：'"
+            :prepend="selfStudy ? '学习进度：' : '课前学习：'"
             class="mt-3"
           >
             <b-form-input
@@ -179,15 +179,20 @@
                 v-on:click="updatePrestudyState(index)"
                 >圆满</b-button
               >
-              <b-button variant="info" :href="submodule.url" target="_blank">
+              <b-button
+                variant="info"
+                :href="getFullUrl(submodule.url)"
+                target="_blank"
+              >
                 <b-icon icon="book"></b-icon>
               </b-button>
             </b-input-group-append>
           </b-input-group>
         </div>
+        <hr />
         <b-input-group
-          v-if="!session.forApplication && !selfStudy"
-          prepend="共修出席："
+          v-if="!session.forApplication"
+          :prepend="selfStudy ? '总体进度：' : '共修出席：'"
           class="mt-3"
         >
           <b-form-input
@@ -223,7 +228,11 @@
               :value="`(${index + 1}) ${material.name}`"
             ></b-form-input>
             <b-input-group-append>
-              <b-button variant="info" :href="material.url" target="_blank">
+              <b-button
+                variant="info"
+                :href="getFullUrl(material.url)"
+                target="_blank"
+              >
                 <b-icon icon="book"></b-icon>
               </b-button>
             </b-input-group-append>
@@ -443,6 +452,15 @@ export default {
     removeMaterial(index) {
       this.session.materials.splice(index, 1);
     },
+    getFullUrl(url) {
+      if (!(url.includes("://") || url.indexOf("//") === 0)) {
+        const parentUrl = process.env.VUE_APP_PARENT_URL;
+        if (!url.startsWith(parentUrl)) {
+          return parentUrl + url.replace("..", "");
+        }
+      }
+      return url;
+    },
     toLocalDateTimeString(date) {
       const options = {
         year: "numeric",
@@ -462,27 +480,31 @@ export default {
       return date.toLocaleDateString("zh-CN", options).substring(2);
     },
     needToShowAttendanceButton() {
-      // console.log(
-      //   `needToShowAttendanceButton - this.isStudent: ${this.isStudent} this.forAdmin: ${this.forAdmin} this.forApplication: ${this.forApplication}`
-      // );
-      return this.isStudent && !this.forAdmin && !this.forApplication;
-      // const scheduledAt = this.classSession.get("scheduledAt");
-      // if (this.isStudent) {
-      //   const today = new Date();
-      //   //student must submit sessionDetails within 3 days
-      //   var cutoffTime = new Date(
-      //     scheduledAt.getTime() + 4 * 24 * 60 * 60 * 1000
-      //   );
-      //   cutoffTime.setHours(0, 0, 0, 0); //set to midnight
-      //   // console.log(`needToShowAttendanceButton - cutoffTime: ${cutoffTime}`);
-      //   return today.getTime() < cutoffTime.getTime();
-      // }
-      // return false;
+      if (
+        !this.selfStudy &&
+        this.isStudent &&
+        !this.forAdmin &&
+        !this.forApplication
+      ) {
+        return true;
+      }
+      if (this.selfStudy && !this.forAdmin) {
+        const progress = this.studyProgress();
+        if (progress.total == progress.completed) {
+          const sessionDetails = this.sessionDetails;
+          return !sessionDetails.attendance.attendance;
+        }
+      }
+      return false;
     },
     checkIfTwoAttendanceButtonsNeeded() {
       const d = new Date();
       const sessionDetails = this.sessionDetails;
-      if (sessionDetails && d >= this.classSession.get("scheduledAt")) {
+      if (
+        !this.selfStudy &&
+        sessionDetails &&
+        d >= this.classSession.get("scheduledAt")
+      ) {
         if (sessionDetails.attendance.onLeave) {
           return false;
         }
@@ -491,20 +513,41 @@ export default {
 
       return false;
     },
+    studyProgress() {
+      const sessionDetails = this.sessionDetails;
+      const total = sessionDetails.submodules.length;
+      var completed = 0;
+      for (var i = 0; i < total; i++) {
+        if (sessionDetails.submodules[i].studyRecord.lineage) {
+          completed++;
+        }
+      }
+      return { total, completed };
+    },
     toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
         if (typeof sessionDetails.attendance.attendance == "number") {
-          return `${sessionDetails.attendance.attendance}人已上课`;
+          return `${sessionDetails.attendance.attendance}人已${
+            this.selfStudy ? "圆满" : "上课"
+          }`;
         }
         if (sessionDetails.attendance.onLeave) {
           return "请假";
         }
         if (sessionDetails.attendance.attendance == true) {
-          return "已上课";
+          return this.selfStudy ? "全部圆满" : "已上课";
         }
-        if (sessionDetails.attendance.attendance == false) {
+        if (!this.selfStudy && sessionDetails.attendance.attendance == false) {
           return "未上课";
         }
+      }
+
+      if (this.selfStudy) {
+        const progress = this.studyProgress();
+        if (progress.completed > 0) {
+          return `已圆满 ${progress.completed}/${progress.total}`;
+        }
+        return "尚未开始学习";
       }
 
       return "未报出席";
@@ -515,14 +558,16 @@ export default {
       }
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
+      var showStats = false;
       if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
         const studyRecord = sessionDetails.submodules[index].studyRecord;
-        if (this.selfStudy && studyRecord.lineage) {
-          return "已圆满";
-        }
         if (typeof studyRecord.lineage == "number") {
+          showStats = true;
           chuanCheng = `${studyRecord.lineage}人已看传承`;
         } else if (studyRecord.lineage) {
+          if (this.selfStudy) {
+            return "已圆满";
+          }
           chuanCheng = "已看传承";
         }
         if (typeof studyRecord.textbook == "number") {
@@ -532,7 +577,7 @@ export default {
         }
       }
 
-      return this.selfStudy ? "未圆满" : `${chuanCheng}/${faBen}`;
+      return this.selfStudy && !showStats ? "未圆满" : `${chuanCheng}/${faBen}`;
     },
     needToShowPrestudyButton(index) {
       if (this.forApplication || this.forAdmin) {
@@ -548,7 +593,7 @@ export default {
     updatePrestudyState(index) {
       console.log(`updatePrestudyState - ${index}`);
 
-      var msg = "确认已圆满传承和法本?";
+      var msg = `确认已圆满${this.selfStudy ? "学习" : "传承和法本?"}`;
       const sessionDetails = this.sessionDetails;
 
       const options = {
@@ -581,6 +626,11 @@ export default {
                   0
                 );
               }
+              if (thisComponent.selfStudy) {
+                thisComponent.session.attendanceState = thisComponent.toAttendanceStateString(
+                  thisComponent.sessionDetails
+                );
+              }
               dialog.close();
             })
             .catch(e => {
@@ -598,6 +648,9 @@ export default {
     attendanceButtonName(secondButton) {
       if (secondButton) {
         return "未上课";
+      }
+      if (this.selfStudy) {
+        return "全部圆满";
       }
       const d = new Date();
       if (d < this.classSession.get("scheduledAt")) {
@@ -632,7 +685,7 @@ export default {
         } else {
           attendance.attendance = true;
           attendance.onLeave = false;
-          msg += "已上课";
+          msg += this.selfStudy ? "已全部圆满" : "已上课";
         }
       }
 
@@ -648,6 +701,9 @@ export default {
         body: msg + "?"
       };
       const thisComponent = this;
+      console.log(
+        `updateAttendanceV2 - attendance: ${JSON.stringify(attendance)}`
+      );
 
       this.$dialog
         .confirm(message, options)

@@ -241,7 +241,30 @@ const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice) {
   return mapDates;
 };
 
-const prepareReportGeneration = function(isRxl, isPractice) {
+const prepareSelfStudyReportGeneration = async function(parseClass) {
+  const query = parseClass.relation("selfStudySessions").query();
+  query.ascending("scheduledAt");
+  const parseSessions = await query.limit(MAX_QUERY_COUNT).find();
+  const csvHeader = ["组别", "组员"];
+  const mapDates = {};
+  for (var i = 0; i < parseSessions.length; i++) {
+    const name = parseSessions[i].get("name");
+    csvHeader.push(name);
+    mapDates[name] = parseSessions[i].get("scheduledAt");
+  }
+  return { csvHeader, mapDates };
+};
+
+const prepareReportGeneration = async function(
+  parseClass,
+  isPractice,
+  selfStudy
+) {
+  if (selfStudy) {
+    return await prepareSelfStudyReportGeneration(parseClass);
+  }
+
+  const isRxl = parseClass.get("url").includes("rpsxl");
   const csvHeaders = [
     [
       "组别",

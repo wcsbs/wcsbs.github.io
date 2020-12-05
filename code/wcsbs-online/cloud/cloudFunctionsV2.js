@@ -757,18 +757,19 @@ const loadTeams = async function(
         query = new Parse.Query("User");
         query.equalTo("objectId", membersOrder[j]);
         const parseUser = await query.first();
+        if (parseUser) {
+          const member = {
+            id: parseUser.id,
+            name: parseUser.get("name")
+          };
+          studentAssignedInTeams.push(member.id);
 
-        const member = {
-          id: parseUser.id,
-          name: parseUser.get("name")
-        };
-        studentAssignedInTeams.push(member.id);
+          if (member.id == leaderId) {
+            team.leader = member;
+          }
 
-        if (member.id == leaderId) {
-          team.leader = member;
+          team.members.push(member);
         }
-
-        team.members.push(member);
       }
     }
     classInfo.classTeams.push(team);
@@ -1009,6 +1010,7 @@ Parse.Cloud.define(
 );
 
 const loadDataForUser = async function(
+  selfStudy,
   parseClass,
   parsePractice,
   parseUser,
@@ -1058,7 +1060,9 @@ const loadDataForUser = async function(
 
           lastDate = reportedAt;
         } else {
-          let query = parseClass.relation("sessionsV2").query();
+          let query = parseClass
+            .relation(selfStudy ? "selfStudySessions" : "sessionsV2")
+            .query();
           query.equalTo("scheduledAt", date);
           const classSession = await query.first();
 
@@ -1251,12 +1255,19 @@ Parse.Cloud.define(
   "class:generateReport",
   async ({
     user,
-    params: { classId, classTeams, practiceId, loadingDetails, reportHash }
+    params: {
+      classId,
+      classTeams,
+      practiceId,
+      selfStudy,
+      loadingDetails,
+      reportHash
+    }
   }) => {
     requireAuth(user);
 
     logger.info(
-      `generateReport - reportHash: ${reportHash} loadingDetails: ${loadingDetails}`
+      `generateReport - classId: ${classId} selfStudy: ${selfStudy} loadingDetails: ${loadingDetails}`
     );
     const requestedAt = new Date();
     var parseReport;
@@ -1294,9 +1305,17 @@ Parse.Cloud.define(
       classId = parseClass.id;
     }
 
-    const { csvHeader, mapDates } = commonFunctions.prepareReportGeneration(
-      parseClass.get("url").includes("rpsxl"),
-      practiceId
+    const {
+      csvHeader,
+      mapDates
+    } = await commonFunctions.prepareReportGeneration(
+      parseClass,
+      practiceId,
+      selfStudy
+    );
+
+    logger.info(
+      `generateReport - csvHeader: ${csvHeader} mapDates: ${mapDates}`
     );
 
     var i,
@@ -1352,6 +1371,7 @@ Parse.Cloud.define(
         const parseCountList = [];
         if (parseUser) {
           var result = await loadDataForUser(
+            selfStudy,
             parseClass,
             parsePractice,
             parseUser,

@@ -32,14 +32,18 @@
           readonly
           :value="
             `(${index + 1}) ${member.name}\t上周：${
-              member.lastWeek == undefined
+              !member.lastWeek
                 ? '未报数'
                 : member.lastWeek
                     .toString()
                     .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-            }\t总计：${member.count
-              .toString()
-              .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+            }\t总计：${
+              !member.count
+                ? '未报数'
+                : member.count
+                    .toString()
+                    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            }
             `
           "
         ></b-form-input>

@@ -3,7 +3,7 @@
     <h3 v-text="buddhaClass.name" />
     <h4>
       辅导员：{{ teachers }} 师兄&nbsp;&nbsp;
-      <a :href="buddhaClass.url" target="_blank">学习资料网页</a>
+      <a :href="getFullUrl(buddhaClass.url)" target="_blank">学习资料网页</a>
     </h4>
     <div v-if="buddhaClass.classSnapshot">
       <b-table
@@ -110,6 +110,15 @@ export default {
     ...mapGetters(["isClassAdmin", "isTeachingAssistant"])
   },
   methods: {
+    getFullUrl(url) {
+      if (!(url.includes("://") || url.indexOf("//") === 0)) {
+        const parentUrl = process.env.VUE_APP_PARENT_URL;
+        if (!url.startsWith(parentUrl)) {
+          return parentUrl + url.replace("..", "");
+        }
+      }
+      return url;
+    },
     listSession() {
       this.$router.push({
         name: "session-management",

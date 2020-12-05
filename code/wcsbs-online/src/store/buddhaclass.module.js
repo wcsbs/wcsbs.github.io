@@ -219,7 +219,7 @@ const actions = {
       practiceId = undefined;
     }
     console.log(
-      `${FETCH_STUDENTS} - classId: ${classId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
+      `${FETCH_STATS} - classId: ${classId} practiceId: ${practiceId} forAdmin: ${forAdmin}`
     );
     context.commit(FETCH_STATS_START);
 
