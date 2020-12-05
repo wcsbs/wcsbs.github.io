@@ -97,6 +97,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
 
 
 
@@ -287,7 +288,8 @@ var render = function() {
               _c("DownloadReport", {
                 attrs: {
                   forSelf: true,
-                  worksheet: _vm.selfStudy ? "学修进度统计" : "出席统计"
+                  worksheet: _vm.selfStudy ? "自学进度统计" : "出席统计",
+                  selfStudy: _vm.selfStudy
                 }
               }),
               _c("hr")

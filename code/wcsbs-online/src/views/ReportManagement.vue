@@ -6,7 +6,7 @@
         {{ classInfo.name }} --
         {{
           !classInfo.practiceId
-            ? "出席统计"
+            ? "闻思进度统计"
             : `${classInfo.practiceName}实修统计`
         }}
       </h3>
@@ -17,6 +17,12 @@
               ? '中组出席统计'
               : `中组${classInfo.practiceName}统计`
           "
+        />
+        <br v-if="classInfo.hasSelfStudySessions" />
+        <DownloadReport
+          v-if="classInfo.hasSelfStudySessions"
+          worksheet="中组自学进度统计"
+          :selfStudy="true"
         />
         <hr />
       </div>
@@ -33,6 +39,12 @@
                 ? `${classTeam.name}出席统计`
                 : `${classTeam.name}${classInfo.practiceName}统计`
             "
+          />
+          <br v-if="classInfo.hasSelfStudySessions" />
+          <DownloadReport
+            v-if="classInfo.hasSelfStudySessions"
+            :worksheet="`${classTeam.name}自学进度统计`"
+            :selfStudy="true"
           />
           <hr />
         </div>

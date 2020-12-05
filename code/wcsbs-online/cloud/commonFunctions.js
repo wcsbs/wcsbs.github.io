@@ -252,6 +252,7 @@ const prepareSelfStudyReportGeneration = async function(parseClass) {
     csvHeader.push(name);
     mapDates[name] = parseSessions[i].get("scheduledAt");
   }
+  csvHeader.push("TOTAL");
   return { csvHeader, mapDates };
 };
 

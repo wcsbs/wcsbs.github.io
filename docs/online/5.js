@@ -15,18 +15,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es6.object.keys */ "./node_modules/core-js/modules/es6.object.keys.js");
 /* harmony import */ var core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es7.array.includes */ "./node_modules/core-js/modules/es7.array.includes.js");
-/* harmony import */ var core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.string.includes */ "./node_modules/core-js/modules/es6.string.includes.js");
-/* harmony import */ var core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es6.array.sort */ "./node_modules/core-js/modules/es6.array.sort.js");
-/* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
-/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
-/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es6.regexp.replace */ "./node_modules/core-js/modules/es6.regexp.replace.js");
+/* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es6_string_starts_with__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.string.starts-with */ "./node_modules/core-js/modules/es6.string.starts-with.js");
+/* harmony import */ var core_js_modules_es6_string_starts_with__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_starts_with__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es7.array.includes */ "./node_modules/core-js/modules/es7.array.includes.js");
+/* harmony import */ var core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es7_array_includes__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.string.includes */ "./node_modules/core-js/modules/es6.string.includes.js");
+/* harmony import */ var core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_string_includes__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es6.array.sort */ "./node_modules/core-js/modules/es6.array.sort.js");
+/* harmony import */ var core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_sort__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
+/* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! parse */ "./node_modules/parse/index.js");
+/* harmony import */ var parse__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(parse__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
 
 
 
@@ -38,8 +44,17 @@ __webpack_require__.r(__webpack_exports__);
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_7__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_9__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -322,7 +337,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       canAddSubmodule: false
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_9__["mapGetters"])(["isClassAdmin", "isTeachingAssistant", "isStudent"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_11__["mapGetters"])(["isClassAdmin", "isTeachingAssistant", "isStudent"])),
   mounted: function mounted() {
     this.refreshUI();
   },
@@ -489,6 +504,17 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     removeMaterial: function removeMaterial(index) {
       this.session.materials.splice(index, 1);
     },
+    getFullUrl: function getFullUrl(url) {
+      if (!(url.includes("://") || url.indexOf("//") === 0)) {
+        var parentUrl = "http://localhost/wcsbs";
+
+        if (!url.startsWith(parentUrl)) {
+          return parentUrl + url.replace("..", "");
+        }
+      }
+
+      return url;
+    },
     toLocalDateTimeString: function toLocalDateTimeString(date) {
       var options = {
         year: "numeric",
@@ -508,27 +534,26 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       return date.toLocaleDateString("zh-CN", options).substring(2);
     },
     needToShowAttendanceButton: function needToShowAttendanceButton() {
-      // console.log(
-      //   `needToShowAttendanceButton - this.isStudent: ${this.isStudent} this.forAdmin: ${this.forAdmin} this.forApplication: ${this.forApplication}`
-      // );
-      return this.isStudent && !this.forAdmin && !this.forApplication; // const scheduledAt = this.classSession.get("scheduledAt");
-      // if (this.isStudent) {
-      //   const today = new Date();
-      //   //student must submit sessionDetails within 3 days
-      //   var cutoffTime = new Date(
-      //     scheduledAt.getTime() + 4 * 24 * 60 * 60 * 1000
-      //   );
-      //   cutoffTime.setHours(0, 0, 0, 0); //set to midnight
-      //   // console.log(`needToShowAttendanceButton - cutoffTime: ${cutoffTime}`);
-      //   return today.getTime() < cutoffTime.getTime();
-      // }
-      // return false;
+      if (!this.selfStudy && this.isStudent && !this.forAdmin && !this.forApplication) {
+        return true;
+      }
+
+      if (this.selfStudy && !this.forAdmin) {
+        var progress = this.studyProgress();
+
+        if (progress.total == progress.completed) {
+          var sessionDetails = this.sessionDetails;
+          return !sessionDetails.attendance.attendance;
+        }
+      }
+
+      return false;
     },
     checkIfTwoAttendanceButtonsNeeded: function checkIfTwoAttendanceButtonsNeeded() {
       var d = new Date();
       var sessionDetails = this.sessionDetails;
 
-      if (sessionDetails && d >= this.classSession.get("scheduledAt")) {
+      if (!this.selfStudy && sessionDetails && d >= this.classSession.get("scheduledAt")) {
         if (sessionDetails.attendance.onLeave) {
           return false;
         }
@@ -538,10 +563,26 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       return false;
     },
+    studyProgress: function studyProgress() {
+      var sessionDetails = this.sessionDetails;
+      var total = sessionDetails.submodules.length;
+      var completed = 0;
+
+      for (var i = 0; i < total; i++) {
+        if (sessionDetails.submodules[i].studyRecord.lineage) {
+          completed++;
+        }
+      }
+
+      return {
+        total: total,
+        completed: completed
+      };
+    },
     toAttendanceStateString: function toAttendanceStateString(sessionDetails) {
       if (sessionDetails) {
         if (typeof sessionDetails.attendance.attendance == "number") {
-          return "".concat(sessionDetails.attendance.attendance, "\u4EBA\u5DF2\u4E0A\u8BFE");
+          return "".concat(sessionDetails.attendance.attendance, "\u4EBA\u5DF2").concat(this.selfStudy ? "圆满" : "上课");
         }
 
         if (sessionDetails.attendance.onLeave) {
@@ -549,12 +590,22 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
 
         if (sessionDetails.attendance.attendance == true) {
-          return "已上课";
+          return this.selfStudy ? "全部圆满" : "已上课";
         }
 
-        if (sessionDetails.attendance.attendance == false) {
+        if (!this.selfStudy && sessionDetails.attendance.attendance == false) {
           return "未上课";
         }
+      }
+
+      if (this.selfStudy) {
+        var progress = this.studyProgress();
+
+        if (progress.completed > 0) {
+          return "\u5DF2\u5706\u6EE1 ".concat(progress.completed, "/").concat(progress.total);
+        }
+
+        return "尚未开始学习";
       }
 
       return "未报出席";
@@ -566,17 +617,19 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
+      var showStats = false;
 
       if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
         var studyRecord = sessionDetails.submodules[index].studyRecord;
 
-        if (this.selfStudy && studyRecord.lineage) {
-          return "已圆满";
-        }
-
         if (typeof studyRecord.lineage == "number") {
+          showStats = true;
           chuanCheng = "".concat(studyRecord.lineage, "\u4EBA\u5DF2\u770B\u4F20\u627F");
         } else if (studyRecord.lineage) {
+          if (this.selfStudy) {
+            return "已圆满";
+          }
+
           chuanCheng = "已看传承";
         }
 
@@ -587,7 +640,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }
       }
 
-      return this.selfStudy ? "未圆满" : "".concat(chuanCheng, "/").concat(faBen);
+      return this.selfStudy && !showStats ? "未圆满" : "".concat(chuanCheng, "/").concat(faBen);
     },
     needToShowPrestudyButton: function needToShowPrestudyButton(index) {
       if (this.forApplication || this.forAdmin) {
@@ -605,7 +658,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     },
     updatePrestudyState: function updatePrestudyState(index) {
       console.log("updatePrestudyState - ".concat(index));
-      var msg = "确认已圆满传承和法本?";
+      var msg = "\u786E\u8BA4\u5DF2\u5706\u6EE1".concat(this.selfStudy ? "学习" : "传承和法本?");
       var sessionDetails = this.sessionDetails;
       var options = {
         okText: "确认",
@@ -623,7 +676,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         textbook: true
       };
       this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_8___default.a.Cloud.run("home:updateUserStudyRecord", {
+        parse__WEBPACK_IMPORTED_MODULE_10___default.a.Cloud.run("home:updateUserStudyRecord", {
           pathname: sessionDetails.submodules[index].url,
           userStudyRecord: userStudyRecord
         }).then(function (result) {
@@ -632,6 +685,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
           if (index == 0) {
             thisComponent.session.prestudyState = thisComponent.toPrestudyStateString(sessionDetails, 0);
+          }
+
+          if (thisComponent.selfStudy) {
+            thisComponent.session.attendanceState = thisComponent.toAttendanceStateString(thisComponent.sessionDetails);
           }
 
           dialog.close();
@@ -647,6 +704,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     attendanceButtonName: function attendanceButtonName(secondButton) {
       if (secondButton) {
         return "未上课";
+      }
+
+      if (this.selfStudy) {
+        return "全部圆满";
       }
 
       var d = new Date();
@@ -686,7 +747,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         } else {
           attendance.attendance = true;
           attendance.onLeave = false;
-          msg += "已上课";
+          msg += this.selfStudy ? "已全部圆满" : "已上课";
         }
       }
 
@@ -703,8 +764,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         body: msg + "?"
       };
       var thisComponent = this;
+      console.log("updateAttendanceV2 - attendance: ".concat(JSON.stringify(attendance)));
       this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_8___default.a.Cloud.run("home:updateAttendanceV2", {
+        parse__WEBPACK_IMPORTED_MODULE_10___default.a.Cloud.run("home:updateAttendanceV2", {
           classId: classId,
           sessionId: sessionId,
           attendance: attendance
@@ -780,7 +842,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       session.classId = this.classInfo.id;
       var thisComponent = this;
       this.$dialog.confirm(message, options).then(function (dialog) {
-        parse__WEBPACK_IMPORTED_MODULE_8___default.a.Cloud.run("class:updateClassSessionV2", {
+        parse__WEBPACK_IMPORTED_MODULE_10___default.a.Cloud.run("class:updateClassSessionV2", {
           session: session
         }).then(function (result) {
           console.log("updateClassSession - result: ".concat(JSON.stringify(result)));
@@ -1224,7 +1286,9 @@ var render = function() {
                                 {
                                   attrs: {
                                     variant: "info",
-                                    href: _vm.sessionDetails.submodules[0].url,
+                                    href: _vm.getFullUrl(
+                                      _vm.sessionDetails.submodules[0].url
+                                    ),
                                     target: "_blank"
                                   }
                                 },
@@ -1248,7 +1312,10 @@ var render = function() {
                             _c(
                               "b-link",
                               {
-                                attrs: { href: submodule.url, target: "_blank" }
+                                attrs: {
+                                  href: _vm.getFullUrl(submodule.url),
+                                  target: "_blank"
+                                }
                               },
                               [
                                 _vm._v(
@@ -1264,7 +1331,7 @@ var render = function() {
                                 staticClass: "mt-3",
                                 attrs: {
                                   prepend: _vm.selfStudy
-                                    ? "学修进度："
+                                    ? "学习进度："
                                     : "课前学习："
                                 }
                               },
@@ -1302,7 +1369,7 @@ var render = function() {
                                       {
                                         attrs: {
                                           variant: "info",
-                                          href: submodule.url,
+                                          href: _vm.getFullUrl(submodule.url),
                                           target: "_blank"
                                         }
                                       },
@@ -1323,12 +1390,15 @@ var render = function() {
                           1
                         )
                       }),
-                  !_vm.session.forApplication && !_vm.selfStudy
+                  _c("hr"),
+                  !_vm.session.forApplication
                     ? _c(
                         "b-input-group",
                         {
                           staticClass: "mt-3",
-                          attrs: { prepend: "共修出席：" }
+                          attrs: {
+                            prepend: _vm.selfStudy ? "总体进度：" : "共修出席："
+                          }
                         },
                         [
                           _c("b-form-input", {
@@ -1419,7 +1489,7 @@ var render = function() {
                                       {
                                         attrs: {
                                           variant: "info",
-                                          href: material.url,
+                                          href: _vm.getFullUrl(material.url),
                                           target: "_blank"
                                         }
                                       },

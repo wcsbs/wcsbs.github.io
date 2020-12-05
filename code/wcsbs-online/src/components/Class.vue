@@ -39,7 +39,7 @@
           block
           variant="info"
           @click="downloadReports('dummy')"
-          >出席统计</b-button
+          >闻思进度统计</b-button
         >
         <hr />
         <h4 v-if="buddhaClass.practices.length > 0">正在实修</h4>

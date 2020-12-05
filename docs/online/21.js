@@ -73,6 +73,18 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -122,7 +134,7 @@ var render = function() {
                   " --\n      " +
                   _vm._s(
                     !_vm.classInfo.practiceId
-                      ? "出席统计"
+                      ? "闻思进度统计"
                       : _vm.classInfo.practiceName + "实修统计"
                   ) +
                   "\n    "
@@ -139,6 +151,15 @@ var render = function() {
                           : "中组" + _vm.classInfo.practiceName + "统计"
                       }
                     }),
+                    _vm.classInfo.hasSelfStudySessions ? _c("br") : _vm._e(),
+                    _vm.classInfo.hasSelfStudySessions
+                      ? _c("DownloadReport", {
+                          attrs: {
+                            worksheet: "中组自学进度统计",
+                            selfStudy: true
+                          }
+                        })
+                      : _vm._e(),
                     _c("hr")
                   ],
                   1
@@ -162,6 +183,17 @@ var render = function() {
                                 "统计"
                           }
                         }),
+                        _vm.classInfo.hasSelfStudySessions
+                          ? _c("br")
+                          : _vm._e(),
+                        _vm.classInfo.hasSelfStudySessions
+                          ? _c("DownloadReport", {
+                              attrs: {
+                                worksheet: classTeam.name + "自学进度统计",
+                                selfStudy: true
+                              }
+                            })
+                          : _vm._e(),
                         _c("hr")
                       ],
                       1

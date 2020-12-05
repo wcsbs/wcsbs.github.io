@@ -817,7 +817,7 @@ Parse.Cloud.define(
       classInfo.lastWeek = lastWeek;
     }
 
-    var query, relation;
+    var query, relation, parseClass;
     if (practiceId) {
       query = new Parse.Query("Practice");
       query.equalTo("objectId", practiceId);
@@ -826,6 +826,14 @@ Parse.Cloud.define(
       classInfo.practiceName = practice.get("name");
       classInfo.practiceModuleId = practice.get("moduleId");
       relation = practice.relation("counts");
+    } else {
+      query = new Parse.Query("Class");
+      query.equalTo("objectId", classId);
+      parseClass = await query.first();
+
+      query = parseClass.relation("selfStudySessions").query();
+      const sessions = await query.find();
+      classInfo.hasSelfStudySessions = sessions.length > 0;
     }
 
     for (var i = 0; i < classInfo.classTeams.length; i++) {
@@ -866,10 +874,6 @@ Parse.Cloud.define(
           if (stats) {
             member.count += stats.get("count");
           }
-
-          query = new Parse.Query("Class");
-          query.equalTo("objectId", classId);
-          const parseClass = await query.first();
 
           query = parseClass.relation("sessionsV2").query();
           query.greaterThanOrEqualTo("scheduledAt", lastWeek.monday);
@@ -1080,6 +1084,7 @@ const loadDataForUser = async function(
         result[key] = commonFunctions.formatCount(count);
         if (count != undefined) {
           monthlyTotal = (monthlyTotal ? monthlyTotal : 0) + count;
+          grandTotal += count;
         }
       } else {
         if (key === "TOTAL") {
@@ -1090,7 +1095,6 @@ const loadDataForUser = async function(
         } else {
           const delta = monthlyTotal ? monthlyTotal : 0;
           yearlyTotal += delta;
-          grandTotal += delta;
           result[key] = commonFunctions.formatCount(monthlyTotal);
           monthlyTotal = undefined;
         }

@@ -3,7 +3,7 @@
     <div v-if="!classInfo.forAdmin && !classInfo.forApplication">
       <DownloadReport
         :forSelf="true"
-        :worksheet="selfStudy ? '学习进度统计' : '出席统计'"
+        :worksheet="selfStudy ? '自学进度统计' : '出席统计'"
         :selfStudy="selfStudy"
       />
       <hr />
