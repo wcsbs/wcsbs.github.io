@@ -506,7 +506,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     },
     getFullUrl: function getFullUrl(url) {
       if (!(url.includes("://") || url.indexOf("//") === 0)) {
-        var parentUrl = "http://localhost/wcsbs";
+        var parentUrl = "..";
 
         if (!url.startsWith(parentUrl)) {
           return parentUrl + url.replace("..", "");
