@@ -27,6 +27,10 @@ def refresh_one_file(template_file, input_file, output_file, level)
 
   if node == nil
     node = doc.at_css('main')
+    if node == nil
+      puts "Skipping file #{doc.title} - #{input_file}"
+      return
+    end
     is_main = true
   end
   
