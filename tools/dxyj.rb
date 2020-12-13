@@ -3,35 +3,67 @@
 require 'nokogiri'
 require 'csv'
 
-def process_one_file(template_file, input_file, title, textbook_link, lineage_link)
-    template = File.read(template_file)
-    template = template.gsub('class_title', title)
+def process_node(node, template_file2, speech_id, speech_title, textbook_link, youtube_speech, youtube_qa)
+    template = File.read(template_file2)
+    template = template.gsub('speech_id', speech_id)
+    template = template.gsub('speech_title', speech_title)
     template = template.gsub('textbook_link', textbook_link)
-    template = template.gsub('lineage_link', lineage_link)
+    template = template.gsub('youtube_speech', youtube_speech)
+    if youtube_qa
+        template = template.gsub('youtube_qa', youtube_qa)
+    else
+        template = template.gsub('<a class="mdui-btn mdui-ripple mdui-ripple-white coun-read mdui-text-color-theme-accent" href="youtube_qa" target="_blank">观看问答</a>', "")
+    end
 
     new_node = Nokogiri::HTML(template)
+    node2 = node.add_child(new_node.at_css('div'))
+
+    # puts "Node: #{node2.to_s}"
+end
+
+def get_href_id(input_dir, index, page_no)
+    html = File.read("#{input_dir}/#{index}/index.html")
+    doc = Nokogiri::HTML(html)
+    element = doc.at_css("div[data-page-url='#{index}-#{page_no}.page']")
+    puts element["id"]
+    element["id"]
+end
+
+def process_one_file(template_file1, template_file2, input_dir, output_dir, index, class_title, onedrive1, onedrive2)
+    template = File.read(template_file1)
+    template = template.gsub('class_title', class_title)
+    template = template.gsub('iframe_placeholder', onedrive1)
+
+    doc = Nokogiri::HTML(template)
   
-    doc = File.open(input_file) { |f| Nokogiri::HTML(f) }
-    node = doc.at_css('article')
-    node.first_element_child.replace(new_node.at_css('div'))
+    node = doc.at_css('article').last_element_child
+    # puts node
+    speech_id = 1
+    table = CSV.parse(File.read("./csv/self_study_submodules.csv"), headers: true)
+    table.each do |r|
+        if r[0] && r[0].match(/^\d+$/)
+            if index == "%02d" % r[0].to_i
+                page_no = r[1]
+                speech_title = r[2]
+                youtube_speech = r[3]
+                youtube_qa = r[4]
+
+                if onedrive2
+                    href_id = "page_#{page_no}"
+                else
+                    href_id = get_href_id(input_dir, index, page_no)
+                end
+                textbook_link = "#{index}/" + '#' + href_id
+                process_node(node, template_file2, speech_id.to_s, speech_title, textbook_link, youtube_speech, youtube_qa)
+                speech_id += 1
+            end
+        end
+    end
 
     result = doc.to_s
         
-    File.open(input_file, 'w') { |file| file.write(result) } 
-    puts "Done for #{doc.title} - #{input_file}"
-end
-
-def process_node(node, template_file1, class_title, class_html, textbook_link, lineage_link)
-    template = File.read(template_file1)
-    template = template.gsub('class_title', class_title)
-    template = template.gsub('class_html', class_html)
-    template = template.gsub('textbook_link', textbook_link)
-    template = template.gsub('lineage_link', lineage_link)
-
-    new_node = Nokogiri::HTML(template)
-    node2 = node.replace(new_node.at_css('div'))
-
-    #puts "Node: #{node2.to_s}"
+    File.open("#{output_dir}/#{index}.html", 'w') { |file| file.write(result) } 
+    puts "Done for #{doc.title}"
 end
 
 def pdf2html(input_dir, output_dir, index, name)
@@ -47,43 +79,9 @@ def process_index(template_file1, template_file2, input_dir, output_dir)
         name = r[1]
         onedrive1 = r[2]
         onedrive2 = r[3]
-        # puts onedrive2
+        process_one_file(template_file1, template_file2, input_dir, output_dir, index, name, onedrive1, onedrive2)
         # pdf2html(input_dir, output_dir, index, name)
     end
-    return
-
-    index_file = output_dir + "index.html"
-    puts index_file
-    doc = File.open(index_file) { |f| Nokogiri::HTML(f) }
-    puts doc.title
-
-    i = 0
-    youtube_csv = File.open("./csv/#{class_name}_youtube.csv", 'r')
-
-    doc.css('h1').each do |h1|
-        href = h1.parent['href']
-        puts "Processing #{h1.text} #{href} ..."
-        csv.puts "#{h1.text},../dymqx/#{class_name}/#{href}"
-
-        faben = class_name == "qxgs" ? (i == 0 ? "../doc/前行的重要性.doc" : "../doc/《大圆满前行》讲解第#{i}课.doc") : ""
-        i += 1
-
-        chuancheng = youtube_csv.readline.strip!
-        index = chuancheng.index("https")
-        if index != 0
-            chuancheng = chuancheng[index .. chuancheng.length - index]
-        end
-
-        process_node(h1.parent.parent.parent, template_file1, h1.text, href, faben, chuancheng)
-        
-        input_file  = input_dir + href
-        output_file  = output_dir + href
-        process_one_file(template_file2, input_file, h1.text, faben, chuancheng)
-    end
-
-    result = doc.to_s    
-    File.open(index_file, 'w') { |file| file.write(result) }
-  
   nil
 end
 
