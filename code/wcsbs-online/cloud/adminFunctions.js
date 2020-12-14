@@ -303,3 +303,105 @@ Parse.Cloud.define(
     return await commonFunctions.sendEmail(to, cc, subject, body);
   }
 );
+
+const createSelfStudySessions = async function(moduleId, csv) {
+  const map = new Map();
+  var lastSessionId;
+  for (var i = 0; i < csv.length; i++) {
+    const record = csv[i];
+    const sessionId = record["sessionId"];
+    const sessionTitle = record["sessionTitle"];
+    const speechId = record["speechId"];
+    const speechTitle = record["speechTitle"];
+
+    var query = new Parse.Query("Submodule");
+    query.equalTo("name", speechTitle);
+    var submodule = await query.first();
+
+    if (!submodule) {
+      submodule = new Parse.Object("Submodule");
+      submodule.set("name", speechTitle);
+    }
+
+    submodule.set("index", i + 1);
+    submodule.set("moduleId", moduleId);
+    submodule.set("url", `../dxyj/${sessionId}.html#${speechId}`);
+    submodule = await submodule.save(null, MASTER_KEY);
+
+    var parseSession = map[sessionTitle];
+
+    if (!parseSession) {
+      query = new Parse.Query("ClassSessionV2");
+      query.equalTo("name", sessionTitle);
+      parseSession = await query.first();
+      if (!parseSession) {
+        parseSession = new Parse.Object("ClassSessionV2");
+        parseSession.set("name", sessionTitle);
+      }
+    }
+    var content;
+    if (sessionId != lastSessionId) {
+      content = {
+        submodules: [submodule.id],
+        materials: []
+      };
+    } else {
+      content = parseSession.get("content");
+      content.submodules.push(submodule.id);
+    }
+    lastSessionId = sessionId;
+
+    parseSession.set("content", content);
+    parseSession.set("scheduledAt", new Date(2020, 1, parseInt(sessionId)));
+    parseSession = await parseSession.save(null, MASTER_KEY);
+
+    map[sessionTitle] = parseSession;
+  }
+
+  // logger.info(`createSelfStudySessions - map: ${JSON.stringify(map)}`);
+  const results = [];
+  for (const key in map) {
+    results.push(map[key]);
+  }
+
+  // logger.info(`createSelfStudySessions - results: ${JSON.stringify(results)}`);
+  return results;
+};
+
+Parse.Cloud.define(
+  "admin:createSelfStudySessions",
+  async ({
+    user,
+    params: { user: userWithRoles, classIds, moduleName, moduleUrl, csv }
+  }) => {
+    requireAuth(user);
+    requireRole(userWithRoles, "B4aAdminUser");
+
+    var query = new Parse.Query("Module");
+    query.equalTo("name", moduleName);
+    var parseModule = await query.first();
+    if (!parseModule) {
+      parseModule = new Parse.Object("Module");
+    }
+    parseModule.set("name", moduleName);
+    parseModule.set("url", moduleUrl);
+    parseModule = await parseModule.save(null, MASTER_KEY);
+
+    const parseSessions = await createSelfStudySessions(parseModule.id, csv);
+    const results = [].concat(parseSessions);
+
+    query = new Parse.Query("Class");
+    query.containedIn("objectId", classIds);
+    const parseClasses = await query.limit(MAX_QUERY_COUNT).find();
+
+    for (var i = 0; i < parseClasses.length; i++) {
+      const relation = parseClasses[i].relation("selfStudySessions");
+      for (var j = 0; j < parseSessions.length; j++) {
+        relation.add(parseSessions[j]);
+      }
+      const result = await parseClasses[i].save(null, MASTER_KEY);
+      results.push(result);
+    }
+    return results;
+  }
+);

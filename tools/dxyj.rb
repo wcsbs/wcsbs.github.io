@@ -8,7 +8,13 @@ def process_node(node, template_file2, speech_id, speech_title, textbook_link, y
     template = template.gsub('speech_id', speech_id)
     template = template.gsub('speech_title', speech_title)
     template = template.gsub('textbook_link', textbook_link)
-    template = template.gsub('youtube_speech', youtube_speech)
+
+    if youtube_speech
+        template = template.gsub('youtube_speech', youtube_speech)
+    else
+        template = template.gsub('<a class="mdui-btn mdui-ripple mdui-ripple-white coun-read mdui-text-color-theme-accent" href="youtube_speech" target="_blank">观看演讲</a>', "")
+    end
+
     if youtube_qa
         template = template.gsub('youtube_qa', youtube_qa)
     else
@@ -17,19 +23,16 @@ def process_node(node, template_file2, speech_id, speech_title, textbook_link, y
 
     new_node = Nokogiri::HTML(template)
     node2 = node.add_child(new_node.at_css('div'))
-
-    # puts "Node: #{node2.to_s}"
 end
 
 def get_href_id(input_dir, index, page_no)
     html = File.read("#{input_dir}/#{index}/index.html")
     doc = Nokogiri::HTML(html)
     element = doc.at_css("div[data-page-url='#{index}-#{page_no}.page']")
-    puts element["id"]
     element["id"]
 end
 
-def process_one_file(template_file1, template_file2, input_dir, output_dir, index, class_title, onedrive1, onedrive2)
+def process_one_file(csv, template_file1, template_file2, input_dir, output_dir, index, class_title, onedrive1, onedrive2)
     template = File.read(template_file1)
     template = template.gsub('class_title', class_title)
     template = template.gsub('iframe_placeholder', onedrive1)
@@ -47,6 +50,8 @@ def process_one_file(template_file1, template_file2, input_dir, output_dir, inde
                 speech_title = r[2]
                 youtube_speech = r[3]
                 youtube_qa = r[4]
+
+                csv.puts "#{index},#{class_title},#{speech_id},#{speech_title}"
 
                 if onedrive2
                     href_id = "page_#{page_no}"
@@ -73,13 +78,16 @@ def pdf2html(input_dir, output_dir, index, name)
 end
 
 def process_index(template_file1, template_file2, input_dir, output_dir)
+    csv = File.open("./csv/self_study_sessions_out.csv", 'w')
+    csv.puts "sessionId,sessionTitle,speechId,speechTitle"
+
     table = CSV.parse(File.read("./csv/self_study_sessions.csv"), headers: true)
     table.each do |r|
         index = "%02d" % r[0]
         name = r[1]
         onedrive1 = r[2]
         onedrive2 = r[3]
-        process_one_file(template_file1, template_file2, input_dir, output_dir, index, name, onedrive1, onedrive2)
+        process_one_file(csv, template_file1, template_file2, input_dir, output_dir, index, name, onedrive1, onedrive2)
         # pdf2html(input_dir, output_dir, index, name)
     end
   nil
@@ -111,4 +119,4 @@ usage: ruby #{File.basename($0)} template_file1 template_file2 input_dir (option
   main
 
 end
-#./dym_index.rb templates/qxsx_session.html templates/checkbox.html ../docs/dymqx/qxsx/
+#./dxyj.rb templates/dxyj_template.html templates/one_speech.html ../docs/dxyj
