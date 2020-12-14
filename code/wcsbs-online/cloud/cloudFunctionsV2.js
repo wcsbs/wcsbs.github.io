@@ -592,7 +592,7 @@ Parse.Cloud.define(
     }
 
     query = parseClass.relation("selfStudySessions").query();
-    query.descending("scheduledAt");
+    query.ascending("scheduledAt");
     classInfo.selfStudySessions = await query.limit(MAX_QUERY_COUNT).find();
 
     for (i = 0; i < classInfo.selfStudySessions.length; i++) {
