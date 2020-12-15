@@ -407,14 +407,17 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       };
       return date.toLocaleDateString("zh-CN", options).substring(2);
     },
-    toggleReportingCount: function toggleReportingCount() {
-      this.practiceObj.showReportingCount = !this.practiceObj.showReportingCount;
+    resetReportingUI: function resetReportingUI() {
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
       this.practiceObj.newDurationHours = undefined;
       this.practiceObj.newDurationMinutes = undefined;
       this.practiceObj.submoduleId = undefined;
       this.practiceObj.sessions = [];
+    },
+    toggleReportingCount: function toggleReportingCount() {
+      this.practiceObj.showReportingCount = !this.practiceObj.showReportingCount;
+      this.resetReportingUI();
     },
     addPracticeSession: function addPracticeSession() {
       var id = this.practiceObj.submoduleId;
@@ -514,6 +517,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         }).then(function (result) {
           console.log("reportPracticeCount - result: ".concat(JSON.stringify(result)));
           thisComponent.practiceCountObj = thisComponent.buildPracticeCountObj(result);
+          thisComponent.resetReportingUI();
           dialog.close();
 
           if (thisComponent.practiceCounts) {
@@ -714,7 +718,7 @@ var render = function() {
                                 "b-input-group",
                                 {
                                   staticClass: "mt-3",
-                                  attrs: { prepend: "输入时长：" }
+                                  attrs: { prepend: "输入小时：" }
                                 },
                                 [
                                   _c("b-form-input", {
@@ -734,33 +738,36 @@ var render = function() {
                                       },
                                       expression: "practiceObj.newDurationHours"
                                     }
-                                  }),
-                                  _c(
-                                    "b-input-group-append",
-                                    [
-                                      _c("b-form-input", {
-                                        attrs: {
-                                          id: "input-minutes",
-                                          type: "number",
-                                          placeholder: "多少分钟？"
-                                        },
-                                        model: {
-                                          value:
-                                            _vm.practiceObj.newDurationMinutes,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.practiceObj,
-                                              "newDurationMinutes",
-                                              $$v
-                                            )
-                                          },
-                                          expression:
-                                            "practiceObj.newDurationMinutes"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
+                                  })
+                                ],
+                                1
+                              ),
+                              _c(
+                                "b-input-group",
+                                {
+                                  staticClass: "mt-3",
+                                  attrs: { prepend: "输入分钟：" }
+                                },
+                                [
+                                  _c("b-form-input", {
+                                    attrs: {
+                                      id: "input-minutes",
+                                      type: "number",
+                                      placeholder: "多少分钟？"
+                                    },
+                                    model: {
+                                      value: _vm.practiceObj.newDurationMinutes,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.practiceObj,
+                                          "newDurationMinutes",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "practiceObj.newDurationMinutes"
+                                    }
+                                  })
                                 ],
                                 1
                               ),

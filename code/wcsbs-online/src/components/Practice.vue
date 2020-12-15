@@ -57,21 +57,21 @@
             </b-input-group-append>
           </b-input-group>
           <div v-if="practiceSubmodules.length > 0">
-            <b-input-group prepend="输入时长：" class="mt-3">
+            <b-input-group prepend="输入小时：" class="mt-3">
               <b-form-input
                 id="input-hours"
                 v-model="practiceObj.newDurationHours"
                 type="number"
                 placeholder="多少小时？"
               ></b-form-input>
-              <b-input-group-append>
-                <b-form-input
-                  id="input-minutes"
-                  v-model="practiceObj.newDurationMinutes"
-                  type="number"
-                  placeholder="多少分钟？"
-                ></b-form-input>
-              </b-input-group-append>
+            </b-input-group>
+            <b-input-group prepend="输入分钟：" class="mt-3">
+              <b-form-input
+                id="input-minutes"
+                v-model="practiceObj.newDurationMinutes"
+                type="number"
+                placeholder="多少分钟？"
+              ></b-form-input>
             </b-input-group>
             <b-input-group prepend="选择修法：" class="mt-3">
               <select v-model="practiceObj.submoduleId">
@@ -351,15 +351,18 @@ export default {
       };
       return date.toLocaleDateString("zh-CN", options).substring(2);
     },
-    toggleReportingCount() {
-      this.practiceObj.showReportingCount = !this.practiceObj
-        .showReportingCount;
+    resetReportingUI() {
       this.practiceObj.newCountReportedAt = undefined;
       this.practiceObj.newCount = undefined;
       this.practiceObj.newDurationHours = undefined;
       this.practiceObj.newDurationMinutes = undefined;
       this.practiceObj.submoduleId = undefined;
       this.practiceObj.sessions = [];
+    },
+    toggleReportingCount() {
+      this.practiceObj.showReportingCount = !this.practiceObj
+        .showReportingCount;
+      this.resetReportingUI();
     },
     addPracticeSession() {
       const id = this.practiceObj.submoduleId;
@@ -472,6 +475,7 @@ export default {
               thisComponent.practiceCountObj = thisComponent.buildPracticeCountObj(
                 result
               );
+              thisComponent.resetReportingUI();
 
               dialog.close();
               if (thisComponent.practiceCounts) {
