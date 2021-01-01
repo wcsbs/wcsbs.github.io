@@ -39,7 +39,7 @@ def process_one_file(csv, template_file1, template_file2, input_dir, output_dir,
 
     doc = Nokogiri::HTML(template)
   
-    node = doc.at_css('article').last_element_child
+    node = doc.at_css('article')
     # puts node
     speech_id = 1
     table = CSV.parse(File.read("./csv/self_study_submodules.csv"), headers: true)
