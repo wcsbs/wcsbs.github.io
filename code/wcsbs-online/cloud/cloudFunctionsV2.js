@@ -286,6 +286,7 @@ const loadDashboardV2 = async function(parseUser, forStudent) {
   var canDownloadReports = true;
   //undefined if loading System Admin Dashboard
   if (parseUser) {
+    query.notEqualTo("deactivated", true);
     if (forStudent) {
       query.equalTo("students", parseUser);
       canDownloadReports = false;
