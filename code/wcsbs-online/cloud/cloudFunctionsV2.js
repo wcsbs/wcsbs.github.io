@@ -1063,6 +1063,7 @@ const loadDataForUser = async function(
             }
             parseCountList.push(...parseCounts);
           }
+          result[key] = commonFunctions.formatCount(count);
 
           lastDate = reportedAt;
         } else {
