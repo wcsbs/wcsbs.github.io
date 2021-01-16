@@ -82,6 +82,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     practiceId: String,
     forSelf: Boolean,
     selfStudy: Boolean,
+    formalStudy: Boolean,
     hasSubmodules: Boolean
   },
   data: function data() {
@@ -145,7 +146,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     }(),
     fetchData: function () {
       var _fetchData = Object(_Users_donghao_Documents_code_buddha_wcsbs_code_wcsbs_online_node_modules_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_9__["default"])( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(loadingDetails) {
-        var thisComponent, classTeam, classId, practiceId, forSelf, selfStudy, classTeams, monthlyTotalOnly, params, loggedInUser, delay, response, retry;
+        var thisComponent, classTeam, classId, practiceId, forSelf, selfStudy, formalStudy, classTeams, monthlyTotalOnly, params, loggedInUser, delay, response, retry;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -156,6 +157,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
                 practiceId = this.forSelf ? this.practiceId : this.classInfo.practiceId;
                 forSelf = this.forSelf;
                 selfStudy = this.selfStudy;
+                formalStudy = this.formalStudy;
                 classTeams = forSelf ? undefined : classTeam ? [classTeam] : this.classTeams;
                 monthlyTotalOnly = !classTeam && !this.forSelf;
                 params = {
@@ -163,6 +165,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
                   classTeams: classTeams,
                   practiceId: practiceId,
                   selfStudy: selfStudy,
+                  formalStudy: formalStudy,
                   loadingDetails: loadingDetails
                 };
                 loggedInUser = parse__WEBPACK_IMPORTED_MODULE_12___default.a.User.current(); // console.log(`generateReport - loggedInUser.id: ${loggedInUser.id}`);
@@ -178,13 +181,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
                 retry = 3;
 
-              case 14:
+              case 15:
                 if (!(retry > 0)) {
-                  _context3.next = 30;
+                  _context3.next = 31;
                   break;
                 }
 
-                _context3.next = 17;
+                _context3.next = 18;
                 return parse__WEBPACK_IMPORTED_MODULE_12___default.a.Cloud.run("class:generateReport", params).then(function (result) {
                   // console.log(`generateReport - result: ${JSON.stringify(result)}`);
                   console.log("generateReport - #result: ".concat(result.length));
@@ -243,21 +246,21 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
                   return e;
                 });
 
-              case 17:
+              case 18:
                 response = _context3.sent;
 
                 if (!Array.isArray(response)) {
-                  _context3.next = 20;
+                  _context3.next = 21;
                   break;
                 }
 
-                return _context3.abrupt("break", 30);
+                return _context3.abrupt("break", 31);
 
-              case 20:
+              case 21:
                 retry--; //{"message":"XMLHttpRequest failed: \"Unable to connect to the Parse API\"","code":100}
 
                 if (!(retry == 0 || response.code != 100)) {
-                  _context3.next = 25;
+                  _context3.next = 26;
                   break;
                 }
 
@@ -265,21 +268,21 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
                 response = [{
                   错误: "\u4E0B\u8F7D\u5931\u8D25\uFF1A".concat(JSON.stringify(response))
                 }];
-                return _context3.abrupt("break", 30);
+                return _context3.abrupt("break", 31);
 
-              case 25:
-                _context3.next = 27;
+              case 26:
+                _context3.next = 28;
                 return delay(60);
 
-              case 27:
+              case 28:
                 console.log("Waited 60s");
-                _context3.next = 14;
+                _context3.next = 15;
                 break;
 
-              case 30:
+              case 31:
                 return _context3.abrupt("return", response);
 
-              case 31:
+              case 32:
               case "end":
                 return _context3.stop();
             }

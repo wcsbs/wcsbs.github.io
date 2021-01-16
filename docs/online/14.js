@@ -98,6 +98,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -292,6 +299,16 @@ var render = function() {
                   selfStudy: _vm.selfStudy
                 }
               }),
+              _c("br"),
+              !_vm.selfStudy
+                ? _c("DownloadReport", {
+                    attrs: {
+                      forSelf: true,
+                      worksheet: "学修进度统计",
+                      formalStudy: true
+                    }
+                  })
+                : _vm._e(),
               _c("hr")
             ],
             1
