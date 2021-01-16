@@ -266,200 +266,68 @@ const prepareReportGeneration = async function(
   }
 
   const isRxl = parseClass.get("url").includes("rpsxl");
-  const csvHeaders = [
-    [
-      "组别",
-      "组员",
-      "7-Dec",
-      "14-Dec",
-      "21-Dec",
-      "28-Dec",
-      "DEC2019 TOTAL",
-      "2019 TOTAL",
-      "4-Jan",
-      "11-Jan",
-      "18-Jan",
-      "25-Jan",
-      "JAN2020 TOTAL",
-      "8-Feb",
-      "15-Feb",
-      "22-Feb",
-      "29-Feb",
-      "FEB2020 TOTAL",
-      "7-Mar",
-      "14-Mar",
-      "21-Mar",
-      "28-Mar",
-      "MAR2020 TOTAL",
-      "4-Apr",
-      "11-Apr",
-      "18-Apr",
-      "25-Apr",
-      "APR2020 TOTAL",
-      "2-May",
-      "9-May",
-      "16-May",
-      "23-May",
-      "30-May",
-      "MAY2020 TOTAL",
-      "6-Jun",
-      "13-Jun",
-      "20-Jun",
-      "27-Jun",
-      "JUN2020 TOTAL",
-      "4-Jul",
-      "11-Jul",
-      "18-Jul",
-      "25-Jul",
-      "JUL2020 TOTAL",
-      "1-Aug",
-      "8-Aug",
-      "15-Aug",
-      "22-Aug",
-      "29-Aug",
-      "AUG2020 TOTAL",
-      "5-Sep",
-      "12-Sep",
-      "19-Sep",
-      "26-Sep",
-      "SEP2020 TOTAL",
-      "3-Oct",
-      "10-Oct",
-      "17-Oct",
-      "24-Oct",
-      "31-Oct",
-      "OCT2020 TOTAL",
-      "7-Nov",
-      "14-Nov",
-      "21-Nov",
-      "28-Nov",
-      "NOV2020 TOTAL",
-      "5-Dec",
-      "12-Dec",
-      "19-Dec",
-      "26-Dec",
-      "DEC2020 TOTAL",
-      "2020 TOTAL",
-      "TOTAL"
-    ],
-    [
-      "组别",
-      "组员",
-      "24FEB-01MAR",
-      "FEB2020 TOTAL",
-      "2-8MAR",
-      "9-15MAR",
-      "16-22MAR",
-      "23-29MAR",
-      "MAR2020 TOTAL",
-      "30MAR-5APR",
-      "6-12APR",
-      "13-19APR",
-      "20-26APR",
-      "APR2020 TOTAL",
-      "27APR-3MAY",
-      "4-10MAY",
-      "11-17MAY",
-      "18-24MAY",
-      "25-31MAY",
-      "MAY2020 TOTAL",
-      "1-7JUN",
-      "8-14JUN",
-      "15-21JUN",
-      "22-28JUN",
-      "JUN2020 TOTAL",
-      "29JUN-5JUL",
-      "6-12JUL",
-      "13-19JUL",
-      "20-26JUL",
-      "JUL2020 TOTAL",
-      "27JUL-2AUG",
-      "3-9AUG",
-      "10-16AUG",
-      "17-23AUG",
-      "24-30AUG",
-      "AUG2020 TOTAL",
-      "31AUG-6SEP",
-      "7-13SEP",
-      "14-20SEP",
-      "21-27SEP",
-      "SEP2020 TOTAL",
-      "28SEP-4OCT",
-      "5-11OCT",
-      "12-18OCT",
-      "19-25OCT",
-      "26OCT-1NOV",
-      "OCT2020 TOTAL",
-      "2-8NOV",
-      "9-15NOV",
-      "16-22NOV",
-      "23-29NOV",
-      "NOV2020 TOTAL",
-      "30NOV-6DEC",
-      "7-13DEC",
-      "14-20DEC",
-      "21-27DEC",
-      "DEC2020 TOTAL",
-      "2020 TOTAL",
-      "TOTAL"
-    ]
-  ];
+  const csvHeader = ["组别", "组员"];
 
-  const csvHeader = csvHeaders[isPractice ? 1 : 0];
-  var mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
+  var today = new Date();
+  var endDate = new Date(today.getFullYear(), 11, 31);
 
-  // JiaXing practices started on 30/6/19
-  if (!isRxl && isPractice) {
-    var endDate = mapDates["24FEB-01MAR"];
-    var sunday = new Date("30 JUN 2019");
-    var insertAt = 2;
+  //both RuXing & JiaXing classes started on 7 DEC 2019
+  var sunday = new Date("8 DEC 2019");
 
-    logger.info(
-      `prepareReportGeneration - sunday: ${sunday} endDate: ${endDate}`
-    );
+  if (isPractice) {
+    if (isRxl) {
+      // RuXing practices started on 1/3/20
+      sunday = new Date("1 MAR 2020");
+    } else {
+      // JiaXing practices started on 30/6/19
+      sunday = new Date("30 JUN 2019");
+    }
+  }
 
-    var lastMonth, lastYear;
-    while (sunday < endDate) {
-      var saturday = new Date(sunday.getTime() - DAY_IN_MS);
-      var monday = new Date(sunday.getTime() - 6 * DAY_IN_MS);
+  logger.info(
+    `prepareReportGeneration - sunday: ${sunday} endDate: ${endDate}`
+  );
 
-      const re = /[\s,]+/;
-      const monElements = toLocalDateString(monday).split(re);
-      const satElements = toLocalDateString(saturday).split(re);
-      const sunElements = toLocalDateString(sunday).split(re);
-      const newCsvHeader = `${monElements[1]}${
-        monElements[0] != sunElements[0] ? monElements[0].toUpperCase() : ""
-      }-${sunElements[1]}${sunElements[0].toUpperCase()}`;
+  var lastMonth, lastYear;
+  var saturday = new Date(sunday.getTime() - DAY_IN_MS);
+  while (saturday <= endDate) {
+    var monday = new Date(sunday.getTime() - 6 * DAY_IN_MS);
 
-      if (!lastMonth) {
+    const re = /[\s,]+/;
+    const monElements = toLocalDateString(monday).split(re);
+    const satElements = toLocalDateString(saturday).split(re);
+    const sunElements = toLocalDateString(sunday).split(re);
+    const newCsvHeader = isPractice
+      ? `${monElements[1]}${
+          monElements[0] != sunElements[0] ? monElements[0].toUpperCase() : ""
+        }-${sunElements[1]}${sunElements[0].toUpperCase()}`
+      : `${satElements[1]}-${satElements[0].toUpperCase()}`;
+
+    if (!lastMonth) {
+      lastMonth = satElements[0];
+      lastYear = satElements[2];
+    } else {
+      if (lastMonth != satElements[0]) {
+        csvHeader.push(`${lastMonth.toUpperCase()}${lastYear} TOTAL`);
         lastMonth = satElements[0];
-        lastYear = satElements[2];
-      } else {
-        if (lastMonth != satElements[0]) {
-          csvHeader.splice(
-            insertAt,
-            0,
-            `${lastMonth.toUpperCase()}${lastYear} TOTAL`
-          );
-          insertAt += 1;
-          lastMonth = satElements[0];
 
-          if (lastYear != satElements[2]) {
-            csvHeader.splice(insertAt, 0, `${lastYear} TOTAL`);
-            insertAt += 1;
-            lastYear = satElements[2];
-          }
+        if (lastYear != satElements[2]) {
+          csvHeader.push(`${lastYear} TOTAL`);
+          lastYear = satElements[2];
         }
       }
-
-      csvHeader.splice(insertAt, 0, newCsvHeader);
-      insertAt += 1;
-
-      sunday = new Date(sunday.getTime() + 7 * DAY_IN_MS);
     }
 
-    mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
+    csvHeader.push(newCsvHeader);
+
+    sunday = new Date(sunday.getTime() + 7 * DAY_IN_MS);
+    saturday = new Date(sunday.getTime() - DAY_IN_MS);
   }
+
+  csvHeader.push(`${lastMonth.toUpperCase()}${lastYear} TOTAL`);
+  csvHeader.push(`${lastYear} TOTAL`);
+
+  var mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
 
   return { csvHeader, mapDates };
 };
