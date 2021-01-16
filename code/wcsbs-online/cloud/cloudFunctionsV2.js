@@ -173,9 +173,9 @@ const loadPracticeSnapshotsV2 = async function(practices) {
 };
 
 const loadUserStudyRecord = async function(userId, submoduleId) {
-  logger.info(
-    `loadUserStudyRecord - userId: ${userId} submoduleId: ${submoduleId}`
-  );
+  // logger.info(
+  //   `loadUserStudyRecord - userId: ${userId} submoduleId: ${submoduleId}`
+  // );
 
   var result = {};
   var query = new Parse.Query("UserStudyRecord");
@@ -1016,6 +1016,7 @@ Parse.Cloud.define(
 
 const loadDataForUser = async function(
   selfStudy,
+  formalStudy,
   parseClass,
   parsePractice,
   parseUser,
@@ -1071,18 +1072,41 @@ const loadDataForUser = async function(
           query.equalTo("scheduledAt", date);
           const classSession = await query.first();
 
-          const attendance = await loadStudentAttendanceV2(
-            userId,
-            classSession
-          );
-          if (
-            attendance.attendance != undefined ||
-            attendance.onLeave != undefined
-          ) {
-            count = attendance.attendance ? 1 : 0;
+          if (formalStudy) {
+            const content = classSession.get("content");
+            for (j = 0; j < content.submodules.length; j++) {
+              const submoduleId = content.submodules[j];
+              const studyRecord = await loadUserStudyRecord(
+                userId,
+                submoduleId
+              );
+              if (j > 0) {
+                i += 1;
+              }
+              result[csvHeader[i]] = studyRecord.textbook ? "是" : "";
+              i += 1;
+              result[csvHeader[i]] = studyRecord.lineage ? "是" : "";
+            }
+          } else {
+            const attendance = await loadStudentAttendanceV2(
+              userId,
+              classSession
+            );
+            if (
+              attendance.attendance != undefined ||
+              attendance.onLeave != undefined
+            ) {
+              count = attendance.attendance ? 1 : 0;
+            }
+            if (selfStudy) {
+              result[key] = count ? "是" : "";
+              i += 1;
+              result[csvHeader[i]] = result[key];
+            } else {
+              result[key] = commonFunctions.formatCount(count);
+            }
           }
         }
-        result[key] = commonFunctions.formatCount(count);
         if (count != undefined) {
           monthlyTotal = (monthlyTotal ? monthlyTotal : 0) + count;
           grandTotal += count;
@@ -1265,6 +1289,7 @@ Parse.Cloud.define(
       classTeams,
       practiceId,
       selfStudy,
+      formalStudy,
       loadingDetails,
       reportHash
     }
@@ -1272,7 +1297,7 @@ Parse.Cloud.define(
     requireAuth(user);
 
     logger.info(
-      `generateReport - classId: ${classId} selfStudy: ${selfStudy} loadingDetails: ${loadingDetails}`
+      `generateReport - classId: ${classId} selfStudy: ${selfStudy} formalStudy: ${formalStudy} loadingDetails: ${loadingDetails}`
     );
     const requestedAt = new Date();
     var parseReport;
@@ -1316,7 +1341,8 @@ Parse.Cloud.define(
     } = await commonFunctions.prepareReportGeneration(
       parseClass,
       practiceId,
-      selfStudy
+      selfStudy,
+      formalStudy
     );
 
     logger.info(
@@ -1377,6 +1403,7 @@ Parse.Cloud.define(
         if (parseUser) {
           var result = await loadDataForUser(
             selfStudy,
+            formalStudy,
             parseClass,
             parsePractice,
             parseUser,

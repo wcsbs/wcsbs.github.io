@@ -241,28 +241,56 @@ const getDatesFromCsvHeader = function(csvHeader, isRxl, isPractice) {
   return mapDates;
 };
 
-const prepareSelfStudyReportGeneration = async function(parseClass) {
-  const query = parseClass.relation("selfStudySessions").query();
+const prepareStudyReportGeneration = async function(parseClass, formalStudy) {
+  var query = parseClass
+    .relation(formalStudy ? "sessionsV2" : "selfStudySessions")
+    .query();
   query.ascending("scheduledAt");
   const parseSessions = await query.limit(MAX_QUERY_COUNT).find();
   const csvHeader = ["组别", "组员"];
   const mapDates = {};
   for (var i = 0; i < parseSessions.length; i++) {
-    const name = parseSessions[i].get("name");
-    csvHeader.push(name);
-    mapDates[name] = parseSessions[i].get("scheduledAt");
+    const parseSession = parseSessions[i];
+    const scheduledAt = parseSession.get("scheduledAt");
+    if (formalStudy) {
+      const content = parseSession.get("content");
+      for (var j = 0; j < content.submodules.length; j++) {
+        const submoduleId = content.submodules[j];
+        query = new Parse.Query("Submodule");
+        query.equalTo("objectId", submoduleId);
+        const parseSubmodule = await query.first();
+
+        if (parseSubmodule) {
+          const name = parseSubmodule.get("name");
+          const text = `${name}<br>法本`;
+          csvHeader.push(text);
+          mapDates[text] = scheduledAt;
+          const lineage = `${name}<br>传承`;
+          csvHeader.push(lineage);
+          mapDates[lineage] = scheduledAt;
+        }
+      }
+    } else {
+      const name = parseSession.get("name");
+      const text = `${name}<br>法本`;
+      csvHeader.push(text);
+      mapDates[text] = scheduledAt;
+      const lineage = `${name}<br>传承`;
+      csvHeader.push(lineage);
+      mapDates[lineage] = scheduledAt;
+    }
   }
-  csvHeader.push("TOTAL");
   return { csvHeader, mapDates };
 };
 
 const prepareReportGeneration = async function(
   parseClass,
   isPractice,
-  selfStudy
+  selfStudy,
+  formalStudy
 ) {
-  if (selfStudy) {
-    return await prepareSelfStudyReportGeneration(parseClass);
+  if (selfStudy || formalStudy) {
+    return await prepareStudyReportGeneration(parseClass, formalStudy);
   }
 
   const isRxl = parseClass.get("url").includes("rpsxl");
@@ -326,6 +354,7 @@ const prepareReportGeneration = async function(
 
   csvHeader.push(`${lastMonth.toUpperCase()}${lastYear} TOTAL`);
   csvHeader.push(`${lastYear} TOTAL`);
+  csvHeader.push("TOTAL");
 
   var mapDates = getDatesFromCsvHeader(csvHeader, isRxl, isPractice);
 

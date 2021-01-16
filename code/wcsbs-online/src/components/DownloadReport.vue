@@ -36,6 +36,7 @@ export default {
     practiceId: String,
     forSelf: Boolean,
     selfStudy: Boolean,
+    formalStudy: Boolean,
     hasSubmodules: Boolean
   },
   data: function() {
@@ -68,6 +69,7 @@ export default {
         : this.classInfo.practiceId;
       const forSelf = this.forSelf;
       const selfStudy = this.selfStudy;
+      const formalStudy = this.formalStudy;
       const classTeams = forSelf
         ? undefined
         : classTeam
@@ -79,6 +81,7 @@ export default {
         classTeams,
         practiceId,
         selfStudy,
+        formalStudy,
         loadingDetails
       };
       const loggedInUser = Parse.User.current();

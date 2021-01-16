@@ -18,6 +18,12 @@
               : `中组${classInfo.practiceName}统计`
           "
         />
+        <br v-if="!classInfo.practiceId" />
+        <DownloadReport
+          v-if="!classInfo.practiceId"
+          :worksheet="`中组学修进度统计`"
+          :formalStudy="true"
+        />
         <br v-if="classInfo.hasSelfStudySessions" />
         <DownloadReport
           v-if="classInfo.hasSelfStudySessions"
@@ -40,9 +46,17 @@
                 : `${classTeam.name}${classInfo.practiceName}统计`
             "
           />
+          <br v-if="!classInfo.practiceId" />
+          <DownloadReport
+            v-if="!classInfo.practiceId"
+            :classTeam="classTeam"
+            :worksheet="`${classTeam.name}学修进度统计`"
+            :formalStudy="true"
+          />
           <br v-if="classInfo.hasSelfStudySessions" />
           <DownloadReport
             v-if="classInfo.hasSelfStudySessions"
+            :classTeam="classTeam"
             :worksheet="`${classTeam.name}自学进度统计`"
             :selfStudy="true"
           />

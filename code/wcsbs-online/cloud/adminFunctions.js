@@ -277,7 +277,7 @@ Parse.Cloud.define(
   "admin:prepareReportGeneration",
   async ({
     user,
-    params: { user: userWithRoles, classId, isPractice, selfStudy }
+    params: { user: userWithRoles, classId, isPractice, selfStudy, formalStudy }
   }) => {
     requireAuth(user);
     requireRole(userWithRoles, "B4aAdminUser");
@@ -289,7 +289,8 @@ Parse.Cloud.define(
     return commonFunctions.prepareReportGeneration(
       parseClass,
       isPractice,
-      selfStudy
+      selfStudy,
+      formalStudy
     );
   }
 );

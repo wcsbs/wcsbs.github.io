@@ -6,6 +6,13 @@
         :worksheet="selfStudy ? '自学进度统计' : '出席统计'"
         :selfStudy="selfStudy"
       />
+      <br />
+      <DownloadReport
+        v-if="!selfStudy"
+        :forSelf="true"
+        worksheet="学修进度统计"
+        :formalStudy="true"
+      />
       <hr />
     </div>
     <div class="input-group mb-3" v-if="!selfStudy">
