@@ -559,7 +559,11 @@ export default {
       var chuanCheng = "未看传承";
       var faBen = "未看法本";
       var showStats = false;
-      if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
+      if (
+        sessionDetails &&
+        sessionDetails.submodules.length > 0 &&
+        sessionDetails.submodules[index].studyRecord
+      ) {
         const studyRecord = sessionDetails.submodules[index].studyRecord;
         if (typeof studyRecord.lineage == "number") {
           showStats = true;
@@ -763,8 +767,8 @@ export default {
       const session = this.session;
       console.log(`session.submodules: ${JSON.stringify(session.submodules)}`);
 
-      if (!session.scheduledAt || session.submodules.length < 1) {
-        this.$dialog.alert("请输入上课时间和内容！", {
+      if (!session.scheduledAt) {
+        this.$dialog.alert("请输入上课时间！", {
           okText: "知道了"
         });
         return;
@@ -783,9 +787,8 @@ export default {
       };
 
       var dt = new Date(session.scheduledAt);
-      dt.setHours(session.submodules[0].url.includes("rpsxl") ? 9 : 14); //TODO: allow setting time
+      dt.setHours(this.classInfo.url.includes("rpsxl") ? 9 : 14); //TODO: allow setting time
       session.scheduledAt = dt;
-      // console.log(`session.scheduledAt: ${session.scheduledAt}`);
       session.classId = this.classInfo.id;
 
       const thisComponent = this;
