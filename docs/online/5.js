@@ -619,7 +619,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       var faBen = "未看法本";
       var showStats = false;
 
-      if (sessionDetails && sessionDetails.submodules[index].studyRecord) {
+      if (sessionDetails && sessionDetails.submodules.length > 0 && sessionDetails.submodules[index].studyRecord) {
         var studyRecord = sessionDetails.submodules[index].studyRecord;
 
         if (typeof studyRecord.lineage == "number") {
@@ -817,8 +817,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       var session = this.session;
       console.log("session.submodules: ".concat(JSON.stringify(session.submodules)));
 
-      if (!session.scheduledAt || session.submodules.length < 1) {
-        this.$dialog.alert("请输入上课时间和内容！", {
+      if (!session.scheduledAt) {
+        this.$dialog.alert("请输入上课时间！", {
           okText: "知道了"
         });
         return;
@@ -835,10 +835,9 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         body: "".concat(session.creating ? "创建新课" : "修改", " \u300A").concat(session.name, "\u300B @ ").concat(this.toLocalDateString(session.scheduledAt), "\uFF1F")
       };
       var dt = new Date(session.scheduledAt);
-      dt.setHours(session.submodules[0].url.includes("rpsxl") ? 9 : 14); //TODO: allow setting time
+      dt.setHours(this.classInfo.url.includes("rpsxl") ? 9 : 14); //TODO: allow setting time
 
-      session.scheduledAt = dt; // console.log(`session.scheduledAt: ${session.scheduledAt}`);
-
+      session.scheduledAt = dt;
       session.classId = this.classInfo.id;
       var thisComponent = this;
       this.$dialog.confirm(message, options).then(function (dialog) {
