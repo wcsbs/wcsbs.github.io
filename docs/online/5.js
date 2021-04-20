@@ -294,10 +294,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1033,27 +1029,25 @@ var render = function() {
                           1
                         )
                       }),
-                      _vm.session.submodules.length > 0
-                        ? _c(
-                            "b-input-group",
-                            {
-                              staticClass: "mt-3",
-                              attrs: { prepend: "上课名称：" }
-                            },
-                            [
-                              _c("b-form-input", {
-                                model: {
-                                  value: _vm.session.name,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.session, "name", $$v)
-                                  },
-                                  expression: "session.name"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e()
+                      _c(
+                        "b-input-group",
+                        {
+                          staticClass: "mt-3",
+                          attrs: { prepend: "上课名称：" }
+                        },
+                        [
+                          _c("b-form-input", {
+                            model: {
+                              value: _vm.session.name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.session, "name", $$v)
+                              },
+                              expression: "session.name"
+                            }
+                          })
+                        ],
+                        1
+                      )
                     ],
                     2
                   )
